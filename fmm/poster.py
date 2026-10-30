@@ -58,6 +58,20 @@ def fb_photo(path, caption, published=True):
     return j["id"]
 
 
+def cover_for(media):
+    """Reel cover made by fmm.thumb: <name>_cover.jpg next to <name>.mp4."""
+    c = Path(media).with_name(Path(media).stem + "_cover.jpg")
+    return c if c.exists() else None
+
+
+def fb_thumbnail(video_id, cover):
+    try:
+        with open(cover, "rb") as f:
+            call("POST", f"{video_id}/thumbnails", data={"is_preferred": "true"}, files={"source": f})
+    except Exception as ex:
+        print("fb thumbnail skipped:", str(ex)[:120])
+
+
 def fb_reel(path, caption):
     start = call("POST", f"{PAGE}/video_reels", data={"upload_phase": "start"})
     vid = start["video_id"]
@@ -69,6 +83,8 @@ def fb_reel(path, caption):
         raise RuntimeError(f"FB reel upload failed: {r.text[:300]}")
     call("POST", f"{PAGE}/video_reels", data={"upload_phase": "finish", "video_id": vid,
                                               "video_state": "PUBLISHED", "description": caption})
+    if cover_for(path):
+        fb_thumbnail(vid, cover_for(path))
     return vid
 
 
@@ -101,8 +117,11 @@ def ig_photo(path, caption):
 
 
 def ig_reel(path, caption, share_to_feed=True):
-    j = call("POST", f"{IG}/media", data={"media_type": "REELS", "upload_type": "resumable", "caption": caption,
-                                          "share_to_feed": str(share_to_feed).lower()})
+    data = {"media_type": "REELS", "upload_type": "resumable", "caption": caption,
+            "share_to_feed": str(share_to_feed).lower()}
+    if cover_for(path):
+        data["cover_url"] = public_url_for(cover_for(path))
+    j = call("POST", f"{IG}/media", data=data)
     size = os.path.getsize(path)
     with open(path, "rb") as f:
         r = requests.post(j["uri"], data=f, timeout=600,
@@ -147,7 +166,7 @@ def posted_files():
 
 def run_queue(folder, where="both", gap=90):
     done = posted_files()
-    items = sorted(Path(folder).glob("*.png")) + sorted(Path(folder).glob("*.mp4"))
+    items = sorted(Path(folder).glob("*.png")) + sorted(Path(folder).glob("*.mp4"))  # covers are .jpg, never posted alone
     for m in items:
         cap = caption_for(m)
         if m.name in done or cap is None:

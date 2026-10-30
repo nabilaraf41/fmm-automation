@@ -592,6 +592,11 @@ def render_reel(reel, out_dir=OUT, music=None, stills=None):
             clock += TRANS
     total = clock
     out = out_dir / f"{reel['id']}.mp4"
+    if reel.get("cover"):  # MrBeast-style cover image used as the Reel/Short thumbnail
+        from fmm import thumb
+        c = reel["cover"]
+        thumb.cover(c.get("subject"), c["text"], out_dir / f"{reel['id']}_cover.jpg", sub=c.get("sub"),
+                    color=c.get("color", "red"), emoji=c.get("emoji", "wow"))
     wav = out_dir / f"{reel['id']}_sfx.wav"
     mix_audio(events, total, wav)
     music = music or reel.get("music")

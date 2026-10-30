@@ -66,6 +66,12 @@ def upload(path, caption, privacy="public"):
     resp = None
     while resp is None:
         _, resp = req.next_chunk()
+    cover = Path(path).with_name(Path(path).stem + "_cover.jpg")
+    if cover.exists():  # custom thumbnail (needs a phone-verified channel)
+        try:
+            service().thumbnails().set(videoId=resp["id"], media_body=MediaFileUpload(str(cover))).execute()
+        except Exception as ex:
+            print("yt thumbnail skipped:", str(ex)[:150])
     return resp["id"], resp["status"]["privacyStatus"]
 
 

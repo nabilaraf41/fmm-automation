@@ -85,7 +85,12 @@ def run(dry=False):
         post = {"id": f"code_{c['code']}", "type": "code", "title": "New Code!!", "subtitle": c["reward"],
                 "code": c["code"], "reward_image": card}
         made.append(brand.render(post, day_dir))
+        from fmm import rewards
+        kind = rewards.kind_of(c["reward"])
+        headline = {"gems": "FREE GEMS!!", "player": "FREE PLAYER!!", "mls": "FREE PLAYER!!", "draft": "FREE DRAFT!!",
+                    "tokens": "FREE FC POINTS!!", "rankup": "FREE RANK UP!!"}.get(kind, "NEW CODE!!")
         reel = {"id": f"code_{c['code']}_reel",
+                "cover": {"subject": card, "text": headline, "sub": f"CODE: {c['code']}", "color": "gold", "emoji": "wow"},
                 "scenes": [{"scene": "code", "code": c["code"], "card": card, "reward": c["reward"]}]}
         made.append(motion.render_reel(reel, day_dir))
         (day_dir / f"code_{c['code']}.txt").write_text(caption_new(c), encoding="utf-8")

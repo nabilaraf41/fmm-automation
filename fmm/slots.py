@@ -125,13 +125,19 @@ def build(slot):
                 "pros": r["pros"], "cons": r["cons"], "score": r["score"]}
         media, caption = brand.render(post, OUT), r["caption"]
     elif ctype == "review_reel":
-        reel = {"id": "slot", "scenes": [
+        cover_text = {"MUST BUY": "MUST BUY?!", "WORTH IT": "WORTH IT?", "SITUATIONAL": "BUY OR NOT?",
+                      "SKIP": "DON'T BUY!?"}[r["verdict"]]
+        reel = {"id": "slot", "cover": {"subject": p["card"], "text": cover_text, "sub": f"{p['ovr']} OVR {p['name']}",
+                                         "color": "green" if r["score"] >= 9 else "red"},
+                "scenes": [
             {"scene": "reveal", "title": "New Card", "sub": f"{p['ovr']} OVR {p['name']}", "card": p["card"]},
             {"scene": "stamp", "title": f"FMM Rating {r['score']}/10", "text": r["verdict"],
              "color": list(VERDICT_COLOR[r["verdict"]]), "card": p["card"]}]}
         media, caption = motion.render_reel(reel, OUT), r["caption"]
     elif ctype == "countdown":
-        reel = {"id": "slot", "scenes": [{"scene": "countdown", "position": "NEW CARDS",
+        reel = {"id": "slot", "cover": {"subject": players[0]["card"], "text": f"TOP {min(7, len(players))}\nNEW CARDS",
+                                         "sub": f"#1 IS {players[0]['ovr']} OVR!", "color": "gold"},
+                "scenes": [{"scene": "countdown", "position": "NEW CARDS",
                                            "players": [{"name": x["name"], "card": x["card"]} for x in players[:7]][::-1]}]}
         media = motion.render_reel(reel, OUT)
         caption = (f"🔥 Top {min(7, len(players))} newest FC Mobile cards right now\n\n"
@@ -142,7 +148,9 @@ def build(slot):
         tiers = {"S": [], "A": [], "B": [], "C": []}
         for s, x in scored:
             tiers["S" if s >= 9 else "A" if s >= 8 else "B" if s >= 7 else "C"].append(x["card"])
-        reel = {"id": "slot", "scenes": [{"scene": "tierlist", "title": "New Cards Tier List",
+        reel = {"id": "slot", "cover": {"subject": scored[0][1]["card"], "text": "TIER LIST!", "sub": "WHO'S S TIER?",
+                                         "color": "purple"},
+                "scenes": [{"scene": "tierlist", "title": "New Cards Tier List",
                                            "tiers": {k: v for k, v in tiers.items() if v}}]}
         media = motion.render_reel(reel, OUT)
         caption = ("📊 FMM tier list: this week's new FC Mobile cards\n\n"
