@@ -103,8 +103,8 @@ def pick(kind, fresh, db, state):
     return "versus", pair, pool
 
 
-def build_from_inbox():
-    """21:00 slot: your own gameplay from the Drive "FMM Clips" folder, when there is any."""
+def build_from_inbox(slot):
+    """Any slot: your own gameplay from the Drive clips folder, when there is any."""
     try:
         from fmm import inbox
         got = inbox.next_clip()
@@ -125,7 +125,7 @@ def build_from_inbox():
                "Follow FMM for daily FC Mobile goals, cards & codes 🔔\n\n"
                "#FCMobile #FCMobile26 #EASportsFCMobile #FCMobileGoals #Gaming #FMM")
     (OUT / "caption.txt").write_text(caption, encoding="utf-8")
-    (OUT / "manifest.json").write_text(json.dumps({"slot": "2100", "kind": "reel", "type": "clip",
+    (OUT / "manifest.json").write_text(json.dumps({"slot": slot, "kind": "reel", "type": "clip",
                                                    "media": "slot.mp4", "source": src}, indent=1), encoding="utf-8")
     print("built clip from", src)
     return True
@@ -133,7 +133,7 @@ def build_from_inbox():
 
 def build(slot):
     from fmm import brand, motion
-    if slot == "2100" and build_from_inbox():
+    if build_from_inbox(slot):  # your own gameplay always goes first, in any slot
         return
     kind = SLOTS[slot]
     state = load_state()
