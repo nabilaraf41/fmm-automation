@@ -5,7 +5,7 @@ Each post in the JSON becomes a 1080x1350 PNG in output/.
 """
 import json, sys
 from pathlib import Path
-from PIL import Image, ImageDraw, ImageFont, ImageFilter
+from PIL import Image, ImageDraw, ImageFont, ImageFilter, ImageEnhance
 
 ROOT = Path(__file__).resolve().parent.parent
 FONTS = ROOT / "assets" / "fonts"
@@ -463,7 +463,116 @@ def post_rate(p):
     return img
 
 
-TEMPLATES = {"guess": post_guess, "rate": post_rate, "codes_list": post_codes_list, "code": post_code, "versus": post_versus, "spotlight": post_spotlight, "tip": post_tip, "tutorial": post_tip, "poll": post_poll, "review": post_review,
+def _card_or_frame(p, cw, ch):
+    """Real card image when we have it, otherwise the FMM framed card."""
+    if p.get("card") and Path(p["card"]).exists():
+        return fit_card(p["card"], cw, ch, None)
+    pc = player_card({"name": p.get("name", "?"), "ovr": p.get("ovr", ""), "pos": p.get("pos", ""),
+                      "tier": "silver"}, cw - 30, ch - 42)
+    return pc.resize((cw + 60, ch + 60), Image.LANCZOS)  # same footprint as fit_card (30px glow margin)
+
+
+def post_xi(p):
+    """Best XI on a pitch (4-3-3). p['players'] = 11 dicts in order GK, LB, CB, CB, RB, CM, CM, CM, LW, ST, RW."""
+    img, d, c = base("squad", p.get("background"))
+    d.text((W // 2 + 60, 60), p.get("title", "BEST BUDGET XI").upper(), font=font("Anton-Regular.ttf", 100), fill=GOLD,
+           anchor="ma", stroke_width=3, stroke_fill=(5, 5, 5))
+    if p.get("subtitle"):
+        d.text((W // 2 + 60, 190), p["subtitle"].upper(), font=label_font(34), fill=WHITE, anchor="ma")
+    # pitch
+    pitch = (60, 250, W - 60, H - 90)
+    d.rounded_rectangle(pitch, 30, fill=(18, 90, 40), outline=(255, 255, 255), width=4)
+    for i in range(1, 8, 2):
+        y0 = pitch[1] + (pitch[3] - pitch[1]) * i / 8
+        d.rectangle((pitch[0] + 4, y0, pitch[2] - 4, y0 + (pitch[3] - pitch[1]) / 8), fill=(22, 104, 48))
+    mx, my = W // 2, (pitch[1] + pitch[3]) // 2
+    d.line((pitch[0], my, pitch[2], my), fill=(255, 255, 255), width=3)
+    d.ellipse((mx - 110, my - 110, mx + 110, my + 110), outline=(255, 255, 255), width=3)
+    d.rectangle((mx - 220, pitch[3] - 150, mx + 220, pitch[3]), outline=(255, 255, 255), width=3)
+    d.rectangle((mx - 220, pitch[1], mx + 220, pitch[1] + 150), outline=(255, 255, 255), width=3)
+    rows = [(0.86, [0.5]), (0.66, [0.14, 0.38, 0.62, 0.86]), (0.44, [0.22, 0.5, 0.78]), (0.2, [0.18, 0.5, 0.82])]
+    pl, k = p["players"], 0
+    cw, ch = 170, 238
+    for fy, xs in rows:
+        for fx in xs:
+            if k >= len(pl):
+                break
+            x = pitch[0] + (pitch[2] - pitch[0]) * fx
+            y = pitch[1] + (pitch[3] - pitch[1]) * fy
+            card = _card_or_frame(pl[k], cw, ch)
+            img.paste(card, (int(x - card.width / 2), int(y - card.height / 2)), card)
+            k += 1
+    return img
+
+
+def post_gem(p):
+    """Hidden gem: big card + its 4 best stats as bars."""
+    img, d, c = base("event", p.get("background"))
+    d.text((W // 2, 180), "HIDDEN GEM 💎".replace(" 💎", ""), font=font("Anton-Regular.ttf", 130), fill=(0, 230, 255),
+           anchor="ma", stroke_width=4, stroke_fill=(5, 5, 5))
+    d.text((W // 2, 335), p.get("subtitle", "").upper(), font=label_font(38), fill=WHITE, anchor="ma")
+    card = fit_card(p["card"], 470, 650, (0, 200, 255))
+    img.paste(card, (40, 410), card)
+    x0, y = 600, 470
+    for label, val in p.get("stats", [])[:5]:
+        d.text((x0, y), label.upper(), font=label_font(32), fill=GRAY)
+        bw = int(400 * min(1, val / 170))
+        d.rounded_rectangle((x0, y + 46, x0 + 400, y + 82), 18, fill=(40, 40, 50))
+        d.rounded_rectangle((x0, y + 46, x0 + bw, y + 82), 18, fill=GREEN)
+        d.text((x0 + 400, y), str(val), font=font("Anton-Regular.ttf", 44), fill=WHITE, anchor="ra")
+        y += 120
+    d.text((W // 2, 1120), p.get("tagline", "LOW OVR. ELITE STATS.").upper(), font=title_font(64), fill=GOLD, anchor="ma")
+    footer(d, "WOULD YOU USE HIM? TELL US 👇".replace(" 👇", ""))
+    return img
+
+
+def post_worth(p):
+    """Is the event worth it? Top event cards in a row + FMM verdict stamp."""
+    img, d, c = base("event", p.get("background"))
+    d.text((W // 2, 170), f"IS {p['event']}".upper(), font=font("Anton-Regular.ttf", 110), fill=WHITE, anchor="ma",
+           stroke_width=3, stroke_fill=PURPLE)
+    d.text((W // 2, 300), "WORTH IT?", font=font("Anton-Regular.ttf", 140), fill=GOLD, anchor="ma",
+           stroke_width=4, stroke_fill=(5, 5, 5))
+    cards = p["cards"][:5]
+    cw = 300 if len(cards) <= 3 else 200
+    ch = int(cw * 1.4)
+    gap = (W - len(cards) * cw) // (len(cards) + 1)
+    for i, cd in enumerate(cards):
+        card = fit_card(cd, cw, ch, GOLD)
+        img.paste(card, (gap + i * (cw + gap) - 30, 520), card)
+    d = ImageDraw.Draw(img)
+    col = {"WORTH IT": GREEN, "MUST BUY": GREEN, "SITUATIONAL": (255, 152, 0)}.get(p["verdict"], RED)
+    d.rounded_rectangle((180, 1000, W - 180, 1150), 30, fill=(10, 10, 10), outline=col, width=8)
+    d.text((W // 2, 1075), f"FMM: {p['verdict']}", font=font("Anton-Regular.ttf", 90), fill=col, anchor="mm")
+    d.text((W // 2, 1190), p.get("note", ""), font=caption_font(34), fill=GRAY, anchor="ma")
+    footer(d, "ARE YOU SPENDING ON THIS EVENT?")
+    return img
+
+
+def post_meme(p):
+    """Two-panel meme: top text + card, bottom text + card (greyed for the 'reality' panel)."""
+    img, d, c = base("news", p.get("background"))
+    panel_h = 560
+    for i, (txt, cd, sad) in enumerate([(p["top"], p["card"], False), (p["bottom"], p.get("card2") or p["card"], True)]):
+        y0 = 130 + i * (panel_h + 40)
+        d.rounded_rectangle((50, y0, W - 50, y0 + panel_h), 30, fill=(250, 250, 250) if not sad else (30, 30, 34))
+        lines = wrap(d, txt, title_font(58), 520)
+        ty = y0 + panel_h / 2 - len(lines) * 34
+        for ln in lines:
+            d.text((90, ty), ln, font=title_font(58), fill=(10, 10, 10) if not sad else WHITE); ty += 68
+        card = load_card(cd)
+        card.thumbnail((380, panel_h - 60))
+        if sad:
+            card = Image.merge("RGBA", (*[ImageEnhance.Brightness(card.convert("L")).enhance(0.8)] * 3, card.getchannel("A")))
+        img.paste(card, (W - 90 - card.width, int(y0 + (panel_h - card.height) / 2)), card)
+        em = Image.open(EMOJI / ("love.png" if not sad else "haha.png")).convert("RGBA").resize((110, 110))
+        img.paste(em, (W - 150, y0 + 20), em)
+        d = ImageDraw.Draw(img)
+    footer(d, "WHO ELSE DOES THIS?")  # no "tag a friend": Meta demotes tag-bait
+    return img
+
+
+TEMPLATES = {"xi": post_xi, "gem": post_gem, "worth": post_worth, "meme": post_meme, "guess": post_guess, "rate": post_rate, "codes_list": post_codes_list, "code": post_code, "versus": post_versus, "spotlight": post_spotlight, "tip": post_tip, "tutorial": post_tip, "poll": post_poll, "review": post_review,
              "news": post_quote, "quote": post_quote, "event": post_quote, "pack": post_quote, "top10": post_top10}
 
 

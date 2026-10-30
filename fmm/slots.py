@@ -95,8 +95,13 @@ def pick(kind, fresh, db, state):
     latest = sorted(fresh.values(), key=lambda p: (heat(p), p.get("ovr") or 0), reverse=True)
     if kind == "reel":
         return ("tierlist" if weekday % 2 else "countdown"), latest[:8], pool
-    # photo fallback rotates daily: card battle -> guess the player -> rate this card
-    rot = ["versus", "guess", "rate"][dt.date.today().toordinal() % 3]
+    # photo fallback rotates through 7 formats (2 photo slots a day -> each format about every 3–4 days)
+    ROT = ["versus", "guess", "xi", "rate", "gem", "worth", "meme"]
+    n = state.get("photo_n", 0)
+    state["photo_n"] = n + 1
+    rot = ROT[n % len(ROT)]
+    if rot in ("xi", "gem", "worth", "meme"):
+        return rot, latest, pool
     if rot != "versus":
         used = set(state.get("used_photo", []))
         cand = [p for p in latest if str(p["id"]) not in used] or latest
@@ -147,6 +152,9 @@ def build(slot):
     if OUT.exists():
         shutil.rmtree(OUT)
     OUT.mkdir(parents=True)
+    if ctype in ("xi", "gem", "worth", "meme"):
+        media, caption = build_extra(ctype, players, pool, fresh, state)
+        return finish(slot, kind, ctype, media, caption, players[:1], state)
     for p in players:
         p["card"] = ensure_card(p, fresh)
     players = [p for p in players if p.get("card")]
@@ -216,6 +224,12 @@ def build(slot):
         caption = (f"⚔️ {a['ovr']} {a['name']} ({a['pos']}) vs {b['ovr']} {b['name']} ({b['pos']})\n\n"
                    f"Only one goes in your starting XI. Who's your pick and why? 👇\n\n"
                    f"#FCMobile #FCMobile26 #EASportsFCMobile #CardBattle #FMM")
+    if ctype.startswith("review"):
+        state["featured"] += [str(p["id"]), f"{p.get('name')}|{p.get('ovr')}|{p.get('pos')}"]
+    finish(slot, kind, ctype, media, caption, players, state)
+
+
+def finish(slot, kind, ctype, media, caption, players, state):
     pending = [r for r in state.get("reveal", []) if not r.get("done")]
     if pending and ctype != "guess":  # answer to the last "guess the player"
         r = pending[-1]
@@ -226,11 +240,111 @@ def build(slot):
     manifest = {"slot": slot, "kind": kind, "type": ctype, "media": Path(media).name,
                 "players": [x["id"] for x in players], "built": dt.datetime.now().isoformat(timespec="minutes")}
     (OUT / "manifest.json").write_text(json.dumps(manifest, indent=1), encoding="utf-8")
-    if ctype.startswith("review"):
-        state["featured"] += [str(p["id"]), f"{p.get('name')}|{p.get('ovr')}|{p.get('pos')}"]
     state["history"] = (state["history"] + [manifest])[-200:]
     STATE.write_text(json.dumps(state, indent=1, ensure_ascii=False), encoding="utf-8")
     print("built", manifest)
+
+
+XI_SLOTS = [("gk", 1), ("def", 4), ("mid", 3), ("att", 3)]
+MEMES = [("When you finally pack {name}", "When you check his weak foot"),
+         ("Me saving gems for 3 weeks", "EA dropping {ovr} OVR {name} on Thursday"),
+         ("{name} on paper: {ovr} OVR", "{name} in my squad after 5 losses"),
+         ("Opponent's {name}", "My {name}"),
+         ("Me: one more pack", "Me 2 hours later, still no {name}")]
+TAGS = "#FCMobile #FCMobile26 #EASportsFCMobile #FMM"
+
+
+def build_extra(ctype, latest, pool, fresh, state):
+    """Best Budget XI, Hidden Gem, Is the event worth it?, memes."""
+    from fmm import brand
+    import random
+    for p in list(fresh.values())[:24]:  # make sure the latest cards all have images
+        try:
+            ensure_card(p, fresh)
+        except Exception as ex:
+            print("card skipped", p.get("name"), str(ex)[:60])
+    have, names = [], set()
+    for p in sorted(pool, key=lambda p: p.get("added") or "", reverse=True):  # one card per player (newest)
+        if p.get("stats") and (renderz.CARDS / f"{p['id']}.png").exists() and p.get("name") not in names:
+            names.add(p.get("name"))
+            have.append({**p, "card": str(renderz.CARDS / f"{p['id']}.png")})
+    rnd = random.Random(dt.date.today().toordinal())
+    if ctype == "xi":
+        ovrs = sorted(p["ovr"] for p in have if p.get("ovr"))
+        cap = ovrs[len(ovrs) // 4] if ovrs else 999          # budget = the cheaper quarter of the cards we know
+        cheap = [p for p in have if (p.get("ovr") or 0) <= cap]
+        team, used = [], set()
+        for g, n in XI_SLOTS:
+            best = sorted([p for p in cheap if rv.group(p.get("pos", "")) == g and p["id"] not in used],
+                          key=lambda p: -rv.key_avg(p, g))[:n]
+            if g != "gk" and len(best) < n:  # short on this line: next-best outfield cards fill in
+                spare = sorted([p for p in cheap if p["id"] not in used and p not in best and rv.group(p.get("pos", "")) != "gk"],
+                               key=lambda p: -(p.get("ovr") or 0))
+                best += spare[:n - len(best)]
+            used |= {p["id"] for p in best}
+            team += best + [{"name": "?", "ovr": "", "pos": g.upper()}] * (n - len(best))
+        if sum(1 for p in team if p.get("name") != "?") < 8:  # too few cards known yet
+            return build_extra("meme", latest, pool, fresh, state)
+        post = {"id": "slot", "type": "xi", "title": "Best Budget XI", "subtitle": f"Every card {cap} OVR or lower",
+                "players": team}
+        lines = [f"{p.get('pos', '')} {p.get('name')} {p.get('ovr')}" for p in team if p.get("name") != "?"]
+        caption = (f"💰 FMM BEST BUDGET XI (all {cap} OVR or lower)\n\n" + "\n".join(lines)
+                   + "\n\nWho would you swap in? 👇 Save this for your next rebuild 📌\n\n" + TAGS + " #BudgetSquad")
+    elif ctype == "gem":
+        def gem_score(p):
+            g = rv.group(p.get("pos", ""))
+            peers = [x for x in have if rv.group(x.get("pos", "")) == g]
+            pct = sum(rv.key_avg(x, g) <= rv.key_avg(p, g) for x in peers) / max(1, len(peers))
+            low = sum((x.get("ovr") or 0) >= (p.get("ovr") or 0) for x in peers) / max(1, len(peers))
+            return pct + low
+        used = set(state.get("used_photo", []))
+        top_ovr = max((x.get("ovr") or 0) for x in have)
+        cands = [x for x in have if str(x["id"]) not in used and (x.get("ovr") or 0) < top_ovr - 2]
+        if not cands:  # nothing "low OVR" to talk about yet -> a card battle instead
+            return build_extra("meme", latest, pool, fresh, state)
+        p = max(cands, key=gem_score)
+        g = rv.group(p.get("pos", ""))
+        labels = [(renderz.STAT_NAMES.get(k, k), p["stats"][k]) for k in sorted(
+            [k for k in rv.GROUPS[g]["keys"] if k in p["stats"]], key=lambda k: -p["stats"][k])[:5]]
+        post = {"id": "slot", "type": "gem", "card": p["card"], "subtitle": f"{p['ovr']} OVR {p['name']} • {p['pos']}",
+                "stats": labels}
+        state.setdefault("used_photo", []).append(str(p["id"]))
+        caption = (f"💎 HIDDEN GEM: {p['ovr']} OVR {p['name']} ({p['pos']})\n\nLow OVR, but his key stats beat many "
+                   f"higher-rated cards:\n" + "\n".join(f"• {l}: {v}" for l, v in labels)
+                   + "\n\nWould you give him a chance? 👇\n\n" + TAGS + " #HiddenGem")
+    elif ctype == "worth":
+        by_prog = {}
+        for p in latest:
+            by_prog.setdefault(p.get("program") or "NEW", []).append(p)
+        prog, cards = max(by_prog.items(), key=lambda kv: len(kv[1]))
+        seen_names, uniq = set(), []
+        for p in sorted(cards, key=lambda p: -(p.get("ovr") or 0)):
+            if p.get("name") in seen_names:
+                continue
+            p["card"] = ensure_card(p, fresh)
+            if p.get("card"):
+                seen_names.add(p.get("name")); uniq.append(p)
+        cards = uniq[:5]
+        scores = [rv.review(p, pool)["score"] for p in cards]
+        avg = sum(scores) / max(1, len(scores))
+        verdict = "WORTH IT" if avg >= 8 else "SITUATIONAL" if avg >= 7 else "SKIP"
+        import re as _re
+        name = _re.sub(r"^(PROGRAM_?|PROGRAMNAME_?)", "", prog, flags=_re.I)
+        name = _re.sub(r"\d+$", "", name).replace("_", " ").strip().title() or "New"
+        post = {"id": "slot", "type": "worth", "event": name, "cards": [p["card"] for p in cards], "verdict": verdict,
+                "note": f"Average FMM rating of its top cards: {avg:.1f}/10"}
+        caption = (f"🤔 Is the {name} event worth your gems?\n\nTop cards:\n"
+                   + "\n".join(f"• {p['ovr']} {p['name']} ({p['pos']}) — {s}/10" for p, s in zip(cards, scores))
+                   + f"\n\nFMM verdict: {verdict}\n\nAre you spending? 👇\n\n" + TAGS)
+    else:  # meme
+        cand = sorted([p for p in latest if p.get("card") or ensure_card(p, fresh)], key=lambda p: -(p.get("ovr") or 0))
+        p = cand[0] if cand else have[0]
+        p["card"] = p.get("card") or ensure_card(p, fresh)
+        top, bottom = rnd.choice(MEMES)
+        post = {"id": "slot", "type": "meme", "top": top.format(**p), "bottom": bottom.format(**p), "card": p["card"]}
+        caption = f"😂 Be honest… who else? 👇\n\n{TAGS} #FCMobileMemes"
+    media = brand.render(post, OUT)
+    return media, caption
 
 
 def post():
