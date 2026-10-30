@@ -65,5 +65,8 @@
  "force": {
   "0700": "countdown"
  },
- "photo_n": 0
+ "photo_n": 0,
+ "hold_programs": [
+  "TOTW27"
+ ]
 }

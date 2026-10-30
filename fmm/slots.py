@@ -45,6 +45,9 @@ def latest_players():
             print(f"fcmobileforum: {len(fresh)} latest cards")
         except Exception as ex:
             print("fcmobileforum not reachable, using collected cards:", str(ex)[:80])
+    hold = set(load_state().get("hold_programs", []))  # programs not confirmed by a second source yet
+    if fresh is not None and hold:
+        fresh = {k: p for k, p in fresh.items() if (p.get("program") or "").replace("PROGRAM_", "") not in hold}
     if fresh is None:
         recent = sorted(db.values(), key=lambda p: p.get("added") or "", reverse=True)
         fresh = {str(p["id"]): p for p in recent if (renderz.CARDS / f"{p['id']}.png").exists()}
