@@ -45,6 +45,14 @@ def run(dry=False):
     if dry or not new:
         return
     held_ids = {p["id"] for p in held}
+    try:  # keep the version library growing, so next week's cards can be compared with these
+        from fmm import versions
+        lib = versions.library()
+        for p in new:
+            lib.setdefault(str(p["id"]), {k: v for k, v in p.items() if not k.startswith("img_")})
+        versions.LIB.write_text(json.dumps({"players": lib}, ensure_ascii=False), encoding="utf-8")
+    except Exception as ex:
+        print("library update skipped:", str(ex)[:80])
     for p in fresh:  # unconfirmed cards stay "unseen" so they're announced once confirmed
         if p["id"] not in held_ids:
             db.setdefault(p["id"], {k: v for k, v in p.items() if not k.startswith("img_")})

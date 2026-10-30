@@ -54,6 +54,34 @@ def pairs(limit=20):
     return res
 
 
+def new_vs_old(new_cards, min_gap=3.0):
+    """For each NEW card, compare with the same player's older versions.
+    Worth a Reel only if the stat gap is clear (>= min_gap on key stats). Best story first:
+      new card has higher OVR but WORSE stats  -> "EA Sports Logic" (old one is the GOAT)
+      new card is much better                   -> "Upgrade" (new one is the GOAT)"""
+    lib = library()
+    out = []
+    for n in new_cards:
+        old = [p for p in lib.values() if p.get("name") == n.get("name") and p.get("stats")
+               and str(p["id"]) != str(n["id"]) and (p.get("added") or "") < (n.get("added") or "9")]
+        if not old or not n.get("stats"):
+            continue
+        g = rv.group(n.get("pos", ""))
+        for o in old:
+            d = rv.key_avg(n, g) - rv.key_avg(o, g)
+            if abs(d) < min_gap:
+                continue
+            irony = d < 0 and (n.get("ovr") or 0) >= (o.get("ovr") or 0)
+            good, bad = (n, o) if d > 0 else (o, n)
+            out.append(((irony, abs(d)), {"name": n["name"], "good": good, "bad": bad, "irony": irony, "new": n}))
+    out.sort(key=lambda x: x[0], reverse=True)
+    seen, res = set(), []
+    for _, pr in out:
+        if pr["name"] not in seen:
+            seen.add(pr["name"]); res.append(pr)
+    return res
+
+
 def collect(pages=60):
     """PC: fetch RenderZ history, keep facts, build card images for the best pairs (+ mark programs confirmed)."""
     lib, imgs = {}, {}

@@ -233,8 +233,14 @@ def build_versions(slot):
     try:
         from fmm import versions, inbox
         used = set(st.get("used_versions", []))
-        pr = next((p for p in versions.pairs(60) if p["name"] not in used
-                   and confirmed_only({"g": p["good"], "b": p["bad"]}).keys() == {"g", "b"}), None)
+        # new cards of this week vs their old versions (only clear stat gaps); nothing worth it -> normal Reel
+        fresh, _, _ = latest_players()
+        week_ago = (dt.datetime.now(dt.UTC) - dt.timedelta(days=7)).strftime("%Y-%m-%dT%H:%M:%S")
+        new = [p for p in fresh.values() if (p.get("added") or "") >= week_ago]
+        pr = next((p for p in versions.new_vs_old(new) if p["irony"] and p["name"] not in used
+                   and confirmed_only({"g": p["good"], "b": p["bad"]}).keys() == {"g", "b"}
+                   and all((renderz.CARDS / f"{c['id']}.png").exists() or ensure_card(c, fresh) for c in (p["good"], p["bad"]))),
+                  None)
         if not pr:
             return False
         meme = inbox.meme_clip()
