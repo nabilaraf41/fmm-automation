@@ -157,7 +157,7 @@ def pick(kind, fresh, db, state):
     wk_unf = sorted([p for p in unfeatured if p in this_week], key=lambda p: (heat(p), p.get("ovr") or 0), reverse=True)
     unfeatured = wk_unf or unfeatured  # this week's cards first: trending, then highest OVR
     if kind == "photo":  # photo slots rotate formats; the "review" turn reviews the next new card
-        ROT = ["review_post", "versus", "guess", "xi", "rate", "gem", "worth", "meme"]
+        ROT = ["review_post", "versus", "pick3", "guess", "compare4", "xi", "rate", "gem", "worth", "meme"]
         n = state.get("photo_n", 0)
         state["photo_n"] = n + 1
         rot = ROT[n % len(ROT)]
@@ -177,7 +177,7 @@ def pick(kind, fresh, db, state):
     if kind == "reel":
         return ("tierlist" if weekday % 2 else "countdown"), latest[:8], pool
     rot = forced_rot or "versus"
-    if rot in ("xi", "gem", "worth", "meme"):
+    if rot in ("xi", "gem", "worth", "meme", "compare4", "pick3"):
         return rot, latest, pool
     if rot == "versus":
         return "versus", next_pair(latest, state), pool
@@ -232,7 +232,7 @@ def build(slot):
     if OUT.exists():
         shutil.rmtree(OUT)
     OUT.mkdir(parents=True)
-    if ctype in ("xi", "gem", "worth", "meme"):
+    if ctype in ("xi", "gem", "worth", "meme", "compare4", "pick3"):
         media, caption = build_extra(ctype, players, pool, fresh, state)
         return finish(slot, kind, ctype, media, caption, players[:1], state)
     for p in players:
@@ -296,11 +296,11 @@ def build(slot):
         caption = (f"⭐ Rate {p['ovr']} OVR {p['name']} ({p['pos']}) from 1 to 10!\n\n"
                    "Be honest — is he worth the hype? 👇\n\n#FCMobile #FCMobile26 #RateTheCard #FMM")
         state.setdefault("used_photo", []).append(str(p["id"]))
-    else:  # versus
+    else:  # versus -> full stats comparison (reference: assets/references/vs_1v1_stats.png)
         a, b = players[0], players[1] if len(players) > 1 else players[0]
-        post = {"id": "slot", "type": "versus", "tag": "Which one would you pick?",
-                "title": f"{a['name']} or {b['name']}?", "cards": [{"card": a["card"]}, {"card": b["card"]}]}
-        media = brand.render(post, OUT)
+        for x in (a, b):
+            x["program_name"] = program_name(x.get("program"))
+        media = brand.render({"id": "slot", "type": "compare", "a": a, "b": b}, OUT)
         caption = (f"⚔️ {a['ovr']} {a['name']} ({a['pos']}) vs {b['ovr']} {b['name']} ({b['pos']})\n\n"
                    f"Only one goes in your starting XI. Who's your pick and why? 👇\n\n"
                    f"#FCMobile #FCMobile26 #EASportsFCMobile #CardBattle #FMM")
@@ -364,8 +364,8 @@ def render_versus(pair, fresh):
     a, b = pair[0], pair[1] if len(pair) > 1 else pair[0]
     for x in (a, b):
         x["card"] = x.get("card") or ensure_card(x, fresh)
-    post = {"id": "slot", "type": "versus", "tag": "Which one would you pick?",
-            "title": f"{a['name']} or {b['name']}?", "cards": [{"card": a["card"]}, {"card": b["card"]}]}
+        x["program_name"] = program_name(x.get("program"))
+    post = {"id": "slot", "type": "compare", "a": a, "b": b}
     caption = (f"⚔️ {a['ovr']} {a['name']} ({a['pos']}) vs {b['ovr']} {b['name']} ({b['pos']})\n\n"
                f"Only one goes in your starting XI. Who's your pick and why? 👇\n\n"
                f"#FCMobile #FCMobile26 #EASportsFCMobile #CardBattle #FMM")
@@ -453,6 +453,40 @@ def build_extra(ctype, latest, pool, fresh, state):
         caption = (f"🤔 Is the {name} event worth your gems?\n\nTop cards:\n"
                    + "\n".join(f"• {p['ovr']} {p['name']} ({p['pos']}) — {s}/10" for p, s in zip(cards, scores))
                    + f"\n\nFMM verdict: {verdict}\n\nAre you spending? 👇\n\n" + TAGS)
+    elif ctype == "compare4":  # Top 4 of the position with the most confirmed cards (ref: vs_top4_table.png)
+        by_pos = {}
+        for p in have:
+            by_pos.setdefault(p.get("pos"), []).append(p)
+        pos, cards = max(by_pos.items(), key=lambda kv: (len(kv[1]) >= 4, len(kv[1])))
+        if len(cards) < 3:
+            return render_versus(next_pair(latest, state), fresh)
+        top4 = sorted(cards, key=lambda p: (p.get("ovr") or 0, rv.key_avg(p, rv.group(pos))), reverse=True)[:4]
+        post = {"id": "slot", "type": "compare4", "position": pos, "players": top4}
+        from fmm.review import face_stats
+        caption = (f"📊 Top {len(top4)} {pos} cards right now — stats compared\n\n"
+                   + "\n".join(f"• {p['ovr']} {p['name']}: " + " ".join(f"{k} {v}" for k, v in face_stats(p).items())
+                               for p in top4)
+                   + "\n\nWho's your #1? 👇\n\n" + TAGS + f" #{pos}")
+    elif ctype == "pick3":  # Pick one of 3 cards from the same event (ref: pick_one_react.png)
+        used = set(state.get("used_photo", []))
+        by_prog = {}
+        for p in latest:
+            if str(p["id"]) not in used:
+                by_prog.setdefault(p.get("program") or "", []).append(p)
+        prog, cards = max(by_prog.items(), key=lambda kv: len(kv[1])) if by_prog else ("", latest)
+        three = sorted(cards, key=lambda p: -(p.get("ovr") or 0))[:3]
+        for p in three:
+            p["card"] = p.get("card") or ensure_card(p, fresh)
+            state.setdefault("used_photo", []).append(str(p["id"]))
+        three = [p for p in three if p.get("card")]
+        if len(three) < 3:
+            return render_versus(next_pair(latest, state), fresh)
+        ev = program_name(prog)
+        post = {"id": "slot", "type": "pick3", "title": "Pick one", "subtitle": f"{three[0]['ovr']} OVR {ev}",
+                "cards": [p["card"] for p in three]}
+        caption = (f"🎁 You can only pick ONE {ev} card:\n\n❤️ {three[0]['ovr']} {three[0]['name']}\n"
+                   f"😮 {three[1]['ovr']} {three[1]['name']}\n😆 {three[2]['ovr']} {three[2]['name']}\n\n"
+                   f"Which one and why? 👇\n\n" + TAGS)
     else:  # meme
         cand = sorted([p for p in latest if p.get("card") or ensure_card(p, fresh)], key=lambda p: -(p.get("ovr") or 0))
         p = cand[0] if cand else have[0]

@@ -64,9 +64,17 @@ def arrow(length=360, width=70, color=(255, 30, 30)):
     return out
 
 
-def cover(subject_path, text, out_path, sub=None, color="red", emoji="wow", flip_arrow=False):
+def cover(subject_path, text, out_path, sub=None, color="red", emoji="wow", flip_arrow=False, bg=None):
+    """bg = optional photo (e.g. the goal frame) blended under the burst rays."""
     inner, outer = THEMES.get(color, THEMES["red"])
     img = burst(inner, outer, W // 2, 1130)
+    if bg and Path(bg).exists():
+        ph = Image.open(bg).convert("RGB")
+        s = max(W / ph.width, H / ph.height)
+        ph = ph.resize((int(ph.width * s), int(ph.height * s)), Image.LANCZOS)
+        ph = ph.crop(((ph.width - W) // 2, (ph.height - H) // 2, (ph.width + W) // 2, (ph.height + H) // 2))
+        ph = ImageEnhance.Color(ImageEnhance.Brightness(ph).enhance(0.75)).enhance(1.4).convert("RGBA")
+        img = Image.blend(ph, img, 0.45)
     # subject: card, huge, punchy colours, white rim + glow
     card = load_card(subject_path) if subject_path else None
     if card:

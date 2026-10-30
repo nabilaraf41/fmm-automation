@@ -63,14 +63,23 @@ def peaks(video, n=None, min_gap=25.0, pre=8.0, post=4.0):
     return [(max(0.0, p - pre), p, min(dur, p + post)) for p in sorted(picked)]
 
 
-def overlay_png(title, sub, path):
-    """Transparent 1080x1920 layer: big title (top), FMM bar (bottom)."""
-    from fmm.brand import font, LOGO
+def overlay_png(title, sub, path, card=None):
+    """Transparent 1080x1920 layer: big title (top), scorer's card (lower right), FMM bar (bottom)."""
+    from fmm.brand import font, LOGO, load_card
     from fmm.thumb import big_text
     im = Image.new("RGBA", (RW, RH), (0, 0, 0, 0))
     if title:
         t = big_text(title.upper(), 150, (255, 230, 0), stroke=12)
         im.alpha_composite(t, ((RW - t.width) // 2, 230))
+    if card:
+        c = load_card(card)
+        c.thumbnail((330, 460), Image.LANCZOS)
+        glow = Image.new("RGBA", (c.width + 60, c.height + 60), (0, 0, 0, 0))
+        glow.paste(Image.new("RGBA", c.size, (255, 215, 0, 200)), (30, 30), c)
+        glow = glow.filter(ImageFilter.GaussianBlur(14))
+        x, y = RW - c.width - 40, RH - 240 - c.height - 20
+        im.alpha_composite(glow, (x - 30, y - 30))
+        im.alpha_composite(c, (x, y))
     d = ImageDraw.Draw(im)
     d.rectangle((0, RH - 230, RW, RH - 120), fill=(5, 5, 5, 200))
     d.rectangle((0, RH - 230, RW, RH - 222), fill=(225, 6, 44, 255))
@@ -84,7 +93,8 @@ def overlay_png(title, sub, path):
     return path
 
 
-def make(video, title="WHAT A GOAL!!", index=0, sub=None, music=None):
+def make(video, title="WHAT A GOAL!!", index=0, sub=None, music=None, card=None):
+    """card = the scorer's card image: shown in the Reel and as the cover's subject."""
     from fmm import sfx
     video = Path(video)
     OUT.mkdir(parents=True, exist_ok=True)
@@ -94,7 +104,7 @@ def make(video, title="WHAT A GOAL!!", index=0, sub=None, music=None):
     start, peak, end = pk[index]
     name = f"{video.stem}_{index}"
     out = OUT / f"{name}.mp4"
-    ov = overlay_png(title, sub, OUT / f"{name}_ov.png")
+    ov = overlay_png(title, sub, OUT / f"{name}_ov.png", card)
     rel = peak - start            # highlight time inside the clip
     slow_a, slow_b = max(0.0, rel - 1.5), rel + 0.8
     clip_len = end - start
@@ -114,7 +124,7 @@ def make(video, title="WHAT A GOAL!!", index=0, sub=None, music=None):
         f"[base2][2:v]overlay=0:0,format=yuv420p[replay];"
         f"[main][replay]concat=n=2:v=1:a=0[v]"
     )
-    replay_png = overlay_png("REPLAY", sub, OUT / f"{name}_ov2.png")
+    replay_png = overlay_png("REPLAY", sub, OUT / f"{name}_ov2.png", card)
     # audio: game audio (+ slowed replay audio) with whoosh at start and impact on the goal
     sfx.build() if not (sfx.OUT / "impact.wav").exists() else None
     af = (
@@ -137,7 +147,8 @@ def make(video, title="WHAT A GOAL!!", index=0, sub=None, music=None):
     run(["ffmpeg", "-v", "error", "-y", "-ss", str(peak), "-i", str(video), "-frames:v", "1",
          "-vf", "crop=ih*3/4:ih:(iw-ih*3/4)/2:0", str(frame)])  # portrait crop of the action for the cover
     from fmm import thumb
-    thumb.cover(str(frame) if frame.exists() else None, title, OUT / f"{name}_cover.jpg", sub=sub, color="red")
+    thumb.cover(card or (str(frame) if frame.exists() else None), title, OUT / f"{name}_cover.jpg", sub=sub,
+                color="red", bg=str(frame) if (card and frame.exists()) else None)
     for tmp in (ov, replay_png, frame):
         Path(tmp).unlink(missing_ok=True)
     return out

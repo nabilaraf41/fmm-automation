@@ -25,8 +25,11 @@ Private repo `nabilaraf41/fmm-automation`, GitHub Actions (PC can be off):
 ## Slot logic (`fmm/slots.py`)
 1. Owner's clips first: Google Drive folder id 1vNTd0SHdx9RnC4tuvKIQL26Z7WgKWD_E (`fmm.inbox` → `fmm.clips`:
    loud-moment highlights, vertical layout, punch-in, slow-mo replay, sfx, cover). ~1 Reel per 75 s of footage.
+   The scorer's card comes from the file name (e.g. "kane free kick.mp4" → Kane's best confirmed card) and is shown
+   in the Reel and as the cover subject (`inbox.scorer_card`).
 2. Reel slots: review Reel of next unreviewed confirmed card from this week (trending on YouTube first, then OVR).
-3. Photo slots rotate: review, versus, guess, budget XI, rate, hidden gem, "is the event worth it", meme.
+3. Photo slots rotate: review, 1v1 stats comparison, pick-one (3 cards + reactions), guess, top-4 stats table,
+   budget XI, rate, hidden gem, "is the event worth it", meme. Design references: assets/references/.
 - One-off overrides: `featured.json` → `force` (e.g. {"0700": "countdown"}).
 - Card sources: RenderZ (blocked from cloud, 403) → fcmobileforum `/players` (`fmm.fmf`, card = bg + render).
 

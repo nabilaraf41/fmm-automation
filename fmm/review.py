@@ -65,6 +65,26 @@ HOOKS = ["🔥 Is {ovr} OVR {name} worth it?", "🚨 {ovr} {name} just dropped �
 WR = {1: "Low", 2: "Medium", 3: "High"}
 
 
+FACE = {"PAC": ["acc", "spd"], "SHO": ["fin", "sho", "lsa", "pos", "vol"], "PAS": ["spa", "lpa", "vis", "cro", "cur"],
+        "DRI": ["dri", "agi", "bal", "rea", "bac"], "DEF": ["awr", "stt", "slt", "mrk"], "PHY": ["str", "jmp", "sta", "agg"]}
+DETAIL = [("PACE", [("acc", "Acceleration"), ("spd", "Sprint Speed")]),
+          ("SHOOTING", [("fin", "Finishing"), ("sho", "Shot Power"), ("lsa", "Long Shots"), ("pos", "Positioning")]),
+          ("PASSING", [("spa", "Short Passing"), ("lpa", "Long Passing"), ("vis", "Vision")]),
+          ("DRIBBLING", [("dri", "Dribbling"), ("agi", "Agility"), ("bac", "Ball Control"), ("rea", "Reactions")]),
+          ("DEFENDING", [("awr", "Awareness"), ("stt", "Standing Tackle"), ("slt", "Sliding Tackle")]),
+          ("PHYSICAL", [("str", "Strength"), ("jmp", "Jumping"), ("sta", "Stamina")])]
+
+
+def face_stats(p):
+    """PAC/SHO/PAS/DRI/DEF/PHY averages from the detailed stats."""
+    st = p.get("stats") or {}
+    out = {}
+    for k, ks in FACE.items():
+        vals = [st[x] for x in ks if x in st]
+        out[k] = round(sum(vals) / len(vals)) if vals else 0
+    return out
+
+
 def group(pos):
     for g, v in GROUPS.items():
         if pos in v["pos"]:

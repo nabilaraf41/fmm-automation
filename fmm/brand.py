@@ -572,7 +572,134 @@ def post_meme(p):
     return img
 
 
-TEMPLATES = {"xi": post_xi, "gem": post_gem, "worth": post_worth, "meme": post_meme, "guess": post_guess, "rate": post_rate, "codes_list": post_codes_list, "code": post_code, "versus": post_versus, "spotlight": post_spotlight, "tip": post_tip, "tutorial": post_tip, "poll": post_poll, "review": post_review,
+def _stars(n):
+    return ("★" * int(n) + "☆" * (5 - int(n))) if isinstance(n, int) and 0 < n <= 5 else ""
+
+
+def post_compare(p):
+    """1 vs 1 stat comparison: cards on top, 6 face stats, detailed mirror table (green = better, red = worse)."""
+    from fmm.review import face_stats, DETAIL
+    a, b = p["a"], p["b"]
+    img, d, c = base("comparison", p.get("background"))
+    title = f"{a['name']} vs {b['name']}".upper()
+    tf = title_font(64)
+    while d.textlength(title, font=tf) > W - 420 and tf.size > 36:
+        tf = title_font(tf.size - 4)
+    d.text((W // 2 + 130, 55), title, font=tf, fill=WHITE, anchor="ma")
+    d.text((W // 2 + 130, 130), "STATS COMPARISON", font=label_font(28), fill=GOLD, anchor="ma")
+    for side, pl in ((0, a), (1, b)):  # cards + mini info
+        x0 = 70 if side == 0 else W // 2 + 30
+        card = fit_card(pl["card"], 200, 280, PURPLE if side == 0 else BLUE)
+        img.paste(card, (x0 - 30, 160), card)
+        d = ImageDraw.Draw(img)
+        ix = x0 + 215
+        d.text((ix, 190), f"{pl['ovr']} {pl['pos']}", font=title_font(44), fill=WHITE)
+        info = [f"WF {_stars(pl.get('weak_foot'))}", f"SM {_stars(pl.get('skill_moves'))}",
+                f"{pl.get('height')} cm" if pl.get("height") else ""]
+        for i, t in enumerate(x for x in info if x.strip() not in ("WF", "SM")):
+            d.text((ix, 250 + i * 40), t, font=body_font(26), fill=GRAY)
+        prog = pl.get("program_name") or (pl.get("program") or "").replace("PROGRAM_", "")
+        if prog:
+            d.text((ix, 380), prog.upper(), font=label_font(24), fill=GOLD)
+    fa, fb = face_stats(a), face_stats(b)
+    y = 470
+    for side, (me, other) in ((0, (fa, fb)), (1, (fb, fa))):  # face stats boxes
+        x0 = 60 if side == 0 else W // 2 + 20
+        bw = (W // 2 - 80) / 6
+        for i, k in enumerate(me):
+            col = GREEN if me[k] > other[k] else RED if me[k] < other[k] else GRAY
+            bx = x0 + i * bw
+            d.rounded_rectangle((bx + 3, y, bx + bw - 3, y + 96), 12, fill=(20, 20, 26), outline=col, width=3)
+            d.text((bx + bw / 2, y + 22), k, font=label_font(22), fill=GRAY, anchor="mm")
+            d.text((bx + bw / 2, y + 64), str(me[k]), font=font("Anton-Regular.ttf", 40), fill=col, anchor="mm")
+    # detailed mirror table: value A | label | value B
+    sa, sb = a.get("stats") or {}, b.get("stats") or {}
+    y = 600
+    row = 52
+    for head, rows in DETAIL:
+        for key, label in rows[:2]:  # 2 key stats per category keeps it readable
+            label = f"{label}"
+            va, vb = sa.get(key), sb.get(key)
+            if va is None or vb is None:
+                continue
+            ca = GREEN if va > vb else RED if va < vb else GRAY
+            cb = GREEN if vb > va else RED if vb < va else GRAY
+            d.rounded_rectangle((60, y, W - 60, y + row - 6), 12, fill=(18, 18, 22))
+            d.text((W // 2, y + row / 2 - 3), label, font=label_font(26), fill=WHITE, anchor="mm")
+            d.text((120, y + row / 2 - 3), str(va), font=font("Anton-Regular.ttf", 34), fill=ca, anchor="mm")
+            d.text((W - 120, y + row / 2 - 3), str(vb), font=font("Anton-Regular.ttf", 34), fill=cb, anchor="mm")
+            wa = int(200 * min(1, va / 200)); wb = int(200 * min(1, vb / 200))
+            d.rounded_rectangle((170, y + 16, 170 + wa, y + row - 22), 7, fill=ca)
+            d.rounded_rectangle((W - 170 - wb, y + 16, W - 170, y + row - 22), 7, fill=cb)
+            y += row
+    footer(d, "WHO WINS? TELL US IN THE COMMENTS")
+    return img
+
+
+def post_compare4(p):
+    """Top 4 of one position: 4 cards on top, face-stat rows, best value per row highlighted."""
+    from fmm.review import face_stats
+    pl = p["players"][:4]
+    img, d, c = base("comparison", p.get("background"))
+    d.text((W // 2 + 60, 60), f"TOP {len(pl)} {p['position']}".upper(), font=font("Anton-Regular.ttf", 96), fill=GOLD,
+           anchor="ma", stroke_width=3, stroke_fill=(5, 5, 5))
+    d.text((W // 2 + 60, 175), "STATS COMPARISON", font=label_font(34), fill=WHITE, anchor="ma")
+    colw = (W - 220) / len(pl)
+    for i, x in enumerate(pl):
+        card = fit_card(x["card"], 190, 266, GOLD)
+        cx = 200 + colw * i + colw / 2
+        img.paste(card, (int(cx - card.width / 2), 230), card)
+    d = ImageDraw.Draw(img)
+    faces = [face_stats(x) for x in pl]
+    y = 560
+    for k in ["PAC", "SHO", "PAS", "DRI", "DEF", "PHY"]:
+        vals = [f[k] for f in faces]
+        best = max(vals)
+        d.rounded_rectangle((60, y, W - 60, y + 96), 18, fill=(18, 18, 24))
+        d.rounded_rectangle((60, y, 190, y + 96), 18, fill=(40, 30, 70))
+        d.text((125, y + 48), k, font=label_font(34), fill=WHITE, anchor="mm")
+        for i, v in enumerate(vals):
+            cx = 200 + colw * i + colw / 2
+            if v == best:
+                d.rounded_rectangle((cx - 70, y + 14, cx + 70, y + 82), 14, fill=(0, 120, 60))
+            d.text((cx, y + 48), str(v), font=font("Anton-Regular.ttf", 50), fill=WHITE, anchor="mm")
+        y += 108
+    footer(d, "WHO'S THE BEST? COMMENT YOUR PICK")
+    return img
+
+
+def post_pick3(p):
+    """Pick one: 3 tall card panels with a reaction under each (Love / Wow / Haha)."""
+    img, d, c = base("event", p.get("background"))
+    d.text((W // 2 + 60, 60), p.get("title", "PICK ONE").upper(), font=font("Anton-Regular.ttf", 84), fill=WHITE,
+           anchor="ma", stroke_width=3, stroke_fill=PURPLE)
+    if p.get("subtitle"):
+        d.text((W // 2 + 60, 165), p["subtitle"].upper(), font=label_font(34), fill=GOLD, anchor="ma")
+    cards = p["cards"][:3]
+    pw, ph, gap = 310, 820, 25
+    x0 = (W - (3 * pw + 2 * gap)) // 2
+    reacts = ["love", "wow", "haha"]
+    for i, cd in enumerate(cards):
+        x = x0 + i * (pw + gap)
+        src = load_card(cd).convert("RGBA")
+        bg = src.resize((pw, int(src.height * pw / src.width)))
+        bg = bg.resize((int(bg.width * ph / bg.height * 1.3), int(ph * 1.3))).crop((0, 0, pw, ph))
+        bg = ImageEnhance.Brightness(bg.convert("RGB").filter(ImageFilter.GaussianBlur(14))).enhance(0.55)
+        m = Image.new("L", (pw, ph), 0); ImageDraw.Draw(m).rounded_rectangle((0, 0, pw - 1, ph - 1), 28, fill=255)
+        img.paste(bg, (x, 240), m)
+        d = ImageDraw.Draw(img)
+        d.rounded_rectangle((x, 240, x + pw - 1, 240 + ph - 1), 28, outline=GOLD, width=5)
+        card = fit_card(cd, pw - 30, 470, GOLD)
+        img.paste(card, (x + (pw - card.width) // 2, 300), card)
+        em = Image.open(EMOJI / f"{reacts[i]}.png").convert("RGBA")
+        em = em.resize((150, int(150 * em.height / em.width)), Image.LANCZOS)
+        img.paste(em, (x + (pw - em.width) // 2, 240 + ph - em.height - 40), em)
+    d = ImageDraw.Draw(img)
+    footer(d, "WHICH ONE ARE YOU PICKING?")
+    return img
+
+
+TEMPLATES = {"compare": post_compare, "compare4": post_compare4, "pick3": post_pick3, "xi": post_xi, "gem": post_gem, "worth": post_worth, "meme": post_meme, "guess": post_guess, "rate": post_rate, "codes_list": post_codes_list, "code": post_code, "versus": post_versus, "spotlight": post_spotlight, "tip": post_tip, "tutorial": post_tip, "poll": post_poll, "review": post_review,
              "news": post_quote, "quote": post_quote, "event": post_quote, "pack": post_quote, "top10": post_top10}
 
 
