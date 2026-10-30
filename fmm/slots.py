@@ -101,7 +101,21 @@ def pick(kind, fresh, db, state):
     force = state.get("force", {}).pop(slot_now(), None)  # one-off override, e.g. {"0700": "countdown"}
     if force in ("countdown", "tierlist") and this_week:
         return force, sorted(this_week, key=lambda p: (heat(p), p.get("ovr") or 0), reverse=True)[:8], pool
-    unfeatured = [p for p in unfeatured if p in this_week] or unfeatured  # this week's cards first
+    wk_unf = sorted([p for p in unfeatured if p in this_week], key=lambda p: (heat(p), p.get("ovr") or 0), reverse=True)
+    unfeatured = wk_unf or unfeatured  # this week's cards first: trending, then highest OVR
+    if kind == "photo":  # photo slots rotate formats; the "review" turn reviews the next new card
+        ROT = ["review_post", "versus", "guess", "xi", "rate", "gem", "worth", "meme"]
+        n = state.get("photo_n", 0)
+        state["photo_n"] = n + 1
+        rot = ROT[n % len(ROT)]
+        if rot == "review_post":
+            if unfeatured:
+                return "review_post", [unfeatured[0]], pool
+            rot = "versus"
+        unfeatured = []  # fall through to the format below
+        forced_rot = rot
+    else:
+        forced_rot = None
     if unfeatured:
         p = unfeatured[0]
         return ("review_reel" if kind == "reel" else "review_post"), [p], pool
@@ -109,11 +123,7 @@ def pick(kind, fresh, db, state):
     latest = sorted(base_set, key=lambda p: (heat(p), p.get("ovr") or 0), reverse=True)
     if kind == "reel":
         return ("tierlist" if weekday % 2 else "countdown"), latest[:8], pool
-    # photo fallback rotates through 7 formats (2 photo slots a day -> each format about every 3–4 days)
-    ROT = ["versus", "guess", "xi", "rate", "gem", "worth", "meme"]
-    n = state.get("photo_n", 0)
-    state["photo_n"] = n + 1
-    rot = ROT[n % len(ROT)]
+    rot = forced_rot or "versus"
     if rot in ("xi", "gem", "worth", "meme"):
         return rot, latest, pool
     if rot != "versus":
