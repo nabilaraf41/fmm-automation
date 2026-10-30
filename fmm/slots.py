@@ -80,6 +80,13 @@ def trend_boost():
         return {}
 
 
+_SLOT = {"v": None}
+
+
+def slot_now():
+    return _SLOT["v"]
+
+
 def pick(kind, fresh, db, state):
     pool = list(db.values())
     hot = trend_boost()
@@ -89,10 +96,17 @@ def pick(kind, fresh, db, state):
     unfeatured = sorted([p for p in fresh.values() if str(p["id"]) not in done and key(p) not in done],
                         key=lambda p: (heat(p), p.get("added") or "", p.get("ovr") or 0), reverse=True)
     weekday = dt.datetime.now().weekday()
+    week_ago = (dt.datetime.now(dt.UTC) - dt.timedelta(days=7)).strftime("%Y-%m-%dT%H:%M:%S")
+    this_week = [p for p in fresh.values() if (p.get("added") or "") >= week_ago]
+    force = state.get("force", {}).pop(slot_now(), None)  # one-off override, e.g. {"0700": "countdown"}
+    if force in ("countdown", "tierlist") and this_week:
+        return force, sorted(this_week, key=lambda p: (heat(p), p.get("ovr") or 0), reverse=True)[:8], pool
+    unfeatured = [p for p in unfeatured if p in this_week] or unfeatured  # this week's cards first
     if unfeatured:
         p = unfeatured[0]
         return ("review_reel" if kind == "reel" else "review_post"), [p], pool
-    latest = sorted(fresh.values(), key=lambda p: (heat(p), p.get("ovr") or 0), reverse=True)
+    base_set = this_week if len(this_week) >= 5 else list(fresh.values())
+    latest = sorted(base_set, key=lambda p: (heat(p), p.get("ovr") or 0), reverse=True)
     if kind == "reel":
         return ("tierlist" if weekday % 2 else "countdown"), latest[:8], pool
     # photo fallback rotates through 7 formats (2 photo slots a day -> each format about every 3–4 days)
@@ -143,6 +157,7 @@ def build_from_inbox(slot):
 
 def build(slot):
     from fmm import brand, motion
+    _SLOT["v"] = slot
     if build_from_inbox(slot):  # your own gameplay always goes first, in any slot
         return
     kind = SLOTS[slot]
@@ -183,7 +198,7 @@ def build(slot):
                 "scenes": [{"scene": "countdown", "position": "NEW CARDS",
                                            "players": [{"name": x["name"], "card": x["card"]} for x in players[:7]][::-1]}]}
         media = motion.render_reel(reel, OUT)
-        caption = (f"🔥 Top {min(7, len(players))} newest FC Mobile cards right now\n\n"
+        caption = (f"🔥 This week's new FC Mobile players — top {min(7, len(players))} by OVR\n\n"
                    + "\n".join(f"{i + 1}. {x['ovr']} {x['pos']} {x['name']}" for i, x in enumerate(players[:7]))
                    + "\n\n👇 Which one are you getting?\n\n#FCMobile #FCMobile26 #EASportsFCMobile #FCMobileCards #FMM")
     elif ctype == "tierlist":

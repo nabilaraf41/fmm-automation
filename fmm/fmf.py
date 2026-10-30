@@ -71,6 +71,8 @@ def slim(x):
 
 def latest():
     players = [slim(x) for x in initial_players(flight_text(fetch(URL).decode("utf-8", "ignore")))]
+    players = [p for p in players if p.get("name") and not p["name"].lower().startswith("unknown")
+               and p.get("img_player")]  # skip placeholder entries the forum hasn't filled in yet
     return sorted(players, key=lambda p: p.get("added") or "", reverse=True)
 
 
