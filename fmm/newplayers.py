@@ -37,11 +37,17 @@ def new_batch():
 def run(dry=False):
     from fmm import brand, motion, poster
     new, fresh, db = new_batch()
-    print(f"new cards: {len(new)}", [f"{p['ovr']} {p['name']}" for p in new[:10]])
+    ok = slots.confirmed_only({p["id"]: p for p in new})  # cross-check before announcing anything
+    held = [p for p in new if p["id"] not in ok]
+    new = [p for p in new if p["id"] in ok]
+    print(f"new cards: {len(new)} confirmed, {len(held)} waiting for confirmation",
+          [f"{p['ovr']} {p['name']}" for p in new[:10]])
     if dry or not new:
         return
-    for p in fresh:
-        db.setdefault(p["id"], {k: v for k, v in p.items() if not k.startswith("img_")})
+    held_ids = {p["id"] for p in held}
+    for p in fresh:  # unconfirmed cards stay "unseen" so they're announced once confirmed
+        if p["id"] not in held_ids:
+            db.setdefault(p["id"], {k: v for k, v in p.items() if not k.startswith("img_")})
     renderz.DB.write_text(json.dumps({"players": db}, ensure_ascii=False, indent=0), encoding="utf-8")
     if len(new) < 3:  # a couple of stray cards: let the slots review them, no announcement
         return

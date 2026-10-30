@@ -68,5 +68,11 @@
  "photo_n": 0,
  "hold_programs": [
   "TOTW27"
+ ],
+ "confirmed_programs": [
+  "BD27",
+  "HEROS8",
+  "HOFS",
+  "ICONS"
  ]
 }

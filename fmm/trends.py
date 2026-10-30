@@ -19,6 +19,21 @@ TOPICS = {"code": r"\bcodes?\b|redeem", "pack": r"pack opening|packs?\b", "draft
           "upgrade": r"rank ?up|training|upgrade"}
 
 
+# program code prefix -> words creators use in titles (second source that a program is really live)
+PROGRAM_WORDS = {"BD": r"ballon", "TOTW": r"totw|team of the week", "ICONS": r"\bicons?\b", "HEROS": r"\bheroe?s?\b",
+                 "HOFS": r"hall of fame|\bhof\b", "TOTY": r"\btoty\b|team of the year", "TOTS": r"\btots\b",
+                 "UCL": r"\bucl\b|champions league", "SCR": r"scream", "MLS": r"\bmls\b"}
+
+
+def program_confirmed(program, seen):
+    """True when the program's family (e.g. BD27 -> BD) shows up in recent creator video titles."""
+    fam = re.sub(r"\d+$", "", (program or "").replace("PROGRAM_", "").upper())
+    known = [k for k in PROGRAM_WORDS if fam.startswith(k)]
+    if not known:          # a family we have no keywords for: don't block it
+        return True
+    return known[0] in seen
+
+
 def run():
     from fmm import youtube
     yt = youtube.service()
@@ -27,7 +42,11 @@ def run():
     for region in REGIONS:
         res = yt.search().list(part="snippet", q="FC Mobile", type="video", order="viewCount", maxResults=25,
                                publishedAfter=since, regionCode=region, relevanceLanguage="en").execute()
-        titles += [i["snippet"]["title"] for i in res.get("items", [])]
+        titles += [i["snippet"]["title"] + " " + i["snippet"].get("description", "") for i in res.get("items", [])]
+    since48 = (dt.datetime.now(dt.UTC).replace(tzinfo=None) - dt.timedelta(hours=48)).strftime("%Y-%m-%dT%H:%M:%SZ")
+    res = yt.search().list(part="snippet", q="FC Mobile new players", type="video", order="date", maxResults=50,
+                           publishedAfter=since48).execute()  # wider net for program confirmation
+    titles += [i["snippet"]["title"] + " " + i["snippet"].get("description", "") for i in res.get("items", [])]
     text = " ".join(titles).lower()
     topics = collections.Counter({k: len(re.findall(v, text)) for k, v in TOPICS.items()})
     db = json.loads((ROOT / "content" / "players_db.json").read_text(encoding="utf-8"))["players"] \
@@ -37,7 +56,8 @@ def run():
         n = (p.get("name") or "").lower()
         if len(n) >= 4 and n in text:
             names[p["name"]] = text.count(n)
-    out = {"at": dt.datetime.now(dt.UTC).replace(tzinfo=None).isoformat(timespec="minutes") + "Z",
+    progs = {k: bool(re.search(v, text)) for k, v in PROGRAM_WORDS.items()}
+    out = {"programs_seen": [k for k, ok in progs.items() if ok], "at": dt.datetime.now(dt.UTC).replace(tzinfo=None).isoformat(timespec="minutes") + "Z",
            "topics": topics.most_common(), "players": names.most_common(10), "sample_titles": titles[:12]}
     OUT.write_text(json.dumps(out, indent=1, ensure_ascii=False), encoding="utf-8")
     return out

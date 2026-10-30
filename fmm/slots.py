@@ -23,6 +23,34 @@ def load_state():
     return json.loads(STATE.read_text(encoding="utf-8")) if STATE.exists() else {"featured": [], "history": []}
 
 
+_TRENDS = {}
+
+
+def confirmed_only(cards):
+    """Cross-check rule: use a card only if its program is confirmed by a second source
+    (FC Mobile creators' YouTube videos from the last 48h) and not on the manual hold list."""
+    from fmm import trends
+    if "t" not in _TRENDS:
+        try:
+            _TRENDS["t"] = trends.run()
+        except Exception as ex:
+            print("cross-check unavailable, using last saved trends:", str(ex)[:80])
+            _TRENDS["t"] = trends.load()
+    seen = _TRENDS["t"].get("programs_seen", [])
+    st = load_state()
+    hold, verified = set(st.get("hold_programs", [])), set(st.get("confirmed_programs", []))
+    keep, held = {}, set()
+    for k, p in cards.items():
+        prog = (p.get("program") or "").replace("PROGRAM_", "")
+        if prog in hold or (prog not in verified and not trends.program_confirmed(prog, seen)):
+            held.add(prog)
+        else:
+            keep[k] = p
+    if held:
+        print("held back (not confirmed by a 2nd source yet):", sorted(held))
+    return keep
+
+
 def latest_players():
     """Fresh list from RenderZ when reachable; otherwise (cloud is blocked by RenderZ) the cards
     your PC already collected into the repo: players_db.json + assets/cards/rz/*.png."""
@@ -31,6 +59,11 @@ def latest_players():
         made = renderz.run()
         page = renderz.fetch(renderz.LIST_URL).decode("utf-8", "ignore")
         fresh = {str(p["id"]): p for p in (renderz.slim(x) for x in renderz.extract_array(page))}
+        # RenderZ is an independent 2nd source: whatever it lists counts as verified
+        st = load_state()
+        progs = {(p.get("program") or "").replace("PROGRAM_", "") for p in fresh.values()} - {""}
+        st["confirmed_programs"] = sorted(set(st.get("confirmed_programs", [])) | progs)
+        STATE.write_text(json.dumps(st, indent=1, ensure_ascii=False), encoding="utf-8")
     except Exception as ex:
         print("RenderZ not reachable here:", str(ex)[:80])
         fresh = None
@@ -45,9 +78,7 @@ def latest_players():
             print(f"fcmobileforum: {len(fresh)} latest cards")
         except Exception as ex:
             print("fcmobileforum not reachable, using collected cards:", str(ex)[:80])
-    hold = set(load_state().get("hold_programs", []))  # programs not confirmed by a second source yet
-    if fresh is not None and hold:
-        fresh = {k: p for k, p in fresh.items() if (p.get("program") or "").replace("PROGRAM_", "") not in hold}
+    fresh = confirmed_only(fresh) if fresh is not None else None
     if fresh is None:
         recent = sorted(db.values(), key=lambda p: p.get("added") or "", reverse=True)
         fresh = {str(p["id"]): p for p in recent if (renderz.CARDS / f"{p['id']}.png").exists()}
@@ -75,7 +106,7 @@ def trend_boost():
     """Player names trending on YouTube right now -> mention counts (refreshed before every build)."""
     try:
         from fmm import trends
-        t = trends.run()
+        t = _TRENDS.get("t") or trends.run()
         print("trending:", t["topics"][:4], t["players"][:5])
         return {n.lower(): c for n, c in t["players"]}
     except Exception as ex:
