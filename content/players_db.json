@@ -1,0 +1,3079 @@
+{
+"players": {
+"30923205": {
+"id": 30923205,
+"name": "Kuyt",
+"full_name": "Dirk Kuyt",
+"ovr": 124,
+"pos": "CM",
+"program": "PROGRAM_HEROS8",
+"weak_foot": 5,
+"skill_moves": 4,
+"work_rates": [
+2,
+2
+],
+"height": 183,
+"weight": 84,
+"stats": {
+"acc": 156,
+"agg": 152,
+"agi": 145,
+"awr": 150,
+"bac": 152,
+"bal": 149,
+"cro": 158,
+"cur": 134,
+"dri": 146,
+"fin": 147,
+"frk": 115,
+"gkd": 8,
+"gkk": 8,
+"gkp": 8,
+"han": 8,
+"hea": 141,
+"jmp": 141,
+"lpa": 149,
+"lsa": 150,
+"mrk": 149,
+"pen": 145,
+"pos": 148,
+"rea": 155,
+"ref": 8,
+"sho": 155,
+"slt": 154,
+"spa": 160,
+"spd": 155,
+"str": 149,
+"stt": 149,
+"vis": 150,
+"vol": 138,
+"sta": 91,
+"total": 4123
+},
+"avg": {
+"avg1": 155,
+"avg2": 148,
+"avg3": 151,
+"avg4": 148,
+"avg5": 149,
+"avg6": 147
+},
+"playstyles": [
+"Tiki Taka",
+"Speed Dribbler"
+],
+"meta": null,
+"added": "2026-10-21T13:36:24Z",
+"layout": {
+"player": {
+"sizeX": 256,
+"sizeY": 256,
+"posX": 0,
+"posY": 0
+},
+"rating": {
+"sizeX": 80,
+"sizeY": 80,
+"posX": 36,
+"posY": 4,
+"fontSize": 36
+},
+"position": {
+"sizeX": 40,
+"sizeY": 20,
+"posX": 56,
+"posY": 64,
+"fontSize": 24
+},
+"nation": {
+"sizeX": 24,
+"sizeY": 24,
+"posX": 82.7,
+"posY": 188
+},
+"club": {
+"sizeX": 24,
+"sizeY": 24,
+"posX": 146.6,
+"posY": 188
+},
+"name": {
+"sizeX": 0,
+"sizeY": 0,
+"posX": 128,
+"posY": 178,
+"fontSize": 22
+},
+"level": {
+"sizeX": 64,
+"sizeY": 32,
+"posX": 128,
+"posY": 233,
+"fontSize": 23
+},
+"rank": {
+"sizeX": 32,
+"sizeY": 32,
+"posX": 128,
+"posY": 232
+}
+},
+"colors": {
+"rating": "#FFFFFF",
+"position": "#FFFFFF",
+"name": "#FFFFFF",
+"level": "#FFFFFF"
+},
+"url": "https://renderz.app/player/30923205"
+},
+"30923204": {
+"id": 30923204,
+"name": "Touré",
+"full_name": "Yaya Touré",
+"ovr": 124,
+"pos": "CDM",
+"program": "PROGRAM_HEROS8",
+"weak_foot": 5,
+"skill_moves": 4,
+"work_rates": [
+0,
+2
+],
+"height": 188,
+"weight": 90,
+"stats": {
+"acc": 155,
+"agg": 157,
+"agi": 143,
+"awr": 158,
+"bac": 157,
+"bal": 146,
+"cro": 124,
+"cur": 133,
+"dri": 150,
+"fin": 142,
+"frk": 137,
+"gkd": 8,
+"gkk": 8,
+"gkp": 8,
+"han": 8,
+"hea": 141,
+"jmp": 146,
+"lpa": 153,
+"lsa": 154,
+"mrk": 155,
+"pen": 136,
+"pos": 153,
+"rea": 162,
+"ref": 8,
+"sho": 156,
+"slt": 151,
+"spa": 160,
+"spd": 154,
+"str": 160,
+"stt": 159,
+"vis": 155,
+"vol": 135,
+"sta": 94,
+"total": 4166
+},
+"avg": {
+"avg1": 154,
+"avg2": 148,
+"avg3": 149,
+"avg4": 151,
+"avg5": 153,
+"avg6": 155
+},
+"playstyles": [
+"Bullet Pass",
+"Intimidator"
+],
+"meta": null,
+"added": "2026-10-21T13:36:24Z",
+"layout": {
+"player": {
+"sizeX": 256,
+"sizeY": 256,
+"posX": 0,
+"posY": 0
+},
+"rating": {
+"sizeX": 80,
+"sizeY": 80,
+"posX": 36,
+"posY": 4,
+"fontSize": 36
+},
+"position": {
+"sizeX": 40,
+"sizeY": 20,
+"posX": 56,
+"posY": 64,
+"fontSize": 24
+},
+"nation": {
+"sizeX": 24,
+"sizeY": 24,
+"posX": 82.7,
+"posY": 188
+},
+"club": {
+"sizeX": 24,
+"sizeY": 24,
+"posX": 146.6,
+"posY": 188
+},
+"name": {
+"sizeX": 0,
+"sizeY": 0,
+"posX": 128,
+"posY": 178,
+"fontSize": 22
+},
+"level": {
+"sizeX": 64,
+"sizeY": 32,
+"posX": 128,
+"posY": 233,
+"fontSize": 23
+},
+"rank": {
+"sizeX": 32,
+"sizeY": 32,
+"posX": 128,
+"posY": 232
+}
+},
+"colors": {
+"rating": "#FFFFFF",
+"position": "#FFFFFF",
+"name": "#FFFFFF",
+"level": "#FFFFFF"
+},
+"url": "https://renderz.app/player/30923204"
+},
+"30923203": {
+"id": 30923203,
+"name": "Kaká",
+"full_name": "Ricardo Izecson dos Santos Leite",
+"ovr": 124,
+"pos": "CAM",
+"program": "PROGRAM_ICONS",
+"weak_foot": 5,
+"skill_moves": 5,
+"work_rates": [
+2,
+0
+],
+"height": 186,
+"weight": 78,
+"stats": {
+"acc": 162,
+"agg": 128,
+"agi": 156,
+"awr": 96,
+"bac": 156,
+"bal": 155,
+"cro": 146,
+"cur": 158,
+"dri": 159,
+"fin": 156,
+"frk": 138,
+"gkd": 8,
+"gkk": 8,
+"gkp": 8,
+"han": 8,
+"hea": 126,
+"jmp": 135,
+"lpa": 155,
+"lsa": 160,
+"mrk": 106,
+"pen": 149,
+"pos": 154,
+"rea": 158,
+"ref": 8,
+"sho": 157,
+"slt": 74,
+"spa": 162,
+"spd": 158,
+"str": 135,
+"stt": 105,
+"vis": 157,
+"vol": 151,
+"sta": 91,
+"total": 3983
+},
+"avg": {
+"avg1": 160,
+"avg2": 156,
+"avg3": 155,
+"avg4": 156,
+"avg5": 100,
+"avg6": 132
+},
+"playstyles": [
+"Finesse Shot",
+"Speed Dribbler"
+],
+"meta": null,
+"added": "2026-10-21T13:36:24Z",
+"layout": {
+"player": {
+"sizeX": 256,
+"sizeY": 256,
+"posX": 0,
+"posY": 0
+},
+"rating": {
+"sizeX": 80,
+"sizeY": 80,
+"posX": 36,
+"posY": 4,
+"fontSize": 36
+},
+"position": {
+"sizeX": 40,
+"sizeY": 20,
+"posX": 56,
+"posY": 64,
+"fontSize": 24
+},
+"nation": {
+"sizeX": 24,
+"sizeY": 24,
+"posX": 82.7,
+"posY": 188
+},
+"club": {
+"sizeX": 24,
+"sizeY": 24,
+"posX": 146.6,
+"posY": 188
+},
+"name": {
+"sizeX": 0,
+"sizeY": 0,
+"posX": 128,
+"posY": 178,
+"fontSize": 22
+},
+"level": {
+"sizeX": 64,
+"sizeY": 32,
+"posX": 128,
+"posY": 233,
+"fontSize": 23
+},
+"rank": {
+"sizeX": 32,
+"sizeY": 32,
+"posX": 128,
+"posY": 232
+}
+},
+"colors": {
+"rating": "#FFFFFF",
+"position": "#FFFFFF",
+"name": "#FFFFFF",
+"level": "#FFFFFF"
+},
+"url": "https://renderz.app/player/30923203"
+},
+"30923202": {
+"id": 30923202,
+"name": "Ribéry",
+"full_name": "Franck Ribéry",
+"ovr": 124,
+"pos": "LW",
+"program": "PROGRAM_ICONS",
+"weak_foot": 5,
+"skill_moves": 5,
+"work_rates": [
+2,
+1
+],
+"height": 170,
+"weight": 72,
+"stats": {
+"acc": 165,
+"agg": 119,
+"agi": 159,
+"awr": 85,
+"bac": 162,
+"bal": 163,
+"cro": 149,
+"cur": 150,
+"dri": 161,
+"fin": 154,
+"frk": 132,
+"gkd": 8,
+"gkk": 8,
+"gkp": 8,
+"han": 8,
+"hea": 109,
+"jmp": 117,
+"lpa": 149,
+"lsa": 156,
+"mrk": 89,
+"pen": 130,
+"pos": 148,
+"rea": 159,
+"ref": 8,
+"sho": 160,
+"slt": 81,
+"spa": 156,
+"spd": 164,
+"str": 121,
+"stt": 98,
+"vis": 152,
+"vol": 150,
+"sta": 91,
+"total": 3869
+},
+"avg": {
+"avg1": 164,
+"avg2": 153,
+"avg3": 151,
+"avg4": 160,
+"avg5": 91,
+"avg6": 119
+},
+"playstyles": [
+"Finesse Shot",
+"Trickster"
+],
+"meta": null,
+"added": "2026-10-21T13:36:24Z",
+"layout": {
+"player": {
+"sizeX": 256,
+"sizeY": 256,
+"posX": 0,
+"posY": 0
+},
+"rating": {
+"sizeX": 80,
+"sizeY": 80,
+"posX": 36,
+"posY": 4,
+"fontSize": 36
+},
+"position": {
+"sizeX": 40,
+"sizeY": 20,
+"posX": 56,
+"posY": 64,
+"fontSize": 24
+},
+"nation": {
+"sizeX": 24,
+"sizeY": 24,
+"posX": 82.7,
+"posY": 188
+},
+"club": {
+"sizeX": 24,
+"sizeY": 24,
+"posX": 146.6,
+"posY": 188
+},
+"name": {
+"sizeX": 0,
+"sizeY": 0,
+"posX": 128,
+"posY": 178,
+"fontSize": 22
+},
+"level": {
+"sizeX": 64,
+"sizeY": 32,
+"posX": 128,
+"posY": 233,
+"fontSize": 23
+},
+"rank": {
+"sizeX": 32,
+"sizeY": 32,
+"posX": 128,
+"posY": 232
+}
+},
+"colors": {
+"rating": "#FFFFFF",
+"position": "#FFFFFF",
+"name": "#FFFFFF",
+"level": "#FFFFFF"
+},
+"url": "https://renderz.app/player/30923202"
+},
+"30923201": {
+"id": 30923201,
+"name": "Ricardo Carvalho",
+"full_name": "Ricardo Alberto Silveira Carvalho",
+"ovr": 124,
+"pos": "CB",
+"program": "PROGRAM_HEROS8",
+"weak_foot": 5,
+"skill_moves": 2,
+"work_rates": [
+1,
+2
+],
+"height": 183,
+"weight": 79,
+"stats": {
+"acc": 155,
+"agg": 154,
+"agi": 143,
+"awr": 164,
+"bac": 148,
+"bal": 147,
+"cro": 131,
+"cur": 125,
+"dri": 145,
+"fin": 109,
+"frk": 110,
+"gkd": 8,
+"gkk": 8,
+"gkp": 8,
+"han": 8,
+"hea": 161,
+"jmp": 160,
+"lpa": 138,
+"lsa": 129,
+"mrk": 165,
+"pen": 102,
+"pos": 150,
+"rea": 151,
+"ref": 8,
+"sho": 135,
+"slt": 166,
+"spa": 148,
+"spd": 150,
+"str": 156,
+"stt": 163,
+"vis": 137,
+"vol": 110,
+"sta": 91,
+"total": 3983
+},
+"avg": {
+"avg1": 152,
+"avg2": 124,
+"avg3": 137,
+"avg4": 146,
+"avg5": 164,
+"avg6": 156
+},
+"playstyles": [
+"Hard Tackle Master",
+"Stand Tackle Master"
+],
+"meta": null,
+"added": "2026-10-21T13:36:24Z",
+"layout": {
+"player": {
+"sizeX": 256,
+"sizeY": 256,
+"posX": 0,
+"posY": 0
+},
+"rating": {
+"sizeX": 80,
+"sizeY": 80,
+"posX": 36,
+"posY": 4,
+"fontSize": 36
+},
+"position": {
+"sizeX": 40,
+"sizeY": 20,
+"posX": 56,
+"posY": 64,
+"fontSize": 24
+},
+"nation": {
+"sizeX": 24,
+"sizeY": 24,
+"posX": 82.7,
+"posY": 188
+},
+"club": {
+"sizeX": 24,
+"sizeY": 24,
+"posX": 146.6,
+"posY": 188
+},
+"name": {
+"sizeX": 0,
+"sizeY": 0,
+"posX": 128,
+"posY": 178,
+"fontSize": 22
+},
+"level": {
+"sizeX": 64,
+"sizeY": 32,
+"posX": 128,
+"posY": 233,
+"fontSize": 23
+},
+"rank": {
+"sizeX": 32,
+"sizeY": 32,
+"posX": 128,
+"posY": 232
+}
+},
+"colors": {
+"rating": "#FFFFFF",
+"position": "#FFFFFF",
+"name": "#FFFFFF",
+"level": "#FFFFFF"
+},
+"url": "https://renderz.app/player/30923201"
+},
+"30923102": {
+"id": 30923102,
+"name": "Schweinsteiger",
+"full_name": "Bastian Schweinsteiger",
+"ovr": 124,
+"pos": "CM",
+"program": "PROGRAM_ICONS",
+"weak_foot": 4,
+"skill_moves": 4,
+"work_rates": [
+2,
+2
+],
+"height": 183,
+"weight": 79,
+"stats": {
+"acc": 150,
+"agg": 147,
+"agi": 147,
+"awr": 150,
+"bac": 158,
+"bal": 150,
+"cro": 148,
+"cur": 148,
+"dri": 153,
+"fin": 129,
+"frk": 139,
+"gkd": 8,
+"gkk": 8,
+"gkp": 8,
+"han": 8,
+"hea": 134,
+"jmp": 140,
+"lpa": 154,
+"lsa": 159,
+"mrk": 146,
+"pen": 121,
+"pos": 144,
+"rea": 155,
+"ref": 8,
+"sho": 158,
+"slt": 135,
+"spa": 159,
+"spd": 152,
+"str": 148,
+"stt": 146,
+"vis": 154,
+"vol": 144,
+"sta": 89,
+"total": 4097
+},
+"avg": {
+"avg1": 151,
+"avg2": 143,
+"avg3": 153,
+"avg4": 152,
+"avg5": 142,
+"avg6": 145
+},
+"playstyles": [
+"Relentless Stamina",
+"Bullet Pass"
+],
+"meta": null,
+"added": "2026-10-28T11:08:30Z",
+"layout": {
+"player": {
+"sizeX": 256,
+"sizeY": 256,
+"posX": 0,
+"posY": 0
+},
+"rating": {
+"sizeX": 80,
+"sizeY": 80,
+"posX": 36.167,
+"posY": 4.083,
+"fontSize": 36
+},
+"position": {
+"sizeX": 40,
+"sizeY": 20,
+"posX": 56,
+"posY": 64,
+"fontSize": 24
+},
+"nation": {
+"sizeX": 24,
+"sizeY": 24,
+"posX": 82.7,
+"posY": 188
+},
+"club": {
+"sizeX": 24,
+"sizeY": 24,
+"posX": 146.6,
+"posY": 188
+},
+"name": {
+"sizeX": 0,
+"sizeY": 0,
+"posX": 128,
+"posY": 178,
+"fontSize": 22
+},
+"level": {
+"sizeX": 64,
+"sizeY": 32,
+"posX": 128,
+"posY": 233,
+"fontSize": 23
+},
+"rank": {
+"sizeX": 32,
+"sizeY": 32,
+"posX": 128,
+"posY": 232
+}
+},
+"colors": {
+"rating": "#FFFFFF",
+"position": "#FFFFFF",
+"name": "#FFFFFF",
+"level": "#FFFFFF"
+},
+"url": "https://renderz.app/player/30923102"
+},
+"30923101": {
+"id": 30923101,
+"name": "Schweinsteiger",
+"full_name": "Bastian Schweinsteiger",
+"ovr": 124,
+"pos": "CM",
+"program": "PROGRAM_ICONS",
+"weak_foot": 4,
+"skill_moves": 4,
+"work_rates": [
+2,
+2
+],
+"height": 183,
+"weight": 79,
+"stats": {
+"acc": 150,
+"agg": 147,
+"agi": 147,
+"awr": 150,
+"bac": 158,
+"bal": 150,
+"cro": 148,
+"cur": 148,
+"dri": 153,
+"fin": 129,
+"frk": 139,
+"gkd": 8,
+"gkk": 8,
+"gkp": 8,
+"han": 8,
+"hea": 134,
+"jmp": 140,
+"lpa": 154,
+"lsa": 159,
+"mrk": 146,
+"pen": 121,
+"pos": 144,
+"rea": 155,
+"ref": 8,
+"sho": 158,
+"slt": 135,
+"spa": 159,
+"spd": 152,
+"str": 148,
+"stt": 146,
+"vis": 154,
+"vol": 144,
+"sta": 89,
+"total": 4097
+},
+"avg": {
+"avg1": 151,
+"avg2": 143,
+"avg3": 153,
+"avg4": 152,
+"avg5": 142,
+"avg6": 145
+},
+"playstyles": [
+"Relentless Stamina",
+"Bullet Pass"
+],
+"meta": null,
+"added": "2026-10-28T11:08:30Z",
+"layout": {
+"player": {
+"sizeX": 256,
+"sizeY": 256,
+"posX": 0,
+"posY": 0
+},
+"rating": {
+"sizeX": 80,
+"sizeY": 80,
+"posX": 36.167,
+"posY": 4.083,
+"fontSize": 36
+},
+"position": {
+"sizeX": 40,
+"sizeY": 20,
+"posX": 56,
+"posY": 64,
+"fontSize": 24
+},
+"nation": {
+"sizeX": 24,
+"sizeY": 24,
+"posX": 82.7,
+"posY": 188
+},
+"club": {
+"sizeX": 24,
+"sizeY": 24,
+"posX": 146.6,
+"posY": 188
+},
+"name": {
+"sizeX": 0,
+"sizeY": 0,
+"posX": 128,
+"posY": 178,
+"fontSize": 22
+},
+"level": {
+"sizeX": 64,
+"sizeY": 32,
+"posX": 128,
+"posY": 233,
+"fontSize": 23
+},
+"rank": {
+"sizeX": 32,
+"sizeY": 32,
+"posX": 128,
+"posY": 232
+}
+},
+"colors": {
+"rating": "#FFFFFF",
+"position": "#FFFFFF",
+"name": "#FFFFFF",
+"level": "#FFFFFF"
+},
+"url": "https://renderz.app/player/30923101"
+},
+"30922902": {
+"id": 30922902,
+"name": "Garrincha",
+"full_name": "Manuel Franc. dos Santos",
+"ovr": 124,
+"pos": "RW",
+"program": "PROGRAM_ICONS",
+"weak_foot": 4,
+"skill_moves": 5,
+"work_rates": [
+2,
+1
+],
+"height": 169,
+"weight": 72,
+"stats": {
+"acc": 162,
+"agg": 113,
+"agi": 158,
+"awr": 82,
+"bac": 160,
+"bal": 155,
+"cro": 164,
+"cur": 152,
+"dri": 162,
+"fin": 153,
+"frk": 136,
+"gkd": 8,
+"gkk": 8,
+"gkp": 8,
+"han": 8,
+"hea": 124,
+"jmp": 124,
+"lpa": 150,
+"lsa": 149,
+"mrk": 78,
+"pen": 137,
+"pos": 149,
+"rea": 160,
+"ref": 8,
+"sho": 151,
+"slt": 78,
+"spa": 158,
+"spd": 159,
+"str": 126,
+"stt": 96,
+"vis": 151,
+"vol": 147,
+"sta": 83,
+"total": 3857
+},
+"avg": {
+"avg1": 160,
+"avg2": 150,
+"avg3": 154,
+"avg4": 159,
+"avg5": 89,
+"avg6": 121
+},
+"playstyles": [
+"Accelerator",
+"Trickster"
+],
+"meta": null,
+"added": "2026-10-21T13:36:24Z",
+"layout": {
+"player": {
+"sizeX": 256,
+"sizeY": 256,
+"posX": 0,
+"posY": 0
+},
+"rating": {
+"sizeX": 80,
+"sizeY": 80,
+"posX": 36.167,
+"posY": 4.083,
+"fontSize": 36
+},
+"position": {
+"sizeX": 40,
+"sizeY": 20,
+"posX": 56,
+"posY": 64,
+"fontSize": 24
+},
+"nation": {
+"sizeX": 24,
+"sizeY": 24,
+"posX": 82.7,
+"posY": 188
+},
+"club": {
+"sizeX": 24,
+"sizeY": 24,
+"posX": 146.6,
+"posY": 188
+},
+"name": {
+"sizeX": 0,
+"sizeY": 0,
+"posX": 128,
+"posY": 178,
+"fontSize": 22
+},
+"level": {
+"sizeX": 64,
+"sizeY": 32,
+"posX": 128,
+"posY": 233,
+"fontSize": 23
+},
+"rank": {
+"sizeX": 32,
+"sizeY": 32,
+"posX": 128,
+"posY": 232
+}
+},
+"colors": {
+"rating": "#FFFFFF",
+"position": "#FFFFFF",
+"name": "#493721",
+"level": "#FFFFFF"
+},
+"url": "https://renderz.app/player/30922902"
+},
+"30922901": {
+"id": 30922901,
+"name": "Garrincha",
+"full_name": "Manuel Franc. dos Santos",
+"ovr": 124,
+"pos": "RW",
+"program": "PROGRAM_ICONS",
+"weak_foot": 4,
+"skill_moves": 5,
+"work_rates": [
+2,
+1
+],
+"height": 169,
+"weight": 72,
+"stats": {
+"acc": 162,
+"agg": 113,
+"agi": 158,
+"awr": 82,
+"bac": 160,
+"bal": 155,
+"cro": 164,
+"cur": 152,
+"dri": 162,
+"fin": 153,
+"frk": 136,
+"gkd": 8,
+"gkk": 8,
+"gkp": 8,
+"han": 8,
+"hea": 124,
+"jmp": 124,
+"lpa": 150,
+"lsa": 149,
+"mrk": 78,
+"pen": 137,
+"pos": 149,
+"rea": 160,
+"ref": 8,
+"sho": 151,
+"slt": 78,
+"spa": 158,
+"spd": 159,
+"str": 126,
+"stt": 96,
+"vis": 151,
+"vol": 147,
+"sta": 83,
+"total": 3857
+},
+"avg": {
+"avg1": 160,
+"avg2": 150,
+"avg3": 154,
+"avg4": 159,
+"avg5": 89,
+"avg6": 121
+},
+"playstyles": [
+"Accelerator",
+"Trickster"
+],
+"meta": null,
+"added": "2026-10-21T13:36:24Z",
+"layout": {
+"player": {
+"sizeX": 256,
+"sizeY": 256,
+"posX": 0,
+"posY": 0
+},
+"rating": {
+"sizeX": 80,
+"sizeY": 80,
+"posX": 36.167,
+"posY": 4.083,
+"fontSize": 36
+},
+"position": {
+"sizeX": 40,
+"sizeY": 20,
+"posX": 56,
+"posY": 64,
+"fontSize": 24
+},
+"nation": {
+"sizeX": 24,
+"sizeY": 24,
+"posX": 82.7,
+"posY": 188
+},
+"club": {
+"sizeX": 24,
+"sizeY": 24,
+"posX": 146.6,
+"posY": 188
+},
+"name": {
+"sizeX": 0,
+"sizeY": 0,
+"posX": 128,
+"posY": 178,
+"fontSize": 22
+},
+"level": {
+"sizeX": 64,
+"sizeY": 32,
+"posX": 128,
+"posY": 233,
+"fontSize": 23
+},
+"rank": {
+"sizeX": 32,
+"sizeY": 32,
+"posX": 128,
+"posY": 232
+}
+},
+"colors": {
+"rating": "#FFFFFF",
+"position": "#FFFFFF",
+"name": "#493721",
+"level": "#FFFFFF"
+},
+"url": "https://renderz.app/player/30922901"
+},
+"30922860": {
+"id": 30922860,
+"name": "Ronaldo",
+"full_name": "Ronaldo Luís Nazário de Lima",
+"ovr": 124,
+"pos": "ST",
+"program": "PROGRAM_ICONS",
+"weak_foot": 5,
+"skill_moves": 5,
+"work_rates": [
+2,
+0
+],
+"height": 183,
+"weight": 78,
+"stats": {
+"acc": 163,
+"agg": 130,
+"agi": 155,
+"awr": 75,
+"bac": 160,
+"bal": 148,
+"cro": 123,
+"cur": 149,
+"dri": 159,
+"fin": 165,
+"frk": 135,
+"gkd": 8,
+"gkk": 8,
+"gkp": 8,
+"han": 8,
+"hea": 149,
+"jmp": 143,
+"lpa": 136,
+"lsa": 158,
+"mrk": 75,
+"pen": 145,
+"pos": 158,
+"rea": 162,
+"ref": 8,
+"sho": 163,
+"slt": 75,
+"spa": 145,
+"spd": 163,
+"str": 153,
+"stt": 96,
+"vis": 136,
+"vol": 164,
+"sta": 85,
+"total": 3908
+},
+"avg": {
+"avg1": 163,
+"avg2": 161,
+"avg3": 137,
+"avg4": 157,
+"avg5": 90,
+"avg6": 143
+},
+"playstyles": [
+"Trickster",
+"Clinical Finisher"
+],
+"meta": null,
+"added": "2026-10-21T13:36:24Z",
+"layout": {
+"player": {
+"sizeX": 256,
+"sizeY": 256,
+"posX": 0,
+"posY": 0
+},
+"rating": {
+"sizeX": 80,
+"sizeY": 80,
+"posX": 36.167,
+"posY": 4.083,
+"fontSize": 36
+},
+"position": {
+"sizeX": 40,
+"sizeY": 20,
+"posX": 56,
+"posY": 64,
+"fontSize": 24
+},
+"nation": {
+"sizeX": 24,
+"sizeY": 24,
+"posX": 82.7,
+"posY": 188
+},
+"club": {
+"sizeX": 24,
+"sizeY": 24,
+"posX": 146.6,
+"posY": 188
+},
+"name": {
+"sizeX": 0,
+"sizeY": 0,
+"posX": 128,
+"posY": 178,
+"fontSize": 22
+},
+"level": {
+"sizeX": 64,
+"sizeY": 32,
+"posX": 128,
+"posY": 233,
+"fontSize": 23
+},
+"rank": {
+"sizeX": 32,
+"sizeY": 32,
+"posX": 128,
+"posY": 232
+}
+},
+"colors": {
+"rating": "#FFFFFF",
+"position": "#FFFFFF",
+"name": "#FFFFFF",
+"level": "#FFFFFF"
+},
+"url": "https://renderz.app/player/30922860"
+},
+"30922856": {
+"id": 30922856,
+"name": "Ronaldo",
+"full_name": "Ronaldo Luís Nazário de Lima",
+"ovr": 124,
+"pos": "ST",
+"program": "PROGRAM_ICONS",
+"weak_foot": 5,
+"skill_moves": 5,
+"work_rates": [
+2,
+0
+],
+"height": 183,
+"weight": 78,
+"stats": {
+"acc": 163,
+"agg": 130,
+"agi": 155,
+"awr": 75,
+"bac": 160,
+"bal": 148,
+"cro": 123,
+"cur": 149,
+"dri": 159,
+"fin": 165,
+"frk": 135,
+"gkd": 8,
+"gkk": 8,
+"gkp": 8,
+"han": 8,
+"hea": 149,
+"jmp": 143,
+"lpa": 136,
+"lsa": 158,
+"mrk": 75,
+"pen": 145,
+"pos": 158,
+"rea": 162,
+"ref": 8,
+"sho": 163,
+"slt": 75,
+"spa": 145,
+"spd": 163,
+"str": 153,
+"stt": 96,
+"vis": 136,
+"vol": 164,
+"sta": 85,
+"total": 3908
+},
+"avg": {
+"avg1": 163,
+"avg2": 161,
+"avg3": 137,
+"avg4": 157,
+"avg5": 90,
+"avg6": 143
+},
+"playstyles": [
+"Trickster",
+"Clinical Finisher"
+],
+"meta": null,
+"added": "2026-10-21T13:36:24Z",
+"layout": {
+"player": {
+"sizeX": 256,
+"sizeY": 256,
+"posX": 0,
+"posY": 0
+},
+"rating": {
+"sizeX": 80,
+"sizeY": 80,
+"posX": 36.167,
+"posY": 4.083,
+"fontSize": 36
+},
+"position": {
+"sizeX": 40,
+"sizeY": 20,
+"posX": 56,
+"posY": 64,
+"fontSize": 24
+},
+"nation": {
+"sizeX": 24,
+"sizeY": 24,
+"posX": 82.7,
+"posY": 188
+},
+"club": {
+"sizeX": 24,
+"sizeY": 24,
+"posX": 146.6,
+"posY": 188
+},
+"name": {
+"sizeX": 0,
+"sizeY": 0,
+"posX": 128,
+"posY": 178,
+"fontSize": 22
+},
+"level": {
+"sizeX": 64,
+"sizeY": 32,
+"posX": 128,
+"posY": 233,
+"fontSize": 23
+},
+"rank": {
+"sizeX": 32,
+"sizeY": 32,
+"posX": 128,
+"posY": 232
+}
+},
+"colors": {
+"rating": "#FFFFFF",
+"position": "#FFFFFF",
+"name": "#FFFFFF",
+"level": "#FFFFFF"
+},
+"url": "https://renderz.app/player/30922856"
+},
+"30922855": {
+"id": 30922855,
+"name": "Ronaldo",
+"full_name": "Ronaldo Luís Nazário de Lima",
+"ovr": 124,
+"pos": "ST",
+"program": "PROGRAM_ICONS",
+"weak_foot": 5,
+"skill_moves": 5,
+"work_rates": [
+2,
+0
+],
+"height": 183,
+"weight": 78,
+"stats": {
+"acc": 163,
+"agg": 130,
+"agi": 155,
+"awr": 75,
+"bac": 160,
+"bal": 148,
+"cro": 123,
+"cur": 149,
+"dri": 159,
+"fin": 165,
+"frk": 135,
+"gkd": 8,
+"gkk": 8,
+"gkp": 8,
+"han": 8,
+"hea": 149,
+"jmp": 143,
+"lpa": 136,
+"lsa": 158,
+"mrk": 75,
+"pen": 145,
+"pos": 158,
+"rea": 162,
+"ref": 8,
+"sho": 163,
+"slt": 75,
+"spa": 145,
+"spd": 163,
+"str": 153,
+"stt": 96,
+"vis": 136,
+"vol": 164,
+"sta": 85,
+"total": 3908
+},
+"avg": {
+"avg1": 163,
+"avg2": 161,
+"avg3": 137,
+"avg4": 157,
+"avg5": 90,
+"avg6": 143
+},
+"playstyles": [
+"Trickster",
+"Clinical Finisher"
+],
+"meta": null,
+"added": "2026-10-21T13:36:24Z",
+"layout": {
+"player": {
+"sizeX": 256,
+"sizeY": 256,
+"posX": 0,
+"posY": 0
+},
+"rating": {
+"sizeX": 80,
+"sizeY": 80,
+"posX": 36.167,
+"posY": 4.083,
+"fontSize": 36
+},
+"position": {
+"sizeX": 40,
+"sizeY": 20,
+"posX": 56,
+"posY": 64,
+"fontSize": 24
+},
+"nation": {
+"sizeX": 24,
+"sizeY": 24,
+"posX": 82.7,
+"posY": 188
+},
+"club": {
+"sizeX": 24,
+"sizeY": 24,
+"posX": 146.6,
+"posY": 188
+},
+"name": {
+"sizeX": 0,
+"sizeY": 0,
+"posX": 128,
+"posY": 178,
+"fontSize": 22
+},
+"level": {
+"sizeX": 64,
+"sizeY": 32,
+"posX": 128,
+"posY": 233,
+"fontSize": 23
+},
+"rank": {
+"sizeX": 32,
+"sizeY": 32,
+"posX": 128,
+"posY": 232
+}
+},
+"colors": {
+"rating": "#FFFFFF",
+"position": "#FFFFFF",
+"name": "#FFFFFF",
+"level": "#FFFFFF"
+},
+"url": "https://renderz.app/player/30922855"
+},
+"30922844": {
+"id": 30922844,
+"name": "Luís Figo",
+"full_name": "Luís Filipe Madeira Caeiro Figo",
+"ovr": 124,
+"pos": "RW",
+"program": "PROGRAM_ICONS",
+"weak_foot": 5,
+"skill_moves": 4,
+"work_rates": [
+2,
+1
+],
+"height": 180,
+"weight": 75,
+"stats": {
+"acc": 164,
+"agg": 141,
+"agi": 155,
+"awr": 78,
+"bac": 159,
+"bal": 156,
+"cro": 165,
+"cur": 150,
+"dri": 162,
+"fin": 157,
+"frk": 146,
+"gkd": 8,
+"gkk": 8,
+"gkp": 8,
+"han": 8,
+"hea": 122,
+"jmp": 139,
+"lpa": 158,
+"lsa": 159,
+"mrk": 78,
+"pen": 149,
+"pos": 158,
+"rea": 159,
+"ref": 8,
+"sho": 154,
+"slt": 78,
+"spa": 159,
+"spd": 163,
+"str": 148,
+"stt": 96,
+"vis": 157,
+"vol": 145,
+"sta": 92,
+"total": 3987
+},
+"avg": {
+"avg1": 163,
+"avg2": 155,
+"avg3": 158,
+"avg4": 158,
+"avg5": 88,
+"avg6": 143
+},
+"playstyles": [
+"Incisive Through",
+"Speed Dribbler"
+],
+"meta": null,
+"added": "2026-10-21T13:36:24Z",
+"layout": {
+"player": {
+"sizeX": 256,
+"sizeY": 256,
+"posX": 0,
+"posY": 0
+},
+"rating": {
+"sizeX": 80,
+"sizeY": 80,
+"posX": 36.167,
+"posY": 4.083,
+"fontSize": 36
+},
+"position": {
+"sizeX": 40,
+"sizeY": 20,
+"posX": 56,
+"posY": 64,
+"fontSize": 24
+},
+"nation": {
+"sizeX": 24,
+"sizeY": 24,
+"posX": 82.7,
+"posY": 188
+},
+"club": {
+"sizeX": 24,
+"sizeY": 24,
+"posX": 146.6,
+"posY": 188
+},
+"name": {
+"sizeX": 0,
+"sizeY": 0,
+"posX": 128,
+"posY": 178,
+"fontSize": 22
+},
+"level": {
+"sizeX": 64,
+"sizeY": 32,
+"posX": 128,
+"posY": 233,
+"fontSize": 23
+},
+"rank": {
+"sizeX": 32,
+"sizeY": 32,
+"posX": 128,
+"posY": 232
+}
+},
+"colors": {
+"rating": "#FFFFFF",
+"position": "#FFFFFF",
+"name": "#FFFFFF",
+"level": "#FFFFFF"
+},
+"url": "https://renderz.app/player/30922844"
+},
+"30922832": {
+"id": 30922832,
+"name": "Beckenbauer",
+"full_name": "Franz Beckenbauer",
+"ovr": 124,
+"pos": "CB",
+"program": "PROGRAM_ICONS",
+"weak_foot": 4,
+"skill_moves": 3,
+"work_rates": [
+0,
+2
+],
+"height": 181,
+"weight": 75,
+"stats": {
+"acc": 151,
+"agg": 148,
+"agi": 140,
+"awr": 164,
+"bac": 147,
+"bal": 147,
+"cro": 135,
+"cur": 131,
+"dri": 139,
+"fin": 123,
+"frk": 136,
+"gkd": 8,
+"gkk": 8,
+"gkp": 8,
+"han": 8,
+"hea": 155,
+"jmp": 157,
+"lpa": 155,
+"lsa": 135,
+"mrk": 161,
+"pen": 127,
+"pos": 147,
+"rea": 150,
+"ref": 8,
+"sho": 136,
+"slt": 160,
+"spa": 154,
+"spd": 150,
+"str": 153,
+"stt": 163,
+"vis": 151,
+"vol": 120,
+"sta": 85,
+"total": 4060
+},
+"avg": {
+"avg1": 150,
+"avg2": 131,
+"avg3": 148,
+"avg4": 143,
+"avg5": 160,
+"avg6": 152
+},
+"playstyles": [
+"Hard Tackle Master"
+],
+"meta": null,
+"added": "2026-10-21T13:36:24Z",
+"layout": {
+"player": {
+"sizeX": 256,
+"sizeY": 256,
+"posX": 0,
+"posY": 0
+},
+"rating": {
+"sizeX": 80,
+"sizeY": 80,
+"posX": 36.167,
+"posY": 4.083,
+"fontSize": 36
+},
+"position": {
+"sizeX": 40,
+"sizeY": 20,
+"posX": 56,
+"posY": 64,
+"fontSize": 24
+},
+"nation": {
+"sizeX": 24,
+"sizeY": 24,
+"posX": 82.7,
+"posY": 188
+},
+"club": {
+"sizeX": 24,
+"sizeY": 24,
+"posX": 146.6,
+"posY": 188
+},
+"name": {
+"sizeX": 0,
+"sizeY": 0,
+"posX": 128,
+"posY": 178,
+"fontSize": 22
+},
+"level": {
+"sizeX": 64,
+"sizeY": 32,
+"posX": 128,
+"posY": 233,
+"fontSize": 23
+},
+"rank": {
+"sizeX": 32,
+"sizeY": 32,
+"posX": 128,
+"posY": 232
+}
+},
+"colors": {
+"rating": "#FFFFFF",
+"position": "#FFFFFF",
+"name": "#FFFFFF",
+"level": "#FFFFFF"
+},
+"url": "https://renderz.app/player/30922832"
+},
+"30922831": {
+"id": 30922831,
+"name": "Beckenbauer",
+"full_name": "Franz Beckenbauer",
+"ovr": 124,
+"pos": "CB",
+"program": "PROGRAM_ICONS",
+"weak_foot": 4,
+"skill_moves": 3,
+"work_rates": [
+0,
+2
+],
+"height": 181,
+"weight": 75,
+"stats": {
+"acc": 151,
+"agg": 148,
+"agi": 140,
+"awr": 164,
+"bac": 147,
+"bal": 147,
+"cro": 135,
+"cur": 131,
+"dri": 139,
+"fin": 123,
+"frk": 136,
+"gkd": 8,
+"gkk": 8,
+"gkp": 8,
+"han": 8,
+"hea": 155,
+"jmp": 157,
+"lpa": 155,
+"lsa": 135,
+"mrk": 161,
+"pen": 127,
+"pos": 147,
+"rea": 150,
+"ref": 8,
+"sho": 136,
+"slt": 160,
+"spa": 154,
+"spd": 150,
+"str": 153,
+"stt": 163,
+"vis": 151,
+"vol": 120,
+"sta": 85,
+"total": 4060
+},
+"avg": {
+"avg1": 150,
+"avg2": 131,
+"avg3": 148,
+"avg4": 143,
+"avg5": 160,
+"avg6": 152
+},
+"playstyles": [
+"Hard Tackle Master"
+],
+"meta": null,
+"added": "2026-10-21T13:36:24Z",
+"layout": {
+"player": {
+"sizeX": 256,
+"sizeY": 256,
+"posX": 0,
+"posY": 0
+},
+"rating": {
+"sizeX": 80,
+"sizeY": 80,
+"posX": 36.167,
+"posY": 4.083,
+"fontSize": 36
+},
+"position": {
+"sizeX": 40,
+"sizeY": 20,
+"posX": 56,
+"posY": 64,
+"fontSize": 24
+},
+"nation": {
+"sizeX": 24,
+"sizeY": 24,
+"posX": 82.7,
+"posY": 188
+},
+"club": {
+"sizeX": 24,
+"sizeY": 24,
+"posX": 146.6,
+"posY": 188
+},
+"name": {
+"sizeX": 0,
+"sizeY": 0,
+"posX": 128,
+"posY": 178,
+"fontSize": 22
+},
+"level": {
+"sizeX": 64,
+"sizeY": 32,
+"posX": 128,
+"posY": 233,
+"fontSize": 23
+},
+"rank": {
+"sizeX": 32,
+"sizeY": 32,
+"posX": 128,
+"posY": 232
+}
+},
+"colors": {
+"rating": "#FFFFFF",
+"position": "#FFFFFF",
+"name": "#FFFFFF",
+"level": "#FFFFFF"
+},
+"url": "https://renderz.app/player/30922831"
+},
+"30922808": {
+"id": 30922808,
+"name": "van Basten",
+"full_name": "Marco van Basten",
+"ovr": 124,
+"pos": "ST",
+"program": "PROGRAM_ICONS",
+"weak_foot": 5,
+"skill_moves": 4,
+"work_rates": [
+2,
+1
+],
+"height": 188,
+"weight": 78,
+"stats": {
+"acc": 157,
+"agg": 137,
+"agi": 150,
+"awr": 79,
+"bac": 158,
+"bal": 146,
+"cro": 122,
+"cur": 150,
+"dri": 152,
+"fin": 165,
+"frk": 127,
+"gkd": 8,
+"gkk": 8,
+"gkp": 8,
+"han": 8,
+"hea": 156,
+"jmp": 148,
+"lpa": 130,
+"lsa": 159,
+"mrk": 75,
+"pen": 153,
+"pos": 159,
+"rea": 156,
+"ref": 8,
+"sho": 163,
+"slt": 75,
+"spa": 138,
+"spd": 159,
+"str": 152,
+"stt": 96,
+"vis": 132,
+"vol": 167,
+"sta": 91,
+"total": 3892
+},
+"avg": {
+"avg1": 158,
+"avg2": 162,
+"avg3": 132,
+"avg4": 153,
+"avg5": 92,
+"avg6": 146
+},
+"playstyles": [
+"Finesse Shot",
+"Clinical Finisher"
+],
+"meta": null,
+"added": "2026-10-28T11:08:30Z",
+"layout": {
+"player": {
+"sizeX": 256,
+"sizeY": 256,
+"posX": 0,
+"posY": 0
+},
+"rating": {
+"sizeX": 80,
+"sizeY": 80,
+"posX": 36.167,
+"posY": 4.083,
+"fontSize": 36
+},
+"position": {
+"sizeX": 40,
+"sizeY": 20,
+"posX": 56,
+"posY": 64,
+"fontSize": 24
+},
+"nation": {
+"sizeX": 24,
+"sizeY": 24,
+"posX": 82.7,
+"posY": 188
+},
+"club": {
+"sizeX": 24,
+"sizeY": 24,
+"posX": 146.6,
+"posY": 188
+},
+"name": {
+"sizeX": 0,
+"sizeY": 0,
+"posX": 128,
+"posY": 178,
+"fontSize": 22
+},
+"level": {
+"sizeX": 64,
+"sizeY": 32,
+"posX": 128,
+"posY": 233,
+"fontSize": 23
+},
+"rank": {
+"sizeX": 32,
+"sizeY": 32,
+"posX": 128,
+"posY": 232
+}
+},
+"colors": {
+"rating": "#FFFFFF",
+"position": "#FFFFFF",
+"name": "#FFFFFF",
+"level": "#FFFFFF"
+},
+"url": "https://renderz.app/player/30922808"
+},
+"30922806": {
+"id": 30922806,
+"name": "Zidane",
+"full_name": "Zinedine Zidane",
+"ovr": 124,
+"pos": "CM",
+"program": "PROGRAM_ICONS",
+"weak_foot": 5,
+"skill_moves": 5,
+"work_rates": [
+2,
+0
+],
+"height": 185,
+"weight": 77,
+"stats": {
+"acc": 155,
+"agg": 143,
+"agi": 151,
+"awr": 147,
+"bac": 163,
+"bal": 156,
+"cro": 154,
+"cur": 152,
+"dri": 159,
+"fin": 146,
+"frk": 152,
+"gkd": 8,
+"gkk": 8,
+"gkp": 8,
+"han": 8,
+"hea": 151,
+"jmp": 144,
+"lpa": 163,
+"lsa": 159,
+"mrk": 134,
+"pen": 150,
+"pos": 151,
+"rea": 158,
+"ref": 8,
+"sho": 154,
+"slt": 132,
+"spa": 165,
+"spd": 150,
+"str": 150,
+"stt": 144,
+"vis": 165,
+"vol": 154,
+"sta": 91,
+"total": 4233
+},
+"avg": {
+"avg1": 152,
+"avg2": 151,
+"avg3": 161,
+"avg4": 157,
+"avg5": 140,
+"avg6": 146
+},
+"playstyles": [
+"Power Shot",
+"Trickster"
+],
+"meta": null,
+"added": "2026-10-21T13:36:24Z",
+"layout": {
+"player": {
+"sizeX": 256,
+"sizeY": 256,
+"posX": 0,
+"posY": 0
+},
+"rating": {
+"sizeX": 80,
+"sizeY": 80,
+"posX": 36.167,
+"posY": 4.083,
+"fontSize": 36
+},
+"position": {
+"sizeX": 40,
+"sizeY": 20,
+"posX": 56,
+"posY": 64,
+"fontSize": 24
+},
+"nation": {
+"sizeX": 24,
+"sizeY": 24,
+"posX": 82.7,
+"posY": 188
+},
+"club": {
+"sizeX": 24,
+"sizeY": 24,
+"posX": 146.6,
+"posY": 188
+},
+"name": {
+"sizeX": 0,
+"sizeY": 0,
+"posX": 128,
+"posY": 178,
+"fontSize": 22
+},
+"level": {
+"sizeX": 64,
+"sizeY": 32,
+"posX": 128,
+"posY": 233,
+"fontSize": 23
+},
+"rank": {
+"sizeX": 32,
+"sizeY": 32,
+"posX": 128,
+"posY": 232
+}
+},
+"colors": {
+"rating": "#FFFFFF",
+"position": "#FFFFFF",
+"name": "#FFFFFF",
+"level": "#FFFFFF"
+},
+"url": "https://renderz.app/player/30922806"
+},
+"30922804": {
+"id": 30922804,
+"name": "Nedvěd",
+"full_name": "Pavel Nedvěd",
+"ovr": 124,
+"pos": "LW",
+"program": "PROGRAM_ICONS",
+"weak_foot": 5,
+"skill_moves": 4,
+"work_rates": [
+2,
+0
+],
+"height": 177,
+"weight": 72,
+"stats": {
+"acc": 163,
+"agg": 141,
+"agi": 155,
+"awr": 122,
+"bac": 158,
+"bal": 156,
+"cro": 163,
+"cur": 149,
+"dri": 158,
+"fin": 154,
+"frk": 144,
+"gkd": 8,
+"gkk": 8,
+"gkp": 8,
+"han": 8,
+"hea": 140,
+"jmp": 136,
+"lpa": 154,
+"lsa": 154,
+"mrk": 115,
+"pen": 142,
+"pos": 151,
+"rea": 158,
+"ref": 8,
+"sho": 155,
+"slt": 108,
+"spa": 153,
+"spd": 163,
+"str": 142,
+"stt": 115,
+"vis": 152,
+"vol": 153,
+"sta": 92,
+"total": 4086
+},
+"avg": {
+"avg1": 163,
+"avg2": 153,
+"avg3": 153,
+"avg4": 157,
+"avg5": 118,
+"avg6": 140
+},
+"playstyles": [
+"Relentless Stamina",
+"Speed Dribbler"
+],
+"meta": null,
+"added": "2026-10-28T11:08:30Z",
+"layout": {
+"player": {
+"sizeX": 256,
+"sizeY": 256,
+"posX": 0,
+"posY": 0
+},
+"rating": {
+"sizeX": 80,
+"sizeY": 80,
+"posX": 36.167,
+"posY": 4.083,
+"fontSize": 36
+},
+"position": {
+"sizeX": 40,
+"sizeY": 20,
+"posX": 56,
+"posY": 64,
+"fontSize": 24
+},
+"nation": {
+"sizeX": 24,
+"sizeY": 24,
+"posX": 82.7,
+"posY": 188
+},
+"club": {
+"sizeX": 24,
+"sizeY": 24,
+"posX": 146.6,
+"posY": 188
+},
+"name": {
+"sizeX": 0,
+"sizeY": 0,
+"posX": 128,
+"posY": 178,
+"fontSize": 22
+},
+"level": {
+"sizeX": 64,
+"sizeY": 32,
+"posX": 128,
+"posY": 233,
+"fontSize": 23
+},
+"rank": {
+"sizeX": 32,
+"sizeY": 32,
+"posX": 128,
+"posY": 232
+}
+},
+"colors": {
+"rating": "#FFFFFF",
+"position": "#FFFFFF",
+"name": "#FFFFFF",
+"level": "#FFFFFF"
+},
+"url": "https://renderz.app/player/30922804"
+},
+"24053826": {
+"id": 24053826,
+"name": "Kane",
+"full_name": "Harry Kane",
+"ovr": 124,
+"pos": "ST",
+"program": "PROGRAM_BD27",
+"weak_foot": 4,
+"skill_moves": 4,
+"work_rates": [
+2,
+0
+],
+"height": 188,
+"weight": 86,
+"stats": {
+"acc": 156,
+"agg": 136,
+"agi": 148,
+"awr": 106,
+"bac": 157,
+"bal": 147,
+"cro": 132,
+"cur": 151,
+"dri": 150,
+"fin": 162,
+"frk": 135,
+"gkd": 8,
+"gkk": 8,
+"gkp": 8,
+"han": 8,
+"hea": 152,
+"jmp": 144,
+"lpa": 153,
+"lsa": 155,
+"mrk": 109,
+"pen": 156,
+"pos": 158,
+"rea": 160,
+"ref": 8,
+"sho": 158,
+"slt": 82,
+"spa": 155,
+"spd": 156,
+"str": 148,
+"stt": 108,
+"vis": 157,
+"vol": 156,
+"sta": 81,
+"total": 4008
+},
+"avg": {
+"avg1": 156,
+"avg2": 158,
+"avg3": 150,
+"avg4": 152,
+"avg5": 109,
+"avg6": 143
+},
+"playstyles": [
+"Incisive Through",
+"Clinical Finisher"
+],
+"meta": null,
+"added": "2026-10-28T11:08:30Z",
+"layout": {
+"player": {
+"sizeX": 256,
+"sizeY": 256,
+"posX": 0,
+"posY": 0
+},
+"rating": {
+"sizeX": 80,
+"sizeY": 80,
+"posX": 36,
+"posY": 4,
+"fontSize": 36
+},
+"position": {
+"sizeX": 40,
+"sizeY": 20,
+"posX": 56,
+"posY": 64,
+"fontSize": 24
+},
+"nation": {
+"sizeX": 24,
+"sizeY": 24,
+"posX": 64,
+"posY": 188
+},
+"club": {
+"sizeX": 24,
+"sizeY": 24,
+"posX": 168,
+"posY": 188
+},
+"league": {
+"sizeX": 24,
+"sizeY": 24,
+"posX": 116,
+"posY": 188
+},
+"name": {
+"sizeX": 0,
+"sizeY": 0,
+"posX": 128,
+"posY": 178,
+"fontSize": 22
+},
+"level": {
+"sizeX": 64,
+"sizeY": 32,
+"posX": 128,
+"posY": 233,
+"fontSize": 23
+},
+"rank": {
+"sizeX": 32,
+"sizeY": 32,
+"posX": 128,
+"posY": 232
+}
+},
+"colors": {
+"rating": "#FFFFFF",
+"position": "#FFFFFF",
+"name": "#FFFFFF",
+"level": "#FFFFFF"
+},
+"url": "https://renderz.app/player/24053826"
+},
+"24053825": {
+"id": 24053825,
+"name": "Kane",
+"full_name": "Harry Kane",
+"ovr": 124,
+"pos": "ST",
+"program": "PROGRAM_BD27",
+"weak_foot": 4,
+"skill_moves": 4,
+"work_rates": [
+2,
+0
+],
+"height": 188,
+"weight": 86,
+"stats": {
+"acc": 156,
+"agg": 136,
+"agi": 148,
+"awr": 106,
+"bac": 157,
+"bal": 147,
+"cro": 132,
+"cur": 151,
+"dri": 150,
+"fin": 162,
+"frk": 135,
+"gkd": 8,
+"gkk": 8,
+"gkp": 8,
+"han": 8,
+"hea": 152,
+"jmp": 144,
+"lpa": 153,
+"lsa": 155,
+"mrk": 109,
+"pen": 156,
+"pos": 158,
+"rea": 160,
+"ref": 8,
+"sho": 158,
+"slt": 82,
+"spa": 155,
+"spd": 156,
+"str": 148,
+"stt": 108,
+"vis": 157,
+"vol": 156,
+"sta": 81,
+"total": 4008
+},
+"avg": {
+"avg1": 156,
+"avg2": 158,
+"avg3": 150,
+"avg4": 152,
+"avg5": 109,
+"avg6": 143
+},
+"playstyles": [
+"Incisive Through",
+"Clinical Finisher"
+],
+"meta": null,
+"added": "2026-10-28T11:08:30Z",
+"layout": {
+"player": {
+"sizeX": 256,
+"sizeY": 256,
+"posX": 0,
+"posY": 0
+},
+"rating": {
+"sizeX": 80,
+"sizeY": 80,
+"posX": 36,
+"posY": 4,
+"fontSize": 36
+},
+"position": {
+"sizeX": 40,
+"sizeY": 20,
+"posX": 56,
+"posY": 64,
+"fontSize": 24
+},
+"nation": {
+"sizeX": 24,
+"sizeY": 24,
+"posX": 64,
+"posY": 188
+},
+"club": {
+"sizeX": 24,
+"sizeY": 24,
+"posX": 168,
+"posY": 188
+},
+"league": {
+"sizeX": 24,
+"sizeY": 24,
+"posX": 116,
+"posY": 188
+},
+"name": {
+"sizeX": 0,
+"sizeY": 0,
+"posX": 128,
+"posY": 178,
+"fontSize": 22
+},
+"level": {
+"sizeX": 64,
+"sizeY": 32,
+"posX": 128,
+"posY": 233,
+"fontSize": 23
+},
+"rank": {
+"sizeX": 32,
+"sizeY": 32,
+"posX": 128,
+"posY": 232
+}
+},
+"colors": {
+"rating": "#FFFFFF",
+"position": "#FFFFFF",
+"name": "#FFFFFF",
+"level": "#FFFFFF"
+},
+"url": "https://renderz.app/player/24053825"
+},
+"24053824": {
+"id": 24053824,
+"name": "Kane",
+"full_name": "Harry Kane",
+"ovr": 124,
+"pos": "ST",
+"program": "PROGRAM_BD27",
+"weak_foot": 4,
+"skill_moves": 4,
+"work_rates": [
+2,
+0
+],
+"height": 188,
+"weight": 86,
+"stats": {
+"acc": 156,
+"agg": 136,
+"agi": 148,
+"awr": 106,
+"bac": 157,
+"bal": 147,
+"cro": 132,
+"cur": 151,
+"dri": 150,
+"fin": 162,
+"frk": 135,
+"gkd": 8,
+"gkk": 8,
+"gkp": 8,
+"han": 8,
+"hea": 152,
+"jmp": 144,
+"lpa": 153,
+"lsa": 155,
+"mrk": 109,
+"pen": 156,
+"pos": 158,
+"rea": 160,
+"ref": 8,
+"sho": 158,
+"slt": 82,
+"spa": 155,
+"spd": 156,
+"str": 148,
+"stt": 108,
+"vis": 157,
+"vol": 156,
+"sta": 81,
+"total": 4008
+},
+"avg": {
+"avg1": 156,
+"avg2": 158,
+"avg3": 150,
+"avg4": 152,
+"avg5": 109,
+"avg6": 143
+},
+"playstyles": [
+"Incisive Through",
+"Clinical Finisher"
+],
+"meta": null,
+"added": "2026-10-28T11:08:30Z",
+"layout": {
+"player": {
+"sizeX": 256,
+"sizeY": 256,
+"posX": 0,
+"posY": 0
+},
+"rating": {
+"sizeX": 80,
+"sizeY": 80,
+"posX": 36,
+"posY": 4,
+"fontSize": 36
+},
+"position": {
+"sizeX": 40,
+"sizeY": 20,
+"posX": 56,
+"posY": 64,
+"fontSize": 24
+},
+"nation": {
+"sizeX": 24,
+"sizeY": 24,
+"posX": 64,
+"posY": 188
+},
+"club": {
+"sizeX": 24,
+"sizeY": 24,
+"posX": 168,
+"posY": 188
+},
+"league": {
+"sizeX": 24,
+"sizeY": 24,
+"posX": 116,
+"posY": 188
+},
+"name": {
+"sizeX": 0,
+"sizeY": 0,
+"posX": 128,
+"posY": 178,
+"fontSize": 22
+},
+"level": {
+"sizeX": 64,
+"sizeY": 32,
+"posX": 128,
+"posY": 233,
+"fontSize": 23
+},
+"rank": {
+"sizeX": 32,
+"sizeY": 32,
+"posX": 128,
+"posY": 232
+}
+},
+"colors": {
+"rating": "#FFFFFF",
+"position": "#FFFFFF",
+"name": "#FFFFFF",
+"level": "#FFFFFF"
+},
+"url": "https://renderz.app/player/24053824"
+},
+"24053816": {
+"id": 24053816,
+"name": "Lamine Yamal",
+"full_name": "Lamine Yamal Nasraoui Ebana",
+"ovr": 124,
+"pos": "RW",
+"program": "PROGRAM_BD27",
+"weak_foot": 4,
+"skill_moves": 5,
+"work_rates": [
+2,
+0
+],
+"height": 181,
+"weight": 72,
+"stats": {
+"acc": 161,
+"agg": 123,
+"agi": 159,
+"awr": 73,
+"bac": 160,
+"bal": 155,
+"cro": 155,
+"cur": 152,
+"dri": 158,
+"fin": 158,
+"frk": 122,
+"gkd": 8,
+"gkk": 8,
+"gkp": 8,
+"han": 8,
+"hea": 109,
+"jmp": 124,
+"lpa": 146,
+"lsa": 155,
+"mrk": 78,
+"pen": 130,
+"pos": 149,
+"rea": 157,
+"ref": 8,
+"sho": 149,
+"slt": 78,
+"spa": 151,
+"spd": 160,
+"str": 130,
+"stt": 92,
+"vis": 154,
+"vol": 145,
+"sta": 84,
+"total": 3807
+},
+"avg": {
+"avg1": 160,
+"avg2": 152,
+"avg3": 149,
+"avg4": 158,
+"avg5": 84,
+"avg6": 126
+},
+"playstyles": [
+"Trickster",
+"Speed Dribbler"
+],
+"meta": null,
+"added": "2026-10-28T11:08:30Z",
+"layout": {
+"player": {
+"sizeX": 256,
+"sizeY": 256,
+"posX": 0,
+"posY": 0
+},
+"rating": {
+"sizeX": 80,
+"sizeY": 80,
+"posX": 36,
+"posY": 4,
+"fontSize": 36
+},
+"position": {
+"sizeX": 40,
+"sizeY": 20,
+"posX": 56,
+"posY": 64,
+"fontSize": 24
+},
+"nation": {
+"sizeX": 24,
+"sizeY": 24,
+"posX": 64,
+"posY": 188
+},
+"club": {
+"sizeX": 24,
+"sizeY": 24,
+"posX": 168,
+"posY": 188
+},
+"league": {
+"sizeX": 24,
+"sizeY": 24,
+"posX": 116,
+"posY": 188
+},
+"name": {
+"sizeX": 0,
+"sizeY": 0,
+"posX": 128,
+"posY": 178,
+"fontSize": 22
+},
+"level": {
+"sizeX": 64,
+"sizeY": 32,
+"posX": 128,
+"posY": 233,
+"fontSize": 23
+},
+"rank": {
+"sizeX": 32,
+"sizeY": 32,
+"posX": 128,
+"posY": 232
+}
+},
+"colors": {
+"rating": "#FFFFFF",
+"position": "#FFFFFF",
+"name": "#FFFFFF",
+"level": "#FFFFFF"
+},
+"url": "https://renderz.app/player/24053816"
+},
+"24053815": {
+"id": 24053815,
+"name": "Lamine Yamal",
+"full_name": "Lamine Yamal Nasraoui Ebana",
+"ovr": 124,
+"pos": "RW",
+"program": "PROGRAM_BD27",
+"weak_foot": 4,
+"skill_moves": 5,
+"work_rates": [
+2,
+0
+],
+"height": 181,
+"weight": 72,
+"stats": {
+"acc": 161,
+"agg": 123,
+"agi": 159,
+"awr": 73,
+"bac": 160,
+"bal": 155,
+"cro": 155,
+"cur": 152,
+"dri": 158,
+"fin": 158,
+"frk": 122,
+"gkd": 8,
+"gkk": 8,
+"gkp": 8,
+"han": 8,
+"hea": 109,
+"jmp": 124,
+"lpa": 146,
+"lsa": 155,
+"mrk": 78,
+"pen": 130,
+"pos": 149,
+"rea": 157,
+"ref": 8,
+"sho": 149,
+"slt": 78,
+"spa": 151,
+"spd": 160,
+"str": 130,
+"stt": 92,
+"vis": 154,
+"vol": 145,
+"sta": 84,
+"total": 3807
+},
+"avg": {
+"avg1": 160,
+"avg2": 152,
+"avg3": 149,
+"avg4": 158,
+"avg5": 84,
+"avg6": 126
+},
+"playstyles": [
+"Trickster",
+"Speed Dribbler"
+],
+"meta": null,
+"added": "2026-10-28T11:08:30Z",
+"layout": {
+"player": {
+"sizeX": 256,
+"sizeY": 256,
+"posX": 0,
+"posY": 0
+},
+"rating": {
+"sizeX": 80,
+"sizeY": 80,
+"posX": 36,
+"posY": 4,
+"fontSize": 36
+},
+"position": {
+"sizeX": 40,
+"sizeY": 20,
+"posX": 56,
+"posY": 64,
+"fontSize": 24
+},
+"nation": {
+"sizeX": 24,
+"sizeY": 24,
+"posX": 64,
+"posY": 188
+},
+"club": {
+"sizeX": 24,
+"sizeY": 24,
+"posX": 168,
+"posY": 188
+},
+"league": {
+"sizeX": 24,
+"sizeY": 24,
+"posX": 116,
+"posY": 188
+},
+"name": {
+"sizeX": 0,
+"sizeY": 0,
+"posX": 128,
+"posY": 178,
+"fontSize": 22
+},
+"level": {
+"sizeX": 64,
+"sizeY": 32,
+"posX": 128,
+"posY": 233,
+"fontSize": 23
+},
+"rank": {
+"sizeX": 32,
+"sizeY": 32,
+"posX": 128,
+"posY": 232
+}
+},
+"colors": {
+"rating": "#FFFFFF",
+"position": "#FFFFFF",
+"name": "#FFFFFF",
+"level": "#FFFFFF"
+},
+"url": "https://renderz.app/player/24053815"
+},
+"30923104": {
+"id": 30923104,
+"name": "David Luiz",
+"full_name": "David Luiz Moreira Marinho",
+"ovr": 123,
+"pos": "CB",
+"program": "PROGRAM_HOFS",
+"weak_foot": 3,
+"skill_moves": 3,
+"work_rates": [
+0,
+2
+],
+"height": 189,
+"weight": 84,
+"stats": {
+"acc": 149,
+"agg": 155,
+"agi": 139,
+"awr": 158,
+"bac": 141,
+"bal": 148,
+"cro": 125,
+"cur": 126,
+"dri": 128,
+"fin": 101,
+"frk": 130,
+"gkd": 8,
+"gkk": 8,
+"gkp": 8,
+"han": 8,
+"hea": 160,
+"jmp": 150,
+"lpa": 145,
+"lsa": 140,
+"mrk": 159,
+"pen": 120,
+"pos": 143,
+"rea": 144,
+"ref": 8,
+"sho": 146,
+"slt": 161,
+"spa": 141,
+"spd": 145,
+"str": 150,
+"stt": 163,
+"vis": 132,
+"vol": 109,
+"sta": 76,
+"total": 3924
+},
+"avg": {
+"avg1": 147,
+"avg2": 125,
+"avg3": 135,
+"avg4": 138,
+"avg5": 160,
+"avg6": 151
+},
+"playstyles": [
+"Intimidator"
+],
+"meta": null,
+"added": "2026-10-28T11:08:30Z",
+"layout": {
+"player": {
+"sizeX": 256,
+"sizeY": 256,
+"posX": 0,
+"posY": 0
+},
+"rating": {
+"sizeX": 80,
+"sizeY": 80,
+"posX": 36.167,
+"posY": 4.083,
+"fontSize": 36
+},
+"position": {
+"sizeX": 40,
+"sizeY": 20,
+"posX": 56,
+"posY": 64,
+"fontSize": 24
+},
+"nation": {
+"sizeX": 24,
+"sizeY": 24,
+"posX": 82.7,
+"posY": 188
+},
+"club": {
+"sizeX": 24,
+"sizeY": 24,
+"posX": 146.6,
+"posY": 188
+},
+"name": {
+"sizeX": 0,
+"sizeY": 0,
+"posX": 128,
+"posY": 178,
+"fontSize": 22
+},
+"level": {
+"sizeX": 64,
+"sizeY": 32,
+"posX": 128,
+"posY": 233,
+"fontSize": 23
+},
+"rank": {
+"sizeX": 32,
+"sizeY": 32,
+"posX": 128,
+"posY": 232
+}
+},
+"colors": {
+"rating": "#FFFFFF",
+"position": "#FFFFFF",
+"name": "#FFFFFF",
+"level": "#FFFFFF"
+},
+"url": "https://renderz.app/player/30923104"
+}
+}
+}

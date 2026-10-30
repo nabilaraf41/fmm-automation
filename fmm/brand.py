@@ -92,6 +92,9 @@ def tag(d, text, color, y=190):
 
 def draw_title(d, text, y, size=96, max_w=W - 120):
     f = title_font(size)
+    while size > 40 and max(d.textlength(w, font=f) for w in text.upper().split()) > max_w:
+        size -= 4  # shrink until the longest single word fits (e.g. SCHWEINSTEIGER)
+        f = title_font(size)
     for ln in wrap(d, text.upper(), f, max_w):
         d.text((60, y), ln, font=f, fill=WHITE)
         y += int(size * 1.05)

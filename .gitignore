@@ -7,3 +7,5 @@ __pycache__/
 
 .claude/
 *.wav.tmp
+site/
+assets/cards/rz/*.png.tmp
