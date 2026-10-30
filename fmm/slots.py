@@ -24,11 +24,21 @@ def load_state():
 
 
 def latest_players():
-    """Fresh list (with signed image URLs) + DB of everything seen."""
-    made = renderz.run()
-    page = renderz.fetch(renderz.LIST_URL).decode("utf-8", "ignore")
-    fresh = {str(p["id"]): p for p in (renderz.slim(x) for x in renderz.extract_array(page))}
-    db = json.loads(renderz.DB.read_text(encoding="utf-8"))["players"]
+    """Fresh list from RenderZ when reachable; otherwise (cloud is blocked by RenderZ) the cards
+    your PC already collected into the repo: players_db.json + assets/cards/rz/*.png."""
+    made = []
+    try:
+        made = renderz.run()
+        page = renderz.fetch(renderz.LIST_URL).decode("utf-8", "ignore")
+        fresh = {str(p["id"]): p for p in (renderz.slim(x) for x in renderz.extract_array(page))}
+    except Exception as ex:
+        print("RenderZ not reachable here, using collected cards:", str(ex)[:80])
+        fresh = None
+    db = json.loads(renderz.DB.read_text(encoding="utf-8"))["players"] if renderz.DB.exists() else {}
+    if fresh is None:
+        recent = sorted(db.values(), key=lambda p: p.get("added") or "", reverse=True)
+        fresh = {str(p["id"]): p for p in recent if (renderz.CARDS / f"{p['id']}.png").exists()}
+        fresh = dict(list(fresh.items())[:24])
     return fresh, db, made
 
 
@@ -37,7 +47,7 @@ def ensure_card(p, fresh):
     path = renderz.CARDS / f"{p['id']}.png"
     if not path.exists():
         src = fresh.get(str(p["id"]))
-        if not src:
+        if not src or not src.get("img_bg"):
             return None
         renderz.CARDS.mkdir(parents=True, exist_ok=True)
         renderz.build_card(src).save(path)
