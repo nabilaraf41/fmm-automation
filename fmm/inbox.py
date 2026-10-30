@@ -13,6 +13,7 @@ ROOT = Path(__file__).resolve().parent.parent
 STATE = ROOT / "content" / "clips_state.json"
 CACHE = ROOT / "output" / "inbox"
 FOLDER = "FMM Clips"
+FOLDER_ID = "1vNTd0SHdx9RnC4tuvKIQL26Z7WgKWD_E"  # your clips folder (used before the name lookup)
 TITLES = [("free kick", "FREE KICK GOAL!!"), ("freekick", "FREE KICK GOAL!!"), ("skill", "INSANE SKILL!!"),
           ("save", "WHAT A SAVE!!"), ("bicycle", "BICYCLE KICK!!"), ("header", "WHAT A HEADER!!"),
           ("long", "LONG SHOT GOAL!!"), ("comeback", "CRAZY COMEBACK!!")]
@@ -29,11 +30,14 @@ def state():
 
 
 def videos(d):
-    q = f"name = '{FOLDER}' and mimeType = 'application/vnd.google-apps.folder' and trashed = false"
-    folders = d.files().list(q=q, fields="files(id)").execute().get("files", [])
-    if not folders:
-        return []
-    q = f"'{folders[0]['id']}' in parents and mimeType contains 'video/' and trashed = false"
+    fid = FOLDER_ID
+    if not fid:
+        q = f"name = '{FOLDER}' and mimeType = 'application/vnd.google-apps.folder' and trashed = false"
+        folders = d.files().list(q=q, fields="files(id)").execute().get("files", [])
+        if not folders:
+            return []
+        fid = folders[0]["id"]
+    q = f"'{fid}' in parents and mimeType contains 'video/' and trashed = false"
     return d.files().list(q=q, orderBy="createdTime", fields="files(id,name,size,createdTime)",
                           pageSize=100).execute().get("files", [])
 
