@@ -54,15 +54,29 @@ def ensure_card(p, fresh):
     return str(path)
 
 
+def trend_boost():
+    """Player names trending on YouTube right now -> mention counts (refreshed before every build)."""
+    try:
+        from fmm import trends
+        t = trends.run()
+        print("trending:", t["topics"][:4], t["players"][:5])
+        return {n.lower(): c for n, c in t["players"]}
+    except Exception as ex:
+        print("trend check skipped:", str(ex)[:100])
+        return {}
+
+
 def pick(kind, fresh, db, state):
     pool = list(db.values())
+    hot = trend_boost()
+    heat = lambda p: hot.get((p.get("name") or "").lower(), 0)
     unfeatured = sorted([p for p in fresh.values() if str(p["id"]) not in state["featured"]],
-                        key=lambda p: (p.get("added") or "", p.get("ovr") or 0), reverse=True)
+                        key=lambda p: (heat(p), p.get("added") or "", p.get("ovr") or 0), reverse=True)
     weekday = dt.datetime.now().weekday()
     if unfeatured:
         p = unfeatured[0]
         return ("review_reel" if kind == "reel" else "review_post"), [p], pool
-    latest = sorted(fresh.values(), key=lambda p: (p.get("ovr") or 0), reverse=True)
+    latest = sorted(fresh.values(), key=lambda p: (heat(p), p.get("ovr") or 0), reverse=True)
     if kind == "reel":
         return ("tierlist" if weekday % 2 else "countdown"), latest[:8], pool
     # photo fallback: card battle between the two best latest cards of the same position group
