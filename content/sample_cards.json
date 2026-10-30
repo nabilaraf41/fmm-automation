@@ -1,0 +1,71 @@
+{
+  "posts": [
+    {
+      "id": "versus_cr7",
+      "type": "versus",
+      "tag": "Which one would you pick?",
+      "title": "CR7 Flashback or TOTS?",
+      "cards": [
+        {"name": "C. Ronaldo", "card": "assets/cards/ronaldo_117_lw.jpg", "tier": "purple"},
+        {"name": "C. Ronaldo", "card": "assets/cards/ronaldo_119_st_tots.jpg", "tier": "gold"}
+      ]
+    },
+    {
+      "id": "versus_three",
+      "type": "versus",
+      "title": "Best Ronaldo card?",
+      "cards": [
+        {"name": "C. Ronaldo", "card": "assets/cards/ronaldo_120_lw.jpg", "tier": "purple"},
+        {"name": "C. Ronaldo", "card": "assets/cards/ronaldo_119_st.jpg", "tier": "red"},
+        {"name": "Ronaldo", "card": "assets/cards/r9_122_st.jpg", "tier": "gold"}
+      ]
+    },
+    {
+      "id": "spotlight_ronaldo",
+      "type": "spotlight",
+      "title": "Icons",
+      "subtitle": "New card is live",
+      "player": "Ronaldo",
+      "tier": "gold",
+      "hero": "assets/heroes/ronaldo_test_hd.png",
+      "card": "assets/cards/r9_122_st.jpg"
+    },
+    {
+      "id": "code_26islive",
+      "type": "code",
+      "title": "New Code!!",
+      "subtitle": "Free rewards — claim before it expires",
+      "reward_image": "assets/cards/ronaldo_120_lw.jpg",
+      "code": "26ISLIVE"
+    },
+    {
+      "id": "review_ronaldo_real_card",
+      "type": "review",
+      "tag": "Player Review",
+      "player": "C. Ronaldo",
+      "subtitle": "LW • 120 OVR",
+      "card": "assets/cards/ronaldo_120_lw.jpg",
+      "tier": "purple",
+      "pros": ["Elite finishing", "Top-tier pace", "Clinical weak foot"],
+      "cons": ["Low defensive work rate"],
+      "score": 9
+    },
+    {
+      "id": "top10_st_real_cards",
+      "type": "top10",
+      "position": "ST",
+      "players": [
+        {"name": "Ronaldo", "card": "assets/cards/r9_122_st.jpg"},
+        {"name": "C. Ronaldo", "card": "assets/cards/ronaldo_119_st.jpg"},
+        {"name": "C. Ronaldo", "card": "assets/cards/ronaldo_119_st_tots.jpg"},
+        {"name": "C. Ronaldo", "card": "assets/cards/ronaldo_122_lw.jpg"},
+        {"name": "C. Ronaldo", "card": "assets/cards/ronaldo_120_lw.jpg"},
+        {"name": "C. Ronaldo", "card": "assets/cards/ronaldo_117_lw.jpg"},
+        {"name": "C. Ronaldo", "card": "assets/cards/ronaldo_84_st_eafc.jpg"},
+        {"name": "Player Eight", "ovr": 117, "tier": "blue"},
+        {"name": "Player Nine", "ovr": 117, "tier": "purple"},
+        {"name": "Player Ten", "ovr": 117, "tier": "gold"}
+      ]
+    }
+  ]
+}

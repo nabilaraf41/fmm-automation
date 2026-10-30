@@ -1,0 +1,9 @@
+.env
+secrets/
+.venv312/
+output/
+external/
+__pycache__/
+
+.claude/
+*.wav.tmp

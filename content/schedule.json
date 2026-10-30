@@ -1,0 +1,20 @@
+{
+  "timezone": "Asia/Dhaka",
+  "jitter_minutes": 15,
+  "slots": [
+    {"time": "07:00", "audience": "USA evening", "kind": "reel", "platforms": ["facebook", "instagram", "youtube"]},
+    {"time": "13:00", "audience": "EU lunch + India", "kind": "photo", "platforms": ["facebook", "instagram"]},
+    {"time": "21:00", "audience": "BD + India peak", "kind": "reel", "platforms": ["facebook", "instagram"]},
+    {"time": "00:30", "audience": "UK/EU evening", "kind": "photo", "platforms": ["facebook", "instagram"]}
+  ],
+  "weekend_extra": [
+    {"time": "23:00", "audience": "USA weekend noon", "kind": "photo", "platforms": ["facebook", "instagram"]}
+  ],
+  "hashtags": {
+    "core": ["#FCMobile", "#FCMobile26", "#EASportsFCMobile", "#FMM", "#FCMobileMania"],
+    "pack": ["#FCMobilePackOpening", "#PackOpening"],
+    "code": ["#FCMobileCodes", "#RedeemCode", "#FreeRewards"],
+    "tip": ["#FCMobileTips", "#FCMobileTactics", "#F2P"],
+    "reach_south_asia": ["#FCMobileIndia", "#FCMobileBangladesh"]
+  }
+}

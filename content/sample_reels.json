@@ -1,0 +1,54 @@
+{
+  "reels": [
+    {
+      "id": "reel_top10_st",
+      "scenes": [
+        {"scene": "countdown", "position": "ST", "players": [
+          {"name": "Ronaldo", "card": "assets/cards/r9_122_st.jpg"},
+          {"name": "C. Ronaldo", "card": "assets/cards/ronaldo_122_lw.jpg"},
+          {"name": "C. Ronaldo", "card": "assets/cards/ronaldo_120_lw.jpg"},
+          {"name": "C. Ronaldo", "card": "assets/cards/ronaldo_119_st.jpg"},
+          {"name": "C. Ronaldo", "card": "assets/cards/ronaldo_119_st_tots.jpg"},
+          {"name": "C. Ronaldo", "card": "assets/cards/ronaldo_117_lw.jpg"},
+          {"name": "C. Ronaldo", "card": "assets/cards/ronaldo_84_st_eafc.jpg"}
+        ]}
+      ]
+    },
+    {
+      "id": "reel_code",
+      "scenes": [{"scene": "code", "code": "26ISLIVE", "card": "assets/cards/ronaldo_120_lw.jpg"}]
+    },
+    {
+      "id": "reel_reveal_stamp",
+      "scenes": [
+        {"scene": "reveal", "title": "New Icon", "sub": "122 OVR Ronaldo is here", "card": "assets/cards/r9_122_st.jpg"},
+        {"scene": "stamp", "title": "Worth it?", "text": "Must buy", "color": [0, 200, 83], "card": "assets/cards/r9_122_st.jpg"}
+      ]
+    },
+    {
+      "id": "reel_news",
+      "scenes": [{"scene": "messages", "headline": "Event news", "lines": [
+        "New Icons event starts this Thursday",
+        "Free 120 OVR player for logging in 7 days",
+        "Redeem code 26ISLIVE still works",
+        "Ballon d'Or packs return next week"
+      ]}]
+    },
+    {
+      "id": "reel_stat_swipe",
+      "scenes": [
+        {"scene": "stat", "title": "Rank up gains", "label": "Ronaldo OVR", "from": 117, "to": 122, "card": "assets/cards/ronaldo_117_lw.jpg"},
+        {"scene": "swipe", "title": "Base vs Icon", "before": "assets/cards/ronaldo_84_st_eafc.jpg", "after": "assets/cards/ronaldo_122_lw.jpg"}
+      ]
+    },
+    {
+      "id": "reel_tierlist",
+      "scenes": [{"scene": "tierlist", "title": "Ronaldo Tier List", "tiers": {
+        "S": ["assets/cards/r9_122_st.jpg", "assets/cards/ronaldo_122_lw.jpg"],
+        "A": ["assets/cards/ronaldo_120_lw.jpg", "assets/cards/ronaldo_119_st.jpg"],
+        "B": ["assets/cards/ronaldo_119_st_tots.jpg", "assets/cards/ronaldo_117_lw.jpg"],
+        "C": ["assets/cards/ronaldo_84_st_eafc.jpg"]
+      }}]
+    }
+  ]
+}

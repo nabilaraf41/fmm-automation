@@ -1,0 +1,59 @@
+{
+  "posts": [
+    {
+      "id": "day1_tip",
+      "type": "tip",
+      "tag": "Pro Tip",
+      "title": "3 Ways to Win More Division Rivals",
+      "points": [
+        "Use skill moves only when you have space, not in crowded midfield.",
+        "Switch to a defensive formation after scoring to protect the lead.",
+        "Train your best striker first; ranks matter more than one extra card."
+      ]
+    },
+    {
+      "id": "day2_poll",
+      "type": "poll",
+      "title": "Best formation in FC Mobile right now?",
+      "options": ["4-3-3 Attack", "4-2-3-1", "4-1-2-1-2 Narrow", "3-5-2"]
+    },
+    {
+      "id": "day3_review",
+      "type": "review",
+      "tag": "Player Review",
+      "player": "Sample Striker",
+      "subtitle": "ST • Sample Event Card",
+      "pos": "ST",
+      "tier": "gold",
+      "image": "",
+      "ovr": 109,
+      "pros": ["Elite finishing", "Excellent positioning", "Fast acceleration"],
+      "cons": ["Average heading", "Slightly weak physicality"],
+      "score": 9
+    },
+    {
+      "id": "day5_top10_cdm",
+      "type": "top10",
+      "position": "CDM",
+      "players": [
+        {"name": "Player One", "ovr": 120, "tier": "gold", "image": ""},
+        {"name": "Player Two", "ovr": 119, "tier": "gold", "image": ""},
+        {"name": "Player Three", "ovr": 119, "tier": "red", "image": ""},
+        {"name": "Player Four", "ovr": 119, "tier": "purple", "image": ""},
+        {"name": "Player Five", "ovr": 119, "tier": "blue", "image": ""},
+        {"name": "Player Six", "ovr": 120, "tier": "silver", "image": ""},
+        {"name": "Player Seven", "ovr": 119, "tier": "red", "image": ""},
+        {"name": "Player Eight", "ovr": 117, "tier": "blue", "image": ""},
+        {"name": "Player Nine", "ovr": 117, "tier": "purple", "image": ""},
+        {"name": "Player Ten", "ovr": 117, "tier": "gold", "image": ""}
+      ]
+    },
+    {
+      "id": "day4_news",
+      "type": "news",
+      "tag": "Breaking",
+      "title": "New event drops this week",
+      "subtitle": "Full guide coming soon on FMM"
+    }
+  ]
+}

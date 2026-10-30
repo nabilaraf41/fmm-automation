@@ -1,0 +1,46 @@
+name: FMM redeem codes
+
+on:
+  schedule:
+    - cron: "15 */3 * * *"   # every 3 hours (UTC)
+  workflow_dispatch: {}       # "Run workflow" button for manual runs
+
+concurrency:
+  group: fmm-codes
+  cancel-in-progress: false
+
+permissions:
+  contents: write             # to save codes_state.json / posted.json back
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install
+        run: |
+          sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg
+          pip install -r requirements.txt
+
+      - name: Check codes and post
+        env:
+          META_PAGE_TOKEN: ${{ secrets.META_PAGE_TOKEN }}
+          META_PAGE_ID: ${{ secrets.META_PAGE_ID }}
+          IG_USER_ID: ${{ secrets.IG_USER_ID }}
+          TZ: Asia/Dhaka
+        run: python -u -m fmm.run_cloud
+
+      - name: Save state
+        if: always()
+        run: |
+          git config user.name "fmm-bot"
+          git config user.email "fmm-bot@users.noreply.github.com"
+          git add content/codes_state.json content/posted.json
+          git diff --cached --quiet || (git commit -m "Update code/post state [skip ci]" && git push)
