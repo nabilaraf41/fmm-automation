@@ -121,6 +121,12 @@ def post(kind, media, caption, where="both"):
         done["facebook"] = (fb_photo if kind == "photo" else fb_reel)(media, caption)
     if where in ("ig", "both"):
         done["instagram"] = (ig_photo if kind == "photo" else ig_reel)(media, caption)
+    if kind == "reel" and where == "both":  # Reels also go to YouTube Shorts, when YouTube is connected
+        try:
+            from fmm import youtube
+            done["youtube"] = youtube.upload(media, caption)[0]
+        except Exception as ex:  # YouTube problems must never block FB/IG posting
+            print("youtube skipped:", str(ex)[:200])
     log({"kind": kind, "file": media, **done})
     return done
 
