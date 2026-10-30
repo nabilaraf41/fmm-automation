@@ -7,6 +7,11 @@ import datetime as dt
 from fmm import codes, poster
 
 if __name__ == "__main__":
+    try:  # new-player drops (Thursday 07:00 BDT, or any surprise batch) -> extra posts
+        from fmm import newplayers
+        newplayers.run()
+    except Exception as ex:
+        print("new-player check skipped:", str(ex)[:150])
     codes.run()
     today = codes.QUEUE / dt.date.today().isoformat()
     if today.exists():

@@ -422,7 +422,48 @@ def post_codes_list(p):
     return img
 
 
-TEMPLATES = {"codes_list": post_codes_list, "code": post_code, "versus": post_versus, "spotlight": post_spotlight, "tip": post_tip, "tutorial": post_tip, "poll": post_poll, "review": post_review,
+def post_guess(p):
+    """Guess the player: card blacked out, only OVR/position/hints visible."""
+    img, d, c = base("poll", p.get("background"))
+    d.text((W // 2, 190), "GUESS THE PLAYER", font=font("Anton-Regular.ttf", 110), fill=GOLD, anchor="ma",
+           stroke_width=3, stroke_fill=(5, 5, 5))
+    card = load_card(p["card"])
+    s = 760 / card.height
+    card = card.resize((int(card.width * s), 760), Image.LANCZOS)
+    sil = Image.new("RGBA", card.size, (12, 12, 16, 255))
+    sil.putalpha(card.getchannel("A"))
+    glow = Image.new("RGBA", card.size, (0, 0, 0, 0))
+    glow.paste(Image.new("RGBA", card.size, PURPLE + (200,)), (0, 0), card)
+    x, y = (W - card.width) // 2, 340
+    g = glow.filter(ImageFilter.GaussianBlur(30))
+    img.paste(g, (x, y), g)
+    img.paste(sil, (x, y), sil)
+    d = ImageDraw.Draw(img)
+    d.text((W // 2, y + 380), "?", font=font("Anton-Regular.ttf", 300), fill=WHITE, anchor="mm")
+    hints = p.get("hints", [])
+    d.text((W // 2, 1140), "  •  ".join(hints).upper(), font=label_font(40), fill=WHITE, anchor="ma")
+    footer(d, "COMMENT YOUR ANSWER • REVEALED IN OUR NEXT POST")
+    return img
+
+
+def post_rate(p):
+    """Rate this card 1-10: big card + a 1..10 scale."""
+    img, d, c = base("review", p.get("background"))
+    d.text((W // 2, 190), "RATE THIS CARD", font=font("Anton-Regular.ttf", 110), fill=WHITE, anchor="ma",
+           stroke_width=3, stroke_fill=RED)
+    card = fit_card(p["card"], 560, 760, GOLD)
+    img.paste(card, ((W - card.width) // 2, 320), card)
+    d = ImageDraw.Draw(img)
+    x0, y0, w = 90, 1140, (W - 180) / 10
+    for i in range(10):
+        col = tuple(int(RED[k] + (GREEN[k] - RED[k]) * i / 9) for k in range(3))
+        d.rounded_rectangle((x0 + i * w + 4, y0, x0 + (i + 1) * w - 4, y0 + 90), 16, fill=col)
+        d.text((x0 + i * w + w / 2, y0 + 45), str(i + 1), font=font("Anton-Regular.ttf", 56), fill=WHITE, anchor="mm")
+    footer(d, "DROP YOUR RATING IN THE COMMENTS")
+    return img
+
+
+TEMPLATES = {"guess": post_guess, "rate": post_rate, "codes_list": post_codes_list, "code": post_code, "versus": post_versus, "spotlight": post_spotlight, "tip": post_tip, "tutorial": post_tip, "poll": post_poll, "review": post_review,
              "news": post_quote, "quote": post_quote, "event": post_quote, "pack": post_quote, "top10": post_top10}
 
 

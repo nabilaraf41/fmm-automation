@@ -95,7 +95,12 @@ def pick(kind, fresh, db, state):
     latest = sorted(fresh.values(), key=lambda p: (heat(p), p.get("ovr") or 0), reverse=True)
     if kind == "reel":
         return ("tierlist" if weekday % 2 else "countdown"), latest[:8], pool
-    # photo fallback: card battle between the two best latest cards of the same position group
+    # photo fallback rotates daily: card battle -> guess the player -> rate this card
+    rot = ["versus", "guess", "rate"][dt.date.today().toordinal() % 3]
+    if rot != "versus":
+        used = set(state.get("used_photo", []))
+        cand = [p for p in latest if str(p["id"]) not in used] or latest
+        return rot, [cand[0]], pool
     by_group = {}
     for p in latest:
         by_group.setdefault(rv.group(p["pos"]), []).append(p)
@@ -189,6 +194,20 @@ def build(slot):
                                                     or (t == 'B' and 7 <= s < 8) or (t == 'C' and s < 7))
                              for t in "SABC")
                    + "\n\n👇 Agree or disagree? Tell us who's misplaced!\n\n#FCMobile #FCMobile26 #TierList #FMM")
+    elif ctype == "guess":
+        hints = [f"{p['ovr']} OVR", p["pos"], p.get("nation") or "", p.get("club") or ""]
+        post = {"id": "slot", "type": "guess", "card": p["card"], "hints": [h for h in hints if h][:4]}
+        media = brand.render(post, OUT)
+        caption = ("🤔 GUESS THE PLAYER!\n\nHints are on the card. First correct answer gets a shout-out 🏆\n"
+                   "Answer in our next post 👇\n\n#FCMobile #FCMobile26 #GuessThePlayer #FMM")
+        state.setdefault("used_photo", []).append(str(p["id"]))
+        state.setdefault("reveal", []).append({"name": p["name"], "ovr": p["ovr"], "date": dt.date.today().isoformat()})
+    elif ctype == "rate":
+        post = {"id": "slot", "type": "rate", "card": p["card"]}
+        media = brand.render(post, OUT)
+        caption = (f"⭐ Rate {p['ovr']} OVR {p['name']} ({p['pos']}) from 1 to 10!\n\n"
+                   "Be honest — is he worth the hype? 👇\n\n#FCMobile #FCMobile26 #RateTheCard #FMM")
+        state.setdefault("used_photo", []).append(str(p["id"]))
     else:  # versus
         a, b = players[0], players[1] if len(players) > 1 else players[0]
         post = {"id": "slot", "type": "versus", "tag": "Which one would you pick?",
@@ -197,6 +216,12 @@ def build(slot):
         caption = (f"⚔️ {a['ovr']} {a['name']} ({a['pos']}) vs {b['ovr']} {b['name']} ({b['pos']})\n\n"
                    f"Only one goes in your starting XI. Who's your pick and why? 👇\n\n"
                    f"#FCMobile #FCMobile26 #EASportsFCMobile #CardBattle #FMM")
+    pending = [r for r in state.get("reveal", []) if not r.get("done")]
+    if pending and ctype != "guess":  # answer to the last "guess the player"
+        r = pending[-1]
+        caption = f"✅ Last 'Guess the Player' answer: {r['ovr']} OVR {r['name']}! Did you get it?\n\n" + caption
+        for x in pending:
+            x["done"] = True
     (OUT / "caption.txt").write_text(caption, encoding="utf-8")
     manifest = {"slot": slot, "kind": kind, "type": ctype, "media": Path(media).name,
                 "players": [x["id"] for x in players], "built": dt.datetime.now().isoformat(timespec="minutes")}
