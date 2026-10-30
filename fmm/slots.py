@@ -71,19 +71,38 @@ def latest_players():
     if fresh is None:  # cloud: fcmobileforum.com allows it
         try:
             from fmm import fmf
-            fresh = {p["id"]: p for p in fmf.latest()[:24]}
+            fresh = {p["id"]: p for p in fmf.latest()}  # all listed; held programs are filtered out below
             for pid, p in fresh.items():
                 db.setdefault(pid, {k: v for k, v in p.items() if not k.startswith("img_")})
             renderz.DB.write_text(json.dumps({"players": db}, ensure_ascii=False, indent=0), encoding="utf-8")
             print(f"fcmobileforum: {len(fresh)} latest cards")
+            fresh = confirmed_only(fresh)
         except Exception as ex:
             print("fcmobileforum not reachable, using collected cards:", str(ex)[:80])
     fresh = confirmed_only(fresh) if fresh is not None else None
     if fresh is None:
         recent = sorted(db.values(), key=lambda p: p.get("added") or "", reverse=True)
         fresh = {str(p["id"]): p for p in recent if (renderz.CARDS / f"{p['id']}.png").exists()}
-        fresh = dict(list(fresh.items())[:24])
-    return fresh, db, made
+        fresh = confirmed_only(dict(list(fresh.items())[:40]))
+    # one entry per card: the forum lists some cards several times under different ids
+    uniq, keys = {}, set()
+    for k, p in fresh.items():
+        key = f"{p.get('name')}|{p.get('ovr')}|{p.get('pos')}"
+        if key not in keys:
+            keys.add(key); uniq[k] = p
+    return uniq, db, made
+
+
+PROGRAM_NAMES = {"BD": "Ballon d'Or", "TOTW": "Team of the Week", "ICONS": "Icons", "HEROS": "Heroes",
+                 "HOFS": "Hall of Fame", "TOTY": "TOTY", "TOTS": "TOTS", "UCL": "Champions League",
+                 "SCR": "Scream Team", "MLS": "MLS"}
+
+
+def program_name(code):
+    import re as _re
+    c = _re.sub(r"^(PROGRAM_?|PROGRAMNAME_?)", "", code or "", flags=_re.I).upper()
+    fam = _re.sub(r"\d+$", "", c)
+    return next((v for k, v in PROGRAM_NAMES.items() if fam.startswith(k)), fam.replace("_", " ").title() or "New")
 
 
 def ensure_card(p, fresh):
@@ -134,7 +153,7 @@ def pick(kind, fresh, db, state):
     this_week = [p for p in fresh.values() if (p.get("added") or "") >= week_ago]
     force = state.get("force", {}).pop(slot_now(), None)  # one-off override, e.g. {"0700": "countdown"}
     if force in ("countdown", "tierlist") and this_week:
-        return force, sorted(this_week, key=lambda p: (heat(p), p.get("ovr") or 0), reverse=True)[:8], pool
+        return force, sorted(this_week, key=lambda p: (p.get("ovr") or 0, heat(p)), reverse=True)[:8], pool
     wk_unf = sorted([p for p in unfeatured if p in this_week], key=lambda p: (heat(p), p.get("ovr") or 0), reverse=True)
     unfeatured = wk_unf or unfeatured  # this week's cards first: trending, then highest OVR
     if kind == "photo":  # photo slots rotate formats; the "review" turn reviews the next new card
@@ -160,6 +179,8 @@ def pick(kind, fresh, db, state):
     rot = forced_rot or "versus"
     if rot in ("xi", "gem", "worth", "meme"):
         return rot, latest, pool
+    if rot == "versus":
+        return "versus", next_pair(latest, state), pool
     if rot != "versus":
         used = set(state.get("used_photo", []))
         cand = [p for p in latest if str(p["id"]) not in used] or latest
@@ -313,6 +334,44 @@ MEMES = [("When you finally pack {name}", "When you check his weak foot"),
 TAGS = "#FCMobile #FCMobile26 #EASportsFCMobile #FMM"
 
 
+def next_pair(latest, state):
+    """Two cards of the same position group that haven't been battled before (newest/best first)."""
+    used = set(state.get("used_pairs", []))
+    seen = {}
+    for k in used:  # how often each player already appeared in a battle
+        for n in k.split("|"):
+            seen[n] = seen.get(n, 0) + 1
+    groups = {}
+    for p in latest:
+        groups.setdefault(rv.group(p.get("pos", "")), []).append(p)
+    options = []
+    for g in groups.values():
+        for i in range(len(g)):
+            for j in range(i + 1, len(g)):
+                key = "|".join(sorted([g[i]["name"], g[j]["name"]]))
+                if g[i]["name"] != g[j]["name"] and key not in used:
+                    rank = (seen.get(g[i]["name"], 0) + seen.get(g[j]["name"], 0), i + j)  # fresh faces first
+                    options.append((rank, key, [g[i], g[j]]))
+    if not options:
+        return latest[:2]
+    _, key, pair = min(options, key=lambda o: o[0])
+    state.setdefault("used_pairs", []).append(key)
+    return pair
+
+
+def render_versus(pair, fresh):
+    from fmm import brand
+    a, b = pair[0], pair[1] if len(pair) > 1 else pair[0]
+    for x in (a, b):
+        x["card"] = x.get("card") or ensure_card(x, fresh)
+    post = {"id": "slot", "type": "versus", "tag": "Which one would you pick?",
+            "title": f"{a['name']} or {b['name']}?", "cards": [{"card": a["card"]}, {"card": b["card"]}]}
+    caption = (f"⚔️ {a['ovr']} {a['name']} ({a['pos']}) vs {b['ovr']} {b['name']} ({b['pos']})\n\n"
+               f"Only one goes in your starting XI. Who's your pick and why? 👇\n\n"
+               f"#FCMobile #FCMobile26 #EASportsFCMobile #CardBattle #FMM")
+    return brand.render(post, OUT), caption
+
+
 def build_extra(ctype, latest, pool, fresh, state):
     """Best Budget XI, Hidden Gem, Is the event worth it?, memes."""
     from fmm import brand
@@ -323,6 +382,7 @@ def build_extra(ctype, latest, pool, fresh, state):
         except Exception as ex:
             print("card skipped", p.get("name"), str(ex)[:60])
     have, names = [], set()
+    pool = list(confirmed_only({str(p.get("id")): p for p in pool}).values())  # cross-check applies here too
     for p in sorted(pool, key=lambda p: p.get("added") or "", reverse=True):  # one card per player (newest)
         if p.get("stats") and (renderz.CARDS / f"{p['id']}.png").exists() and p.get("name") not in names:
             names.add(p.get("name"))
@@ -343,7 +403,7 @@ def build_extra(ctype, latest, pool, fresh, state):
             used |= {p["id"] for p in best}
             team += best + [{"name": "?", "ovr": "", "pos": g.upper()}] * (n - len(best))
         if sum(1 for p in team if p.get("name") != "?") < 8:  # too few cards known yet
-            return build_extra("meme", latest, pool, fresh, state)
+            return render_versus(next_pair(latest, state), fresh)
         post = {"id": "slot", "type": "xi", "title": "Best Budget XI", "subtitle": f"Every card {cap} OVR or lower",
                 "players": team}
         lines = [f"{p.get('pos', '')} {p.get('name')} {p.get('ovr')}" for p in team if p.get("name") != "?"]
@@ -360,7 +420,7 @@ def build_extra(ctype, latest, pool, fresh, state):
         top_ovr = max((x.get("ovr") or 0) for x in have)
         cands = [x for x in have if str(x["id"]) not in used and (x.get("ovr") or 0) < top_ovr - 2]
         if not cands:  # nothing "low OVR" to talk about yet -> a card battle instead
-            return build_extra("meme", latest, pool, fresh, state)
+            return render_versus(next_pair(latest, state), fresh)
         p = max(cands, key=gem_score)
         g = rv.group(p.get("pos", ""))
         labels = [(renderz.STAT_NAMES.get(k, k), p["stats"][k]) for k in sorted(
@@ -387,9 +447,7 @@ def build_extra(ctype, latest, pool, fresh, state):
         scores = [rv.review(p, pool)["score"] for p in cards]
         avg = sum(scores) / max(1, len(scores))
         verdict = "WORTH IT" if avg >= 8 else "SITUATIONAL" if avg >= 7 else "SKIP"
-        import re as _re
-        name = _re.sub(r"^(PROGRAM_?|PROGRAMNAME_?)", "", prog, flags=_re.I)
-        name = _re.sub(r"\d+$", "", name).replace("_", " ").strip().title() or "New"
+        name = program_name(prog)
         post = {"id": "slot", "type": "worth", "event": name, "cards": [p["card"] for p in cards], "verdict": verdict,
                 "note": f"Average FMM rating of its top cards: {avg:.1f}/10"}
         caption = (f"🤔 Is the {name} event worth your gems?\n\nTop cards:\n"
