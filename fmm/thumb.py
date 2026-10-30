@@ -96,15 +96,16 @@ def cover(subject_path, text, out_path, sub=None, color="red", emoji="wow", flip
     em = Image.open(EMOJI / f"{emoji}.png").convert("RGBA")
     em = em.resize((260, int(260 * em.height / em.width)), Image.LANCZOS).rotate(-12, expand=True, resample=Image.BICUBIC)
     a = arrow().rotate(-35 if not flip_arrow else 215, expand=True, resample=Image.BICUBIC)
+    # emoji low on the side (never over the OVR, which sits top-left on cards); arrow top-right
     if not flip_arrow:
-        img.alpha_composite(em, (30, 640)); img.alpha_composite(a, (W - a.width - 10, 600))
+        img.alpha_composite(em, (10, 1330)); img.alpha_composite(a, (W - a.width - 10, 600))
     else:
-        img.alpha_composite(em, (W - em.width - 30, 640)); img.alpha_composite(a, (10, 600))
+        img.alpha_composite(em, (W - em.width - 10, 1330)); img.alpha_composite(a, (10, 600))
     # small brand mark
     logo = Image.open(LOGO).convert("RGBA")
     logo.putalpha(logo.convert("L").point(lambda v: 0 if v < 40 else 255))
     logo.thumbnail((200, 100))
-    img.alpha_composite(logo, (W - logo.width - 30, H - logo.height - 30 - (170 if sub else 0)))
+    img.alpha_composite(logo, (30, 30))
     out_path = Path(out_path)
     img.convert("RGB").save(out_path, quality=92)
     return out_path
