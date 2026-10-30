@@ -32,9 +32,19 @@ def latest_players():
         page = renderz.fetch(renderz.LIST_URL).decode("utf-8", "ignore")
         fresh = {str(p["id"]): p for p in (renderz.slim(x) for x in renderz.extract_array(page))}
     except Exception as ex:
-        print("RenderZ not reachable here, using collected cards:", str(ex)[:80])
+        print("RenderZ not reachable here:", str(ex)[:80])
         fresh = None
     db = json.loads(renderz.DB.read_text(encoding="utf-8"))["players"] if renderz.DB.exists() else {}
+    if fresh is None:  # cloud: fcmobileforum.com allows it
+        try:
+            from fmm import fmf
+            fresh = {p["id"]: p for p in fmf.latest()[:24]}
+            for pid, p in fresh.items():
+                db.setdefault(pid, {k: v for k, v in p.items() if not k.startswith("img_")})
+            renderz.DB.write_text(json.dumps({"players": db}, ensure_ascii=False, indent=0), encoding="utf-8")
+            print(f"fcmobileforum: {len(fresh)} latest cards")
+        except Exception as ex:
+            print("fcmobileforum not reachable, using collected cards:", str(ex)[:80])
     if fresh is None:
         recent = sorted(db.values(), key=lambda p: p.get("added") or "", reverse=True)
         fresh = {str(p["id"]): p for p in recent if (renderz.CARDS / f"{p['id']}.png").exists()}
@@ -50,7 +60,11 @@ def ensure_card(p, fresh):
         if not src or not src.get("img_bg"):
             return None
         renderz.CARDS.mkdir(parents=True, exist_ok=True)
-        renderz.build_card(src).save(path)
+        if src.get("source") == "fcmobileforum":
+            from fmm import fmf
+            fmf.build_card(src).save(path)
+        else:
+            renderz.build_card(src).save(path)
     return str(path)
 
 
@@ -70,7 +84,9 @@ def pick(kind, fresh, db, state):
     pool = list(db.values())
     hot = trend_boost()
     heat = lambda p: hot.get((p.get("name") or "").lower(), 0)
-    unfeatured = sorted([p for p in fresh.values() if str(p["id"]) not in state["featured"]],
+    key = lambda p: f"{p.get('name')}|{p.get('ovr')}|{p.get('pos')}"  # same card on RenderZ and the forum
+    done = set(state["featured"])
+    unfeatured = sorted([p for p in fresh.values() if str(p["id"]) not in done and key(p) not in done],
                         key=lambda p: (heat(p), p.get("added") or "", p.get("ovr") or 0), reverse=True)
     weekday = dt.datetime.now().weekday()
     if unfeatured:
@@ -148,7 +164,7 @@ def build(slot):
                 "players": [x["id"] for x in players], "built": dt.datetime.now().isoformat(timespec="minutes")}
     (OUT / "manifest.json").write_text(json.dumps(manifest, indent=1), encoding="utf-8")
     if ctype.startswith("review"):
-        state["featured"].append(str(p["id"]))
+        state["featured"] += [str(p["id"]), f"{p.get('name')}|{p.get('ovr')}|{p.get('pos')}"]
     state["history"] = (state["history"] + [manifest])[-200:]
     STATE.write_text(json.dumps(state, indent=1, ensure_ascii=False), encoding="utf-8")
     print("built", manifest)
