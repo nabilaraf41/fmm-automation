@@ -101,7 +101,9 @@ def cover(subject_path, text, out_path, sub=None, color="red", emoji="wow", flip
         t = big_text(sub.upper(), 120, (255, 255, 255), stroke=12)
         img.alpha_composite(t, ((W - t.width) // 2, H - t.height - 70))
     # shocked emoji + red arrow pointing at the card
-    em = Image.open(EMOJI / f"{emoji}.png").convert("RGBA")
+    em = Image.open(EMOJI / f"{emoji or 'wow'}.png").convert("RGBA")
+    if emoji is None:
+        em = Image.new("RGBA", (1, 1), (0, 0, 0, 0))
     em = em.resize((260, int(260 * em.height / em.width)), Image.LANCZOS).rotate(-12, expand=True, resample=Image.BICUBIC)
     a = arrow().rotate(-35 if not flip_arrow else 215, expand=True, resample=Image.BICUBIC)
     # emoji low on the side (never over the OVR, which sits top-left on cards); arrow top-right

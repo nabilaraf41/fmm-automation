@@ -66,13 +66,30 @@
   "0700": "countdown"
  },
  "photo_n": 0,
- "hold_programs": [
-  "TOTW27"
- ],
+ "hold_programs": [],
  "confirmed_programs": [
+  "ANN27",
   "BD27",
+  "CHAMPIONS26",
+  "CL27",
+  "GC26",
   "HEROS8",
   "HOFS",
-  "ICONS"
+  "ICONS",
+  "MOMENT25",
+  "NUMERO26",
+  "OUTSTANDING26",
+  "RECORDHOLDERS",
+  "RTAC26",
+  "SCREAMTEAM27",
+  "STELLAR27",
+  "SUMMERSPECIAL",
+  "TOTS26",
+  "TOTW27",
+  "TWG26",
+  "UB27",
+  "UCL26",
+  "UECL26",
+  "UEL26"
  ]
 }

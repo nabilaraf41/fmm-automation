@@ -71,6 +71,26 @@ def scorer_card(file_name):
         return None
 
 
+def meme_clip():
+    """Download (once) a random meme clip from the Drive folder (files named 'meme ...') -> local path or None."""
+    import random
+    from googleapiclient.http import MediaIoBaseDownload
+    d = drive()
+    memes = [f for f in videos(d) if f["name"].lower().startswith("meme")]
+    if not memes:
+        return None
+    f = random.choice(memes)
+    CACHE.mkdir(parents=True, exist_ok=True)
+    local = CACHE / f"meme_{f['id']}{Path(f['name']).suffix or '.mp4'}"
+    if not local.exists():
+        with open(local, "wb") as out:
+            dl = MediaIoBaseDownload(out, d.files().get_media(fileId=f["id"]), chunksize=32 * 1024 * 1024)
+            done = False
+            while not done:
+                _, done = dl.next_chunk()
+    return local
+
+
 def title_for(name):
     n = name.lower()
     return next((t for k, t in TITLES if k in n), "WHAT A GOAL!!")
@@ -83,6 +103,8 @@ def next_clip():
     d = drive()
     st = state()
     for f in videos(d):
+        if f["name"].lower().startswith("meme"):  # meme clips are for "EA Sports Logic" Reels, not gameplay
+            continue
         rec = st["files"].setdefault(f["id"], {"name": f["name"], "used": 0, "total": None})
         if rec["total"] is not None and rec["used"] >= rec["total"]:
             continue

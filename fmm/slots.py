@@ -95,7 +95,8 @@ def latest_players():
 
 PROGRAM_NAMES = {"BD": "Ballon d'Or", "TOTW": "Team of the Week", "ICONS": "Icons", "HEROS": "Heroes",
                  "HOFS": "Hall of Fame", "TOTY": "TOTY", "TOTS": "TOTS", "UCL": "Champions League",
-                 "SCR": "Scream Team", "MLS": "MLS"}
+                 "SCR": "Scream Team", "MLS": "MLS", "TWG": "World's Game", "OUTSTANDING": "Outstanding",
+                 "ANN": "Anniversary", "CHAMPIONS": "Champions", "NUMERO": "Numero Uno", "SIG": "Signature"}
 
 
 def program_name(code):
@@ -143,7 +144,9 @@ def slot_now():
 def pick(kind, fresh, db, state):
     pool = list(db.values())
     hot = trend_boost()
-    heat = lambda p: hot.get((p.get("name") or "").lower(), 0)
+    from fmm.versions import FOCUS  # CR7, Messi, Neymar, Kane, BD & Indian players: always near the front
+    heat = lambda p: hot.get((p.get("name") or "").lower(), 0) + \
+        (5 if any(f in (p.get("name") or "").lower() for f in FOCUS) else 0)
     key = lambda p: f"{p.get('name')}|{p.get('ovr')}|{p.get('pos')}"  # same card on RenderZ and the forum
     done = set(state["featured"])
     unfeatured = sorted([p for p in fresh.values() if str(p["id"]) not in done and key(p) not in done],
@@ -220,10 +223,43 @@ def build_from_inbox(slot):
     return True
 
 
+def build_versions(slot):
+    """Two versions of one player (GOAT vs WASTE) over your meme clip. Needs a 'meme…' video in the Drive folder."""
+    st = load_state()
+    st["reel_n"] = st.get("reel_n", 0) + 1
+    STATE.write_text(json.dumps(st, indent=1, ensure_ascii=False), encoding="utf-8")
+    if st["reel_n"] % 2:
+        return False
+    try:
+        from fmm import versions, inbox
+        used = set(st.get("used_versions", []))
+        pr = next((p for p in versions.pairs(60) if p["name"] not in used
+                   and confirmed_only({"g": p["good"], "b": p["bad"]}).keys() == {"g", "b"}), None)
+        if not pr:
+            return False
+        meme = inbox.meme_clip()
+        if not meme:
+            print("EA-logic Reel skipped: upload a meme clip named 'meme ….mp4' to the Drive folder")
+            return False
+        if OUT.exists():
+            shutil.rmtree(OUT)
+        versions.make_reel(pr, meme, OUT)
+        (OUT / "caption.txt").write_text(versions.caption(pr), encoding="utf-8")
+        st = load_state()
+        st.setdefault("used_versions", []).append(pr["name"])
+        finish(slot, "reel", "versions", OUT / "slot.mp4", versions.caption(pr), [pr["good"], pr["bad"]], st)
+        return True
+    except Exception as ex:
+        print("EA-logic Reel skipped:", str(ex)[:150])
+        return False
+
+
 def build(slot):
     from fmm import brand, motion
     _SLOT["v"] = slot
     if build_from_inbox(slot):  # your own gameplay always goes first, in any slot
+        return
+    if SLOTS[slot] == "reel" and build_versions(slot):  # every 2nd Reel: "EA Sports Logic"
         return
     kind = SLOTS[slot]
     state = load_state()
