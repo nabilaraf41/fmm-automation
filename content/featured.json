@@ -6,7 +6,9 @@
   "f24053826",
   "Kane|124|ST",
   "f24054654",
-  "Jackson|118|ST"
+  "Jackson|118|ST",
+  "f24054652",
+  "Mbappé|118|ST"
  ],
  "history": [
   {
@@ -58,6 +60,16 @@
     "f24054654"
    ],
    "built": "2026-10-31T01:47"
+  },
+  {
+   "slot": "2100",
+   "kind": "reel",
+   "type": "review_reel",
+   "media": "slot.mp4",
+   "players": [
+    "f24054652"
+   ],
+   "built": "2026-10-31T01:50"
   }
  ]
 }
