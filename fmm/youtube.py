@@ -13,7 +13,8 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 CLIENT = ROOT / "secrets" / "google_client.json"
 TOKEN = ROOT / "secrets" / "youtube_token.json"
-SCOPES = ["https://www.googleapis.com/auth/youtube.upload", "https://www.googleapis.com/auth/youtube.readonly"]
+SCOPES = ["https://www.googleapis.com/auth/youtube.upload", "https://www.googleapis.com/auth/youtube.readonly",
+          "https://www.googleapis.com/auth/drive.readonly"]  # Drive: read your "FMM Clips" inbox folder
 
 
 def creds():
@@ -21,7 +22,7 @@ def creds():
     from google.auth.transport.requests import Request
     info = json.loads(os.environ["YOUTUBE_TOKEN_JSON"]) if os.environ.get("YOUTUBE_TOKEN_JSON") else \
         json.loads(TOKEN.read_text(encoding="utf-8"))
-    c = Credentials.from_authorized_user_info(info, SCOPES)
+    c = Credentials.from_authorized_user_info(info)  # use exactly the scopes this login granted
     if not c.valid:
         c.refresh(Request())
     return c

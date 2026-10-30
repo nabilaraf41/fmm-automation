@@ -103,8 +103,38 @@ def pick(kind, fresh, db, state):
     return "versus", pair, pool
 
 
+def build_from_inbox():
+    """21:00 slot: your own gameplay from the Drive "FMM Clips" folder, when there is any."""
+    try:
+        from fmm import inbox
+        got = inbox.next_clip()
+    except Exception as ex:
+        print("clips inbox skipped:", str(ex)[:120])
+        return False
+    if not got:
+        return False
+    mp4, title, src = got
+    if OUT.exists():
+        shutil.rmtree(OUT)
+    OUT.mkdir(parents=True)
+    shutil.copy(mp4, OUT / "slot.mp4")
+    cover = Path(mp4).with_name(Path(mp4).stem + "_cover.jpg")
+    if cover.exists():
+        shutil.copy(cover, OUT / "slot_cover.jpg")
+    caption = (f"⚽ {title.title()}\n\nWould you have scored this? Rate it 1–10 👇\n\n"
+               "Follow FMM for daily FC Mobile goals, cards & codes 🔔\n\n"
+               "#FCMobile #FCMobile26 #EASportsFCMobile #FCMobileGoals #Gaming #FMM")
+    (OUT / "caption.txt").write_text(caption, encoding="utf-8")
+    (OUT / "manifest.json").write_text(json.dumps({"slot": "2100", "kind": "reel", "type": "clip",
+                                                   "media": "slot.mp4", "source": src}, indent=1), encoding="utf-8")
+    print("built clip from", src)
+    return True
+
+
 def build(slot):
     from fmm import brand, motion
+    if slot == "2100" and build_from_inbox():
+        return
     kind = SLOTS[slot]
     state = load_state()
     fresh, db, made = latest_players()
