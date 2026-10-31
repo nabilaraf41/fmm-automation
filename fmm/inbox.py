@@ -122,7 +122,14 @@ def post_long():
                f"Watch till the end and tell us your rating 👇{nl}{nl}Subscribe for daily FC Mobile content 🔔{nl}{nl}"
                "#FCMobile #FCMobile26 #EASportsFCMobile #Gameplay #FMM")
     from fmm import youtube
-    vid = youtube.upload(download(f), caption, short=False)[0]
+    local = download(f)
+    vid = youtube.upload(local, caption, short=False)[0]
+    try:  # same video to the Facebook Page (monetized: in-stream ads on 3+ min videos)
+        from fmm import poster
+        poster.log({"kind": "long", "file": str(local), "type": "long", "youtube": vid,
+                    "facebook": poster.fb_video(local, caption.replace("Subscribe", "Follow"))})
+    except Exception as ex:
+        print("facebook long video skipped:", str(ex)[:150])
     done[f["id"]] = today
     STATE.write_text(json.dumps(st, indent=1, ensure_ascii=False), encoding="utf-8")
     return vid

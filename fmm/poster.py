@@ -50,6 +50,18 @@ def log(entry):
 
 
 # ---------- Facebook ----------
+def fb_video(path, caption):
+    """Normal (long) Facebook video — eligible for in-stream ads when 3+ minutes.
+    shortcut: single-request upload (fine up to ~1 GB); trim very long recordings before uploading."""
+    with open(path, "rb") as f:
+        r = requests.post(f"https://graph-video.facebook.com/v26.0/{PAGE}/videos", timeout=1800,
+                          data={"access_token": TOKEN, "description": caption}, files={"source": f})
+    j = r.json()
+    if "error" in j:
+        raise RuntimeError(f"FB video: {j['error'].get('message')}")
+    return j["id"]
+
+
 def fb_photo(path, caption, published=True):
     with open(path, "rb") as f:
         j = call("POST", f"{PAGE}/photos", data={"caption": caption, "published": str(published).lower(),
