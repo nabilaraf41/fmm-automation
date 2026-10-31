@@ -13,6 +13,7 @@ from fmm.captions import polish
 ROOT = Path(__file__).resolve().parent.parent
 STATE = ROOT / "content" / "replies.json"
 PER_POST = 2
+IG_REPLIES = False  # owner skipped adding the Instagram comments permission (1 Nov 2026)
 DAYS = 3
 
 QUESTION = ["Good question! {short}", "{short} Hope that helps 🙌", "{short} Let us know how it goes!"]
@@ -81,7 +82,8 @@ def run():
         if e.get("at", "") < since:
             continue
         for platform, obj, targets, send in (
-            ("instagram", e.get("instagram"), lambda o: ig_targets(o, me),
+            # shortcut: Instagram replies need instagram_manage_comments on the token; re-enable by removing this guard
+            ("instagram", None if not IG_REPLIES else e.get("instagram"), lambda o: ig_targets(o, me),
              lambda cid, msg: poster.call("POST", f"{cid}/replies", data={"message": msg})),
             ("facebook", e.get("facebook"), fb_targets,
              lambda cid, msg: poster.call("POST", f"{cid}/comments", data={"message": msg}))):
