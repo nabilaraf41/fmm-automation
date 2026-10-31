@@ -11,6 +11,12 @@
    "code": "BALLONDOR70",
    "reward": "119-121 OVR Ballon D'or Player",
    "date": "27th October"
+  },
+  "COSTUMEPARTY": {
+   "first_seen": "2026-10-31",
+   "code": "COSTUMEPARTY",
+   "reward": "Festive Draft Voucher & 1k Gems",
+   "date": "31st October"
   }
  },
  "roundups": [
