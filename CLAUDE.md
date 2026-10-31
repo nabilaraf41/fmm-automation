@@ -15,10 +15,10 @@ give click-by-click steps and copy-paste commands.
 
 ## Where it runs
 Private repo `nabilaraf41/fmm-automation`, GitHub Actions (PC can be off):
-- `.github/workflows/codes.yml` — every 3h + Thu 07:15/07:45 BDT: `fmm.run_cloud` → new-player drop
-  (`fmm.newplayers`) + redeem codes (`fmm.codes`, source fcmobileforum.com/fcmobile-redeem-codes).
-- `.github/workflows/slots.yml` — 4 daily slots (BDT): build 30 min before, post at 07:00 (Reel), 13:00 (photo),
-  21:00 (Reel), 00:30 (photo). Build uploads `output/slot/` as artifact; post job downloads and publishes.
+- `.github/workflows/codes.yml` ("FMM hourly") — every hour at :05: `fmm.run_cloud` → posts any slot due in the last
+  3 h and not yet done (`featured.json` → `done_slots`; GitHub cron can be late or skip runs), then new-player drops
+  (`fmm.newplayers`) and redeem codes (`fmm.codes`). Slots (BDT): 07:00 Reel, 13:00 photo, 21:00 Reel, 00:30 photo.
+- `.github/workflows/slots.yml` — manual runs only (build / post a slot by hand).
 - Secrets: META_PAGE_TOKEN (never expires), META_PAGE_ID, IG_USER_ID, META_APP_ID/SECRET, YOUTUBE_TOKEN_JSON
   (Google OAuth: youtube.upload, youtube.readonly, drive.readonly; app "FMM Automation" published).
 
