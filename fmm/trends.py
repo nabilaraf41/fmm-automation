@@ -35,6 +35,13 @@ def program_confirmed(program, seen):
 
 
 def run():
+    try:  # cached: hourly runs would otherwise use ~9,600 of the 10,000 daily YouTube quota units
+        old = json.loads(OUT.read_text(encoding="utf-8"))
+        age = dt.datetime.now(dt.UTC).replace(tzinfo=None) - dt.datetime.fromisoformat(old["at"].rstrip("Z"))
+        if age < dt.timedelta(hours=3) and "programs_seen" in old:
+            return old
+    except Exception:
+        pass
     from fmm import youtube
     yt = youtube.service()
     since = (dt.datetime.now(dt.UTC).replace(tzinfo=None) - dt.timedelta(hours=24)).strftime("%Y-%m-%dT%H:%M:%SZ")

@@ -4,15 +4,6 @@ name: FMM daily slots
 #   06:30 -> 07:00 (USA, Reel)     12:30 -> 13:00 (EU/India, photo)
 #   20:30 -> 21:00 (BD/India, Reel) 00:00 -> 00:30 (UK/EU, photo)
 on:
-  schedule:
-    - cron: "30 0 * * *"    # build 0700
-    - cron: "30 6 * * *"    # build 1300
-    - cron: "30 14 * * *"   # build 2100
-    - cron: "0 18 * * *"    # build 0030
-    - cron: "0 1 * * *"     # post 0700
-    - cron: "0 7 * * *"     # post 1300
-    - cron: "0 15 * * *"    # post 2100
-    - cron: "30 18 * * *"   # post 0030
   workflow_dispatch:
     inputs:
       mode: {description: "build or post", required: true, default: build, type: choice, options: [build, post]}
@@ -21,7 +12,7 @@ on:
 run-name: "${{ github.event_name == 'workflow_dispatch' && format('{0} {1}', inputs.mode, inputs.slot) || 'scheduled' }}"
 
 concurrency:
-  group: fmm-slots
+  group: fmm-state
   cancel-in-progress: false
 
 permissions:

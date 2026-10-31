@@ -1,14 +1,12 @@
-name: FMM redeem codes
+name: FMM hourly
 
 on:
   schedule:
-    - cron: "15 */3 * * *"   # every 3 hours (UTC)
-    - cron: "15 1 * * 4"     # Thursday 07:15 BDT: new players drop at 07:00
-    - cron: "45 1 * * 4"     # Thursday 07:45 BDT: second look in case the drop was late
+    - cron: "5 * * * *"      # every hour: catch up any due slot (07:00/13:00/21:00/00:30 BDT), drops, codes
   workflow_dispatch: {}       # "Run workflow" button for manual runs
 
 concurrency:
-  group: fmm-codes
+  group: fmm-state
   cancel-in-progress: false
 
 permissions:
@@ -45,5 +43,5 @@ jobs:
         run: |
           git config user.name "fmm-bot"
           git config user.email "fmm-bot@users.noreply.github.com"
-          git add content/codes_state.json content/posted.json content/players_db.json content/featured.json content/card_library.json assets/cards/rz 2>/dev/null || true
+          git add content/codes_state.json content/posted.json content/players_db.json content/featured.json content/trends.json content/clips_state.json content/card_library.json assets/cards/rz 2>/dev/null || true
           git diff --cached --quiet || (git commit -m "Update code/post state [skip ci]" && git pull --rebase -q && git push)
