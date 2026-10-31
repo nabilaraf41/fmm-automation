@@ -16,7 +16,7 @@ cap=(f"4 Goals in One Game! | FC Mobile H2H{nl}{nl}Watch every goal from this FC
      f"🔔 Subscribe for daily FC Mobile cards, redeem codes and gameplay{nl}📘 Facebook: https://www.facebook.com/61577183936749{nl}"
      f"📸 Instagram: https://www.instagram.com/fc_fmm/{nl}{nl}FC Mobile gameplay, FC Mobile 26 H2H, EA Sports FC Mobile goals, FC Mobile tips{nl}{nl}"
      "#FCMobile #FCMobile26 #EASportsFCMobile #Gameplay #FMM")
-yt=youtube.upload(out, cap, short=False)[0]
+yt='6jNVGlvne_U'  # already on YouTube (run 41181933709); this rerun posts Facebook only
 fb=poster.fb_video(out, cap.replace('Subscribe','Follow'))
 poster.fb_thumbnail(fb, Path('output/long/best_h2h_cover.jpg'))
 poster.log({"kind":"long","file":str(out),"type":"long","youtube":yt,"facebook":fb})

@@ -51,15 +51,28 @@ def log(entry):
 
 # ---------- Facebook ----------
 def fb_video(path, caption):
-    """Normal (long) Facebook video — eligible for in-stream ads when 3+ minutes.
-    shortcut: single-request upload (fine up to ~1 GB); trim very long recordings before uploading."""
-    with open(path, "rb") as f:
-        r = requests.post(f"https://graph-video.facebook.com/v26.0/{PAGE}/videos", timeout=1800,
-                          data={"access_token": TOKEN, "description": caption}, files={"source": f})
-    j = r.json()
+    """Normal (long) Facebook video, uploaded in chunks (big files fail in one request).
+    Eligible for in-stream ads when 3+ minutes."""
+    url = f"https://graph-video.facebook.com/v26.0/{PAGE}/videos"
+    size = os.path.getsize(path)
+    j = requests.post(url, data={"access_token": TOKEN, "upload_phase": "start", "file_size": size}, timeout=120).json()
     if "error" in j:
-        raise RuntimeError(f"FB video: {j['error'].get('message')}")
-    return j["id"]
+        raise RuntimeError(f"FB video start: {j['error'].get('message')}")
+    sid, start, end = j["upload_session_id"], int(j["start_offset"]), int(j["end_offset"])
+    with open(path, "rb") as f:
+        while start < end:
+            f.seek(start)
+            chunk = f.read(end - start)
+            r = requests.post(url, data={"access_token": TOKEN, "upload_phase": "transfer", "upload_session_id": sid,
+                                         "start_offset": start}, files={"video_file_chunk": chunk}, timeout=600).json()
+            if "error" in r:
+                raise RuntimeError(f"FB video transfer: {r['error'].get('message')}")
+            start, end = int(r["start_offset"]), int(r["end_offset"])
+    r = requests.post(url, data={"access_token": TOKEN, "upload_phase": "finish", "upload_session_id": sid,
+                                 "description": caption}, timeout=120).json()
+    if "error" in r or not r.get("success"):
+        raise RuntimeError(f"FB video finish: {r}")
+    return j.get("video_id") or sid
 
 
 def fb_photo(path, caption, published=True):
