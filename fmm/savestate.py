@@ -35,9 +35,13 @@ def save(message):
     snap = {f: json.loads((ROOT / f).read_text(encoding="utf-8")) for f in FILES if (ROOT / f).exists()}
     binaries = git("ls-files", "--others", "--modified", "--exclude-standard", "assets/cards/rz", "content").stdout.split()
     keep = {b: (ROOT / b).read_bytes() for b in binaries if not b.endswith(".json") and (ROOT / b).exists()}
+    git("fetch", "-q", "origin", "main")
+    ahead = git("rev-list", "--reverse", "origin/main..HEAD").stdout.split()  # local code commits: keep them
     for attempt in range(4):
         git("fetch", "-q", "origin", "main")
         git("reset", "-q", "--hard", "origin/main")
+        for c in ahead:
+            git("cherry-pick", "-X", "theirs", c)
         for f, ours in snap.items():
             p = ROOT / f
             theirs = json.loads(p.read_text(encoding="utf-8")) if p.exists() else type(ours)()
