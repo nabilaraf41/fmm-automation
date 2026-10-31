@@ -133,7 +133,7 @@ def ig_reel(path, caption, share_to_feed=True):
 
 
 # ---------- high level ----------
-def post(kind, media, caption, where="both"):
+def post(kind, media, caption, where="both", ctype=None):
     media = str(media)
     done = {}
     if where in ("fb", "both"):
@@ -146,7 +146,7 @@ def post(kind, media, caption, where="both"):
             done["youtube"] = youtube.upload(media, caption)[0]
         except Exception as ex:  # YouTube problems must never block FB/IG posting
             print("youtube skipped:", str(ex)[:200])
-    log({"kind": kind, "file": media, **done})
+    log({"kind": kind, "file": media, **({"type": ctype} if ctype else {}), **done})
     return done
 
 

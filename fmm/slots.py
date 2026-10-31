@@ -163,6 +163,7 @@ def pick(kind, fresh, db, state):
         ROT = ["review_post", "rank10", "versus", "pick3", "guess", "rank10", "compare4", "xi", "rate", "gem", "worth", "meme"]
         n = state.get("photo_n", 0)
         state["photo_n"] = n + 1
+        ROT = [r for r in ROT if r != state.get("drop")] + [state["boost"]] * 2 if state.get("boost") else             [r for r in ROT if r != state.get("drop")]  # weekly growth loop: more of the best format, none of the worst
         rot = ROT[n % len(ROT)]
         if rot == "review_post":
             if unfeatured:
@@ -610,7 +611,7 @@ def post():
     m = json.loads((OUT / "manifest.json").read_text(encoding="utf-8"))
     caption = (OUT / "caption.txt").read_text(encoding="utf-8")
     kind = "reel" if m["media"].endswith(".mp4") else "photo"
-    print("posted", poster.post(kind, OUT / m["media"], caption, "both"))
+    print("posted", poster.post(kind, OUT / m["media"], caption, "both", m.get("type")))  # type feeds the weekly growth loop
 
 
 if __name__ == "__main__":

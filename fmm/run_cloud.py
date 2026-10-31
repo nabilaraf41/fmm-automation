@@ -63,6 +63,11 @@ if __name__ == "__main__":
         run_slot(now)
     except Exception as ex:
         print("slot failed (next hourly run retries):", str(ex)[:200])
+    try:  # Mondays: weekly growth report + more of what works
+        from fmm import growth
+        growth.run()
+    except Exception as ex:
+        print("growth report skipped:", str(ex)[:150])
     try:  # new-player drops (Thursday 07:00 BDT, or any surprise batch) -> extra posts
         from fmm import newplayers
         newplayers.run()
