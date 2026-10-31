@@ -127,7 +127,8 @@ if __name__ == "__main__":
                 sub=sys.argv[4] if len(sys.argv) > 4 else None))
 
 
-def cover_wide(frame, text, out_path, card=None, sub=None):
+def cover_wide(frame, text, out_path, card=None, sub=None, big=None, emoji="wow"):
+    """big = huge right-side text (e.g. the score "4-0") when there is no card."""
     """16:9 thumbnail (1280x720) for long videos: punchy frame, huge outlined text left, card right, red arrow."""
     w, h = 1280, 720
     img = Image.new("RGBA", (w, h), (10, 10, 10, 255))
@@ -146,11 +147,17 @@ def cover_wide(frame, text, out_path, card=None, sub=None):
         img.alpha_composite(g.filter(ImageFilter.GaussianBlur(25)), (x, y)); img.alpha_composite(c, (x, y))
     y = 60
     for i, ln in enumerate(text.upper().split(chr(10))[:2]):
-        t = big_text(ln, 150, (255, 230, 0) if i == 0 else (255, 255, 255), stroke=12, max_w=760 if card else 1180)
+        t = big_text(ln, 150, (255, 230, 0) if i == 0 else (255, 255, 255), stroke=12, max_w=700 if (card or big) else 1180)
         img.alpha_composite(t, (30, y)); y += t.height - 30
     if sub:
-        t = big_text(sub.upper(), 80, (255, 255, 255), stroke=10, max_w=760 if card else 1180)
+        t = big_text(sub.upper(), 80, (255, 255, 255), stroke=10, max_w=700 if (card or big) else 1180)
         img.alpha_composite(t, (30, h - t.height - 30))
+    if big and not card:
+        t = big_text(big, 330, (60, 255, 120), stroke=16, max_w=520)
+        img.alpha_composite(t, (w - t.width - 30, (h - t.height) // 2 - 20))
+        em = Image.open(EMOJI / f"{emoji}.png").convert("RGBA")
+        em = em.resize((190, int(190 * em.height / em.width)), Image.LANCZOS)
+        img.alpha_composite(em, (w - em.width - 40, h - em.height - 30))
     a = arrow(300, 60).rotate(-25, expand=True, resample=Image.BICUBIC)
     if card:
         img.alpha_composite(a, (w - 430 - 40 - a.width + 60, 260))
