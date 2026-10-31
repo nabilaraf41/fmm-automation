@@ -33,32 +33,41 @@ def watermark(path):
     return path
 
 
-def make(segments, title, out, sub="FC MOBILE GAMEPLAY"):
-    out = Path(out); tmp = out.parent / "_le"; tmp.mkdir(parents=True, exist_ok=True)
-    sfx.build()
-    intro, outro = card(title, sub, tmp / "intro.png"), card("FOLLOW FMM", "DAILY FC MOBILE • SUBSCRIBE", tmp / "outro.png")
-    wm = watermark(tmp / "wm.png")
-    inputs, parts, t = [], [], 0.0
-    cuts = []
-    inputs += ["-loop", "1", "-t", "3", "-i", str(intro)]
-    parts.append("[0:v]scale=1920:1080,setsar=1,fps=30,format=yuv420p[p0]"); t += 3
-    for i, (f, a, b) in enumerate(segments, 1):
-        inputs += ["-ss", str(a), "-t", str(b - a), "-i", str(f)]
-        parts.append(f"[{i}:v]scale=-2:1080,crop=1920:1080,setsar=1,fps=30,format=yuv420p[p{i}]")
-        cuts.append(t); t += b - a
-    k = len(segments) + 1
-    inputs += ["-loop", "1", "-t", "4", "-i", str(outro), "-i", str(wm), "-i", str(sfx.OUT / "whoosh.wav")]
-    parts.append(f"[{k}:v]scale=1920:1080,setsar=1,fps=30,format=yuv420p[p{k}]")
-    cuts.append(t); t += 4
-    chain = "".join(f"[p{i}]" for i in range(k + 1)) + f"concat=n={k + 1}:v=1:a=0[cat]"
-    wm_i, wh_i = k + 1, k + 2
-    vids = f"[cat][{wm_i}:v]overlay=0:0:enable='between(t,3,{t - 4:.2f})'[v]"
-    aud = ";".join(f"[{wh_i}:a]adelay={int(c * 1000)}|{int(c * 1000)}[w{j}]" for j, c in enumerate(cuts))
-    mix = "".join(f"[w{j}]" for j in range(len(cuts))) + f"amix=inputs={len(cuts)}:normalize=0,apad,atrim=0:{t:.2f},loudnorm=I=-14:TP=-1.5[a]"
-    r = subprocess.run(["ffmpeg", "-v", "error", "-y", *inputs, "-filter_complex", ";".join(parts) + ";" + chain + ";" + vids
-                        + ";" + aud + ";" + mix, "-map", "[v]", "-map", "[a]", "-c:v", "libx264", "-preset", "veryfast",
-                        "-crf", "22", "-threads", "0", "-c:a", "aac", "-b:a", "160k", "-movflags", "+faststart", str(out)],
-                       capture_output=True, text=True)
+def _ff(*args):
+    r = subprocess.run(["ffmpeg", "-v", "error", "-y", *args], capture_output=True, text=True)
     if r.returncode:
         raise RuntimeError(r.stderr[-600:])
+
+
+ENC = ["-c:v", "libx264", "-preset", "veryfast", "-crf", "22", "-pix_fmt", "yuv420p", "-r", "30",
+       "-c:a", "aac", "-b:a", "160k", "-ar", "44100", "-ac", "2"]
+
+
+def make(segments, title, out, sub="FC MOBILE GAMEPLAY"):
+    """Each piece is rendered on its own (same size, fps and audio format), then joined without re-encoding."""
+    out = Path(out); tmp = out.parent / "_le"; tmp.mkdir(parents=True, exist_ok=True)
+    sfx.build()
+    wm = watermark(tmp / "wm.png")
+    silent = ["-f", "lavfi", "-i", "anullsrc=r=44100:cl=stereo"]
+    pieces = []
+    for i, (img, secs) in enumerate([(card(title, sub, tmp / "intro.png"), 3)]):
+        p = tmp / "p00.mp4"
+        _ff("-loop", "1", "-t", str(secs), "-i", str(img), "-i", str(sfx.OUT / "riser.wav"),
+            "-filter_complex", "[0:v]scale=1920:1080,setsar=1[v];[1:a]apad[a]", "-map", "[v]", "-map", "[a]",
+            "-t", str(secs), *ENC, str(p))
+        pieces.append(p)
+    for i, (f, a, b) in enumerate(segments, 1):
+        p = tmp / f"p{i:02d}.mp4"
+        _ff("-ss", str(a), "-t", str(b - a), "-i", str(f), "-i", str(wm), "-i", str(sfx.OUT / "whoosh.wav"),
+            "-filter_complex", "[0:v]scale=-2:1080,crop=1920:1080,setsar=1[g];[g][1:v]overlay=0:0[v];[2:a]apad[a]",
+            "-map", "[v]", "-map", "[a]", "-t", str(b - a), *ENC, str(p))
+        pieces.append(p)
+    p = tmp / "p99.mp4"
+    _ff("-loop", "1", "-t", "4", "-i", str(card("FOLLOW FMM", "DAILY FC MOBILE • SUBSCRIBE", tmp / "outro.png")),
+        *silent, "-filter_complex", "[0:v]scale=1920:1080,setsar=1[v]", "-map", "[v]", "-map", "1:a",
+        "-t", "4", *ENC, str(p))
+    pieces.append(p)
+    lst = tmp / "list.txt"
+    lst.write_text("".join(f"file '{q.resolve().as_posix()}'" + chr(10) for q in pieces), encoding="utf-8")
+    _ff("-f", "concat", "-safe", "0", "-i", str(lst), "-c", "copy", "-movflags", "+faststart", str(out))
     return out
