@@ -1,6 +1,6 @@
 """The 2-hourly cloud run (.github/workflows/codes.yml, every 2 hours at :05).
 
-1. Due slot: if a slot time (07:00/13:00/21:00/00:30 BDT) has passed in the last 5 hours and wasn't posted,
+1. Due slot: if a slot time (07:00/13:00/19:00/21:00 BDT) has passed in the last 5 hours and wasn't posted,
    build it and post it now. GitHub cron can be late or skip runs, so every slot is caught up by the next run.
 2. New-player drops and redeem codes (extra posts).
 Safe to run any number of times: featured.json "done_slots", codes_state.json and posted.json stop repeats.
@@ -55,7 +55,7 @@ if __name__ == "__main__":
     _n = dt.datetime(2026, 11, 1, 7, 40, tzinfo=BDT)
     assert due_slot(_n, {}) == ("2026-11-01-0700", "0700")
     assert due_slot(_n, {"2026-11-01-0700": 1}) is None
-    assert due_slot(dt.datetime(2026, 11, 1, 2, 0, tzinfo=BDT), {}) == ("2026-11-01-0030", "0030")
+    assert due_slot(dt.datetime(2026, 11, 1, 1, 30, tzinfo=BDT), {}) == ("2026-10-31-2100", "2100")
     assert due_slot(dt.datetime(2026, 11, 1, 12, 30, tzinfo=BDT), {}) is None  # 07:00 is >5h old
 
     now = dt.datetime.now(BDT)

@@ -118,16 +118,37 @@ def post_long():
     f = todo[0]
     name = Path(f["name"]).stem[4:].strip(" -_").title() or "Full Match"
     nl = chr(10)
-    caption = (f"{name} | FC Mobile Full Gameplay 🔥{nl}{nl}Full FC Mobile gameplay from FC Mobile Mania (FMM).{nl}"
-               f"Watch till the end and tell us your rating 👇{nl}{nl}Subscribe for daily FC Mobile content 🔔{nl}{nl}"
+    title = f"{name} | FC Mobile"[:60]  # titles under 60 chars read fully in search and suggested
+    # first 2 lines hook the scroller, then summary, links, then the words people actually search
+    caption = (f"{title}{nl}{nl}"
+               f"Watch how this one plays out in FC Mobile 26 🔥 Stay till the end.{nl}"
+               f"Full gameplay with real tactics, skill moves and finishing you can copy in your own matches.{nl}{nl}"
+               f"In this video: {name} — full FC Mobile gameplay, H2H / VSA match, best formation and the cards I used.{nl}{nl}"
+               f"🔔 Subscribe for daily FC Mobile cards, redeem codes and gameplay{nl}"
+               f"📘 Facebook: https://www.facebook.com/61577183936749{nl}"
+               f"📸 Instagram: https://www.instagram.com/fc_fmm/{nl}{nl}"
+               f"FC Mobile gameplay, FC Mobile 26 H2H, EA Sports FC Mobile best formation, FC Mobile tips{nl}{nl}"
                "#FCMobile #FCMobile26 #EASportsFCMobile #Gameplay #FMM")
     from fmm import youtube
     local = download(f)
+    try:  # 16:9 MrBeast-style cover from a frame at 40%, the player's card if the name has one
+        import subprocess
+        from fmm import clips, thumb
+        frame = local.with_name(local.stem + "_frame.png")
+        subprocess.run(["ffmpeg", "-v", "error", "-y", "-ss", str(clips.duration(local) * 0.4), "-i", str(local),
+                        "-frames:v", "1", str(frame)])
+        thumb.cover_wide(frame, name, local.with_name(local.stem + "_cover.jpg"), card=scorer_card(f["name"]),
+                         sub="FC MOBILE")
+    except Exception as ex:
+        print("long cover skipped:", str(ex)[:100])
     vid = youtube.upload(local, caption, short=False)[0]
     try:  # same video to the Facebook Page (monetized: in-stream ads on 3+ min videos)
         from fmm import poster
-        poster.log({"kind": "long", "file": str(local), "type": "long", "youtube": vid,
-                    "facebook": poster.fb_video(local, caption.replace("Subscribe", "Follow"))})
+        fb = poster.fb_video(local, caption.replace("Subscribe", "Follow"))
+        cover = local.with_name(local.stem + "_cover.jpg")
+        if cover.exists():
+            poster.fb_thumbnail(fb, cover)
+        poster.log({"kind": "long", "file": str(local), "type": "long", "youtube": vid, "facebook": fb})
     except Exception as ex:
         print("facebook long video skipped:", str(ex)[:150])
     done[f["id"]] = today

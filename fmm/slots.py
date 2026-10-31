@@ -3,7 +3,7 @@
     python -m fmm.slots build <slot>   -> 30 min before: check RenderZ, pick + render content into output/slot/
     python -m fmm.slots post           -> at slot time: publish output/slot/ to FB + IG (+ YouTube for Reels)
 
-Slots: 0700 (USA, Reel) · 1300 (EU/India, photo) · 2100 (BD/India, Reel) · 0030 (UK/EU, photo)
+Slots (BDT): 0700 (USA evening, Reel) · 1300 (Asia lunch, photo) · 1900 (Indonesia 20:00 WIB, photo) · 2100 (BD/India peak, Reel)
 New cards are featured first (newest/highest OVR); with nothing new, slots fall back to card battles,
 tier lists and countdowns built from the latest cards.
 """
@@ -15,7 +15,7 @@ from fmm import renderz, review as rv
 ROOT = Path(__file__).resolve().parent.parent
 OUT = ROOT / "output" / "slot"
 STATE = ROOT / "content" / "featured.json"
-SLOTS = {"0700": "reel", "1300": "photo", "2100": "reel", "0030": "photo"}
+SLOTS = {"0700": "reel", "1300": "photo", "1900": "photo", "2100": "reel"}  # FC Mobile is biggest in South/SE Asia; 07:00 keeps one high-pay US slot
 VERDICT_COLOR = {"MUST BUY": (0, 200, 83), "WORTH IT": (255, 215, 0), "SITUATIONAL": (255, 152, 0), "SKIP": (225, 6, 44)}
 
 

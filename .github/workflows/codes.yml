@@ -2,7 +2,7 @@ name: FMM hourly
 
 on:
   schedule:
-    - cron: "5 1-23/2 * * *" # every 2 hours, odd UTC = 07:05/13:05/21:05/01:05 BDT: catch up any due slot (07:00/13:00/21:00/00:30 BDT), drops, codes
+    - cron: "5 1-23/2 * * *" # every 2 hours, odd UTC = 07:05/13:05/19:05/21:05 BDT: catch up any due slot (07:00/13:00/19:00/21:00 BDT), drops, codes
   workflow_dispatch: {}       # "Run workflow" button for manual runs
 
 concurrency:

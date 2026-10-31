@@ -17,7 +17,7 @@ give click-by-click steps and copy-paste commands.
 Private repo `nabilaraf41/fmm-automation`, GitHub Actions (PC can be off):
 - `.github/workflows/codes.yml` ("FMM hourly") — every 2 hours at :05: `fmm.run_cloud` → posts any slot due in the last
   5 h and not yet done (`featured.json` → `done_slots`; GitHub cron can be late or skip runs), then new-player drops
-  (`fmm.newplayers`) and redeem codes (`fmm.codes`). Slots (BDT): 07:00 Reel, 13:00 photo, 21:00 Reel, 00:30 photo.
+  (`fmm.newplayers`) and redeem codes (`fmm.codes`). Slots (BDT): 07:00 Reel (US), 13:00 photo, 19:00 photo (Indonesia peak), 21:00 Reel (BD/India peak).
 - `.github/workflows/slots.yml` — manual runs only (build / post a slot by hand).
 - Secrets: META_PAGE_TOKEN (never expires), META_PAGE_ID, IG_USER_ID, META_APP_ID/SECRET, YOUTUBE_TOKEN_JSON
   (Google OAuth: youtube.upload, youtube.readonly, drive.readonly; app "FMM Automation" published).

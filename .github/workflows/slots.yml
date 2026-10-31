@@ -1,13 +1,11 @@
 name: FMM daily slots
 
-# Bangladesh time (UTC+6):  build 30 min before  ->  post at slot
-#   06:30 -> 07:00 (USA, Reel)     12:30 -> 13:00 (EU/India, photo)
-#   20:30 -> 21:00 (BD/India, Reel) 00:00 -> 00:30 (UK/EU, photo)
+# Manual runs only; the 2-hourly job in codes.yml posts the slots (07:00 / 13:00 / 19:00 / 21:00 BDT).
 on:
   workflow_dispatch:
     inputs:
       mode: {description: "build or post", required: true, default: build, type: choice, options: [build, post]}
-      slot: {description: "0700 / 1300 / 2100 / 0030", required: false, default: "1300"}
+      slot: {description: "0700 / 1300 / 1900 / 2100", required: false, default: "1300"}
 
 run-name: "${{ github.event_name == 'workflow_dispatch' && format('{0} {1}', inputs.mode, inputs.slot) || 'scheduled' }}"
 

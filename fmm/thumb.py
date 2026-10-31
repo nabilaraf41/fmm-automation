@@ -125,3 +125,37 @@ if __name__ == "__main__":
     import sys
     print(cover(sys.argv[1], sys.argv[2], sys.argv[3] if len(sys.argv) > 3 else "output/_cover.jpg",
                 sub=sys.argv[4] if len(sys.argv) > 4 else None))
+
+
+def cover_wide(frame, text, out_path, card=None, sub=None):
+    """16:9 thumbnail (1280x720) for long videos: punchy frame, huge outlined text left, card right, red arrow."""
+    w, h = 1280, 720
+    img = Image.new("RGBA", (w, h), (10, 10, 10, 255))
+    if frame and Path(frame).exists():
+        ph = Image.open(frame).convert("RGB")
+        s = max(w / ph.width, h / ph.height)
+        ph = ph.resize((int(ph.width * s), int(ph.height * s)), Image.LANCZOS)
+        ph = ph.crop(((ph.width - w) // 2, (ph.height - h) // 2, (ph.width + w) // 2, (ph.height + h) // 2))
+        img = ImageEnhance.Color(ImageEnhance.Contrast(ph).enhance(1.2)).enhance(1.5).convert("RGBA")
+        img.alpha_composite(Image.new("RGBA", (w, h), (0, 0, 0, 70)))
+    if card:
+        from fmm.brand import load_card
+        c = load_card(card); c.thumbnail((430, 600), Image.LANCZOS)
+        g = Image.new("RGBA", c.size, (0, 0, 0, 0)); g.paste(Image.new("RGBA", c.size, (255, 230, 120, 230)), (0, 0), c)
+        x, y = w - c.width - 40, (h - c.height) // 2
+        img.alpha_composite(g.filter(ImageFilter.GaussianBlur(25)), (x, y)); img.alpha_composite(c, (x, y))
+    y = 60
+    for i, ln in enumerate(text.upper().split(chr(10))[:2]):
+        t = big_text(ln, 150, (255, 230, 0) if i == 0 else (255, 255, 255), stroke=12, max_w=760 if card else 1180)
+        img.alpha_composite(t, (30, y)); y += t.height - 30
+    if sub:
+        t = big_text(sub.upper(), 80, (255, 255, 255), stroke=10, max_w=760 if card else 1180)
+        img.alpha_composite(t, (30, h - t.height - 30))
+    a = arrow(300, 60).rotate(-25, expand=True, resample=Image.BICUBIC)
+    if card:
+        img.alpha_composite(a, (w - 430 - 40 - a.width + 60, 260))
+    logo = Image.open(LOGO).convert("RGBA")
+    logo.putalpha(logo.convert("L").point(lambda v: 0 if v < 40 else 255)); logo.thumbnail((160, 80))
+    img.alpha_composite(logo, (w - logo.width - 20, 20))
+    img.convert("RGB").save(out_path, quality=92)
+    return Path(out_path)
