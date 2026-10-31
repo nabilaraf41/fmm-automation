@@ -604,7 +604,9 @@ def render_reel(reel, out_dir=OUT, music=None, stills=None):
            "-i", str(wav)]
     if music:  # music under the sound effects
         cmd += ["-stream_loop", "-1", "-i", music, "-filter_complex",
-                "[2:a]volume=0.35[m];[1:a][m]amix=inputs=2:duration=first:normalize=0[a]", "-map", "0:v", "-map", "[a]"]
+                "[2:a]volume=0.35[m];[1:a][m]amix=inputs=2:duration=first:normalize=0,loudnorm=I=-14:TP=-1.5[a]", "-map", "0:v", "-map", "[a]"]
+    if not music:
+        cmd += ["-af", "loudnorm=I=-14:TP=-1.5:LRA=11"]  # reel-kit loudness target
     cmd += ["-t", f"{total:.2f}", "-c:v", "libx264", "-preset", "medium", "-crf", "19", "-pix_fmt", "yuv420p",
             "-c:a", "aac", "-b:a", "160k", "-movflags", "+faststart", str(out)]
     enc = subprocess.Popen(cmd, stdin=subprocess.PIPE)

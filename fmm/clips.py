@@ -77,7 +77,7 @@ def overlay_png(title, sub, path, card=None):
         glow = Image.new("RGBA", (c.width + 60, c.height + 60), (0, 0, 0, 0))
         glow.paste(Image.new("RGBA", c.size, (255, 215, 0, 200)), (30, 30), c)
         glow = glow.filter(ImageFilter.GaussianBlur(14))
-        x, y = RW - c.width - 40, RH - 240 - c.height - 20
+        x, y = RW - c.width - 160, RH - 400 - c.height  # inside IG safe area (right 140, bottom 380)
         im.alpha_composite(glow, (x - 30, y - 30))
         im.alpha_composite(c, (x, y))
     d = ImageDraw.Draw(im)
@@ -132,7 +132,7 @@ def make(video, title="WHAT A GOAL!!", index=0, sub=None, music=None, card=None)
         f"[0:a]atrim=start={start + slow_a}:end={start + slow_b},asetpts=PTS-STARTPTS,atempo=0.5,volume=0.8[ra];"
         f"[ga][ra]concat=n=2:v=0:a=1[game];"
         f"[3:a]adelay=0|0[w];[4:a]adelay={int(rel * 1000)}|{int(rel * 1000)},volume=1.2[i];"
-        f"[game][w][i]amix=inputs=3:duration=first:normalize=0,alimiter=limit=0.95[a]"
+        f"[game][w][i]amix=inputs=3:duration=first:normalize=0,alimiter=limit=0.95,loudnorm=I=-14:TP=-1.5:LRA=11[a]"
     )
     cmd = ["ffmpeg", "-v", "error", "-y", "-i", str(video), "-i", str(ov), "-i", str(replay_png),
            "-i", str(sfx.OUT / "whoosh.wav"), "-i", str(sfx.OUT / "impact.wav"),

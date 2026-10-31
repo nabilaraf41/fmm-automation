@@ -160,7 +160,7 @@ def pick(kind, fresh, db, state):
     wk_unf = sorted([p for p in unfeatured if p in this_week], key=lambda p: (heat(p), p.get("ovr") or 0), reverse=True)
     unfeatured = wk_unf or unfeatured  # this week's cards first: trending, then highest OVR
     if kind == "photo":  # photo slots rotate formats; the "review" turn reviews the next new card
-        ROT = ["review_post", "versus", "pick3", "guess", "compare4", "xi", "rate", "gem", "worth", "meme"]
+        ROT = ["review_post", "rank10", "versus", "pick3", "guess", "rank10", "compare4", "xi", "rate", "gem", "worth", "meme"]
         n = state.get("photo_n", 0)
         state["photo_n"] = n + 1
         rot = ROT[n % len(ROT)]
@@ -180,7 +180,7 @@ def pick(kind, fresh, db, state):
     if kind == "reel":
         return ("tierlist" if weekday % 2 else "countdown"), latest[:8], pool
     rot = forced_rot or "versus"
-    if rot in ("xi", "gem", "worth", "meme", "compare4", "pick3"):
+    if rot in ("xi", "gem", "worth", "meme", "compare4", "pick3", "rank10"):
         return rot, latest, pool
     if rot == "versus":
         return "versus", next_pair(latest, state), pool
@@ -274,7 +274,7 @@ def build(slot):
     if OUT.exists():
         shutil.rmtree(OUT)
     OUT.mkdir(parents=True)
-    if ctype in ("xi", "gem", "worth", "meme", "compare4", "pick3"):
+    if ctype in ("xi", "gem", "worth", "meme", "compare4", "pick3", "rank10"):
         media, caption = build_extra(ctype, players, pool, fresh, state)
         return finish(slot, kind, ctype, media, caption, players[:1], state)
     for p in players:
@@ -495,6 +495,20 @@ def build_extra(ctype, latest, pool, fresh, state):
         caption = (f"🤔 Is the {name} event worth your gems?\n\nTop cards:\n"
                    + "\n".join(f"• {p['ovr']} {p['name']} ({p['pos']}) — {s}/10" for p, s in zip(cards, scores))
                    + f"\n\nFMM verdict: {verdict}\n\nAre you spending? 👇\n\n" + TAGS)
+    elif ctype == "rank10":  # weekly Top 10 per position from fcmobileforum.com/top-20 (cross-checked)
+        from fmm import top20
+        n = state.get("rank_n", 0); state["rank_n"] = n + 1
+        pos = top20.POSITIONS[n % len(top20.POSITIONS)]
+        ten = top20.ensure_images(top20.top10(pos))
+        if len(ten) < 6:
+            return render_versus(next_pair(latest, state), fresh)
+        post = {"id": "slot", "type": "top10", "position": pos.upper(), "title": "This week",
+                "players": [{"name": p["name"], "card": p["card"], "ovr": p.get("ovr")} for p in ten]}
+        nl = "\n"
+        caption = (f"🏆 TOP 10 {pos.upper()} in FC Mobile this week{nl}{nl}"
+                   + nl.join(f"{i + 1}. {p.get('ovr')} {p['name']} ({program_name(p.get('program'))})"
+                             for i, p in enumerate(ten))
+                   + f"{nl}{nl}Who's missing? 👇 Save this for your next upgrade 📌{nl}{nl}" + TAGS + f" #Top10 #{pos.upper()}")
     elif ctype == "compare4":  # Top 4 of the position with the most confirmed cards (ref: vs_top4_table.png)
         by_pos = {}
         for p in have:
