@@ -8,6 +8,8 @@ give click-by-click steps and copy-paste commands.
 - **Cross-check before posting anything** (cards, events, players): a 2nd source must confirm it
   (RenderZ or creators' YouTube titles). Enforced by `slots.confirmed_only`; manual list in
   `content/featured.json` → `confirmed_programs`, `hold_programs` (TOTW27 held until confirmed).
+- State (content/*.json) is saved with `python -m fmm.savestate "msg"` (merges with concurrent cloud saves);
+  never plain-push state files from the PC while a cloud run may be saving.
 - Never commit tokens. Secrets live in `.env`, `secrets/` (gitignored) and GitHub Secrets.
 - Creating repos / uploading may be blocked for Claude: give the owner the command to run.
 - Reviews are original FMM wording from stats (FMM Player Review Standard); never copy RenderZ/forum text.
