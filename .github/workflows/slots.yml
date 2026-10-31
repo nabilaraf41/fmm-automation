@@ -26,6 +26,7 @@ jobs:
       TZ: Asia/Dhaka
     steps:
       - uses: actions/checkout@v4
+        with: {ref: main}   # latest state at start, not at trigger time (queued runs reposted slots)
 
       - name: Which job?
         id: which

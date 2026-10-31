@@ -16,6 +16,7 @@ jobs:
     timeout-minutes: 60
     steps:
       - uses: actions/checkout@v4
+        with: {ref: main}   # latest state at start, not at trigger time (queued runs reposted slots)
       - uses: actions/setup-python@v5
         with: {python-version: "3.12", cache: pip}
       - name: Install
