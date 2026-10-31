@@ -1,5 +1,8 @@
 {
- "featured": [],
+ "featured": [
+  "30922808",
+  "van Basten|124|ST"
+ ],
  "history": [
   {
    "slot": "1300",
@@ -60,12 +63,22 @@
     "f24054652"
    ],
    "built": "2026-10-31T01:50"
+  },
+  {
+   "slot": "1900",
+   "kind": "photo",
+   "type": "review_post",
+   "media": "slot.png",
+   "players": [
+    30922808
+   ],
+   "built": "2026-10-31T23:32"
   }
  ],
  "force": {
   "0700": "countdown"
  },
- "photo_n": 0,
+ "photo_n": 1,
  "hold_programs": [],
  "confirmed_programs": [
   "ANN27",
@@ -95,7 +108,7 @@
  "done_slots": {
   "2026-10-31-0700": "2026-10-31T10:09 manual",
   "2026-10-31-1300": "posted (twice, before state-save fix)",
-  "2026-10-31-1900": "missed",
+  "2026-10-31-1900": "2026-10-31 late (manual catch-up)",
   "2026-10-31-2100": "2026-10-31T22:00"
  }
 }
