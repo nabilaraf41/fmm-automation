@@ -47,18 +47,18 @@ def check():
     print(f"YouTube: {ch['snippet']['title']} ({ch['statistics'].get('subscriberCount')} subscribers)")
 
 
-def title_and_description(caption):
+def title_and_description(caption, short=True):
     """First caption line -> title (max 100 chars, with | FC Mobile), rest -> description."""
     lines = [l for l in caption.strip().splitlines()]
     title = lines[0].strip()
     if "fc mobile" not in title.lower():
         title += " | FC Mobile"
-    return title[:100], caption.strip() + "\n\n#Shorts"
+    return title[:100], caption.strip() + ("\n\n#Shorts" if short else "")
 
 
-def upload(path, caption, privacy="public"):
+def upload(path, caption, privacy="public", short=True):
     from googleapiclient.http import MediaFileUpload
-    title, desc = title_and_description(caption)
+    title, desc = title_and_description(caption, short)
     body = {"snippet": {"title": title, "description": desc, "categoryId": "20",  # Gaming
                         "tags": ["FC Mobile", "FC Mobile 26", "EA Sports FC Mobile", "FMM", "FC Mobile Mania"]},
             "status": {"privacyStatus": privacy, "selfDeclaredMadeForKids": False}}

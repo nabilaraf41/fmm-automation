@@ -63,6 +63,13 @@ if __name__ == "__main__":
         run_slot(now)
     except Exception as ex:
         print("slot failed (next hourly run retries):", str(ex)[:200])
+    try:  # one long YouTube video a day from Drive 'long …' files (watch hours for the Partner Program)
+        from fmm import inbox
+        v = inbox.post_long()
+        if v:
+            print("long video uploaded:", v)
+    except Exception as ex:
+        print("long video skipped:", str(ex)[:150])
     try:  # Mondays: weekly growth report + more of what works
         from fmm import growth
         growth.run()

@@ -103,6 +103,31 @@ def mark_pack(f):
     STATE.write_text(json.dumps(st, indent=1, ensure_ascii=False), encoding="utf-8")
 
 
+def post_long():
+    """One full video a day to YouTube as a normal (long) video, for watch hours toward monetization.
+    Drive files named 'long …' (e.g. 'long full match vs real madrid.mp4'), oldest first, each posted once."""
+    import datetime as dt
+    st = state()
+    done = st.setdefault("long", {})
+    today = dt.date.today().isoformat()
+    if today in done.values():
+        return None
+    todo = [f for f in videos(drive()) if f["name"].lower().startswith("long") and f["id"] not in done]
+    if not todo:
+        return None
+    f = todo[0]
+    name = Path(f["name"]).stem[4:].strip(" -_").title() or "Full Match"
+    nl = chr(10)
+    caption = (f"{name} | FC Mobile Full Gameplay 🔥{nl}{nl}Full FC Mobile gameplay from FC Mobile Mania (FMM).{nl}"
+               f"Watch till the end and tell us your rating 👇{nl}{nl}Subscribe for daily FC Mobile content 🔔{nl}{nl}"
+               "#FCMobile #FCMobile26 #EASportsFCMobile #Gameplay #FMM")
+    from fmm import youtube
+    vid = youtube.upload(download(f), caption, short=False)[0]
+    done[f["id"]] = today
+    STATE.write_text(json.dumps(st, indent=1, ensure_ascii=False), encoding="utf-8")
+    return vid
+
+
 def meme_clip():
     """Download (once) a random meme clip from the Drive folder (files named 'meme ...') -> local path or None."""
     import random
@@ -135,7 +160,7 @@ def next_clip():
     d = drive()
     st = state()
     for f in videos(d):
-        if f["name"].lower().startswith(("meme", "pack")):  # memes -> EA Logic Reels, packs -> Thu/Sun pack Reels
+        if f["name"].lower().startswith(("meme", "pack", "long")):  # memes -> EA Logic Reels, packs -> Thu/Sun pack Reels
             continue
         rec = st["files"].setdefault(f["id"], {"name": f["name"], "used": 0, "total": None})
         if rec["total"] is not None and rec["used"] >= rec["total"]:
