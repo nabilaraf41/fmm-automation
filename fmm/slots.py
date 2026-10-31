@@ -227,16 +227,16 @@ def build_from_inbox(slot):
 PACK_CAPTION = ROOT / "content" / "pack_caption.txt"
 
 
-def build_pack():
+def build_pack(got=None, title=None, caption=None):
     """Pack-opening Reel from a Drive video named 'pack ….mp4' (e.g. 'pack opening ronaldo.mp4' -> title + card)."""
     try:
         from fmm import inbox, clips, sfx, thumb
-        got = inbox.pack_video()
+        got = got or inbox.pack_video()
         if not got:
             return False
         f, src = got
         who = Path(f["name"]).stem.lower().replace("pack opening", "").replace("pack", "").strip(" -_")
-        title = f"I PACKED {who.upper()}!!" if who else "PACK OPENING!!"
+        title = title or (f"I PACKED {who.upper()}!!" if who else "PACK OPENING!!")
         card = inbox.scorer_card(f["name"])
         if OUT.exists():
             shutil.rmtree(OUT)
@@ -264,7 +264,7 @@ def build_pack():
         thumb.cover(card or (str(frame) if frame.exists() else None), title.replace("I PACKED ", "I PACKED\n", 1) if len(title) > 16 else title,
                     OUT / "slot_cover.jpg", sub="PACK OPENING", color="gold", bg=str(frame) if card and frame.exists() else None)
         ov.unlink(missing_ok=True); frame.unlink(missing_ok=True)
-        caption = PACK_CAPTION.read_text(encoding="utf-8").replace("{title}", title.title())
+        caption = caption or PACK_CAPTION.read_text(encoding="utf-8").replace("{title}", title.title())
         inbox.mark_pack(f)
         finish("2100", "reel", "pack", OUT / "slot.mp4", caption, [], load_state())
         return True

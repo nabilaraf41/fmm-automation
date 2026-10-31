@@ -71,10 +71,16 @@ def scorer_card(file_name):
         return None
 
 
+def ext(name):
+    """File extension only if it looks like one ('My bad luck... anything?' has none) -> '.mp4' otherwise."""
+    e = Path(name).suffix.lower()
+    return e if e[1:].isalnum() and len(e) <= 5 else ".mp4"
+
+
 def download(f):
     from googleapiclient.http import MediaIoBaseDownload
     CACHE.mkdir(parents=True, exist_ok=True)
-    local = CACHE / f"{f['id']}{Path(f['name']).suffix or '.mp4'}"
+    local = CACHE / f"{f['id']}{ext(f['name'])}"
     if not local.exists():
         with open(local, "wb") as out:
             dl = MediaIoBaseDownload(out, drive().files().get_media(fileId=f["id"]), chunksize=32 * 1024 * 1024)
@@ -166,7 +172,7 @@ def meme_clip():
         return None
     f = random.choice(memes)
     CACHE.mkdir(parents=True, exist_ok=True)
-    local = CACHE / f"meme_{f['id']}{Path(f['name']).suffix or '.mp4'}"
+    local = CACHE / f"meme_{f['id']}{ext(f['name'])}"
     if not local.exists():
         with open(local, "wb") as out:
             dl = MediaIoBaseDownload(out, d.files().get_media(fileId=f["id"]), chunksize=32 * 1024 * 1024)
@@ -194,7 +200,7 @@ def next_clip():
         if rec["total"] is not None and rec["used"] >= rec["total"]:
             continue
         CACHE.mkdir(parents=True, exist_ok=True)
-        local = CACHE / f"{f['id']}{Path(f['name']).suffix or '.mp4'}"
+        local = CACHE / f"{f['id']}{ext(f['name'])}"
         if not local.exists():
             with open(local, "wb") as out:
                 dl = MediaIoBaseDownload(out, d.files().get_media(fileId=f["id"]), chunksize=32 * 1024 * 1024)
