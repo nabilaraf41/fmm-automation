@@ -24,7 +24,9 @@ def polish(caption):
     body = [l for l in lines[1:] if not (l.strip() and all(w.startswith("#") for w in l.split()))]
     out = "\n".join([lines[0]] + body).rstrip()
     if tags:
-        out += "\n\n" + " ".join(list(dict.fromkeys(tags))[:5])
+        tags = list(dict.fromkeys(tags))
+        keep = tags[:5] if "#FMM" in tags[:5] or "#FMM" not in tags else tags[:4] + ["#FMM"]  # brand tag always stays
+        out += "\n\n" + " ".join(keep)
     return out
 
 
