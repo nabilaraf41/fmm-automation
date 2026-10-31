@@ -70,6 +70,11 @@ if __name__ == "__main__":
             print("long video uploaded:", v)
     except Exception as ex:
         print("long video skipped:", str(ex)[:150])
+    try:  # reply to the 2 best comments per recent post (Instagram + Facebook)
+        from fmm import replies
+        replies.run()
+    except Exception as ex:
+        print("replies skipped:", str(ex)[:150])
     try:  # Mondays: weekly growth report + more of what works
         from fmm import growth
         growth.run()
