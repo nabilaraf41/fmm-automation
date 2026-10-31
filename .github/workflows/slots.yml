@@ -18,9 +18,7 @@ on:
       mode: {description: "build or post", required: true, default: build, type: choice, options: [build, post]}
       slot: {description: "0700 / 1300 / 2100 / 0030", required: false, default: "1300"}
 
-run-name: >-
-  ${{ github.event_name == 'workflow_dispatch' && format('{0} {1}', inputs.mode, inputs.slot)
-   || (contains(fromJSON('["30 0 * * *","30 6 * * *","30 14 * * *","0 18 * * *"]'), github.event.schedule) && 'build' || 'post') }}
+run-name: "${{ github.event_name == 'workflow_dispatch' && format('{0} {1}', inputs.mode, inputs.slot) || 'scheduled' }}"
 
 concurrency:
   group: fmm-slots
@@ -76,10 +74,12 @@ jobs:
       - name: Fetch media from latest build
         if: steps.which.outputs.mode == 'post'
         run: |
-          id=$(gh run list -R ${{ github.repository }} -w slots.yml -s success -L 20 --json databaseId,displayTitle \
-               -q '[.[] | select(.displayTitle | startswith("build"))][0].databaseId')
-          echo "build run: $id"
-          gh run download "$id" -R ${{ github.repository }} -n slot-media -D output/slot
+          # newest successful run that has slot media, made in the last 60 min (never repost an old build)
+          since=$(date -u -d '-60 min' +%Y-%m-%dT%H:%M:%SZ)
+          for id in $(gh run list -R ${{ github.repository }} -w slots.yml -s success -L 15 --json databaseId,createdAt                       -q ".[] | select(.createdAt >= \"$since\") | .databaseId"); do
+            gh run download "$id" -R ${{ github.repository }} -n slot-media -D output/slot 2>/dev/null && { echo "build run: $id"; break; }
+          done
+          test -f output/slot/manifest.json || { echo "no fresh build in the last 60 min - nothing posted"; exit 1; }
 
       - name: Publish
         if: steps.which.outputs.mode == 'post'
