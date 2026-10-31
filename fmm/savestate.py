@@ -51,8 +51,10 @@ def save(message):
             (ROOT / b).write_bytes(data)
         git("add", "-A", "content", "assets/cards/rz")
         if git("diff", "--cached", "--quiet", check=False).returncode == 0:
-            print("state: nothing new"); return
-        git("commit", "-q", "-m", message)
+            if not ahead:
+                print("state: nothing new"); return
+        else:
+            git("commit", "-q", "-m", message)
         if git("push", "-q", "origin", "HEAD:main", check=False).returncode == 0:
             print("state saved"); return
         time.sleep(3 + attempt * 3)
