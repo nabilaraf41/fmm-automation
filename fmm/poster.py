@@ -162,6 +162,8 @@ def post(kind, media, caption, where="both", ctype=None):
     """Post to each platform independently. One platform failing never re-posts the others:
     the result is logged as soon as any platform succeeds; it raises only if all of them failed."""
     media = str(media)
+    from fmm.captions import polish
+    caption = polish(caption)  # humanized, hook-first, max 5 hashtags
     done, errors = {}, {}
     steps = []
     if where in ("fb", "both"):
