@@ -56,8 +56,8 @@ def make(segments, title, out, sub="FC MOBILE GAMEPLAY"):
     aud = ";".join(f"[{wh_i}:a]adelay={int(c * 1000)}|{int(c * 1000)}[w{j}]" for j, c in enumerate(cuts))
     mix = "".join(f"[w{j}]" for j in range(len(cuts))) + f"amix=inputs={len(cuts)}:normalize=0,apad,atrim=0:{t:.2f},loudnorm=I=-14:TP=-1.5[a]"
     r = subprocess.run(["ffmpeg", "-v", "error", "-y", *inputs, "-filter_complex", ";".join(parts) + ";" + chain + ";" + vids
-                        + ";" + aud + ";" + mix, "-map", "[v]", "-map", "[a]", "-c:v", "libx264", "-preset", "medium",
-                        "-crf", "21", "-c:a", "aac", "-b:a", "160k", "-movflags", "+faststart", str(out)],
+                        + ";" + aud + ";" + mix, "-map", "[v]", "-map", "[a]", "-c:v", "libx264", "-preset", "veryfast",
+                        "-crf", "22", "-threads", "0", "-c:a", "aac", "-b:a", "160k", "-movflags", "+faststart", str(out)],
                        capture_output=True, text=True)
     if r.returncode:
         raise RuntimeError(r.stderr[-600:])
