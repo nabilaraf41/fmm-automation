@@ -159,18 +159,28 @@ def ig_reel(path, caption, share_to_feed=True):
 
 # ---------- high level ----------
 def post(kind, media, caption, where="both", ctype=None):
+    """Post to each platform independently. One platform failing never re-posts the others:
+    the result is logged as soon as any platform succeeds; it raises only if all of them failed."""
     media = str(media)
-    done = {}
+    done, errors = {}, {}
+    steps = []
     if where in ("fb", "both"):
-        done["facebook"] = (fb_photo if kind == "photo" else fb_reel)(media, caption)
+        steps.append(("facebook", lambda: (fb_photo if kind == "photo" else fb_reel)(media, caption)))
     if where in ("ig", "both"):
-        done["instagram"] = (ig_photo if kind == "photo" else ig_reel)(media, caption)
-    if kind == "reel" and where == "both":  # Reels also go to YouTube Shorts, when YouTube is connected
-        try:
+        steps.append(("instagram", lambda: (ig_photo if kind == "photo" else ig_reel)(media, caption)))
+    if kind == "reel" and where == "both":  # Reels also go to YouTube Shorts
+        def yt():
             from fmm import youtube
-            done["youtube"] = youtube.upload(media, caption)[0]
-        except Exception as ex:  # YouTube problems must never block FB/IG posting
-            print("youtube skipped:", str(ex)[:200])
+            return youtube.upload(media, caption)[0]
+        steps.append(("youtube", yt))
+    for name, fn in steps:
+        try:
+            done[name] = fn()
+        except Exception as ex:
+            errors[name] = str(ex)[:200]
+            print(f"{name} failed:", errors[name])
+    if not done:
+        raise RuntimeError(f"all platforms failed: {errors}")
     log({"kind": kind, "file": media, **({"type": ctype} if ctype else {}), **done})
     return done
 
