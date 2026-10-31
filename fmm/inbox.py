@@ -71,6 +71,38 @@ def scorer_card(file_name):
         return None
 
 
+def download(f):
+    from googleapiclient.http import MediaIoBaseDownload
+    CACHE.mkdir(parents=True, exist_ok=True)
+    local = CACHE / f"{f['id']}{Path(f['name']).suffix or '.mp4'}"
+    if not local.exists():
+        with open(local, "wb") as out:
+            dl = MediaIoBaseDownload(out, drive().files().get_media(fileId=f["id"]), chunksize=32 * 1024 * 1024)
+            done = False
+            while not done:
+                _, done = dl.next_chunk()
+    return local
+
+
+def pack_video():
+    """Newest pack-opening video ('pack ….mp4') not posted yet; if all are used, the least recently used one."""
+    st = state()
+    packs = [f for f in videos(drive()) if f["name"].lower().startswith("pack")]
+    if not packs:
+        return None
+    used = st.setdefault("packs", {})
+    new = [f for f in packs if f["id"] not in used]
+    f = new[-1] if new else min(packs, key=lambda f: used.get(f["id"], ""))
+    return f, download(f)
+
+
+def mark_pack(f):
+    import datetime as dt
+    st = state()
+    st.setdefault("packs", {})[f["id"]] = dt.datetime.now().isoformat(timespec="minutes")
+    STATE.write_text(json.dumps(st, indent=1, ensure_ascii=False), encoding="utf-8")
+
+
 def meme_clip():
     """Download (once) a random meme clip from the Drive folder (files named 'meme ...') -> local path or None."""
     import random
@@ -103,7 +135,7 @@ def next_clip():
     d = drive()
     st = state()
     for f in videos(d):
-        if f["name"].lower().startswith("meme"):  # meme clips are for "EA Sports Logic" Reels, not gameplay
+        if f["name"].lower().startswith(("meme", "pack")):  # memes -> EA Logic Reels, packs -> Thu/Sun pack Reels
             continue
         rec = st["files"].setdefault(f["id"], {"name": f["name"], "used": 0, "total": None})
         if rec["total"] is not None and rec["used"] >= rec["total"]:

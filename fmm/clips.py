@@ -25,8 +25,31 @@ def duration(video):
     return float(r.stdout.strip() or 0)
 
 
+def has_audio(video):
+    r = run(["ffprobe", "-v", "error", "-select_streams", "a", "-show_entries", "stream=index", "-of", "csv=p=0", str(video)])
+    return bool(r.stdout.strip())
+
+
+def action(video, step=0.5):
+    """Silent recordings: visual change per `step` s (scene score, 0..1), smoothed like loudness.
+    shortcut: big on-screen changes stand in for goal noise; record with internal audio for better picks."""
+    r = run(["ffmpeg", "-hide_banner", "-nostats", "-i", str(video), "-an", "-vf",
+             "fps=4,scale=320:-2,select='gte(scene,0)',metadata=print:key=lavfi.scene_score:file=-", "-f", "null", "-"])
+    ts = [float(x) for x in re.findall(r"pts_time:([\d.]+)", r.stdout)]
+    sc = [float(x) for x in re.findall(r"scene_score=([\d.]+)", r.stdout)]
+    buckets = {}
+    for t, v in zip(ts, sc):
+        b = round(t / step) * step
+        buckets[b] = max(buckets.get(b, 0.0), v)
+    raw = sorted(buckets.items())
+    return [(t, sum(v for _, v in raw[max(0, i - 2):i + 3])) for i, (t, _) in enumerate(raw)]
+
+
 def loudness(video, step=0.5):
-    """RMS loudness (dB) per `step` seconds, smoothed over ~1.5 s so a goal roar beats a single kick."""
+    """RMS loudness (dB) per `step` seconds, smoothed over ~1.5 s so a goal roar beats a single kick.
+    Videos without sound use on-screen action instead."""
+    if not has_audio(video):
+        return action(video, step)
     n = int(44100 * step)
     r = run(["ffmpeg", "-hide_banner", "-nostats", "-i", str(video), "-vn", "-af",
              f"aresample=44100,asetnsamples=n={n}:p=0,astats=metadata=1:reset=1,"
@@ -127,15 +150,17 @@ def make(video, title="WHAT A GOAL!!", index=0, sub=None, music=None, card=None)
     replay_png = overlay_png("REPLAY", sub, OUT / f"{name}_ov2.png", card)
     # audio: game audio (+ slowed replay audio) with whoosh at start and impact on the goal
     sfx.build() if not (sfx.OUT / "impact.wav").exists() else None
+    ga = "0:a" if has_audio(video) else "5:a"  # silent recordings: a silent track keeps the mix working
     af = (
-        f"[0:a]atrim=start={start}:end={end},asetpts=PTS-STARTPTS[ga];"
-        f"[0:a]atrim=start={start + slow_a}:end={start + slow_b},asetpts=PTS-STARTPTS,atempo=0.5,volume=0.8[ra];"
+        f"[{ga}]atrim=start={start}:end={end},asetpts=PTS-STARTPTS[ga];"
+        f"[{ga}]atrim=start={start + slow_a}:end={start + slow_b},asetpts=PTS-STARTPTS,atempo=0.5,volume=0.8[ra];"
         f"[ga][ra]concat=n=2:v=0:a=1[game];"
         f"[3:a]adelay=0|0[w];[4:a]adelay={int(rel * 1000)}|{int(rel * 1000)},volume=1.2[i];"
         f"[game][w][i]amix=inputs=3:duration=first:normalize=0,alimiter=limit=0.95,loudnorm=I=-14:TP=-1.5:LRA=11[a]"
     )
     cmd = ["ffmpeg", "-v", "error", "-y", "-i", str(video), "-i", str(ov), "-i", str(replay_png),
            "-i", str(sfx.OUT / "whoosh.wav"), "-i", str(sfx.OUT / "impact.wav"),
+           "-f", "lavfi", "-t", str(end + 5), "-i", "anullsrc=r=44100:cl=stereo",
            "-filter_complex", vf + ";" + af, "-map", "[v]", "-map", "[a]",
            "-r", "30", "-c:v", "libx264", "-preset", "medium", "-crf", "20", "-c:a", "aac", "-b:a", "160k",
            "-movflags", "+faststart", str(out)]
