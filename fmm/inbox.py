@@ -90,10 +90,15 @@ def download(f):
     return local
 
 
+def is_pack(name):
+    n = name.lower()
+    return n.startswith("pack") or "opening" in n  # e.g. "My bad luck while signature opening…"
+
+
 def pack_video():
     """Newest pack-opening video ('pack ….mp4') not posted yet; if all are used, the least recently used one."""
     st = state()
-    packs = [f for f in videos(drive()) if f["name"].lower().startswith("pack")]
+    packs = [f for f in videos(drive()) if is_pack(f["name"])]
     if not packs:
         return None
     used = st.setdefault("packs", {})
@@ -194,7 +199,7 @@ def next_clip():
     d = drive()
     st = state()
     for f in videos(d):
-        if f["name"].lower().startswith(("meme", "pack", "long")):  # memes -> EA Logic Reels, packs -> Thu/Sun pack Reels
+        if f["name"].lower().startswith(("meme", "long")) or is_pack(f["name"]):  # memes -> EA Logic Reels, packs -> Thu/Sun pack Reels
             continue
         rec = st["files"].setdefault(f["id"], {"name": f["name"], "used": 0, "total": None})
         if rec["total"] is not None and rec["used"] >= rec["total"]:
