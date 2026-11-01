@@ -1,7 +1,9 @@
 {
  "featured": [
   "30922808",
-  "van Basten|124|ST"
+  "van Basten|124|ST",
+  "f24053844",
+  "Vitinha|122|CM"
  ],
  "history": [
   {
@@ -81,6 +83,16 @@
    "media": "slot.mp4",
    "players": [],
    "built": "2026-10-31T23:36"
+  },
+  {
+   "slot": "0700",
+   "kind": "reel",
+   "type": "review_reel",
+   "media": "slot.mp4",
+   "players": [
+    "f24053844"
+   ],
+   "built": "2026-11-01T07:03"
   }
  ],
  "force": {
@@ -117,6 +129,9 @@
   "2026-10-31-0700": "2026-10-31T10:09 manual",
   "2026-10-31-1300": "posted (twice, before state-save fix)",
   "2026-10-31-1900": "2026-10-31 late (manual catch-up)",
-  "2026-10-31-2100": "2026-10-31T22:00"
- }
+  "2026-10-31-2100": "2026-10-31T22:00",
+  "2026-11-01-0700": "2026-11-01T07:02+06:00"
+ },
+ "slot_tries": {},
+ "reel_n": 1
 }
