@@ -1,5 +1,7 @@
 # FMM (FC Mobile Mania) — automation handbook
 
+New chat? Read HANDOVER.md first (status, open items, what was fixed and must not be reintroduced).
+
 Owner's social accounts: FB Page "FC Mobile Mania - FMM" (id 705738725948110), IG @fc_fmm (17841473352545444),
 YouTube "FC Mobile Mania - FMM". Owner is in Bangladesh (BDT = UTC+6), zero budget, non-technical:
 give click-by-click steps and copy-paste commands.
