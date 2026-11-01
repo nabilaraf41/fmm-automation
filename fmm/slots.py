@@ -186,7 +186,7 @@ def pick(kind, fresh, db, state):
     if rot in ("xi", "gem", "worth", "meme", "compare4", "pick3", "rank10"):
         return rot, latest, pool
     if rot == "versus":
-        return "versus", next_pair(latest, state), pool
+        return "versus", next_pair(latest, state, pool), pool
     if rot != "versus":
         used = set(state.get("used_photo", []))
         cand = [p for p in latest if str(p["id"]) not in used] or latest
@@ -436,29 +436,22 @@ MEMES = [("When you finally pack {name}", "When you check his weak foot"),
 TAGS = "#FCMobile #FIFAMobile #EAFC #FMM"
 
 
-def next_pair(latest, state):
-    """Two cards of the same position group that haven't been battled before (newest/best first)."""
+def next_pair(latest, state, pool=()):
+    """A new card vs the best card at the exact same position (old cards count), never a pair battled before.
+    Owner rule: never compare players with different positions."""
     used = set(state.get("used_pairs", []))
-    seen = {}
-    for k in used:  # how often each player already appeared in a battle
-        for n in k.split("|"):
-            seen[n] = seen.get(n, 0) + 1
-    groups = {}
-    for p in latest:
-        groups.setdefault(rv.group(p.get("pos", "")), []).append(p)
-    options = []
-    for g in groups.values():
-        for i in range(len(g)):
-            for j in range(i + 1, len(g)):
-                key = "|".join(sorted([g[i]["name"], g[j]["name"]]))
-                if g[i]["name"] != g[j]["name"] and key not in used:
-                    rank = (seen.get(g[i]["name"], 0) + seen.get(g[j]["name"], 0), i + j)  # fresh faces first
-                    options.append((rank, key, [g[i], g[j]]))
-    if not options:
-        return latest[:2]
-    _, key, pair = min(options, key=lambda o: o[0])
-    state.setdefault("used_pairs", []).append(key)
-    return pair
+    pool = confirmed_only({str(p["id"]): p for p in pool}).values()  # cross-check rule applies to old cards too
+    rivals = [p for p in list(latest) + list(pool) if (renderz.CARDS / f"{p['id']}.png").exists() or p.get("img_bg")]
+    times = lambda p: sum(p["name"] in k.split("|") for k in used)
+    for p in sorted(latest, key=times):  # least-battled new card first (stable: keeps newest/trending order)
+        same = sorted([q for q in rivals if q.get("pos") == p.get("pos") and q["name"] != p["name"]],
+                      key=lambda q: -(q.get("ovr") or 0))
+        for q in same:
+            key = "|".join(sorted([p["name"], q["name"]]))
+            if key not in used:
+                state.setdefault("used_pairs", []).append(key)
+                return [p, q]
+    return []
 
 
 def render_versus(pair, fresh):
@@ -505,7 +498,7 @@ def build_extra(ctype, latest, pool, fresh, state):
             used |= {p["id"] for p in best}
             team += best + [{"name": "?", "ovr": "", "pos": g.upper()}] * (n - len(best))
         if sum(1 for p in team if p.get("name") != "?") < 8:  # too few cards known yet
-            return render_versus(next_pair(latest, state), fresh)
+            return render_versus(next_pair(latest, state, pool), fresh)
         post = {"id": "slot", "type": "xi", "title": "Best Budget XI", "subtitle": f"Every card {cap} OVR or lower",
                 "players": team}
         lines = [f"{p.get('pos', '')} {p.get('name')} {p.get('ovr')}" for p in team if p.get("name") != "?"]
@@ -522,7 +515,7 @@ def build_extra(ctype, latest, pool, fresh, state):
         top_ovr = max((x.get("ovr") or 0) for x in have)
         cands = [x for x in have if str(x["id"]) not in used and (x.get("ovr") or 0) < top_ovr - 2]
         if not cands:  # nothing "low OVR" to talk about yet -> a card battle instead
-            return render_versus(next_pair(latest, state), fresh)
+            return render_versus(next_pair(latest, state, pool), fresh)
         p = max(cands, key=gem_score)
         g = rv.group(p.get("pos", ""))
         labels = [(renderz.STAT_NAMES.get(k, k), p["stats"][k]) for k in sorted(
@@ -561,7 +554,7 @@ def build_extra(ctype, latest, pool, fresh, state):
         pos = top20.POSITIONS[n % len(top20.POSITIONS)]
         ten = top20.ensure_images(top20.top10(pos))
         if len(ten) < 6:
-            return render_versus(next_pair(latest, state), fresh)
+            return render_versus(next_pair(latest, state, pool), fresh)
         post = {"id": "slot", "type": "top10", "position": pos.upper(), "title": "This week",
                 "players": [{"name": p["name"], "card": p["card"], "ovr": p.get("ovr")} for p in ten]}
         nl = "\n"
@@ -575,7 +568,7 @@ def build_extra(ctype, latest, pool, fresh, state):
             by_pos.setdefault(p.get("pos"), []).append(p)
         pos, cards = max(by_pos.items(), key=lambda kv: (len(kv[1]) >= 4, len(kv[1])))
         if len(cards) < 3:
-            return render_versus(next_pair(latest, state), fresh)
+            return render_versus(next_pair(latest, state, pool), fresh)
         top4 = sorted(cards, key=lambda p: (p.get("ovr") or 0, rv.key_avg(p, rv.group(pos))), reverse=True)[:4]
         post = {"id": "slot", "type": "compare4", "position": pos, "players": top4}
         from fmm.review import face_stats
@@ -596,7 +589,7 @@ def build_extra(ctype, latest, pool, fresh, state):
             state.setdefault("used_photo", []).append(str(p["id"]))
         three = [p for p in three if p.get("card")]
         if len(three) < 3:
-            return render_versus(next_pair(latest, state), fresh)
+            return render_versus(next_pair(latest, state, pool), fresh)
         ev = program_name(prog)
         post = {"id": "slot", "type": "pick3", "title": "Pick one", "subtitle": f"{three[0]['ovr']} OVR {ev}",
                 "cards": [p["card"] for p in three]}
