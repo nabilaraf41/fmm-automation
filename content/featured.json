@@ -104,12 +104,23 @@
     "f24053816"
    ],
    "built": "2026-11-01T13:21"
+  },
+  {
+   "slot": "1900",
+   "kind": "photo",
+   "type": "versus",
+   "media": "slot.png",
+   "players": [
+    "f24053816",
+    "f24053826"
+   ],
+   "built": "2026-11-01T19:33"
   }
  ],
  "force": {
   "0700": "countdown"
  },
- "photo_n": 2,
+ "photo_n": 3,
  "hold_programs": [],
  "confirmed_programs": [
   "ANN27",
@@ -142,9 +153,13 @@
   "2026-10-31-1900": "2026-10-31 late (manual catch-up)",
   "2026-10-31-2100": "2026-10-31T22:00",
   "2026-11-01-0700": "2026-11-01 Vitinha stats review (manual)",
-  "2026-11-01-1300": "2026-11-01T13:21+06:00"
+  "2026-11-01-1300": "2026-11-01T13:21+06:00",
+  "2026-11-01-1900": "2026-11-01T19:33+06:00"
  },
  "slot_tries": {},
  "reel_n": 1,
- "rank_n": 1
+ "rank_n": 1,
+ "used_pairs": [
+  "Kane|Lamine Yamal"
+ ]
 }
