@@ -1,4 +1,4 @@
-﻿# Handover from chat "1" (31 Oct â€“ 1 Nov 2026)
+# Handover from chat "1" (31 Oct – 1 Nov 2026)
 
 Full transcript backup: `C:\Users\Admin\Downloads\session-export-1793493412525.zip` (open only if something below is unclear).
 The handbook is CLAUDE.md; memory notes load automatically when the chat is opened in `E:\Claude\FMM`.
@@ -6,17 +6,17 @@ The handbook is CLAUDE.md; memory notes load automatically when the chat is open
 ## Status (1 Nov 2026, 21:00 BDT)
 - Everything posts from the cloud (repo nabilaraf41/fmm-automation). Google Apps Script starts the job every hour.
 - Slots BDT: 07:00 Reel, 13:00 photo, 19:00 photo, 21:00 Reel (Thu/Sun 21:00 = pack opening).
-- Extras: redeem codes, new-player drops (Thu 07:00), Drive clips ("pack â€¦", "meme â€¦", "long â€¦", player-named goals),
+- Extras: redeem codes, new-player drops (Thu 07:00), Drive clips ("pack …", "meme …", "long …", player-named goals),
   long videos to YouTube + Facebook, Facebook comment replies (max 2/post), Monday growth report.
 - Captions pass through the humanizer (fmm/captions.py). 13 ig-* skills in .claude/skills; voice in ~/.claude/instagram/voice.md.
 
 ## Added 1 Nov 2026 (later the same day)
 - Every photo post is also posted as a 10 s zoom Reel/Short (`poster.post` -> `reel.make_reel`, 4K source + sharpen).
 - RkReddy / top-50 study (memory notes in docs/memory/): clip Reels ~12 s, pack Reels ~15 s around the reveal,
-  reaction + number hooks (BROKEN/INSANE only for 9+ ratings), clip captions = file name + â˜ ï¸ðŸ”¥, tags #FCMobile #FIFAMobile #EAFC.
+  reaction + number hooks (BROKEN/INSANE only for 9+ ratings), clip captions = file name + ☠️🔥, tags #FCMobile #FIFAMobile #EAFC.
 - Stats battle (`slots.next_pair`): same EXACT position only, both cards 122+ OVR, new card vs best card at that
-  position (old cards allowed, cross-checked), each pair once. Owner rules â€” keep them.
-- Chat 2 was deleted; this chat ("1") is the only working chat. Backup zip: see BACKUP section in the owner's reply.
+  position (old cards allowed, cross-checked), each pair once. Owner rules — keep them.
+- Chat 2 was deleted; this chat ("1") is the only working chat. Full backup zip: Downloads\FMM-BACKUP-2026-11-01.zip.
 
 ## Fixed in chat 1 (don't reintroduce)
 - State is saved only with `python -m fmm.savestate` (merges; keeps local commits). Never plain-push state files.
