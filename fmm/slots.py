@@ -154,7 +154,9 @@ def pick(kind, fresh, db, state):
     weekday = dt.datetime.now().weekday()
     week_ago = (dt.datetime.now(dt.UTC) - dt.timedelta(days=7)).strftime("%Y-%m-%dT%H:%M:%S")
     this_week = [p for p in fresh.values() if (p.get("added") or "") >= week_ago]
-    force = state.get("force", {}).pop(slot_now(), None)  # one-off override, e.g. {"0700": "countdown"}
+    # one-off override for one dated slot, e.g. {"2026-11-05-0700": "countdown"}: applies once, nothing to delete
+    # (state saves merge and can't remove keys, so an undated override would repeat every day)
+    force = state.get("force", {}).get(f"{dt.date.today().isoformat()}-{slot_now()}")
     if force in ("countdown", "tierlist") and this_week:
         return force, sorted(this_week, key=lambda p: (p.get("ovr") or 0, heat(p)), reverse=True)[:8], pool
     wk_unf = sorted([p for p in unfeatured if p in this_week], key=lambda p: (heat(p), p.get("ovr") or 0), reverse=True)
