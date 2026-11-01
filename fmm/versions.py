@@ -169,7 +169,7 @@ def caption(pr):
             f"❌ {b['ovr']} {pr['name']} ({program_name(b.get('program'))})\n\n"
             f"The {g['ovr']} wins on {', '.join(better) or 'the stats'}"
             + (f" — even with LOWER OVR!" if pr["irony"] else "") +
-            "\n\nWhich version do you have? 👇\n\n#FCMobile #FCMobile26 #EASportsFCMobile #EASportsLogic #FMM")
+            "\n\nWhich version do you have? 👇\n\n#FCMobile #FIFAMobile #EAFC #EASportsLogic #FMM")
 
 
 if __name__ == "__main__":

@@ -31,6 +31,6 @@ def polish(caption):
 
 
 if __name__ == "__main__":
-    s = polish("🔥 Is 124 OVR Kane worth it? — let's dive in\n\nHe is a game-changer.\n\n#FCMobile #FCMobile26 #EASportsFCMobile #PlayerReview #Kane #FMM")
+    s = polish("🔥 Is 124 OVR Kane worth it? — let's dive in\n\nHe is a game-changer.\n\n#FCMobile #FIFAMobile #EAFC #PlayerReview #Kane #FMM")
     print(s)
     assert not s[0] in "🔥" and s.count("#") <= 5 and "—" not in s and "#FMM" in s

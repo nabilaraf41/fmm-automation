@@ -147,7 +147,7 @@ def review(p, pool=None, seed=None):
         f"Best for {who}.", "",
         "👇 Would he make your starting XI?", "",
         "(Stat-based FMM review.)", "",
-        f"#FCMobile #FCMobile26 #EASportsFCMobile #PlayerReview #{(name or '').replace(' ', '').replace('.', '')} #FMM",
+        f"#FCMobile #FIFAMobile #EAFC #PlayerReview #{(name or '').replace(' ', '').replace('.', '')} #FMM",
     ]).replace("\n\n\n", "\n\n")
     label = {k: l for _, rows in DETAIL for k, l in rows} | {"vol": "Volleys", "hea": "Heading", "mrk": "Marking",
              "agg": "Aggression", "ref": "Reflexes", "gkd": "Diving", "gkh": "Handling", "gkp": "GK Positioning", "gkk": "Kicking"}

@@ -69,7 +69,7 @@ def run(dry=False):
     OUT.mkdir(parents=True)
     program = (top[0].get("program") or "NEW").replace("_", " ")
     names = "\n".join(f"{i + 1}. {p['ovr']} {p['pos']} {p['name']}" for i, p in enumerate(top[:10]))
-    tags = "#FCMobile #FCMobile26 #EASportsFCMobile #NewPlayers #FCMobileCards #FMM"
+    tags = "#FCMobile #FIFAMobile #EAFC #NewPlayers #FCMobileCards #FMM"
     # 1) announcement Reel
     reel = {"id": "a_drop_reel",
             "cover": {"subject": top[0]["card"], "text": "NEW PLAYERS\nARE HERE!!", "sub": f"UP TO {top[0]['ovr']} OVR",

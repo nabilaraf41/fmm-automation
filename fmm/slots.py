@@ -216,9 +216,11 @@ def build_from_inbox(slot):
     cover = Path(mp4).with_name(Path(mp4).stem + "_cover.jpg")
     if cover.exists():
         shutil.copy(cover, OUT / "slot_cover.jpg")
-    caption = (f"⚽ {title.title()}\n\nWould you have scored this? Rate it 1–10 👇\n\n"
+    # evergreen Shorts are titled like "Prime Neymar penalty☠️🔥": player + moment + emoji, nothing tied to an event
+    name = Path(src).stem.strip()
+    caption = (f"{name.title() if len(name) <= 40 else title.title()} ☠️🔥\n\nWould you have scored this? Rate it 1–10 👇\n\n"
                "Follow FMM for daily FC Mobile goals, cards & codes 🔔\n\n"
-               "#FCMobile #FCMobile26 #EASportsFCMobile #FCMobileGoals #Gaming #FMM")
+               "#FCMobile #FIFAMobile #EAFC #FCMobileGoals #Gaming #FMM")
     (OUT / "caption.txt").write_text(caption, encoding="utf-8")
     (OUT / "manifest.json").write_text(json.dumps({"slot": slot, "kind": "reel", "type": "clip",
                                                    "media": "slot.mp4", "source": src}, indent=1), encoding="utf-8")
@@ -365,7 +367,7 @@ def build(slot):
         media = motion.render_reel(reel, OUT)
         caption = (f"🔥 This week's new FC Mobile players — top {min(7, len(players))} by OVR\n\n"
                    + "\n".join(f"{i + 1}. {x['ovr']} {x['pos']} {x['name']}" for i, x in enumerate(players[:7]))
-                   + "\n\n👇 Which one are you getting?\n\n#FCMobile #FCMobile26 #EASportsFCMobile #FCMobileCards #FMM")
+                   + "\n\n👇 Which one are you getting?\n\n#FCMobile #FIFAMobile #EAFC #FCMobileCards #FMM")
     elif ctype == "tierlist":
         scored = sorted(((rv.review(x, pool)["score"], x) for x in players), key=lambda t: -t[0])
         tiers = {"S": [], "A": [], "B": [], "C": []}
@@ -403,7 +405,7 @@ def build(slot):
         media = brand.render({"id": "slot", "type": "compare", "a": a, "b": b}, OUT)
         caption = (f"⚔️ {a['ovr']} {a['name']} ({a['pos']}) vs {b['ovr']} {b['name']} ({b['pos']})\n\n"
                    f"Only one goes in your starting XI. Who's your pick and why? 👇\n\n"
-                   f"#FCMobile #FCMobile26 #EASportsFCMobile #CardBattle #FMM")
+                   f"#FCMobile #FIFAMobile #EAFC #CardBattle #FMM")
     if ctype.startswith("review"):
         state["featured"] += [str(p["id"]), f"{p.get('name')}|{p.get('ovr')}|{p.get('pos')}"]
     finish(slot, kind, ctype, media, caption, players, state)
@@ -431,7 +433,7 @@ MEMES = [("When you finally pack {name}", "When you check his weak foot"),
          ("{name} on paper: {ovr} OVR", "{name} in my squad after 5 losses"),
          ("Opponent's {name}", "My {name}"),
          ("Me: one more pack", "Me 2 hours later, still no {name}")]
-TAGS = "#FCMobile #FCMobile26 #EASportsFCMobile #FMM"
+TAGS = "#FCMobile #FIFAMobile #EAFC #FMM"
 
 
 def next_pair(latest, state):
@@ -468,7 +470,7 @@ def render_versus(pair, fresh):
     post = {"id": "slot", "type": "compare", "a": a, "b": b}
     caption = (f"⚔️ {a['ovr']} {a['name']} ({a['pos']}) vs {b['ovr']} {b['name']} ({b['pos']})\n\n"
                f"Only one goes in your starting XI. Who's your pick and why? 👇\n\n"
-               f"#FCMobile #FCMobile26 #EASportsFCMobile #CardBattle #FMM")
+               f"#FCMobile #FIFAMobile #EAFC #CardBattle #FMM")
     return brand.render(post, OUT), caption
 
 

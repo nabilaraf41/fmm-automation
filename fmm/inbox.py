@@ -139,7 +139,7 @@ def post_long():
                f"📘 Facebook: https://www.facebook.com/61577183936749{nl}"
                f"📸 Instagram: https://www.instagram.com/fc_fmm/{nl}{nl}"
                f"FC Mobile gameplay, FC Mobile 26 H2H, EA Sports FC Mobile best formation, FC Mobile tips{nl}{nl}"
-               "#FCMobile #FCMobile26 #EASportsFCMobile #Gameplay #FMM")
+               "#FCMobile #FIFAMobile #EAFC #Gameplay #FMM")
     from fmm import youtube
     local = download(f)
     try:  # 16:9 MrBeast-style cover from a frame at 40%, the player's card if the name has one
