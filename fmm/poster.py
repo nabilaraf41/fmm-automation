@@ -184,6 +184,12 @@ def post(kind, media, caption, where="both", ctype=None):
     if not done:
         raise RuntimeError(f"all platforms failed: {errors}")
     log({"kind": kind, "file": media, **({"type": ctype} if ctype else {}), **done})
+    if kind == "photo" and where == "both":  # every photo also goes out as a Reel/Short (slow zoom), for reach
+        try:
+            from fmm import reel
+            done["reel"] = post("reel", reel.make_reel(media, seconds=10), caption, where, ctype)
+        except Exception as ex:
+            print("photo reel skipped:", str(ex)[:150])
     return done
 
 
