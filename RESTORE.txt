@@ -1,0 +1,25 @@
+FMM BACKUP — HOW TO RESTORE ON A NEW PC / NEW CLAUDE
+===================================================
+
+Nothing has to be restored for the posting to keep running: it runs on GitHub (nabilaraf41/fmm-automation)
+and the Google Apps Script trigger. This backup is for continuing the work in a new Claude chat.
+
+What is inside the zip
+- FMM\              the whole project folder (code, git history, assets, content, .claude skills)
+- FMM\.env, FMM\secrets\   YOUR PRIVATE KEYS. Never share the zip or upload it anywhere public.
+- chats\            every chat with Claude for this project (.jsonl files) + earlier export zip
+- memory\           Claude's memory notes about FMM (also in FMM\docs\memory\)
+- instagram\voice.md   your caption voice for the ig-* skills
+
+Restore steps
+1. Unzip to E:\Claude\  so you get E:\Claude\FMM (same place as now is easiest).
+2. Install Python 3.12+ and ffmpeg if the PC is new. Then in a terminal inside E:\Claude\FMM:
+       pip install -r requirements.txt
+3. Copy  memory\*.md  to  C:\Users\<you>\.claude\projects\E--Claude-FMM\memory\
+   Copy  instagram\voice.md  to  C:\Users\<you>\.claude\instagram\voice.md
+   Copy  chats\*.jsonl  (and folders)  to  C:\Users\<you>\.claude\projects\E--Claude-FMM\
+   (If you unzip FMM somewhere else, the folder name changes: e.g. D:\FMM -> D--FMM.)
+4. Open Claude (Code tab), choose the folder E:\Claude\FMM, and say:
+       "Read HANDOVER.md and CLAUDE.md, then continue running FMM."
+   The old chat also shows up in the chat list after step 3 and can be resumed.
+5. Using a different Claude account? Log in to GitHub on the new PC (gh auth login) so it can push.
