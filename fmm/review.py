@@ -120,7 +120,8 @@ def review(p, pool=None, seed=None):
     name, ovr, pos = p.get("name", ""), p.get("ovr"), p.get("pos", "")
     hook = rnd.choice(HOOKS).format(name=name, ovr=ovr, pos=pos)
     forms = FORMATIONS[g]
-    ps = ", ".join(p.get("playstyles") or []) or "—"
+    from fmm.brand import ps_name
+    ps = ", ".join(ps_name(x) for x in (p.get("playstyles") or [])) or "—"
     summary = (f"{name} is built for a {('direct, goal-hungry' if g == 'att' else 'controlling' if g == 'mid' else 'solid, no-nonsense' if g == 'def' else 'reliable')} "
                f"role. His best tools are {STRENGTH[top[0]].split(' —')[0].lower()} and {STRENGTH[top[1]].split(' —')[0].lower()}"
                if len(top) >= 2 else f"{name} is a solid all-round option.")

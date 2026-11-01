@@ -235,6 +235,12 @@ def _box(d, xy, fill=(16, 16, 22), outline=(48, 48, 60)):
     d.rounded_rectangle(xy, 18, fill=fill, outline=outline, width=2)
 
 
+def ps_name(raw):
+    """'PLAYSTYLE_INCISIVE_THROUGH_1' -> 'Incisive Through' (forum and RenderZ give raw codes)."""
+    import re as _re
+    return _re.sub(r"\s+\d+$", "", str(raw).replace("PLAYSTYLE_", "").replace("Playstyle ", "").replace("_", " ")).strip().title()
+
+
 def post_review(p):
     """Card review: card + info grid (WF/SM/work rates/body), playstyles, face stats, key-stat bars,
     one-line pros/cons, alternatives and a rating meter. Falls back to the plain layout without p['info']."""
@@ -285,11 +291,11 @@ def post_review(p):
     d.text((x0, y), "PLAYSTYLES", font=label_font(22), fill=GRAY)
     y += 36
     px = x0
-    for ps in (info.get("playstyles") or ["None"]):
-        pf = label_font(24)
+    for ps in [ps_name(x) for x in (info.get("playstyles") or ["None"])][:2]:  # 2 fit above the stats row
+        pf = label_font(20)
         tw = d.textlength(ps.upper(), font=pf)
         if px + tw + 40 > x1:
-            px, y = x0, y + 52
+            px, y = x0, y + 46
         d.rounded_rectangle((px, y, px + tw + 36, y + 42), 21, fill=(40, 20, 60), outline=PURPLE, width=2)
         d.text((px + 18 + tw / 2, y + 21), ps.upper(), font=pf, fill=WHITE, anchor="mm")
         px += tw + 50
