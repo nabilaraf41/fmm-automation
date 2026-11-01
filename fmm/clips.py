@@ -71,7 +71,8 @@ def peaks(video, n=None, min_gap=25.0, pre=8.0, post=4.0):
     if dur <= 40:  # already a short goal clip: use all of it, peak at its loudest point
         lv = loudness(video) or [(dur * 0.6, 0)]
         pk = max(lv, key=lambda x: x[1])[0]
-        return [(0.0, min(pk, dur - 0.5), dur)]
+        pk = min(pk, dur - 0.5)
+        return [(max(0.0, pk - pre), pk, min(dur, pk + post))]  # 8-15 s Shorts get the most views (RkReddy study)
     lv = loudness(video)
     if not lv:
         return [(max(0, dur / 2 - pre), dur / 2, min(dur, dur / 2 + post))]

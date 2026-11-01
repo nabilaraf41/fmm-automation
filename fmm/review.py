@@ -60,8 +60,9 @@ WEAKNESS = {
 }
 FORMATIONS = {"att": ["4-3-3 Attack", "4-2-3-1", "4-1-2-1-2"], "mid": ["4-3-3 Holding", "4-2-3-1", "4-1-2-1-2 Narrow"],
               "def": ["4-3-3", "4-2-3-1", "5-3-2"], "gk": ["Any formation"]}
-HOOKS = ["🔥 Is {ovr} OVR {name} worth it?", "🚨 {ovr} {name} just dropped — should you get him?",
-         "👀 {name} {ovr} OVR: hype or must-have?", "⚡ Full review: {ovr} OVR {name} ({pos})"]
+# short reaction + number hooks: the first line is also the YouTube title (RkReddy's best titles look like this)
+HOOKS = ["{ovr} OVR {name} is BROKEN....! 😭", "Is {ovr} {name} worth it?!", "{name} {ovr} OVR: hype or must-have?",
+         "This {ovr} {pos} is INSANE!", "{ovr} OVR {name}... buy or skip?"]
 WR = {1: "Low", 2: "Medium", 3: "High"}
 
 
@@ -118,7 +119,8 @@ def review(p, pool=None, seed=None):
     pros = [STRENGTH[k].split(" —")[0] for k in top]
     cons = [WEAKNESS[k] for k in low] or ["No major weaknesses at this rating"]
     name, ovr, pos = p.get("name", ""), p.get("ovr"), p.get("pos", "")
-    hook = rnd.choice(HOOKS).format(name=name, ovr=ovr, pos=pos)
+    hooks = HOOKS if score >= 9 else [h for h in HOOKS if "BROKEN" not in h and "INSANE" not in h]  # hype only when earned
+    hook = rnd.choice(hooks).format(name=name, ovr=ovr, pos=pos)
     forms = FORMATIONS[g]
     from fmm.brand import ps_name
     ps = ", ".join(ps_name(x) for x in (p.get("playstyles") or [])) or "—"

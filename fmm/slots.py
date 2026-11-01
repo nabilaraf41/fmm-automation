@@ -247,13 +247,16 @@ def build_pack(got=None, title=None, caption=None):
         dur = clips.duration(src)
         lv = clips.loudness(src)  # biggest moment = the reveal
         reveal = max(lv, key=lambda x: x[1])[0] if lv else dur * 0.6
+        start = max(0.0, reveal - 10)  # keep ~15 s: build-up, reveal, card on screen
+        dur = min(dur, reveal + 5) - start
+        reveal -= start
         sfx.build()
         ms = int(max(0.0, reveal - 0.2) * 1000)
         vf = ("[0:v]split=2[a][b];[a]scale=-2:1920,crop=1080:1920,boxblur=25:2,eq=brightness=-0.15:saturation=1.3[bg];"
               "[b]scale=1080:-2[fg];[bg][fg]overlay=(W-w)/2:(H-h)/2-40[base];[base][1:v]overlay=0:0,format=yuv420p[v]")
         af = (f"[2:a]volume=0.8[r];[3:a]adelay={ms}|{ms}[i];[4:a]adelay={ms}|{ms}[s];"
               f"[r][i][s]amix=inputs=3:normalize=0,apad,atrim=0:{dur:.2f},loudnorm=I=-14:TP=-1.5[a]")
-        r = subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", str(src), "-i", str(ov), "-i", str(sfx.OUT / "riser.wav"),
+        r = subprocess.run(["ffmpeg", "-v", "error", "-y", "-ss", f"{start:.2f}", "-i", str(src), "-i", str(ov), "-i", str(sfx.OUT / "riser.wav"),
                             "-i", str(sfx.OUT / "impact.wav"), "-i", str(sfx.OUT / "sparkle.wav"),
                             "-filter_complex", vf + ";" + af, "-map", "[v]", "-map", "[a]", "-t", f"{dur:.2f}", "-r", "30",
                             "-c:v", "libx264", "-preset", "medium", "-crf", "20", "-c:a", "aac", "-b:a", "160k",
@@ -261,7 +264,7 @@ def build_pack(got=None, title=None, caption=None):
         if r.returncode:
             raise RuntimeError(r.stderr[-300:])
         frame = OUT / "frame.png"
-        subprocess.run(["ffmpeg", "-v", "error", "-y", "-ss", str(max(0.0, dur - 3)), "-i", str(src),  # packed card is on screen at the end
+        subprocess.run(["ffmpeg", "-v", "error", "-y", "-ss", str(max(0.0, start + dur - 3)), "-i", str(src),  # packed card is on screen at the end
                         "-frames:v", "1", "-vf", "crop=ih*3/4:ih:(iw-ih*3/4)/2:0", str(frame)])
         thumb.cover(card or (str(frame) if frame.exists() else None), title.replace("I PACKED ", "I PACKED\n", 1) if len(title) > 16 else title,
                     OUT / "slot_cover.jpg", sub="PACK OPENING", color="gold", bg=str(frame) if card and frame.exists() else None)
@@ -345,8 +348,8 @@ def build(slot):
                 "verdict": r["verdict"], "group": r["group"], "info": p, "pool": pool}
         media, caption = brand.render(post, OUT), r["caption"]
     elif ctype == "review_reel":
-        cover_text = {"MUST BUY": "MUST BUY?!", "WORTH IT": "WORTH IT?", "SITUATIONAL": "BUY OR NOT?",
-                      "SKIP": "DON'T BUY!?"}[r["verdict"]]
+        cover_text = {"MUST BUY": "THIS CARD\nIS BROKEN!!", "WORTH IT": "WORTH IT?!", "SITUATIONAL": "BUY OR NOT?",
+                      "SKIP": "DON'T BUY\nTHIS!!"}[r["verdict"]]
         reel = {"id": "slot", "cover": {"subject": p["card"], "text": cover_text, "sub": f"{p['ovr']} OVR {p['name']}",
                                          "color": "green" if r["score"] >= 9 else "red"},
                 "scenes": [
