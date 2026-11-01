@@ -146,7 +146,11 @@ def review(p, pool=None, seed=None):
         "(Stat-based FMM review.)", "",
         f"#FCMobile #FCMobile26 #EASportsFCMobile #PlayerReview #{(name or '').replace(' ', '').replace('.', '')} #FMM",
     ]).replace("\n\n\n", "\n\n")
-    return {"pros": pros, "cons": cons, "score": score, "verdict": verdict, "formations": forms,
+    label = {k: l for _, rows in DETAIL for k, l in rows} | {"vol": "Volleys", "hea": "Heading", "mrk": "Marking",
+             "agg": "Aggression", "ref": "Reflexes", "gkd": "Diving", "gkh": "Handling", "gkp": "GK Positioning", "gkk": "Kicking"}
+    short_pros = [f"{label.get(k, k.upper())} {st[k]}" for k in top]
+    short_cons = [f"{label.get(k, k.upper())} {st[k]}" for k in low] or ["No real weakness"]
+    return {"pros": pros, "cons": cons, "short_pros": short_pros, "short_cons": short_cons, "score": score, "verdict": verdict, "formations": forms,
             "summary": summary, "caption": caption, "group": g}
 
 

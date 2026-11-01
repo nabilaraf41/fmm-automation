@@ -3,7 +3,7 @@
 Usage:  python -m fmm.brand content/sample_week.json
 Each post in the JSON becomes a 1080x1350 PNG in output/.
 """
-import json, sys
+import json, math, sys
 from pathlib import Path
 from PIL import Image, ImageDraw, ImageFont, ImageFilter, ImageEnhance
 
@@ -231,7 +231,131 @@ def player_card(p, cw, ch):
     return glow  # note: includes 30px glow margin on each side
 
 
+def _box(d, xy, fill=(16, 16, 22), outline=(48, 48, 60)):
+    d.rounded_rectangle(xy, 18, fill=fill, outline=outline, width=2)
+
+
 def post_review(p):
+    """Card review: card + info grid (WF/SM/work rates/body), playstyles, face stats, key-stat bars,
+    one-line pros/cons, alternatives and a rating meter. Falls back to the plain layout without p['info']."""
+    info = p.get("info")
+    if not info:
+        return _post_review_plain(p)
+    from fmm.review import face_stats, GROUPS, DETAIL
+    img, d, c = base("review", p.get("background"))
+    WR = {1: "LOW", 2: "MED", 3: "HIGH"}
+    # header: program tag right of logo
+    prog = (info.get("program") or "").replace("PROGRAM_", "")
+    d.text((W - 60, 70), "NEW CARD REVIEW", font=label_font(30), fill=GOLD, anchor="ra")
+    if prog:
+        d.text((W - 60, 112), prog, font=label_font(24), fill=GRAY, anchor="ra")
+    # card (left)
+    card = player_card({"name": p["player"], "card": p.get("card"), "tier": "gold", "ovr": info.get("ovr"),
+                        "pos": info.get("pos")}, 390, 560)
+    img.paste(card, (50 - 30, 175 - 30), card)
+    d = ImageDraw.Draw(img)
+    # right column: name, ovr/pos, info grid, playstyles
+    x0, x1 = 480, W - 60
+    nf = title_font(76)
+    name = p["player"].upper()
+    while d.textlength(name, font=nf) > x1 - x0 and nf.size > 40:
+        nf = title_font(nf.size - 4)
+    d.text((x0, 185), name, font=nf, fill=WHITE)
+    d.text((x0, 275), f"{info.get('ovr')} OVR  •  {info.get('pos')}", font=label_font(34), fill=c)
+    wr = info.get("work_rates") or [None, None]
+    cells = [("WEAK FOOT", info.get("weak_foot")), ("SKILL MOVES", info.get("skill_moves")),
+             ("ATT WORK RATE", WR.get(wr[0], "-")), ("DEF WORK RATE", WR.get(wr[1], "-")),
+             ("HEIGHT", f"{info['height']} cm" if info.get("height") else "-"),
+             ("WEIGHT", f"{info['weight']} kg" if info.get("weight") else "-")]
+    cw, ch = (x1 - x0 - 16) // 2, 92
+    for i, (lab, val) in enumerate(cells):
+        bx, by = x0 + (i % 2) * (cw + 16), 335 + (i // 2) * (ch + 12)
+        _box(d, (bx, by, bx + cw, by + ch))
+        d.text((bx + cw // 2, by + 24), lab, font=label_font(20), fill=GRAY, anchor="mm")
+        if isinstance(val, int):  # stars
+            for k in range(5):
+                sx = bx + cw // 2 - 2 * 34 + k * 34
+                rr = [14 if j % 2 == 0 else 6.3 for j in range(10)]
+                star = [(sx + rr[j] * math.cos(math.pi / 2 + j * math.pi / 5), by + 62 - rr[j] * math.sin(math.pi / 2 + j * math.pi / 5))
+                        for j in range(10)]
+                d.polygon(star, fill=GOLD if k < val else (70, 70, 80))
+        else:
+            d.text((bx + cw // 2, by + 62), str(val), font=label_font(32), fill=WHITE, anchor="mm")
+    y = 335 + 3 * (ch + 12) + 8
+    d.text((x0, y), "PLAYSTYLES", font=label_font(22), fill=GRAY)
+    y += 36
+    px = x0
+    for ps in (info.get("playstyles") or ["None"]):
+        pf = label_font(24)
+        tw = d.textlength(ps.upper(), font=pf)
+        if px + tw + 40 > x1:
+            px, y = x0, y + 52
+        d.rounded_rectangle((px, y, px + tw + 36, y + 42), 21, fill=(40, 20, 60), outline=PURPLE, width=2)
+        d.text((px + 18 + tw / 2, y + 21), ps.upper(), font=pf, fill=WHITE, anchor="mm")
+        px += tw + 50
+    # face stats row
+    y = 760
+    fs = face_stats(info)
+    bw = (W - 120 - 5 * 12) / 6
+    for i, (k, v) in enumerate(fs.items()):
+        bx = 60 + i * (bw + 12)
+        col = GREEN if v >= 150 else GOLD if v >= 130 else RED if v < 100 else WHITE
+        _box(d, (bx, y, bx + bw, y + 110))
+        d.text((bx + bw / 2, y + 48), str(v), font=font("Anton-Regular.ttf", 50), fill=col, anchor="mm")
+        d.text((bx + bw / 2, y + 90), k, font=label_font(22), fill=GRAY, anchor="mm")
+    # key stats (left) + pros/cons (right)
+    y = 900
+    st = info.get("stats") or {}
+    label = {k: l for _, rows in DETAIL for k, l in rows}
+    g = p.get("group", "att")
+    keys = [k for k in GROUPS[g]["keys"] if k in st and k in label][:6]
+    _box(d, (60, y, 560, y + 270))
+    d.text((84, y + 18), "KEY STATS", font=label_font(24), fill=GOLD)
+    top = max([st[k] for k in keys] or [1])
+    for i, k in enumerate(keys):
+        ry = y + 78 + i * 31
+        d.text((84, ry), label[k], font=body_font(22), fill=WHITE, anchor="lm")
+        d.rounded_rectangle((290, ry - 7, 480, ry + 7), 7, fill=(40, 40, 50))
+        d.rounded_rectangle((290, ry - 7, 290 + int(190 * st[k] / max(top, 1)), ry + 7), 7, fill=c)
+        d.text((536, ry), str(st[k]), font=label_font(22), fill=WHITE, anchor="rm")
+    _box(d, (580, y, W - 60, y + 270))
+    yy = y + 18
+    for head, items, colr, mark in (("PROS", p.get("pros", [])[:3], GREEN, "+"), ("CONS", p.get("cons", [])[:2], RED, "–")):
+        d.text((604, yy), head, font=label_font(24), fill=colr); yy += 34
+        for it in items:
+            d.text((604, yy), f"{mark}  {it}", font=body_font(25), fill=WHITE); yy += 32
+        yy += 4
+    # bottom: alternatives + rating meter
+    y = 1190
+    from fmm.renderz import CARDS
+    peers = [x for x in (p.get("pool") or []) if x.get("name") != info.get("name") and x.get("pos") == info.get("pos")]
+    alts = [a for a in (str(CARDS / f"{x['id']}.png") for x in sorted(peers, key=lambda x: abs((x.get("ovr") or 0) - (info.get("ovr") or 0))))
+            if Path(a).exists()][:3]
+    if alts:
+        d.text((60, y - 2), "ALTERNATIVES", font=label_font(20), fill=GRAY)
+        for i, a in enumerate(alts):
+            ac = fit_card(a, 72, 100)
+            img.paste(ac, (60 + i * 86 - 30, y + 22 - 30), ac)
+        d = ImageDraw.Draw(img)
+    score = p.get("score") or 0
+    mx0, mx1 = 360, W - 230
+    d.text((mx0, y - 2), "FMM RATING METER", font=label_font(20), fill=GRAY)
+    bands = [("POOR", (150, 20, 20)), ("AVERAGE", (170, 100, 20)), ("GOOD", (170, 160, 20)), ("GREAT", (90, 140, 20)), ("ELITE", (0, 170, 60))]
+    seg = (mx1 - mx0) / 5
+    pick = min(4, max(0, int(score) - 5))
+    for i, (lab, col) in enumerate(bands):
+        sx = mx0 + i * seg
+        on = i == pick
+        d.rounded_rectangle((sx + 3, y + 30 - (6 if on else 0), sx + seg - 3, y + 90 + (6 if on else 0)), 10, fill=col,
+                            outline=WHITE if on else None, width=3)
+        d.text((sx + seg / 2, y + 60), lab, font=label_font(17 if on else 15), fill=WHITE, anchor="mm")
+    d.rounded_rectangle((W - 210, y - 6, W - 60, y + 100), 20, fill=c)
+    d.text((W - 135, y + 40), f"{score:g}", font=font("Anton-Regular.ttf", 58), fill=WHITE, anchor="mm")
+    d.text((W - 135, y + 84), (p.get("verdict") or "/10"), font=label_font(17), fill=WHITE, anchor="mm")
+    return img
+
+
+def _post_review_plain(p):
     img, d, c = base("review", p.get("background"))
     tag(d, p.get("tag", "Player Review"), c)
     card = player_card({"name": p["player"], "ovr": p.get("ovr"), "pos": p.get("pos", ""), "image": p.get("image"),

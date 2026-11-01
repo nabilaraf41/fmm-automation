@@ -341,7 +341,8 @@ def build(slot):
     if ctype == "review_post":
         post = {"id": "slot", "type": "review", "tag": "New Card Review", "player": p["name"],
                 "subtitle": f"{p['ovr']} OVR • {p['pos']}", "card": p["card"], "tier": "gold",
-                "pros": r["pros"], "cons": r["cons"], "score": r["score"]}
+                "pros": r["short_pros"], "cons": r["short_cons"], "score": r["score"],
+                "verdict": r["verdict"], "group": r["group"], "info": p, "pool": pool}
         media, caption = brand.render(post, OUT), r["caption"]
     elif ctype == "review_reel":
         cover_text = {"MUST BUY": "MUST BUY?!", "WORTH IT": "WORTH IT?", "SITUATIONAL": "BUY OR NOT?",

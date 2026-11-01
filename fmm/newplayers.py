@@ -93,7 +93,8 @@ def run(dry=False):
         r = rv.review(p, pool)
         post = {"id": f"c_review_{i}", "type": "review", "tag": "New Card Review", "player": p["name"],
                 "subtitle": f"{p['ovr']} OVR • {p['pos']}", "card": p["card"], "tier": "gold",
-                "pros": r["pros"], "cons": r["cons"], "score": r["score"]}
+                "pros": r["short_pros"], "cons": r["short_cons"], "score": r["score"],
+                "verdict": r["verdict"], "group": r["group"], "info": p, "pool": pool}
         brand.render(post, OUT)
         (OUT / f"c_review_{i}.txt").write_text(r["caption"], encoding="utf-8")
         st["featured"] += [str(p["id"]), f"{p['name']}|{p['ovr']}|{p['pos']}"]
