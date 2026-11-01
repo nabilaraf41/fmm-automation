@@ -53,3 +53,6 @@ renderz.py / fmf.py (card data) · clean.py (rembg, needs `.venv312`) · sfx.py 
 ## Open items
 - YouTube API audit not submitted/approved yet (uploads currently publish public; watch for lock to private).
 - Content strategy: CONTENT_STRATEGY.md · setup steps: SETUP_GUIDE.md.
+
+## Memory backup
+Copies of the chat's memory notes live in docs/memory/. On a new PC, copy them to ~/.claude/projects/<project>/memory/.

@@ -1,0 +1,9 @@
+- [FMM automation setup](fmm-automation-setup.md) — what's built, cloud schedule, account IDs, limits
+- [FMM user preferences](fmm-user-preferences.md) — non-technical, zero budget, design rules for posts
+- [Always cross-check cards](fmm-cross-check.md) — verify every card/event with a 2nd source before posting
+- [FMM top formats & focus players](fmm-top-formats.md) — EA Sports Logic Reels, CR7/Messi/Neymar/Kane/Hamza/Indian
+- [FMM Instagram skills](fmm-ig-skills.md) — ig-* skills installed; use proactively, report when important
+- [FMM design references](fmm-design-references.md) — VS stats, top-4 table, pick-one react formats; scorer card on clips
+- [RkReddy research](rkreddy-research.md) — what his top Shorts/long videos do (short reaction titles, 8-15 s, numbers)
+- [FC Mobile top creators](fc-mobile-top-creators.md) — top 10 YT Shorts/long channels with median views, verified IG accounts
+- [Evergreen FC Mobile Shorts](fc-mobile-evergreen-shorts.md) — top 50 study: legend skills, comedy, then-vs-now keep getting views
