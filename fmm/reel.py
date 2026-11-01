@@ -1,7 +1,7 @@
-"""Turn a branded post (or any image) into a 9:16 Reel/Short with slow zoom + music.
+﻿"""Turn a branded post (or any image) into a 9:16 Reel/Short with slow zoom + music.
 
 Usage:  python -m fmm.reel output/day1_tip.png [music.mp3] [seconds]
-Output: output/<name>_reel.mp4 (1080x1920, H.264, 30fps) — fits FB Reels, IG Reels, YT Shorts.
+Output: output/<name>_reel.mp4 (1080x1920, H.264, 30fps) â€” fits FB Reels, IG Reels, YT Shorts.
 """
 import subprocess, sys
 from pathlib import Path
@@ -27,14 +27,15 @@ def make_reel(src, music=None, seconds=8):
     frame = make_frame(src)
     out = src.with_name(src.stem + "_reel.mp4")
     n = seconds * FPS
-    vf = (f"scale=2160:-1,zoompan=z='min(zoom+0.0008,1.12)':x='iw/2-(iw/zoom/2)':"
-          f"y='ih/2-(ih/zoom/2)':d={n}:s=1080x1920:fps={FPS},fade=t=in:st=0:d=0.5,format=yuv420p")
+    # 4K source + gentle zoom keeps small stat text crisp; unsharp offsets the platforms' recompression
+    vf = (f"scale=4320:-1:flags=lanczos,zoompan=z='min(zoom+0.0003,1.05)':x='iw/2-(iw/zoom/2)':"
+          f"y='ih/2-(ih/zoom/2)':d={n}:s=1080x1920:fps={FPS},unsharp=5:5:0.8,fade=t=in:st=0:d=0.5,format=yuv420p")
     cmd = ["ffmpeg", "-y", "-loop", "1", "-i", str(frame)]
     if music:
         cmd += ["-i", str(music)]
-    else:  # silent track — platforms prefer an audio stream
+    else:  # silent track â€” platforms prefer an audio stream
         cmd += ["-f", "lavfi", "-i", "anullsrc=r=44100:cl=stereo"]
-    cmd += ["-vf", vf, "-t", str(seconds), "-c:v", "libx264", "-preset", "medium", "-crf", "20",
+    cmd += ["-vf", vf, "-t", str(seconds), "-c:v", "libx264", "-preset", "slow", "-crf", "16",
             "-c:a", "aac", "-b:a", "128k", "-shortest", "-movflags", "+faststart", str(out)]
     subprocess.run(cmd, check=True, capture_output=True)
     frame.unlink()
