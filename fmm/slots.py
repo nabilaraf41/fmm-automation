@@ -442,6 +442,8 @@ def next_pair(latest, state, pool=()):
     used = set(state.get("used_pairs", []))
     pool = confirmed_only({str(p["id"]): p for p in pool}).values()  # cross-check rule applies to old cards too
     rivals = [p for p in list(latest) + list(pool) if (renderz.CARDS / f"{p['id']}.png").exists() or p.get("img_bg")]
+    hype = lambda p: (p.get("ovr") or 0) >= 122  # owner: fans only care about 122+ cards
+    rivals, latest = [q for q in rivals if hype(q)], [p for p in latest if hype(p)]
     times = lambda p: sum(p["name"] in k.split("|") for k in used)
     for p in sorted(latest, key=times):  # least-battled new card first (stable: keeps newest/trending order)
         same = sorted([q for q in rivals if q.get("pos") == p.get("pos") and q["name"] != p["name"]],
