@@ -123,6 +123,16 @@
    "media": "slot.mp4",
    "players": [],
    "built": "2026-11-01T21:34"
+  },
+  {
+   "slot": "1300",
+   "kind": "photo",
+   "type": "xi",
+   "media": "slot.png",
+   "players": [
+    "f24054654"
+   ],
+   "built": "2026-11-02T07:09"
   }
  ],
  "force": {
@@ -171,7 +181,8 @@
  "reel_n": 1,
  "rank_n": 1,
  "used_pairs": [
-  "Kane|Lamine Yamal"
+  "Kane|Lamine Yamal",
+  "Kuyt|Schweinsteiger"
  ],
  "growth_week": "2026-W45",
  "boost": "rank10",
