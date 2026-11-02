@@ -7,7 +7,7 @@ Slots (BDT): 0700 (USA evening, Reel) · 1300 (Asia lunch, photo) · 1900 (Indon
 New cards are featured first (newest/highest OVR); with nothing new, slots fall back to card battles,
 tier lists and countdowns built from the latest cards.
 """
-import datetime as dt, json, shutil, subprocess, sys
+import datetime as dt, json, shutil, subprocess, sys, time
 from pathlib import Path
 
 from fmm import renderz, review as rv
@@ -166,7 +166,7 @@ def pick(kind, fresh, db, state):
         n = state.get("photo_n", 0)
         state["photo_n"] = n + 1
         ROT = [r for r in ROT if r != state.get("drop")] + [state["boost"]] * 2 if state.get("boost") else             [r for r in ROT if r != state.get("drop")]  # weekly growth loop: more of the best format, none of the worst
-        rot = ROT[n % len(ROT)]
+        rot = force if force in ROT else ROT[n % len(ROT)]  # a dated override takes this turn's place (a swap)
         if rot == "review_post":
             if unfeatured:
                 return "review_post", [unfeatured[0]], pool
@@ -509,6 +509,21 @@ def build_extra(ctype, latest, pool, fresh, state):
         caption = (f"💰 FMM BEST BUDGET XI: every card under 14k Star Shards\n\n" + "\n".join(lines)
                    + f"\n\nWhole team: {total:,} Star Shards (prices checked on 2 databases)"
                    + "\n\nWho would you swap in? 👇 Save this for your next rebuild 📌\n\n" + TAGS + " #BudgetSquad")
+        # owner: post the XI in 3 parts first (defence, midfield, attack), then the whole team; slots.post() reads pre.json
+        pre = []
+        for i, (name, part) in enumerate([("DEFENCE", team[:5]), ("MIDFIELD", team[5:8]), ("ATTACK", team[8:])], 1):
+            part = [p for p in part if p.get("name") != "?"]
+            if not part:
+                continue
+            sub = sum(p["shards"] for p in part)
+            media = brand.render({"id": f"xi_{dt.date.today():%Y%m%d}_part{i}", "type": "xi_part", "title": "Best Budget XI",
+                                  "subtitle": f"Part {i}/3 • {name} • {sub:,} shards", "players": part}, OUT)
+            cap = (f"💰 Budget XI part {i}/3: the {name.lower()} (every card under 14k Star Shards)\n\n"
+                   + "\n".join(f"{p['pos']} {p['ovr']} {p['name']} – {p['shards']:,} shards" for p in part)
+                   + f"\n\n{name.title()} total: {sub:,} Star Shards. Full XI drops in a few minutes 👀"
+                   + "\n\n" + TAGS + " #BudgetSquad")
+            pre.append({"media": Path(media).name, "caption": cap})
+        (OUT / "pre.json").write_text(json.dumps(pre, ensure_ascii=False, indent=1), encoding="utf-8")
     elif ctype == "gem":
         def gem_score(p):
             g = rv.group(p.get("pos", ""))
@@ -617,6 +632,11 @@ def post():
     m = json.loads((OUT / "manifest.json").read_text(encoding="utf-8"))
     caption = (OUT / "caption.txt").read_text(encoding="utf-8")
     kind = "reel" if m["media"].endswith(".mp4") else "photo"
+    pre = OUT / "pre.json"
+    for x in (json.loads(pre.read_text(encoding="utf-8")) if pre.exists() else []):  # e.g. Budget XI parts 1-3
+        if Path(x["media"]).name not in poster.posted_files():  # a retried run never re-posts a part
+            print("posted part", poster.post("photo", OUT / x["media"], x["caption"], "both", m.get("type"), reel=False))
+            time.sleep(120)  # a short gap between parts, never a burst
     print("posted", poster.post(kind, OUT / m["media"], caption, "both", m.get("type")))  # type feeds the weekly growth loop
 
 

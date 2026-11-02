@@ -602,6 +602,32 @@ def _card_or_frame(p, cw, ch):
     return pc.resize((cw + 60, ch + 60), Image.LANCZOS)  # same footprint as fit_card (30px glow margin)
 
 
+def post_xi_part(p):
+    """One line of the Budget XI (part 1/3 ...): big cards in rows of 3 with a Star Shards price pill under each."""
+    img, d, c = base("squad", p.get("background"))
+    d.text((W // 2 + 60, 60), p.get("title", "BEST BUDGET XI").upper(), font=font("Anton-Regular.ttf", 96), fill=GOLD,
+           anchor="ma", stroke_width=3, stroke_fill=(5, 5, 5))
+    d.text((W // 2 + 60, 185), p.get("subtitle", "").upper(), font=label_font(36), fill=WHITE, anchor="ma")
+    pl = p["players"]
+    rows = [pl[i:i + 3] for i in range(0, len(pl), 3)]
+    cw, ch = (300, 420) if len(rows) == 1 else (250, 350)
+    top, gap = 280, (H - 280 - 150) / len(rows)
+    for r, row in enumerate(rows):
+        for i, q in enumerate(row):
+            x = W / 2 + (i - (len(row) - 1) / 2) * (cw + 60)
+            y = top + gap * r + gap / 2 - 30
+            card = _card_or_frame(q, cw, ch)
+            img.paste(card, (int(x - card.width / 2), int(y - card.height / 2)), card)
+            box = card.getchannel("A").getbbox() if card.mode == "RGBA" else None
+            ty = y - card.height / 2 + (box[3] if box else card.height) + 4
+            txt, f = f"{q['shards']:,} SHARDS", label_font(28)
+            tw = d.textlength(txt, font=f)
+            d.rounded_rectangle((x - tw / 2 - 14, ty, x + tw / 2 + 14, ty + 42), 18, fill=(5, 5, 5))
+            d.text((x, ty + 5), txt, font=f, fill=GOLD, anchor="ma")
+    footer(d, p["footer"]) if p.get("footer") else footer(d)
+    return img
+
+
 def post_xi(p):
     """Best XI on a pitch (4-3-3). p['players'] = 11 dicts in order GK, LB, CB, CB, RB, CM, CM, CM, LW, ST, RW."""
     img, d, c = base("squad", p.get("background"))
@@ -836,7 +862,7 @@ def post_pick3(p):
     return img
 
 
-TEMPLATES = {"compare": post_compare, "compare4": post_compare4, "pick3": post_pick3, "xi": post_xi, "gem": post_gem, "worth": post_worth, "meme": post_meme, "guess": post_guess, "rate": post_rate, "codes_list": post_codes_list, "code": post_code, "versus": post_versus, "spotlight": post_spotlight, "tip": post_tip, "tutorial": post_tip, "poll": post_poll, "review": post_review,
+TEMPLATES = {"compare": post_compare, "compare4": post_compare4, "pick3": post_pick3, "xi": post_xi, "xi_part": post_xi_part, "gem": post_gem, "worth": post_worth, "meme": post_meme, "guess": post_guess, "rate": post_rate, "codes_list": post_codes_list, "code": post_code, "versus": post_versus, "spotlight": post_spotlight, "tip": post_tip, "tutorial": post_tip, "poll": post_poll, "review": post_review,
              "news": post_quote, "quote": post_quote, "event": post_quote, "pack": post_quote, "top10": post_top10}
 
 
