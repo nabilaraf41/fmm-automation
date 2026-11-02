@@ -5,7 +5,7 @@
   "UCL",
   "TOTY"
  ],
- "at": "2026-11-02T04:33Z",
+ "at": "2026-11-02T04:50Z",
  "topics": [
   [
    "event",
@@ -302,6 +302,26 @@
   [
    "draft",
    25
+  ],
+  [
+   "event",
+   64
+  ],
+  [
+   "draft",
+   30
+  ],
+  [
+   "top",
+   29
+  ],
+  [
+   "review",
+   16
+  ],
+  [
+   "pack",
+   13
   ]
  ],
  "players": [
@@ -544,6 +564,18 @@
   [
    "Nuno Mendes",
    8
+  ],
+  [
+   "Ronaldo",
+   44
+  ],
+  [
+   "Lamine Yamal",
+   22
+  ],
+  [
+   "Nuno Mendes",
+   7
   ]
  ],
  "sample_titles": [
