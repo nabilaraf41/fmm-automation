@@ -494,7 +494,7 @@ def build_extra(ctype, latest, pool, fresh, state):
         today = dt.date.today()
         wk = state.get("xi_week") or {}
         forced = str(state.get("force", {}).get(f"{today.isoformat()}-1300") or "")  # e.g. "xi:defence" (one-off order)
-        fresh_team = (today.weekday() == 3 and ":" not in forced) or not wk.get("team") or \
+        fresh_team = (today.weekday() == 3 and ":" not in forced) or forced == "xi:attack" or not wk.get("team") or \
             (today - dt.date.fromisoformat(wk["start"])).days > 5
         if fresh_team:
             try:
