@@ -165,6 +165,16 @@
     "f24054654"
    ],
    "built": "2026-11-02T08:16"
+  },
+  {
+   "slot": "1300",
+   "kind": "photo",
+   "type": "xi",
+   "media": "xi_20261102_attack.png",
+   "players": [
+    "f24054654"
+   ],
+   "built": "2026-11-02T13:34"
   }
  ],
  "force": {
@@ -215,7 +225,8 @@
   "2026-11-01-1300": "2026-11-01T13:21+06:00",
   "2026-11-01-1900": "2026-11-01T19:33+06:00",
   "2026-11-01-2100": "2026-11-01T21:33+06:00",
-  "2026-11-02-0700": "2026-11-02T07:33+06:00"
+  "2026-11-02-0700": "2026-11-02T07:33+06:00",
+  "2026-11-02-1300": "2026-11-02T13:33+06:00"
  },
  "slot_tries": {},
  "reel_n": 2,
@@ -227,5 +238,109 @@
  ],
  "growth_week": "2026-W45-monday",
  "boost": "rank10",
- "drop": null
+ "drop": null,
+ "xi_week": {
+  "start": "2026-11-02",
+  "team": [
+   {
+    "id": "s24051602",
+    "name": "Nübel",
+    "ovr": 120,
+    "pos": "GK",
+    "shards": 12305,
+    "img_player": "https://cdn.fcmobileforum.com/players/223885_STELLAR27_LIVE_36026a0a.png",
+    "img_bg": "https://cdn.fcmobileforum.com/card-art/proto_PLAYERS:14/backgrounds_27_B_STELLA_LIVE_STATIC"
+   },
+   {
+    "id": "s24054214",
+    "name": "Grimaldo",
+    "ovr": 120,
+    "pos": "LB",
+    "shards": 2600,
+    "img_player": "https://cdn.fcmobileforum.com/players/210035_ST27_LIVE_9c98f394.png",
+    "img_bg": "https://cdn.fcmobileforum.com/card-art/proto_PLAYERS:28/backgrounds_27_B_SCREAMTEAM_LIVE_STATIC"
+   },
+   {
+    "id": "s24053894",
+    "name": "Pacho",
+    "ovr": 121,
+    "pos": "CB",
+    "shards": 6300,
+    "img_player": "https://cdn.fcmobileforum.com/players/256196_BD27_LIVE_45a39242.png",
+    "img_bg": "https://cdn.fcmobileforum.com/card-art/proto_PLAYERS_INC:50/backgrounds_27_FCM27_BALLONDOR_LIVE_STATIC"
+   },
+   {
+    "id": "s24053808",
+    "name": "Saliba",
+    "ovr": 121,
+    "pos": "CB",
+    "shards": 7600,
+    "img_player": "https://cdn.fcmobileforum.com/players/243715_base_6b418e23.png",
+    "img_bg": "https://cdn.fcmobileforum.com/card-art/proto_PLAYERS:25/backgrounds_27_FCM27_BALLONDOR_LIVE_STATIC"
+   },
+   {
+    "id": "s30921248",
+    "name": "Layún",
+    "ovr": 120,
+    "pos": "RB",
+    "shards": 13455,
+    "img_player": "https://cdn.fcmobileforum.com/players/178322_ANN27_ICON_f23d7a41.png",
+    "img_bg": "https://cdn.fcmobileforum.com/card-art/proto_PLAYERS_INC:32/backgrounds_27_ANNIVERSARY27_ICON_STATIC"
+   },
+   {
+    "id": "s24048474",
+    "name": "Thuram",
+    "ovr": 120,
+    "pos": "CDM",
+    "shards": 13225,
+    "img_player": "https://cdn.fcmobileforum.com/players/247246_CHA26_LIVE_6bf9ad38.png",
+    "img_bg": "https://cdn.fcmobileforum.com/card-art/proto_PLAYERS_S2:447/backgrounds_26_LIVE_JUV_STATIC"
+   },
+   {
+    "id": "s24053928",
+    "name": "João Neves",
+    "ovr": 121,
+    "pos": "CM",
+    "shards": 5600,
+    "img_player": "https://cdn.fcmobileforum.com/players/272834_BD27_LIVE_1e244e32.png",
+    "img_bg": "https://cdn.fcmobileforum.com/card-art/proto_PLAYERS:25/backgrounds_27_FCM27_BALLONDOR_LIVE_STATIC"
+   },
+   {
+    "id": "s24054002",
+    "name": "Steijn",
+    "ovr": 121,
+    "pos": "CAM",
+    "shards": 5900,
+    "img_player": "https://cdn.fcmobileforum.com/players/244728_STELLAR27_LIVE_df792bcc.png",
+    "img_bg": "https://cdn.fcmobileforum.com/card-art/proto_PLAYERS:27/backgrounds_27_STELLAR_SCORPIO_LIVE_STATIC"
+   },
+   {
+    "id": "s30923106",
+    "name": "Kewell",
+    "ovr": 122,
+    "pos": "LW",
+    "shards": 12200,
+    "img_player": "https://cdn.fcmobileforum.com/players/266801_ST27_ICON_69aa60a8.png",
+    "img_bg": "https://cdn.fcmobileforum.com/card-art/proto_PLAYERS:44/backgrounds_27_B_SCREAMTEAM_ICON_STATIC"
+   },
+   {
+    "id": "s24054010",
+    "name": "André Silva",
+    "ovr": 122,
+    "pos": "ST",
+    "shards": 13455,
+    "img_player": "https://cdn.fcmobileforum.com/players/228941_STELLAR27_LIVE_ba43871d.png",
+    "img_bg": "https://cdn.fcmobileforum.com/card-art/proto_PLAYERS:27/backgrounds_27_STELLAR_SCORPIO_LIVE_STATIC"
+   },
+   {
+    "id": "s24054006",
+    "name": "Tsygankov",
+    "ovr": 121,
+    "pos": "RW",
+    "shards": 5900,
+    "img_player": "https://cdn.fcmobileforum.com/players/244369_STELLAR27_LIVE_bcc64ef2.png",
+    "img_bg": "https://cdn.fcmobileforum.com/card-art/proto_PLAYERS:27/backgrounds_27_STELLAR_SCORPIO_LIVE_STATIC"
+   }
+  ]
+ }
 }
