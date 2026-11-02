@@ -145,6 +145,16 @@
     "f24053816"
    ],
    "built": "2026-11-02T07:34"
+  },
+  {
+   "slot": "1300",
+   "kind": "photo",
+   "type": "xi",
+   "media": "slot.png",
+   "players": [
+    "f24054654"
+   ],
+   "built": "2026-11-02T08:11"
   }
  ],
  "force": {
@@ -195,7 +205,8 @@
  "rank_n": 1,
  "used_pairs": [
   "Kane|Lamine Yamal",
-  "Kuyt|Schweinsteiger"
+  "Kuyt|Schweinsteiger",
+  "Kane|van Basten"
  ],
  "growth_week": "2026-W45",
  "boost": "rank10",
