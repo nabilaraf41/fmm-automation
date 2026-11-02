@@ -162,7 +162,7 @@ def pick(kind, fresh, db, state):
     wk_unf = sorted([p for p in unfeatured if p in this_week], key=lambda p: (heat(p), p.get("ovr") or 0), reverse=True)
     unfeatured = wk_unf or unfeatured  # this week's cards first: trending, then highest OVR
     if kind == "photo":  # photo slots rotate formats; the "review" turn reviews the next new card
-        if slot_now() == "1300" and (force == "xi" or (force is None and weekday not in (1, 2))):  # Budget XI Thu-Mon
+        if slot_now() == "1300" and (str(force).startswith("xi") or (force is None and weekday not in (1, 2))):  # Budget XI Thu-Mon
             return "xi", list(fresh.values()), pool
         ROT = ["review_post", "rank10", "versus", "pick3", "guess", "rank10", "compare4", "rate", "gem", "worth", "meme"]
         n = state.get("photo_n", 0)
@@ -493,7 +493,8 @@ def build_extra(ctype, latest, pool, fresh, state):
         from fmm import shards  # owner: budget = under 14k Star Shards, price confirmed by 2 sites
         today = dt.date.today()
         wk = state.get("xi_week") or {}
-        fresh_team = today.weekday() == 3 or not wk.get("team") or \
+        forced = str(state.get("force", {}).get(f"{today.isoformat()}-1300") or "")  # e.g. "xi:defence" (one-off order)
+        fresh_team = (today.weekday() == 3 and ":" not in forced) or not wk.get("team") or \
             (today - dt.date.fromisoformat(wk["start"])).days > 5
         if fresh_team:
             try:
@@ -546,7 +547,8 @@ def build_extra(ctype, latest, pool, fresh, state):
         caption = (f"💰 FMM BEST BUDGET XI: every card under 14k Star Shards\n\n{line(team)}"
                    f"\n\nWhole team: {total:,} Star Shards (prices checked on 2 databases)"
                    "\n\nWho would you swap in? 👇 Save this for your next rebuild 📌\n\n" + TAGS + " #BudgetSquad")
-        step = {3: "attack", 4: "defence", 5: "midfield", 6: "xi"}.get(today.weekday(), "all")
+        step = forced.split(":", 1)[1] if ":" in forced else \
+            {3: "attack", 4: "defence", 5: "midfield", 6: "xi"}.get(today.weekday(), "all")
         if step in parts:
             post, caption = part(step)
         elif step == "all":  # Monday: attack, defence, midfield + the pitch in one swipe post; slots.post() reads it
