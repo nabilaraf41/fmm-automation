@@ -599,12 +599,16 @@ def render_reel(reel, out_dir=OUT, music=None, stills=None):
                     color=c.get("color", "red"), emoji=c.get("emoji", "wow"))
     wav = out_dir / f"{reel['id']}_sfx.wav"
     mix_audio(events, total, wav)
-    music = music or reel.get("music")
+    music, start = music or reel.get("music"), 0
+    if not music:  # copyright-safe library track (fmm.music)
+        from fmm import music as lib
+        music, start = lib.pick()
     cmd = ["ffmpeg", "-v", "error", "-y", "-f", "rawvideo", "-pix_fmt", "rgb24", "-s", f"{RW}x{RH}", "-r", str(FPS), "-i", "-",
            "-i", str(wav)]
     if music:  # music under the sound effects
-        cmd += ["-stream_loop", "-1", "-i", music, "-filter_complex",
-                "[2:a]volume=0.35[m];[1:a][m]amix=inputs=2:duration=first:normalize=0,loudnorm=I=-14:TP=-1.5[a]", "-map", "0:v", "-map", "[a]"]
+        cmd += ["-stream_loop", "-1", "-ss", str(start), "-i", music, "-filter_complex",
+                f"[2:a]volume=0.35,afade=t=out:st={max(0, total - 1):.2f}:d=1[m];"
+                "[1:a][m]amix=inputs=2:duration=first:normalize=0,loudnorm=I=-14:TP=-1.5[a]", "-map", "0:v", "-map", "[a]"]
     if not music:
         cmd += ["-af", "loudnorm=I=-14:TP=-1.5:LRA=11"]  # reel-kit loudness target
     cmd += ["-t", f"{total:.2f}", "-c:v", "libx264", "-preset", "medium", "-crf", "19", "-pix_fmt", "yuv420p",

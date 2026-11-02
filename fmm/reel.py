@@ -30,10 +30,14 @@ def make_reel(src, music=None, seconds=8):
     # 4K source + gentle zoom keeps small stat text crisp; unsharp offsets the platforms' recompression
     vf = (f"scale=4320:-1:flags=lanczos,zoompan=z='min(zoom+0.0003,1.05)':x='iw/2-(iw/zoom/2)':"
           f"y='ih/2-(ih/zoom/2)':d={n}:s=1080x1920:fps={FPS},unsharp=5:5:0.8,fade=t=in:st=0:d=0.5,format=yuv420p")
+    start = 0
+    if not music:  # copyright-safe library track (fmm.music), else a silent track: platforms prefer an audio stream
+        from fmm import music as lib
+        music, start = lib.pick()
     cmd = ["ffmpeg", "-y", "-loop", "1", "-i", str(frame)]
     if music:
-        cmd += ["-i", str(music)]
-    else:  # silent track â€” platforms prefer an audio stream
+        cmd += ["-ss", str(start), "-i", str(music), "-af", f"afade=t=in:d=0.5,afade=t=out:st={seconds - 1}:d=1,loudnorm=I=-16:TP=-1.5"]
+    else:
         cmd += ["-f", "lavfi", "-i", "anullsrc=r=44100:cl=stereo"]
     cmd += ["-vf", vf, "-t", str(seconds), "-c:v", "libx264", "-preset", "slow", "-crf", "16",
             "-c:a", "aac", "-b:a", "128k", "-shortest", "-movflags", "+faststart", str(out)]

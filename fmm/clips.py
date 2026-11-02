@@ -157,11 +157,19 @@ def make(video, title="WHAT A GOAL!!", index=0, sub=None, music=None, card=None)
         f"[{ga}]atrim=start={start + slow_a}:end={start + slow_b},asetpts=PTS-STARTPTS,atempo=0.5,volume=0.8[ra];"
         f"[ga][ra]concat=n=2:v=0:a=1[game];"
         f"[3:a]adelay=0|0[w];[4:a]adelay={int(rel * 1000)}|{int(rel * 1000)},volume=1.2[i];"
-        f"[game][w][i]amix=inputs=3:duration=first:normalize=0,alimiter=limit=0.95,loudnorm=I=-14:TP=-1.5:LRA=11[a]"
+        f"[6:a]volume=0.22[m];"  # copyright-safe library music (fmm.music), quiet under the game sound
+        f"[game][w][i][m]amix=inputs=4:duration=first:normalize=0,alimiter=limit=0.95,loudnorm=I=-14:TP=-1.5:LRA=11[a]"
     )
+    if not music:
+        from fmm import music as lib
+        music, mstart = lib.pick()
+    else:
+        mstart = 0
+    track = ["-stream_loop", "-1", "-ss", str(mstart), "-i", str(music)] if music else \
+        ["-f", "lavfi", "-t", str(end + 5), "-i", "anullsrc=r=44100:cl=stereo"]
     cmd = ["ffmpeg", "-v", "error", "-y", "-i", str(video), "-i", str(ov), "-i", str(replay_png),
            "-i", str(sfx.OUT / "whoosh.wav"), "-i", str(sfx.OUT / "impact.wav"),
-           "-f", "lavfi", "-t", str(end + 5), "-i", "anullsrc=r=44100:cl=stereo",
+           "-f", "lavfi", "-t", str(end + 5), "-i", "anullsrc=r=44100:cl=stereo", *track,
            "-filter_complex", vf + ";" + af, "-map", "[v]", "-map", "[a]",
            "-r", "30", "-c:v", "libx264", "-preset", "medium", "-crf", "20", "-c:a", "aac", "-b:a", "160k",
            "-movflags", "+faststart", str(out)]
