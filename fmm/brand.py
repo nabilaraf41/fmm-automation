@@ -631,6 +631,13 @@ def post_xi(p):
             y = pitch[1] + (pitch[3] - pitch[1]) * fy
             card = _card_or_frame(pl[k], cw, ch)
             img.paste(card, (int(x - card.width / 2), int(y - card.height / 2)), card)
+            if pl[k].get("shards"):  # Star Shards price pill just under the visible card art
+                box = card.getchannel("A").getbbox() if card.mode == "RGBA" else None
+                ty = y - card.height / 2 + (box[3] if box else card.height) + 2
+                txt, f = f"{pl[k]['shards']:,} SHARDS", label_font(22)
+                tw = d.textlength(txt, font=f)
+                d.rounded_rectangle((x - tw / 2 - 10, ty, x + tw / 2 + 10, ty + 32), 14, fill=(5, 5, 5))
+                d.text((x, ty + 4), txt, font=f, fill=GOLD, anchor="ma")
             k += 1
     return img
 

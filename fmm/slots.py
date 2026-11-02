@@ -486,25 +486,28 @@ def build_extra(ctype, latest, pool, fresh, state):
             have.append({**p, "card": str(renderz.CARDS / f"{p['id']}.png")})
     rnd = random.Random(dt.date.today().toordinal())
     if ctype == "xi":
-        ovrs = sorted(p["ovr"] for p in have if p.get("ovr"))
-        cap = ovrs[len(ovrs) // 4] if ovrs else 999          # budget = the cheaper quarter of the cards we know
-        cheap = [p for p in have if (p.get("ovr") or 0) <= cap]
+        from fmm import shards  # owner: budget = under 14k Star Shards, price confirmed by 2 sites
+        try:
+            cheap = shards.budget_cards()  # highest OVR first, cheaper first on ties
+        except Exception as ex:  # a price site down/blocked: no unverified prices, post a battle instead
+            print("shard prices unavailable:", str(ex)[:100])
+            cheap = []
         team, used = [], set()
-        for g, n in XI_SLOTS:
-            best = sorted([p for p in cheap if rv.group(p.get("pos", "")) == g and p["id"] not in used],
-                          key=lambda p: -rv.key_avg(p, g))[:n]
-            if g != "gk" and len(best) < n:  # short on this line: next-best outfield cards fill in
-                spare = sorted([p for p in cheap if p["id"] not in used and p not in best and rv.group(p.get("pos", "")) != "gk"],
-                               key=lambda p: -(p.get("ovr") or 0))
-                best += spare[:n - len(best)]
-            used |= {p["id"] for p in best}
-            team += best + [{"name": "?", "ovr": "", "pos": g.upper()}] * (n - len(best))
+        # 4-3-3 in the template's order; each slot takes its exact position first, then a close fit
+        for want in (["GK"], ["LB", "LWB"], ["CB"], ["CB"], ["RB", "RWB"], ["CDM", "CM"], ["CM"], ["CAM", "CM"],
+                     ["LW", "LM"], ["ST", "CF"], ["RW", "RM"]):
+            p = next((p for w in want for p in cheap if p["pos"] == w and p["id"] not in used), None)
+            if p:
+                used.add(p["id"])
+            team.append(p or {"name": "?", "ovr": "", "pos": want[0]})
         if sum(1 for p in team if p.get("name") != "?") < 8:  # too few cards known yet
             return render_versus(next_pair(latest, state, pool), fresh)
-        post = {"id": "slot", "type": "xi", "title": "Best Budget XI", "subtitle": f"Every card {cap} OVR or lower",
+        post = {"id": "slot", "type": "xi", "title": "Best Budget XI", "subtitle": "Every card under 14,000 Star Shards",
                 "players": team}
-        lines = [f"{p.get('pos', '')} {p.get('name')} {p.get('ovr')}" for p in team if p.get("name") != "?"]
-        caption = (f"💰 FMM BEST BUDGET XI (all {cap} OVR or lower)\n\n" + "\n".join(lines)
+        lines = [f"{p.get('pos', '')} {p.get('ovr')} {p.get('name')} – {p['shards']:,} shards" for p in team if p.get("name") != "?"]
+        total = sum(p.get("shards") or 0 for p in team)
+        caption = (f"💰 FMM BEST BUDGET XI: every card under 14k Star Shards\n\n" + "\n".join(lines)
+                   + f"\n\nWhole team: {total:,} Star Shards (prices checked on 2 databases)"
                    + "\n\nWho would you swap in? 👇 Save this for your next rebuild 📌\n\n" + TAGS + " #BudgetSquad")
     elif ctype == "gem":
         def gem_score(p):
