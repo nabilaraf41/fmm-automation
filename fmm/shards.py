@@ -5,7 +5,7 @@
 
 Sources: fcmobileforum.com ShardIQ (JSON API) and fcmobilesquad.com/star-signings-players (HTML pages).
 A price counts only when both list the same card (name + OVR + position) within 5% of each other.
-The forum refuses cloud servers (403), so the cloud uses the copy the PC saved (at most MAX_AGE_DAYS old).
+The forum refuses cloud servers (403), so the cloud uses the copy the PC saved (at most MAX_AGE_DAYS old, refreshed Thursdays).
 """
 import datetime as dt, html, json, re, unicodedata
 from pathlib import Path
@@ -14,7 +14,7 @@ import requests
 UA = {"User-Agent": "Mozilla/5.0 (compatible; FMM-watcher/1.0; +https://nabilaraf41.github.io/)"}
 BUDGET = 14000  # owner: under 14k shards = low budget
 CACHE = Path(__file__).resolve().parent.parent / "content" / "shard_prices.json"
-MAX_AGE_DAYS = 3
+MAX_AGE_DAYS = 8  # owner: shard prices are fixed; the PC refreshes them every Thursday evening
 
 
 def norm(s):
