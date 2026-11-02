@@ -75,7 +75,7 @@ if __name__ == "__main__":
         replies.run()
     except Exception as ex:
         print("replies skipped:", str(ex)[:150])
-    try:  # Mondays: weekly growth report + more of what works
+    try:  # Tuesday night: weekly growth report + more of what works
         from fmm import growth
         growth.run()
     except Exception as ex:
