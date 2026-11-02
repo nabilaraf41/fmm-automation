@@ -141,6 +141,41 @@ def ig_photo(path, caption):
     return ig_publish(cid)
 
 
+def ig_carousel(paths, caption):
+    kids = []
+    for p in paths:
+        cid = call("POST", f"{IG}/media", data={"image_url": public_url_for(p), "is_carousel_item": "true"})["id"]
+        ig_wait(cid)
+        kids.append(cid)
+    cid = call("POST", f"{IG}/media", data={"media_type": "CAROUSEL", "children": ",".join(kids), "caption": caption})["id"]
+    ig_wait(cid)
+    return ig_publish(cid)
+
+
+def fb_carousel(paths, caption):
+    """One Facebook post with several photos (uploaded unpublished, then attached)."""
+    ids = [fb_photo(p, "", published=False) for p in paths]
+    data = {"message": caption, **{f"attached_media[{i}]": json.dumps({"media_fbid": x}) for i, x in enumerate(ids)}}
+    return call("POST", f"{PAGE}/feed", data=data)["id"]
+
+
+def post_carousel(paths, caption, ctype=None):
+    """Swipe post on Facebook + Instagram; each platform on its own, logged once any succeeds."""
+    from fmm.captions import polish
+    caption = polish(caption)
+    done, errors = {}, {}
+    for name, fn in (("facebook", fb_carousel), ("instagram", ig_carousel)):
+        try:
+            done[name] = fn([str(p) for p in paths], caption)
+        except Exception as ex:
+            errors[name] = str(ex)[:200]
+            print(f"{name} failed:", errors[name])
+    if not done:
+        raise RuntimeError(f"all platforms failed: {errors}")
+    log({"kind": "carousel", "file": str(paths[0]), **({"type": ctype} if ctype else {}), **done})
+    return done
+
+
 def ig_reel(path, caption, share_to_feed=True):
     data = {"media_type": "REELS", "upload_type": "resumable", "caption": caption,
             "share_to_feed": str(share_to_feed).lower()}

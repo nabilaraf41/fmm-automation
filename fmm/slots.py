@@ -7,7 +7,7 @@ Slots (BDT): 0700 (USA evening, Reel) · 1300 (Asia lunch, photo) · 1900 (Indon
 New cards are featured first (newest/highest OVR); with nothing new, slots fall back to card battles,
 tier lists and countdowns built from the latest cards.
 """
-import datetime as dt, json, shutil, subprocess, sys, time
+import datetime as dt, json, shutil, subprocess, sys
 from pathlib import Path
 
 from fmm import renderz, review as rv
@@ -162,7 +162,7 @@ def pick(kind, fresh, db, state):
     wk_unf = sorted([p for p in unfeatured if p in this_week], key=lambda p: (heat(p), p.get("ovr") or 0), reverse=True)
     unfeatured = wk_unf or unfeatured  # this week's cards first: trending, then highest OVR
     if kind == "photo":  # photo slots rotate formats; the "review" turn reviews the next new card
-        if slot_now() == "1300" and force in (None, "xi"):  # owner: 13:00 is the Budget XI every day
+        if slot_now() == "1300" and (force == "xi" or (force is None and weekday not in (1, 2))):  # Budget XI Thu-Mon
             return "xi", list(fresh.values()), pool
         ROT = ["review_post", "rank10", "versus", "pick3", "guess", "rank10", "compare4", "rate", "gem", "worth", "meme"]
         n = state.get("photo_n", 0)
@@ -488,44 +488,71 @@ def build_extra(ctype, latest, pool, fresh, state):
             have.append({**p, "card": str(renderz.CARDS / f"{p['id']}.png")})
     rnd = random.Random(dt.date.today().toordinal())
     if ctype == "xi":
+        # owner's weekly cycle at 13:00 (new cards drop Thursday): Thu attack, Fri defence, Sat midfield,
+        # Sun starting XI, Mon all 4 as one swipe post; Tue/Wed other formats. The team is picked Thursday and kept.
         from fmm import shards  # owner: budget = under 14k Star Shards, price confirmed by 2 sites
-        try:
-            cheap = shards.budget_cards()  # highest OVR first, cheaper first on ties
-        except Exception as ex:  # a price site down/blocked: no unverified prices, post a battle instead
-            print("shard prices unavailable:", str(ex)[:100])
-            cheap = []
-        team, used = [], set()
-        # 4-3-3 in the template's order; each slot takes its exact position first, then a close fit
-        for want in (["GK"], ["LB", "LWB"], ["CB"], ["CB"], ["RB", "RWB"], ["CDM", "CM"], ["CM"], ["CAM", "CM"],
-                     ["LW", "LM"], ["ST", "CF"], ["RW", "RM"]):
-            p = next((p for w in want for p in cheap if p["pos"] == w and p["id"] not in used), None)
-            if p:
-                used.add(p["id"])
-            team.append(p or {"name": "?", "ovr": "", "pos": want[0]})
-        if sum(1 for p in team if p.get("name") != "?") < 8:  # too few cards known yet
-            return render_versus(next_pair(latest, state, pool), fresh)
+        today = dt.date.today()
+        wk = state.get("xi_week") or {}
+        fresh_team = today.weekday() == 3 or not wk.get("team") or \
+            (today - dt.date.fromisoformat(wk["start"])).days > 5
+        if fresh_team:
+            try:
+                cheap = shards.budget_cards()  # highest OVR first, cheaper first on ties
+            except Exception as ex:  # a price site down/blocked: no unverified prices, post a battle instead
+                print("shard prices unavailable:", str(ex)[:100])
+                cheap = []
+            team, used = [], set()
+            # 4-3-3 in the template's order; each slot takes its exact position first, then a close fit
+            for want in (["GK"], ["LB", "LWB"], ["CB"], ["CB"], ["RB", "RWB"], ["CDM", "CM"], ["CM"], ["CAM", "CM"],
+                         ["LW", "LM"], ["ST", "CF"], ["RW", "RM"]):
+                p = next((p for w in want for p in cheap if p["pos"] == w and p["id"] not in used), None)
+                if p:
+                    used.add(p["id"])
+                team.append(p or {"name": "?", "ovr": "", "pos": want[0]})
+            if sum(1 for p in team if p.get("name") != "?") < 8:  # too few cards known yet
+                return render_versus(next_pair(latest, state, pool), fresh)
+            state["xi_week"] = {"start": today.isoformat(),
+                                "team": [{k: p.get(k) for k in ("id", "name", "ovr", "pos", "shards", "img_player", "img_bg")}
+                                         for p in team]}
+        else:  # same team all week; card images are rebuilt from the saved art links when missing
+            from fmm import fmf
+            team = []
+            for p in wk["team"]:
+                p = {**p, "layout": {}, "colors": {}}
+                path = renderz.CARDS / f"{p['id']}.png"
+                if p.get("name") != "?" and not path.exists() and p.get("img_bg"):
+                    try:
+                        renderz.CARDS.mkdir(parents=True, exist_ok=True)
+                        fmf.build_card(p).save(path)
+                    except Exception as ex:
+                        print("card image skipped", p["name"], str(ex)[:60])
+                p["card"] = str(path) if path.exists() else None
+                team.append(p)
+        real = lambda ps: [p for p in ps if p.get("name") != "?"]
+        line = lambda ps: "\n".join(f"{p['pos']} {p['ovr']} {p['name']} – {p['shards']:,} shards" for p in real(ps))
+        parts = {"attack": ("ATTACK", team[8:], 1), "defence": ("DEFENCE", team[:5], 2), "midfield": ("MIDFIELD", team[5:8], 3)}
+
+        def part(key):
+            name, ps, i = parts[key]
+            sub = sum(p["shards"] for p in real(ps))
+            return ({"id": f"xi_{today:%Y%m%d}_{key}", "type": "xi_part", "title": "Best Budget XI",
+                     "subtitle": f"Part {i}/3 • {name} • {sub:,} shards", "players": real(ps)},
+                    f"💰 Budget XI part {i}/3: the {name.lower()} (every card under 14k Star Shards)\n\n{line(ps)}"
+                    f"\n\n{name.title()} total: {sub:,} Star Shards. Next part tomorrow at the same time 👀"
+                    f"\n\n{TAGS} #BudgetSquad")
+        total = sum(p.get("shards") or 0 for p in real(team))
         post = {"id": "slot", "type": "xi", "title": "Best Budget XI", "subtitle": "Every card under 14,000 Star Shards",
                 "players": team}
-        lines = [f"{p.get('pos', '')} {p.get('ovr')} {p.get('name')} – {p['shards']:,} shards" for p in team if p.get("name") != "?"]
-        total = sum(p.get("shards") or 0 for p in team)
-        caption = (f"💰 FMM BEST BUDGET XI: every card under 14k Star Shards\n\n" + "\n".join(lines)
-                   + f"\n\nWhole team: {total:,} Star Shards (prices checked on 2 databases)"
-                   + "\n\nWho would you swap in? 👇 Save this for your next rebuild 📌\n\n" + TAGS + " #BudgetSquad")
-        # owner: post the XI in 3 parts first (defence, midfield, attack), then the whole team; slots.post() reads pre.json
-        pre = []
-        for i, (name, part) in enumerate([("DEFENCE", team[:5]), ("MIDFIELD", team[5:8]), ("ATTACK", team[8:])], 1):
-            part = [p for p in part if p.get("name") != "?"]
-            if not part:
-                continue
-            sub = sum(p["shards"] for p in part)
-            media = brand.render({"id": f"xi_{dt.date.today():%Y%m%d}_part{i}", "type": "xi_part", "title": "Best Budget XI",
-                                  "subtitle": f"Part {i}/3 • {name} • {sub:,} shards", "players": part}, OUT)
-            cap = (f"💰 Budget XI part {i}/3: the {name.lower()} (every card under 14k Star Shards)\n\n"
-                   + "\n".join(f"{p['pos']} {p['ovr']} {p['name']} – {p['shards']:,} shards" for p in part)
-                   + f"\n\n{name.title()} total: {sub:,} Star Shards. Full XI drops in a few minutes 👀"
-                   + "\n\n" + TAGS + " #BudgetSquad")
-            pre.append({"media": Path(media).name, "caption": cap})
-        (OUT / "pre.json").write_text(json.dumps(pre, ensure_ascii=False, indent=1), encoding="utf-8")
+        caption = (f"💰 FMM BEST BUDGET XI: every card under 14k Star Shards\n\n{line(team)}"
+                   f"\n\nWhole team: {total:,} Star Shards (prices checked on 2 databases)"
+                   "\n\nWho would you swap in? 👇 Save this for your next rebuild 📌\n\n" + TAGS + " #BudgetSquad")
+        step = {3: "attack", 4: "defence", 5: "midfield", 6: "xi"}.get(today.weekday(), "all")
+        if step in parts:
+            post, caption = part(step)
+        elif step == "all":  # Monday: attack, defence, midfield + the pitch in one swipe post; slots.post() reads it
+            files = [Path(brand.render(part(k)[0], OUT)).name for k in ("attack", "defence", "midfield")]
+            (OUT / "carousel.json").write_text(json.dumps(files + ["slot.png"]), encoding="utf-8")
+            caption = caption.replace("FMM BEST BUDGET XI:", "FMM BEST BUDGET XI, all 4 parts: swipe 👉")
     elif ctype == "gem":
         def gem_score(p):
             g = rv.group(p.get("pos", ""))
@@ -634,11 +661,10 @@ def post():
     m = json.loads((OUT / "manifest.json").read_text(encoding="utf-8"))
     caption = (OUT / "caption.txt").read_text(encoding="utf-8")
     kind = "reel" if m["media"].endswith(".mp4") else "photo"
-    pre = OUT / "pre.json"
-    for x in (json.loads(pre.read_text(encoding="utf-8")) if pre.exists() else []):  # e.g. Budget XI parts 1-3
-        if Path(x["media"]).name not in poster.posted_files():  # a retried run never re-posts a part
-            print("posted part", poster.post("photo", OUT / x["media"], x["caption"], "both", m.get("type"), reel=False))
-            time.sleep(120)  # a short gap between parts, never a burst
+    car = OUT / "carousel.json"
+    if car.exists():  # Monday Budget XI: all 4 images as one swipe post
+        print("posted", poster.post_carousel([OUT / f for f in json.loads(car.read_text(encoding="utf-8"))], caption, m.get("type")))
+        return
     print("posted", poster.post(kind, OUT / m["media"], caption, "both", m.get("type")))  # type feeds the weekly growth loop
 
 
