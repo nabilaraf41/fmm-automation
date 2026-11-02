@@ -162,7 +162,9 @@ def pick(kind, fresh, db, state):
     wk_unf = sorted([p for p in unfeatured if p in this_week], key=lambda p: (heat(p), p.get("ovr") or 0), reverse=True)
     unfeatured = wk_unf or unfeatured  # this week's cards first: trending, then highest OVR
     if kind == "photo":  # photo slots rotate formats; the "review" turn reviews the next new card
-        ROT = ["review_post", "rank10", "versus", "pick3", "guess", "rank10", "compare4", "xi", "rate", "gem", "worth", "meme"]
+        if slot_now() == "1300" and force in (None, "xi"):  # owner: 13:00 is the Budget XI every day
+            return "xi", list(fresh.values()), pool
+        ROT = ["review_post", "rank10", "versus", "pick3", "guess", "rank10", "compare4", "rate", "gem", "worth", "meme"]
         n = state.get("photo_n", 0)
         state["photo_n"] = n + 1
         ROT = [r for r in ROT if r != state.get("drop")] + [state["boost"]] * 2 if state.get("boost") else             [r for r in ROT if r != state.get("drop")]  # weekly growth loop: more of the best format, none of the worst
