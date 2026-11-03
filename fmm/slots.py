@@ -15,7 +15,7 @@ from fmm import renderz, review as rv
 ROOT = Path(__file__).resolve().parent.parent
 OUT = ROOT / "output" / "slot"
 STATE = ROOT / "content" / "featured.json"
-SLOTS = {"0700": "reel", "1300": "photo", "1900": "photo", "2100": "reel"}  # FC Mobile is biggest in South/SE Asia; 07:00 keeps one high-pay US slot
+SLOTS = {"0700": "reel", "1300": "photo", "1700": "photo", "1900": "photo", "2100": "reel"}  # FC Mobile is biggest in South/SE Asia; 07:00 keeps one high-pay US slot
 VERDICT_COLOR = {"MUST BUY": (0, 200, 83), "WORTH IT": (255, 215, 0), "SITUATIONAL": (255, 152, 0), "SKIP": (225, 6, 44)}
 
 
@@ -162,6 +162,8 @@ def pick(kind, fresh, db, state):
     wk_unf = sorted([p for p in unfeatured if p in this_week], key=lambda p: (heat(p), p.get("ovr") or 0), reverse=True)
     unfeatured = wk_unf or unfeatured  # this week's cards first: trending, then highest OVR
     if kind == "photo":  # photo slots rotate formats; the "review" turn reviews the next new card
+        if slot_now() == "1700":  # owner: daily "Choose 1" at 17:00
+            return "choose", list(fresh.values()), pool
         if slot_now() == "1300" and (str(force).startswith("xi") or (force is None and weekday not in (1, 2))):  # Budget XI Thu-Mon
             return "xi", list(fresh.values()), pool
         ROT = ["review_post", "rank10", "versus", "pick3", "guess", "rank10", "compare4", "rate", "gem", "worth", "meme"]
@@ -335,7 +337,7 @@ def build(slot):
     if OUT.exists():
         shutil.rmtree(OUT)
     OUT.mkdir(parents=True)
-    if ctype in ("xi", "gem", "worth", "meme", "compare4", "pick3", "rank10"):
+    if ctype in ("xi", "gem", "worth", "meme", "compare4", "pick3", "rank10", "choose"):
         media, caption = build_extra(ctype, players, pool, fresh, state)
         return finish(slot, kind, ctype, media, caption, players[:1], state)
     for p in players:
@@ -627,6 +629,46 @@ def build_extra(ctype, latest, pool, fresh, state):
                    + "\n".join(f"• {p['ovr']} {p['name']}: " + " ".join(f"{k} {v}" for k, v in face_stats(p).items())
                                for p in top4)
                    + "\n\nWho's your #1? 👇\n\n" + TAGS + f" #{pos}")
+    elif ctype == "choose":  # 17:00 "Choose 1": 4 cards of one position, 122+; defenders/attackers/midfielders by day
+        day = dt.date.today().toordinal()
+        groups = [["CB", "LB", "RB"], ["ST", "LW", "RW"], ["CM", "CAM", "CDM"]]
+        g = groups[day % 3]
+        four = []
+        try:  # cards listed on both FC Mobile Forum and FC Mobile Squad = cross-checked
+            from fmm import shards, fmf
+            cards = shards.forum_cards()
+            ok = shards.prices(cards)
+            seen, pool2 = set(), []
+            for c in cards:
+                k = (shards.norm(c["player_name"]), c["ovr"], c["position"])
+                if k in ok and c["ovr"] >= 122 and k not in seen:
+                    seen.add(k)
+                    art = c.get("card") or {}
+                    pool2.append({"id": f"s{c['id']}", "name": c["player_name"], "ovr": c["ovr"], "pos": c["position"],
+                                  "img_player": art.get("playerImage") or c.get("player_card"),
+                                  "img_bg": art.get("cardArtBackgroundUrl"), "layout": {}, "colors": {}})
+        except Exception as ex:
+            print("choose-1 cards unavailable:", str(ex)[:100])
+            pool2 = []
+        for pos in g[(day // 3) % 3:] + g[:(day // 3) % 3]:  # today's position first, then the rest of the group
+            cands = [p for p in pool2 + have if p.get("pos") == pos and (p.get("ovr") or 0) >= 122]
+            cands = list({p["name"]: p for p in cands}.values())  # one card per player
+            if len(cands) >= 4:
+                four = random.Random(day).sample(cands, 4)
+                for p in four:
+                    path = renderz.CARDS / f"{p['id']}.png"
+                    if not p.get("card") and not path.exists():
+                        renderz.CARDS.mkdir(parents=True, exist_ok=True)
+                        fmf.build_card(p).save(path)
+                    p["card"] = p.get("card") or str(path)
+                break
+        if not four:
+            return render_versus(next_pair(latest, state, pool), fresh)
+        post = {"id": "slot", "type": "choose4", "title": "Choose 1", "subtitle": f"Best {pos} • 122+ OVR",
+                "cards": [p["card"] for p in four]}
+        caption = (f"Choose 1: which {pos} goes in your team? 👇\n\n"
+                   + "\n".join(f"{i}. {p['ovr']} {p['name']}" for i, p in enumerate(four, 1))
+                   + "\n\nComment 1, 2, 3 or 4\n\n" + TAGS)
     elif ctype == "pick3":  # Pick one of 3 cards from the same event (ref: pick_one_react.png)
         used = set(state.get("used_photo", []))
         by_prog = {}

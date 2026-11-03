@@ -862,7 +862,23 @@ def post_pick3(p):
     return img
 
 
-TEMPLATES = {"compare": post_compare, "compare4": post_compare4, "pick3": post_pick3, "xi": post_xi, "xi_part": post_xi_part, "gem": post_gem, "worth": post_worth, "meme": post_meme, "guess": post_guess, "rate": post_rate, "codes_list": post_codes_list, "code": post_code, "versus": post_versus, "spotlight": post_spotlight, "tip": post_tip, "tutorial": post_tip, "poll": post_poll, "review": post_review,
+def post_choose4(p):
+    """Choose 1: four cards in a 2x2 grid, a big option number on each (ref: RkReddy community poll)."""
+    img, d, c = base("event", p.get("background"))
+    d.text((W // 2 + 60, 60), p.get("title", "CHOOSE 1").upper(), font=font("Anton-Regular.ttf", 96), fill=WHITE,
+           anchor="ma", stroke_width=3, stroke_fill=PURPLE)
+    d.text((W // 2 + 60, 180), p.get("subtitle", "").upper(), font=label_font(34), fill=GOLD, anchor="ma")
+    for i, cd in enumerate(p["cards"][:4]):
+        x, y = 300 + (i % 2) * 480, 250 + (i // 2) * 520
+        card = fit_card(cd, 330, 460, GOLD)
+        img.paste(card, (int(x - card.width / 2), y), card)
+        d.ellipse((x - 175, y + 10, x - 105, y + 80), fill=GOLD)
+        d.text((x - 140, y + 45), str(i + 1), font=font("Anton-Regular.ttf", 52), fill=(5, 5, 5), anchor="mm")
+    footer(d, "COMMENT 1, 2, 3 OR 4")
+    return img
+
+
+TEMPLATES = {"choose4": post_choose4, "compare": post_compare, "compare4": post_compare4, "pick3": post_pick3, "xi": post_xi, "xi_part": post_xi_part, "gem": post_gem, "worth": post_worth, "meme": post_meme, "guess": post_guess, "rate": post_rate, "codes_list": post_codes_list, "code": post_code, "versus": post_versus, "spotlight": post_spotlight, "tip": post_tip, "tutorial": post_tip, "poll": post_poll, "review": post_review,
              "news": post_quote, "quote": post_quote, "event": post_quote, "pack": post_quote, "top10": post_top10}
 
 

@@ -7,10 +7,12 @@ Safe to run any number of times: featured.json "done_slots", codes_state.json an
 """
 import datetime as dt
 import json
+import time
 from fmm import codes, poster, slots
 
 BDT = dt.timezone(dt.timedelta(hours=6))
 CATCH_UP = dt.timedelta(hours=5)  # 2-hourly runs: still covered if one run is skipped
+EARLY = dt.timedelta(minutes=75)  # owner: post exactly on time, so start early, build, then wait for the slot
 
 
 def due_slot(now, done):
@@ -20,7 +22,7 @@ def due_slot(now, done):
         for slot in sorted(slots.SLOTS, reverse=True):
             t = dt.datetime.combine(day, dt.time(int(slot[:2]), int(slot[2:])), BDT)
             key = f"{day}-{slot}"
-            if t <= now < t + CATCH_UP and key not in done:
+            if t - EARLY <= now < t + CATCH_UP and key not in done:
                 return key, slot
     return None
 
@@ -42,6 +44,11 @@ def run_slot(now):
     slots.STATE.write_text(json.dumps(st, indent=1, ensure_ascii=False), encoding="utf-8")
     print("posting slot", key)
     slots.build(slot)
+    t = dt.datetime.combine(dt.date.fromisoformat(key[:10]), dt.time(int(slot[:2]), int(slot[2:])), BDT)
+    wait = (t - dt.datetime.now(BDT)).total_seconds()
+    if wait > 0:  # built early: hold it until the exact slot time
+        print(f"built, waiting {wait / 60:.0f} min for {slot}")
+        time.sleep(wait)
     slots.post()
     st = slots.load_state()  # build() updated the state file
     st.setdefault("done_slots", {})[key] = now.isoformat(timespec="minutes")
@@ -56,7 +63,8 @@ if __name__ == "__main__":
     assert due_slot(_n, {}) == ("2026-11-01-0700", "0700")
     assert due_slot(_n, {"2026-11-01-0700": 1}) is None
     assert due_slot(dt.datetime(2026, 11, 1, 1, 30, tzinfo=BDT), {}) == ("2026-10-31-2100", "2100")
-    assert due_slot(dt.datetime(2026, 11, 1, 12, 30, tzinfo=BDT), {}) is None  # 07:00 is >5h old
+    assert due_slot(dt.datetime(2026, 11, 1, 12, 30, tzinfo=BDT), {}) == ("2026-11-01-1300", "1300")  # early start
+    assert due_slot(dt.datetime(2026, 11, 1, 15, 0, tzinfo=BDT), {"2026-11-01-1300": 1}) is None
 
     now = dt.datetime.now(BDT)
     try:

@@ -3,6 +3,7 @@ name: FMM hourly
 on:
   schedule:
     - cron: "5 1-23/2 * * *" # every 2 hours, odd UTC = 07:05/13:05/19:05/21:05 BDT: catch up any due slot (07:00/13:00/19:00/21:00 BDT), drops, codes
+    - cron: "50 23,5,9,11,13 * * *" # 05:50/11:50/15:50/17:50/19:50 BDT: build early, post exactly at 07/13/17/19/21:00
   workflow_dispatch: {}       # "Run workflow" button for manual runs
 
 concurrency:
@@ -15,7 +16,7 @@ permissions:
 jobs:
   run:
     runs-on: ubuntu-latest
-    timeout-minutes: 40
+    timeout-minutes: 100
     steps:
       - uses: actions/checkout@v4
         with: {ref: main}   # latest state at start, not at trigger time (queued runs reposted slots)
