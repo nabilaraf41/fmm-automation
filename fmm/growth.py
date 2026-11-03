@@ -38,10 +38,14 @@ def metrics(entry):
     if entry.get("instagram"):
         try:
             j = poster.call("GET", entry["instagram"], params={"fields": "like_count,comments_count"})
-            m.update(likes=j.get("like_count", 0), comments=j.get("comments_count", 0))
+            m.update(likes=j.get("like_count", 0), comments=j.get("comments_count", 0),
+                     ig_eng=j.get("like_count", 0) + j.get("comments_count", 0))
+        except Exception:
+            pass
+        try:  # needs instagram_manage_insights on the token; without it Instagram views stay 0
             ins = poster.call("GET", f"{entry['instagram']}/insights", params={"metric": "views"})
             v = sum(x["values"][0]["value"] for x in ins.get("data", []))
-            m.update(views=v, ig_views=v, ig_eng=j.get("like_count", 0) + j.get("comments_count", 0))
+            m.update(views=v, ig_views=v)
         except Exception:
             pass
     if entry.get("facebook"):
@@ -51,6 +55,9 @@ def metrics(entry):
                      comments=j.get("comments", {}).get("summary", {}).get("total_count", 0))
             m.update(fb_eng=j.get("likes", {}).get("summary", {}).get("total_count", 0)
                      + j.get("comments", {}).get("summary", {}).get("total_count", 0))
+            if entry.get("kind") == "reel":  # Reel ids are videos: Facebook shares their view count
+                v = poster.call("GET", entry["facebook"], params={"fields": "views"}).get("views", 0)
+                m.update(views=v, fb_views=v)
         except Exception:
             pass
     return m
@@ -79,7 +86,8 @@ def run(force=False):
         if e.get("at", "") < since or not type_of(e):
             continue
         m = metrics(e)
-        posts.append({"type": type_of(e), "kind": e["kind"], "score": score(m), "at": e["at"][:10], **m})
+        posts.append({"type": type_of(e), "kind": e["kind"], "score": score(m), "at": e["at"][:10],
+                      "hour": e["at"][11:13], **m})
     ranked = rank(posts)
     rotation = {"review_post", "rank10", "versus", "pick3", "guess", "compare4", "xi", "rate", "gem", "worth", "meme"}
     photo = [r for r in ranked if r[0] in rotation]  # only formats the photo slots can actually schedule
@@ -92,8 +100,13 @@ def run(force=False):
     lines += [f"| {t} | {s:.0f} | {n} |" for t, s, n in ranked]
     tot = lambda k: sum(p.get(k, 0) for p in posts)
     lines += ["", "## By platform", "", "| Platform | Views | Likes + comments |", "|---|---|---|",
-              f"| YouTube | {tot('yt_views'):,} | — |", f"| Instagram | {tot('ig_views'):,} | {tot('ig_eng'):,} |",
-              f"| Facebook | (not shared by Facebook for these posts) | {tot('fb_eng'):,} |"]
+              f"| YouTube | {tot('yt_views'):,} | — |", f"| Instagram | (needs insights permission) | {tot('ig_eng'):,} |",
+              f"| Facebook (Reels) | {tot('fb_views'):,} | {tot('fb_eng'):,} |"]
+    by_hour = collections.defaultdict(list)
+    for p in posts:
+        by_hour[p["hour"]].append(p["score"])
+    lines += ["", "## By posting hour (BDT)", "", "| Hour | Avg score | Posts |", "|---|---|---|"]
+    lines += [f"| {h}:00 | {sum(v) / len(v):.0f} | {len(v)} |" for h, v in sorted(by_hour.items())]
     lines += ["", "## Top 5 posts", ""] + [f"{i}. {p['at']} {p['type']} ({p['kind']}): score {p['score']:,}"
                                            for i, p in enumerate(sorted(posts, key=lambda p: -p["score"])[:5], 1)]
     lines += ["", f"More of: **{st['boost'] or '—'}** · less of: **{st['drop'] or '—'}**",
