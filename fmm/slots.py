@@ -388,6 +388,13 @@ def build(slot):
             {"scene": "stamp", "title": f"FMM Rating {r['score']}/10", "text": r["verdict"],
              "color": list(VERDICT_COLOR[r["verdict"]]), "card": p["card"]}]}
         media, caption = motion.render_reel(reel, OUT), r["caption"]
+        # hook test: same Reel, different first line, as an Instagram Trial Reel (see post())
+        first = caption.splitlines()[0]
+        alts = [h.format(name=p["name"], ovr=p["ovr"], pos=p["pos"]) for h in rv.HOOKS
+                if r["score"] >= 9 or ("BROKEN" not in h and "INSANE" not in h)]
+        alt = next((h for h in alts if h != first), None)
+        if alt:
+            (OUT / "trial_caption.txt").write_text(caption.replace(first, alt, 1), encoding="utf-8")
     elif ctype == "countdown":
         reel = {"id": "slot", "cover": {"subject": players[0]["card"], "text": f"TOP {min(7, len(players))}\nNEW CARDS",
                                          "sub": f"#1 IS {players[0]['ovr']} OVR!", "color": "gold"},
@@ -782,6 +789,16 @@ def post():
         print("posted", poster.post_carousel([OUT / f for f in json.loads(car.read_text(encoding="utf-8"))], caption, m.get("type")))
         return
     print("posted", poster.post(kind, OUT / m["media"], caption, "both", m.get("type")))  # type feeds the weekly growth loop
+    trial = OUT / "trial_caption.txt"
+    if kind == "reel" and trial.exists():  # hook test; a failure here never affects the main post
+        try:
+            from fmm.captions import polish
+            t = polish(trial.read_text(encoding="utf-8"))
+            poster.log({"kind": "reel", "file": str(OUT / m["media"]), "type": f"{m.get('type')}_trial",
+                        "hook": t.splitlines()[0], "instagram": poster.ig_reel(OUT / m["media"], t, trial=True)})
+            print("trial reel posted:", t.splitlines()[0])
+        except Exception as ex:
+            print("trial reel skipped:", str(ex)[:150])
 
 
 if __name__ == "__main__":
