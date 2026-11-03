@@ -34,7 +34,7 @@ def merge(theirs, ours):
 def save(message):
     snap = {f: json.loads((ROOT / f).read_text(encoding="utf-8")) for f in FILES if (ROOT / f).exists()}
     binaries = git("ls-files", "--others", "--modified", "--exclude-standard", "assets/cards/rz", "content").stdout.split()
-    keep = {b: (ROOT / b).read_bytes() for b in binaries if not b.endswith(".json") and (ROOT / b).exists()}
+    keep = {b: (ROOT / b).read_bytes() for b in binaries if b not in FILES and (ROOT / b).exists()}  # e.g. shard_prices.json: replaced whole
     git("fetch", "-q", "origin", "main")
     ahead = git("rev-list", "--reverse", "origin/main..HEAD").stdout.split()  # local code commits: keep them
     for attempt in range(4):

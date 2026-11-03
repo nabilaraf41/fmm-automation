@@ -93,6 +93,16 @@ if __name__ == "__main__":
         newplayers.run()
     except Exception as ex:
         print("new-player check skipped:", str(ex)[:150])
+    try:  # Thursday afternoon (after the drop): next 7 days' plan -> content/week_plan.md -> owner's Google Doc
+        st = slots.load_state()
+        if now.weekday() == 3 and now.hour >= 14 and st.get("plan_day") != now.date().isoformat():
+            from fmm import weekplan
+            weekplan.plan()
+            st = slots.load_state()
+            st["plan_day"] = now.date().isoformat()
+            slots.STATE.write_text(json.dumps(st, indent=1, ensure_ascii=False), encoding="utf-8")
+    except Exception as ex:
+        print("week plan skipped:", str(ex)[:150])
     codes.run()
     today = codes.QUEUE / dt.date.today().isoformat()
     if today.exists():
