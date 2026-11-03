@@ -69,7 +69,7 @@ def describe(ctype, players, st, day):
         return "Stats battle: " + " vs ".join(f"{x.get('ovr')} {x.get('name')}" for x in players[:2])
     return {"countdown": "Countdown Reel: this week's best new cards", "tierlist": "Tier list Reel: this week's cards",
             "rank10": "Top 10 ranking", "pick3": "Pick one (3 cards)", "guess": "Guess the player", "compare4": "Top 4 stats table",
-            "rate": "Rate the card", "gem": "Hidden gem", "worth": "Is the event worth it?", "meme": "Meme"}.get(ctype, ctype)
+            "rate": "Rate the card", "goat": "CR7 vs Messi stats battle", "gem": "Hidden gem", "worth": "Is the event worth it?", "meme": "Meme"}.get(ctype, ctype)
 
 
 if __name__ == "__main__":
