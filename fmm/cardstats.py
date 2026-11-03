@@ -6,6 +6,7 @@ import datetime as dt, json, sys
 from pathlib import Path
 import requests
 
+from fmm.fmf import ATTR
 from fmm.shards import UA
 
 CACHE = Path(__file__).resolve().parent.parent / "content" / "card_stats.json"
@@ -21,6 +22,7 @@ def fetch(min_ovr=120):
             out.append({"id": f"f{p['id']}", "name": p["playerName"], "ovr": p["ovr"], "pos": p["position"],
                         "program": (p.get("eventName") or "").replace("programname_", "").upper(),
                         "face": {k: p.get(f"stats{i + 1}") or 0 for i, k in enumerate(FACE)},
+                        "stats": {ATTR[k]: v for k, v in (p.get("attributes") or {}).items() if k in ATTR},
                         "img_player": p.get("playerImage"), "img_bg": p.get("cardArtBackgroundUrl")})
         off += 60
         if off >= j["total"] or not j["players"]:

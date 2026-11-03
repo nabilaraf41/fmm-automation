@@ -175,6 +175,11 @@ def pick(kind, fresh, db, state):
     wk_unf = sorted([p for p in unfeatured if p in this_week], key=lambda p: (heat(p), p.get("ovr") or 0), reverse=True)
     unfeatured = wk_unf or unfeatured  # this week's cards first: trending, then highest OVR
     if kind == "photo":  # photo slots rotate formats; the "review" turn reviews the next new card
+        if force == "goat":  # one-off CR7 vs Messi (owner's request), best confirmed card of each
+            from fmm import cardstats
+            cards = list(confirmed_only({c["id"]: c for c in cardstats.load()}).values())
+            best = lambda n: max([c for c in cards if c["name"] == n], key=lambda c: c["ovr"])
+            return "goat", [best("C. Ronaldo"), best("Messi")], pool
         if slot_now() == "1900" and series_today():  # owner: 31-day "Top 10 by stat" series at 19:00
             return "statrank", list(fresh.values()), pool
         if slot_now() == "1700":  # owner: daily "Choose 1" at 17:00
@@ -352,7 +357,7 @@ def build(slot):
     if OUT.exists():
         shutil.rmtree(OUT)
     OUT.mkdir(parents=True)
-    if ctype in ("xi", "gem", "worth", "meme", "compare4", "pick3", "rank10", "choose", "statrank"):
+    if ctype in ("xi", "gem", "worth", "meme", "compare4", "pick3", "rank10", "choose", "statrank", "goat"):
         media, caption = build_extra(ctype, players, pool, fresh, state)
         return finish(slot, kind, ctype, media, caption, players[:1], state)
     for p in players:
@@ -649,6 +654,19 @@ def build_extra(ctype, latest, pool, fresh, state):
                    + "\n".join(f"• {p['ovr']} {p['name']}: " + " ".join(f"{k} {v}" for k, v in face_stats(p).items())
                                for p in top4)
                    + "\n\nWho's your #1? 👇\n\n" + TAGS + f" #{pos}")
+    elif ctype == "goat":
+        from fmm import fmf
+        for p in latest:
+            path = renderz.CARDS / f"{p['id']}.png"
+            if not path.exists():
+                renderz.CARDS.mkdir(parents=True, exist_ok=True)
+                fmf.build_card({**p, "layout": {}, "colors": {}}).save(path)
+            p["card"] = str(path)
+        media, _ = render_versus(latest, fresh)
+        a, b = latest
+        return media, (f"CR7 or Messi? The debate never ends ⚔️\n\n{a['ovr']} {a['name']} ({a['pos']}) vs "
+                       f"{b['ovr']} {b['name']} ({b['pos']}): full stats in the picture.\n\n"
+                       "Who's your GOAT in FC Mobile? 👇\n\n#FCMobile #FIFAMobile #EAFC #Ronaldo #Messi")
     elif ctype == "statrank":  # Top 10 by one stat (series_today), from the cross-checked cards we have stats for
         stat, pos = series_today()
         poss = pos.split()[1:] if pos.startswith("ALL") else [pos]
