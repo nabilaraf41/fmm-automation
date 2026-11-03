@@ -360,6 +360,11 @@ def build(slot):
                                          "color": "green" if r["score"] >= 9 else "red"},
                 "scenes": [
             {"scene": "reveal", "title": "New Card", "sub": f"{p['ovr']} OVR {p['name']}", "card": p["card"]},
+            {"scene": "image", "image": str(brand.render(  # owner: review Reels must show the full stats
+                {"id": "stats", "type": "review", "tag": "New Card Review", "player": p["name"],
+                 "subtitle": f"{p['ovr']} OVR • {p['pos']}", "card": p["card"], "tier": "gold",
+                 "pros": r["short_pros"], "cons": r["short_cons"], "score": r["score"], "verdict": r["verdict"],
+                 "group": r["group"], "info": p, "pool": pool}, OUT))},
             {"scene": "stamp", "title": f"FMM Rating {r['score']}/10", "text": r["verdict"],
              "color": list(VERDICT_COLOR[r["verdict"]]), "card": p["card"]}]}
         media, caption = motion.render_reel(reel, OUT), r["caption"]

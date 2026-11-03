@@ -359,6 +359,19 @@ def sc_stat(s):
     return dur, draw
 
 
+def sc_image(s):
+    """A finished post image (e.g. the stats review) held on screen with a gentle zoom, long enough to read."""
+    dur = s.get("dur", 4.5)
+    src = Image.open(s["image"]).convert("RGBA")
+    def draw(t):
+        f = background(s.get("theme", "squad"))
+        z = 1 + 0.04 * t / dur
+        im = src.resize((int(RW * z), int(src.height * RW * z / src.width)), Image.LANCZOS)
+        paste_center(f, im, RW / 2, RH / 2, alpha=clamp(t / 0.3))
+        return f
+    return dur, draw
+
+
 def sc_swipe(s):
     dur = s.get("dur", 3.6)
     def draw(t):
@@ -452,7 +465,7 @@ def sc_outro(s):
     return dur, draw
 
 
-SCENES = {"reveal": sc_reveal, "countdown": sc_countdown, "code": sc_code, "stamp": sc_stamp, "messages": sc_messages,
+SCENES = {"image": sc_image, "reveal": sc_reveal, "countdown": sc_countdown, "code": sc_code, "stamp": sc_stamp, "messages": sc_messages,
           "stat": sc_stat, "swipe": sc_swipe, "tierlist": sc_tierlist, "outro": sc_outro}
 
 
