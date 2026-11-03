@@ -141,6 +141,19 @@ def slot_now():
     return _SLOT["v"]
 
 
+# owner's Top 10 series: each stat for its positions, then all those positions combined ("ALL"); one post a day
+SERIES_START = dt.date(2026, 11, 3)
+SERIES = [(s, p) for s, ps in [("SHO", "ST RW LW CAM"), ("DRI", "ST RW LW CAM LM RM"), ("PAC", "ST RW LW CAM LM RM"),
+                               ("PAS", "CM CAM CDM"), ("DEF", "RB CB LB"), ("PHY", "RB CB LB")]
+          for p in ps.split() + ["ALL " + ps]]
+STAT_NAME = {"SHO": "Shooting", "DRI": "Dribbling", "PAC": "Pace", "PAS": "Passing", "DEF": "Defending", "PHY": "Physical"}
+
+
+def series_today():
+    i = (dt.date.today() - SERIES_START).days
+    return SERIES[i] if 0 <= i < len(SERIES) else None
+
+
 def pick(kind, fresh, db, state):
     pool = list(db.values())
     hot = trend_boost()
@@ -162,6 +175,8 @@ def pick(kind, fresh, db, state):
     wk_unf = sorted([p for p in unfeatured if p in this_week], key=lambda p: (heat(p), p.get("ovr") or 0), reverse=True)
     unfeatured = wk_unf or unfeatured  # this week's cards first: trending, then highest OVR
     if kind == "photo":  # photo slots rotate formats; the "review" turn reviews the next new card
+        if slot_now() == "1900" and series_today():  # owner: 31-day "Top 10 by stat" series at 19:00
+            return "statrank", list(fresh.values()), pool
         if slot_now() == "1700":  # owner: daily "Choose 1" at 17:00
             return "choose", list(fresh.values()), pool
         if slot_now() == "1300" and (str(force).startswith("xi") or (force is None and weekday not in (1, 2))):  # Budget XI Thu-Mon
@@ -337,7 +352,7 @@ def build(slot):
     if OUT.exists():
         shutil.rmtree(OUT)
     OUT.mkdir(parents=True)
-    if ctype in ("xi", "gem", "worth", "meme", "compare4", "pick3", "rank10", "choose"):
+    if ctype in ("xi", "gem", "worth", "meme", "compare4", "pick3", "rank10", "choose", "statrank"):
         media, caption = build_extra(ctype, players, pool, fresh, state)
         return finish(slot, kind, ctype, media, caption, players[:1], state)
     for p in players:
@@ -634,6 +649,22 @@ def build_extra(ctype, latest, pool, fresh, state):
                    + "\n".join(f"• {p['ovr']} {p['name']}: " + " ".join(f"{k} {v}" for k, v in face_stats(p).items())
                                for p in top4)
                    + "\n\nWho's your #1? 👇\n\n" + TAGS + f" #{pos}")
+    elif ctype == "statrank":  # Top 10 by one stat (series_today), from the cross-checked cards we have stats for
+        stat, pos = series_today()
+        poss = pos.split()[1:] if pos.startswith("ALL") else [pos]
+        ranked = sorted([p for p in have if p.get("pos") in poss],
+                        key=lambda p: -rv.face_stats(p)[stat])
+        ranked = list({p["name"]: p for p in reversed(ranked)}.values())[::-1][:10]  # best card per player
+        if len(ranked) < 5:  # too few cards with stats for this position yet
+            return render_versus(next_pair(latest, state, pool), fresh)
+        label = "/".join(poss) if len(poss) > 1 else pos
+        post = {"id": "slot", "type": "top10", "position": label if len(poss) == 1 else "ALL", "title": f"by {STAT_NAME[stat]}", "subtitle": "latest cards",
+                "players": [{"name": p["name"], "card": p["card"], "ovr": p.get("ovr"), "pos": p.get("pos"),
+                             "stat": f"{stat} {rv.face_stats(p)[stat]}"} for p in ranked]}
+        caption = (f"🏆 Top {len(ranked)} {label} by {STAT_NAME[stat]}: the latest cards we've checked\n\n"
+                   + "\n".join(f"{i}. {p['name']} ({p['ovr']} {p['pos']}): {stat} {rv.face_stats(p)[stat]}"
+                               for i, p in enumerate(ranked, 1))
+                   + "\n\nWho's missing from this list? 👇\n\n" + TAGS)
     elif ctype == "choose":  # 17:00 "Choose 1": 4 cards of one position, 122+; defenders/attackers/midfielders by day
         day = dt.date.today().toordinal()
         groups = [["CB", "LB", "RB"], ["ST", "LW", "RW"], ["CM", "CAM", "CDM"]]
