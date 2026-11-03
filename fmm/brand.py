@@ -422,8 +422,8 @@ def post_top10(p):
             d.text((x + cw // 2, cy - 8), str(rank), font=font("Anton-Regular.ttf", 64),
                    fill=GOLD if rank <= 3 else WHITE, anchor="mb", stroke_width=3, stroke_fill=(5, 5, 5))
             if pl.get("stat"):  # stat-based Top 10: the ranked value under each card
-                d.rounded_rectangle((x + 15, cy + ch - 20, x + cw - 15, cy + ch + 22), 16, fill=(5, 5, 5))
-                d.text((x + cw // 2, cy + ch + 1), pl["stat"], font=label_font(26), fill=GOLD, anchor="mm")
+                d.rounded_rectangle((x + 25, cy + ch - 62, x + cw - 25, cy + ch - 26), 16, fill=(5, 5, 5))
+                d.text((x + cw // 2, cy + ch - 44), pl["stat"], font=label_font(24), fill=GOLD, anchor="mm")
     return img
 
 

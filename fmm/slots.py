@@ -652,17 +652,35 @@ def build_extra(ctype, latest, pool, fresh, state):
     elif ctype == "statrank":  # Top 10 by one stat (series_today), from the cross-checked cards we have stats for
         stat, pos = series_today()
         poss = pos.split()[1:] if pos.startswith("ALL") else [pos]
-        ranked = sorted([p for p in have if p.get("pos") in poss],
-                        key=lambda p: -rv.face_stats(p)[stat])
-        ranked = list({p["name"]: p for p in reversed(ranked)}.values())[::-1][:10]  # best card per player
-        if len(ranked) < 5:  # too few cards with stats for this position yet
+        try:  # every 120+ card with stats (FC Mobile Forum filter), events cross-checked like everything else
+            from fmm import cardstats, fmf
+            allc = list(confirmed_only({c["id"]: c for c in cardstats.load()}).values())
+        except Exception as ex:
+            print("card stats unavailable:", str(ex)[:100])
+            allc = []
+        ranked, names = [], set()
+        for p in sorted([c for c in allc if c["pos"] in poss], key=lambda c: (-c["face"][stat], -c["ovr"])):
+            if p["name"] not in names:  # best card per player
+                names.add(p["name"]); ranked.append(p)
+        ranked = ranked[:10]
+        for p in ranked:
+            path = renderz.CARDS / f"{p['id']}.png"
+            try:
+                if not path.exists():
+                    renderz.CARDS.mkdir(parents=True, exist_ok=True)
+                    fmf.build_card({**p, "layout": {}, "colors": {}}).save(path)
+                p["card"] = str(path)
+            except Exception as ex:
+                print("card image skipped", p["name"], str(ex)[:60])
+        ranked = [p for p in ranked if p.get("card")]
+        if len(ranked) < 10:
             return render_versus(next_pair(latest, state, pool), fresh)
         label = "/".join(poss) if len(poss) > 1 else pos
         post = {"id": "slot", "type": "top10", "position": label if len(poss) == 1 else "ALL", "title": f"by {STAT_NAME[stat]}", "subtitle": "latest cards",
                 "players": [{"name": p["name"], "card": p["card"], "ovr": p.get("ovr"), "pos": p.get("pos"),
-                             "stat": f"{stat} {rv.face_stats(p)[stat]}"} for p in ranked]}
-        caption = (f"🏆 Top {len(ranked)} {label} by {STAT_NAME[stat]}: the latest cards we've checked\n\n"
-                   + "\n".join(f"{i}. {p['name']} ({p['ovr']} {p['pos']}): {stat} {rv.face_stats(p)[stat]}"
+                             "stat": f"{stat} {p['face'][stat]}"} for p in ranked]}
+        caption = (f"🏆 Top 10 {label} in FC Mobile by {STAT_NAME[stat]} (120+ OVR cards)\n\n"
+                   + "\n".join(f"{i}. {p['name']} ({p['ovr']} {p['pos']}): {stat} {p['face'][stat]}"
                                for i, p in enumerate(ranked, 1))
                    + "\n\nWho's missing from this list? 👇\n\n" + TAGS)
     elif ctype == "choose":  # 17:00 "Choose 1": 4 cards of one position, 122+; defenders/attackers/midfielders by day
