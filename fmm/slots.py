@@ -789,6 +789,11 @@ def post():
         print("posted", poster.post_carousel([OUT / f for f in json.loads(car.read_text(encoding="utf-8"))], caption, m.get("type")))
         return
     print("posted", poster.post(kind, OUT / m["media"], caption, "both", m.get("type")))  # type feeds the weekly growth loop
+    if m.get("type") == "review_reel" and (OUT / "stats.png").exists():  # owner: review Reels come with the stats photo too
+        try:
+            print("posted stats photo", poster.post("photo", OUT / "stats.png", caption, "both", "review_post", reel=False))
+        except Exception as ex:
+            print("stats photo skipped:", str(ex)[:150])
     trial = OUT / "trial_caption.txt"
     if kind == "reel" and trial.exists():  # hook test; a failure here never affects the main post
         try:
