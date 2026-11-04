@@ -179,8 +179,8 @@ def post_carousel(paths, caption, ctype=None):
 def ig_reel(path, caption, share_to_feed=True, trial=False):
     data = {"media_type": "REELS", "upload_type": "resumable", "caption": caption,
             "share_to_feed": str(share_to_feed).lower()}
-    if trial:  # Trial Reel: shown to non-followers first; Instagram moves it to the feed if it performs
-        data["trial_params"] = json.dumps({"graduation_strategy": "SS_PERFORMANCE"})
+    if trial:  # Trial Reel: non-followers only; MANUAL so it never lands in the feed next to the main Reel
+        data["trial_params"] = json.dumps({"graduation_strategy": "MANUAL"})
     if cover_for(path):
         data["cover_url"] = public_url_for(cover_for(path))
     j = call("POST", f"{IG}/media", data=data)
