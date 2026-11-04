@@ -271,5 +271,22 @@
   "facebook": "1830869711496345",
   "instagram": "18102136331411337",
   "youtube": "uR44MB1Puzg"
+ },
+ {
+  "at": "2026-11-04 07:00:58",
+  "kind": "reel",
+  "file": "/home/runner/work/fmm-automation/fmm-automation/output/slot/slot.mp4",
+  "type": "review_reel",
+  "facebook": "1117434334610924",
+  "instagram": "17914162143471621",
+  "youtube": "yykseLeUqcA"
+ },
+ {
+  "at": "2026-11-04 07:01:31",
+  "kind": "reel",
+  "file": "/home/runner/work/fmm-automation/fmm-automation/output/slot/slot.mp4",
+  "type": "review_reel_trial",
+  "hook": "Is 122 Kewell worth it?!",
+  "instagram": "18119326258981512"
  }
 ]
