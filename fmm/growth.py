@@ -87,7 +87,7 @@ def run(force=False):
             continue
         m = metrics(e)
         posts.append({"type": type_of(e), "kind": e["kind"], "score": score(m), "at": e["at"][:10],
-                      "hour": e["at"][11:13], **m})
+                      "hour": e["at"][11:13], "hook_style": e.get("hook_style"), **m})
     ranked = rank(posts)
     rotation = {"review_post", "rank10", "versus", "pick3", "guess", "compare4", "xi", "rate", "gem", "worth", "meme"}
     photo = [r for r in ranked if r[0] in rotation]  # only formats the photo slots can actually schedule
@@ -107,6 +107,18 @@ def run(force=False):
         by_hour[p["hour"]].append(p["score"])
     lines += ["", "## By posting hour (BDT)", "", "| Hour | Avg score | Posts |", "|---|---|---|"]
     lines += [f"| {h}:00 | {sum(v) / len(v):.0f} | {len(v)} |" for h, v in sorted(by_hour.items())]
+    # hook test: compare first-line styles on Instagram views (main posts and trials both reach Instagram)
+    from fmm.review import HOOKS
+    by_hook = collections.defaultdict(list)
+    for p in posts:
+        if p.get("hook_style") is not None and p.get("ig_views"):
+            by_hook[p["hook_style"]].append(p["ig_views"])
+    if by_hook:
+        avg = {h: sum(v) / len(v) for h, v in by_hook.items()}
+        st["hook_best"] = max(avg, key=avg.get)  # next week's main posts use the winning style
+        slots.STATE.write_text(json.dumps(st, indent=1, ensure_ascii=False), encoding="utf-8")
+        lines += ["", "## Hook test (Instagram views)", "", "| Hook style | Avg views | Posts |", "|---|---|---|"]
+        lines += [f"| {HOOKS[h]} | {avg[h]:.0f} | {len(by_hook[h])} |" for h in sorted(avg, key=lambda h: -avg[h])]
     lines += ["", "## Top 5 posts", ""] + [f"{i}. {p['at']} {p['type']} ({p['kind']}): score {p['score']:,}"
                                            for i, p in enumerate(sorted(posts, key=lambda p: -p["score"])[:5], 1)]
     lines += ["", f"More of: **{st['boost'] or '—'}** · less of: **{st['drop'] or '—'}**",

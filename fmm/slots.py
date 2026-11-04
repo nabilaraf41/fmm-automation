@@ -388,13 +388,19 @@ def build(slot):
             {"scene": "stamp", "title": f"FMM Rating {r['score']}/10", "text": r["verdict"],
              "color": list(VERDICT_COLOR[r["verdict"]]), "card": p["card"]}]}
         media, caption = motion.render_reel(reel, OUT), r["caption"]
-        # hook test: same Reel, different first line, as an Instagram Trial Reel (see post())
+        # hook test: main post uses the best hook style so far (weekly report), the Instagram Trial Reel tries the
+        # least-tested other style; same video, only the first line differs
+        ok = [i for i, h in enumerate(rv.HOOKS) if r["score"] >= 9 or ("BROKEN" not in h and "INSANE" not in h)]
+        tries = state.get("hook_tries", {})
+        best = state.get("hook_best") if state.get("hook_best") in ok else ok[0]
+        test = min([i for i in ok if i != best], key=lambda i: tries.get(str(i), 0), default=None)
+        line = lambda i: rv.HOOKS[i].format(name=p["name"], ovr=p["ovr"], pos=p["pos"])
         first = caption.splitlines()[0]
-        alts = [h.format(name=p["name"], ovr=p["ovr"], pos=p["pos"]) for h in rv.HOOKS
-                if r["score"] >= 9 or ("BROKEN" not in h and "INSANE" not in h)]
-        alt = next((h for h in alts if h != first), None)
-        if alt:
-            (OUT / "trial_caption.txt").write_text(caption.replace(first, alt, 1), encoding="utf-8")
+        caption = caption.replace(first, line(best), 1)
+        (OUT / "hooks.json").write_text(json.dumps({"main": best, "trial": test}), encoding="utf-8")
+        if test is not None:
+            (OUT / "trial_caption.txt").write_text(caption.replace(line(best), line(test), 1), encoding="utf-8")
+            state.setdefault("hook_tries", {})[str(test)] = tries.get(str(test), 0) + 1
     elif ctype == "countdown":
         reel = {"id": "slot", "cover": {"subject": players[0]["card"], "text": f"TOP {min(7, len(players))}\nNEW CARDS",
                                          "sub": f"#1 IS {players[0]['ovr']} OVR!", "color": "gold"},
@@ -788,7 +794,9 @@ def post():
     if car.exists():  # Monday Budget XI: all 4 images as one swipe post
         print("posted", poster.post_carousel([OUT / f for f in json.loads(car.read_text(encoding="utf-8"))], caption, m.get("type")))
         return
-    print("posted", poster.post(kind, OUT / m["media"], caption, "both", m.get("type")))  # type feeds the weekly growth loop
+    hk = json.loads((OUT / "hooks.json").read_text()) if (OUT / "hooks.json").exists() else {}
+    print("posted", poster.post(kind, OUT / m["media"], caption, "both", m.get("type"),  # type feeds the weekly growth loop
+                                extra={"hook_style": hk["main"]} if "main" in hk else None))
     if m.get("type") == "review_reel" and (OUT / "stats.png").exists():  # owner: review Reels come with the stats photo too
         try:
             print("posted stats photo", poster.post("photo", OUT / "stats.png", caption, "both", "review_post", reel=False))
@@ -799,8 +807,10 @@ def post():
         try:
             from fmm.captions import polish
             t = polish(trial.read_text(encoding="utf-8"))
+            hk = json.loads((OUT / "hooks.json").read_text()) if (OUT / "hooks.json").exists() else {}
             poster.log({"kind": "reel", "file": str(OUT / m["media"]), "type": f"{m.get('type')}_trial",
-                        "hook": t.splitlines()[0], "instagram": poster.ig_reel(OUT / m["media"], t, trial=True)})
+                        "hook": t.splitlines()[0], "hook_style": hk.get("trial"),
+                        "instagram": poster.ig_reel(OUT / m["media"], t, trial=True)})
             print("trial reel posted:", t.splitlines()[0])
         except Exception as ex:
             print("trial reel skipped:", str(ex)[:150])

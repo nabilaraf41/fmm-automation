@@ -195,7 +195,7 @@ def ig_reel(path, caption, share_to_feed=True, trial=False):
 
 
 # ---------- high level ----------
-def post(kind, media, caption, where="both", ctype=None, reel=True):
+def post(kind, media, caption, where="both", ctype=None, reel=True, extra=None):
     """Post to each platform independently. One platform failing never re-posts the others:
     the result is logged as soon as any platform succeeds; it raises only if all of them failed."""
     media = str(media)
@@ -220,7 +220,7 @@ def post(kind, media, caption, where="both", ctype=None, reel=True):
             print(f"{name} failed:", errors[name])
     if not done:
         raise RuntimeError(f"all platforms failed: {errors}")
-    log({"kind": kind, "file": media, **({"type": ctype} if ctype else {}), **done})
+    log({"kind": kind, "file": media, **({"type": ctype} if ctype else {}), **(extra or {}), **done})
     if kind == "photo" and where == "both" and reel:  # every photo also goes out as a Reel/Short (slow zoom), for reach
         try:
             from fmm import reel
