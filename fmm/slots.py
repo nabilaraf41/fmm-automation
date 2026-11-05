@@ -269,6 +269,8 @@ def build_pack(got=None, title=None, caption=None):
         # "Madrid Pack Opening 2, got Bellingham" -> who = "bellingham" (the packed player is after "got")
         who = stem.split(" got ", 1)[1] if " got " in stem else stem.replace("pack opening", "").replace("pack", "")
         who = re.sub(r"[^a-z' ]", " ", who).strip()
+        if len(who.split()) > 3:  # a sentence ("...never got any players from here"), not a player name
+            who = ""
         title = title or (f"I PACKED {who.upper()}!!" if who else "PACK OPENING!!")
         card = inbox.scorer_card(who or f["name"])
         if OUT.exists():
