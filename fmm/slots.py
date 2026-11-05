@@ -237,6 +237,8 @@ def build_from_inbox(slot):
         shutil.rmtree(OUT)
     OUT.mkdir(parents=True)
     shutil.copy(mp4, OUT / "slot.mp4")
+    from fmm import atb
+    atb.box(OUT / "slot.mp4", src)  # reaction video: owner's recording + ATB reacting
     cover = Path(mp4).with_name(Path(mp4).stem + "_cover.jpg")
     if cover.exists():
         shutil.copy(cover, OUT / "slot_cover.jpg")
@@ -258,7 +260,7 @@ PACK_CAPTION = ROOT / "content" / "pack_caption.txt"
 def build_pack(got=None, title=None, caption=None):
     """Pack-opening Reel from a Drive video named 'pack ….mp4' (e.g. 'pack opening ronaldo.mp4' -> title + card)."""
     try:
-        from fmm import inbox, clips, sfx, thumb
+        from fmm import inbox, clips, sfx, thumb, atb
         got = got or inbox.pack_video()
         if not got:
             return False
@@ -270,12 +272,13 @@ def build_pack(got=None, title=None, caption=None):
             shutil.rmtree(OUT)
         OUT.mkdir(parents=True)
         ov = clips.overlay_png(title, "PACK OPENING TRICK IN CAPTION", OUT / "ov.png", card)
-        dur = clips.duration(src)
-        lv = clips.loudness(src)  # biggest moment = the reveal
-        reveal = max(lv, key=lambda x: x[1])[0] if lv else dur * 0.6
-        start = max(0.0, reveal - 10)  # keep ~15 s: build-up, reveal, card on screen
-        dur = min(dur, reveal + 5) - start
-        reveal -= start
+        full = clips.duration(src)
+        # owner: never cut before the player reveal. The loudest moment is often the pack opening, not the
+        # reveal, so always run to the END of the recording (reveal + card on screen), max 58 s for Reels.
+        start = max(0.0, full - 58)
+        dur = full - start
+        lv = [x for x in clips.loudness(src) if x[0] >= start]
+        reveal = (max(lv, key=lambda x: x[1])[0] if lv else full * 0.8) - start  # sfx hit only
         sfx.build()
         ms = int(max(0.0, reveal - 0.2) * 1000)
         vf = ("[0:v]split=2[a][b];[a]scale=-2:1920,crop=1080:1920,boxblur=25:2,eq=brightness=-0.15:saturation=1.3[bg];"
@@ -289,6 +292,7 @@ def build_pack(got=None, title=None, caption=None):
                             "-movflags", "+faststart", str(OUT / "slot.mp4")], capture_output=True, text=True)
         if r.returncode:
             raise RuntimeError(r.stderr[-300:])
+        atb.box(OUT / "slot.mp4", f["name"])  # reaction video: owner's pack opening + ATB reacting
         frame = OUT / "frame.png"
         subprocess.run(["ffmpeg", "-v", "error", "-y", "-ss", str(max(0.0, start + dur - 3)), "-i", str(src),  # packed card is on screen at the end
                         "-frames:v", "1", "-vf", "crop=ih*3/4:ih:(iw-ih*3/4)/2:0", str(frame)])
