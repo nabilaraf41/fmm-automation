@@ -317,6 +317,16 @@
     "f24055502"
    ],
    "built": "2026-11-05T06:38"
+  },
+  {
+   "slot": "1700",
+   "kind": "photo",
+   "type": "choose",
+   "media": "slot.png",
+   "players": [
+    "f30923108"
+   ],
+   "built": "2026-11-05T10:36"
   }
  ],
  "force": {
