@@ -374,5 +374,32 @@
   "hook": "Is 121 Messi worth it?!",
   "hook_style": 1,
   "instagram": "17916385986535761"
+ },
+ {
+  "at": "2026-11-05 07:00:59",
+  "kind": "reel",
+  "file": "/home/runner/work/fmm-automation/fmm-automation/output/slot/slot.mp4",
+  "type": "review_reel",
+  "hook_style": 1,
+  "facebook": "1491406042896246",
+  "instagram": "18204287752378631",
+  "youtube": "Cq4B_WW20-Q"
+ },
+ {
+  "at": "2026-11-05 07:01:23",
+  "kind": "photo",
+  "file": "/home/runner/work/fmm-automation/fmm-automation/output/slot/stats.png",
+  "type": "review_post",
+  "facebook": "122206761212906131",
+  "instagram": "18138504901643285"
+ },
+ {
+  "at": "2026-11-05 07:02:02",
+  "kind": "reel",
+  "file": "/home/runner/work/fmm-automation/fmm-automation/output/slot/slot.mp4",
+  "type": "review_reel_trial",
+  "hook": "Kane 120 OVR: hype or worth having?",
+  "hook_style": 2,
+  "instagram": "18349445545285914"
  }
 ]
