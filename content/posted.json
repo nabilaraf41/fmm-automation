@@ -451,5 +451,22 @@
   "facebook": "2376516879785286",
   "instagram": "18133633174742771",
   "youtube": "eQiyqPb_bcE"
+ },
+ {
+  "at": "2026-11-05 19:00:37",
+  "kind": "photo",
+  "file": "/home/runner/work/fmm-automation/fmm-automation/output/slot/slot.png",
+  "type": "statrank",
+  "facebook": "122206829606906131",
+  "instagram": "18082768340375000"
+ },
+ {
+  "at": "2026-11-05 19:01:36",
+  "kind": "reel",
+  "file": "/home/runner/work/fmm-automation/fmm-automation/output/slot/slot_reel.mp4",
+  "type": "statrank",
+  "facebook": "1459375469480538",
+  "instagram": "18114345488150424",
+  "youtube": "OMs2IEAg0lI"
  }
 ]
