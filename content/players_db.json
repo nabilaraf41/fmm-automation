@@ -10128,6 +10128,1167 @@
    "colors": {},
    "url": "https://fcmobileforum.com/players",
    "source": "fcmobileforum"
+  },
+  "30923108": {
+   "id": 30923108,
+   "name": "Eto'o",
+   "full_name": "Samuel Eto'o",
+   "ovr": 124,
+   "pos": "ST",
+   "program": "PROGRAM_ICONS",
+   "weak_foot": 4,
+   "skill_moves": 4,
+   "work_rates": [
+    2,
+    1
+   ],
+   "height": 179,
+   "weight": 75,
+   "stats": {
+    "acc": 163,
+    "agg": 138,
+    "agi": 155,
+    "awr": 76,
+    "bac": 158,
+    "bal": 150,
+    "cro": 135,
+    "cur": 146,
+    "dri": 154,
+    "fin": 163,
+    "frk": 137,
+    "gkd": 8,
+    "gkk": 8,
+    "gkp": 8,
+    "han": 8,
+    "hea": 150,
+    "jmp": 150,
+    "lpa": 128,
+    "lsa": 156,
+    "mrk": 79,
+    "pen": 140,
+    "pos": 156,
+    "rea": 159,
+    "ref": 8,
+    "sho": 158,
+    "slt": 75,
+    "spa": 139,
+    "spd": 162,
+    "str": 142,
+    "stt": 96,
+    "vis": 140,
+    "vol": 152,
+    "sta": 87,
+    "total": 3884
+   },
+   "avg": {
+    "avg1": 162,
+    "avg2": 157,
+    "avg3": 136,
+    "avg4": 155,
+    "avg5": 91,
+    "avg6": 142
+   },
+   "playstyles": [
+    "Speed Dribbler",
+    "Clinical Finisher"
+   ],
+   "meta": null,
+   "added": "2026-11-04T09:25:23Z",
+   "layout": {
+    "player": {
+     "sizeX": 256,
+     "sizeY": 256,
+     "posX": 0,
+     "posY": 0
+    },
+    "rating": {
+     "sizeX": 80,
+     "sizeY": 80,
+     "posX": 36.167,
+     "posY": 4.083,
+     "fontSize": 36
+    },
+    "position": {
+     "sizeX": 40,
+     "sizeY": 20,
+     "posX": 56,
+     "posY": 64,
+     "fontSize": 24
+    },
+    "nation": {
+     "sizeX": 24,
+     "sizeY": 24,
+     "posX": 82.7,
+     "posY": 188
+    },
+    "club": {
+     "sizeX": 24,
+     "sizeY": 24,
+     "posX": 146.6,
+     "posY": 188
+    },
+    "name": {
+     "sizeX": 0,
+     "sizeY": 0,
+     "posX": 128,
+     "posY": 178,
+     "fontSize": 22
+    },
+    "level": {
+     "sizeX": 64,
+     "sizeY": 32,
+     "posX": 128,
+     "posY": 233,
+     "fontSize": 23
+    },
+    "rank": {
+     "sizeX": 32,
+     "sizeY": 32,
+     "posX": 128,
+     "posY": 232
+    }
+   },
+   "colors": {
+    "rating": "#FFFFFF",
+    "position": "#FFFFFF",
+    "name": "#FFFFFF",
+    "level": "#FFFFFF"
+   },
+   "url": "https://renderz.app/player/30923108",
+   "card": "assets/cards/rz/30923108.png",
+   "new_since": "2026-11-05"
+  },
+  "30923107": {
+   "id": 30923107,
+   "name": "Eto'o",
+   "full_name": "Samuel Eto'o",
+   "ovr": 124,
+   "pos": "ST",
+   "program": "PROGRAM_ICONS",
+   "weak_foot": 4,
+   "skill_moves": 4,
+   "work_rates": [
+    2,
+    1
+   ],
+   "height": 179,
+   "weight": 75,
+   "stats": {
+    "acc": 163,
+    "agg": 138,
+    "agi": 155,
+    "awr": 76,
+    "bac": 158,
+    "bal": 150,
+    "cro": 135,
+    "cur": 146,
+    "dri": 154,
+    "fin": 163,
+    "frk": 137,
+    "gkd": 8,
+    "gkk": 8,
+    "gkp": 8,
+    "han": 8,
+    "hea": 150,
+    "jmp": 150,
+    "lpa": 128,
+    "lsa": 156,
+    "mrk": 79,
+    "pen": 140,
+    "pos": 156,
+    "rea": 159,
+    "ref": 8,
+    "sho": 158,
+    "slt": 75,
+    "spa": 139,
+    "spd": 162,
+    "str": 142,
+    "stt": 96,
+    "vis": 140,
+    "vol": 152,
+    "sta": 87,
+    "total": 3884
+   },
+   "avg": {
+    "avg1": 162,
+    "avg2": 157,
+    "avg3": 136,
+    "avg4": 155,
+    "avg5": 91,
+    "avg6": 142
+   },
+   "playstyles": [
+    "Speed Dribbler",
+    "Clinical Finisher"
+   ],
+   "meta": null,
+   "added": "2026-11-04T09:25:23Z",
+   "layout": {
+    "player": {
+     "sizeX": 256,
+     "sizeY": 256,
+     "posX": 0,
+     "posY": 0
+    },
+    "rating": {
+     "sizeX": 80,
+     "sizeY": 80,
+     "posX": 36.167,
+     "posY": 4.083,
+     "fontSize": 36
+    },
+    "position": {
+     "sizeX": 40,
+     "sizeY": 20,
+     "posX": 56,
+     "posY": 64,
+     "fontSize": 24
+    },
+    "nation": {
+     "sizeX": 24,
+     "sizeY": 24,
+     "posX": 82.7,
+     "posY": 188
+    },
+    "club": {
+     "sizeX": 24,
+     "sizeY": 24,
+     "posX": 146.6,
+     "posY": 188
+    },
+    "name": {
+     "sizeX": 0,
+     "sizeY": 0,
+     "posX": 128,
+     "posY": 178,
+     "fontSize": 22
+    },
+    "level": {
+     "sizeX": 64,
+     "sizeY": 32,
+     "posX": 128,
+     "posY": 233,
+     "fontSize": 23
+    },
+    "rank": {
+     "sizeX": 32,
+     "sizeY": 32,
+     "posX": 128,
+     "posY": 232
+    }
+   },
+   "colors": {
+    "rating": "#FFFFFF",
+    "position": "#FFFFFF",
+    "name": "#FFFFFF",
+    "level": "#FFFFFF"
+   },
+   "url": "https://renderz.app/player/30923107",
+   "card": "assets/cards/rz/30923107.png",
+   "new_since": "2026-11-05"
+  },
+  "30922854": {
+   "id": 30922854,
+   "name": "Ronaldinho",
+   "full_name": "Ronaldo de Assis Moreira",
+   "ovr": 124,
+   "pos": "LW",
+   "program": "PROGRAM_ICONS",
+   "weak_foot": 5,
+   "skill_moves": 5,
+   "work_rates": [
+    2,
+    1
+   ],
+   "height": 180,
+   "weight": 78,
+   "stats": {
+    "acc": 162,
+    "agg": 135,
+    "agi": 158,
+    "awr": 82,
+    "bac": 165,
+    "bal": 157,
+    "cro": 155,
+    "cur": 159,
+    "dri": 161,
+    "fin": 155,
+    "frk": 154,
+    "gkd": 8,
+    "gkk": 8,
+    "gkp": 8,
+    "han": 8,
+    "hea": 132,
+    "jmp": 141,
+    "lpa": 156,
+    "lsa": 158,
+    "mrk": 82,
+    "pen": 150,
+    "pos": 147,
+    "rea": 162,
+    "ref": 8,
+    "sho": 151,
+    "slt": 78,
+    "spa": 160,
+    "spd": 160,
+    "str": 144,
+    "stt": 99,
+    "vis": 160,
+    "vol": 150,
+    "sta": 91,
+    "total": 4004
+   },
+   "avg": {
+    "avg1": 161,
+    "avg2": 153,
+    "avg3": 158,
+    "avg4": 161,
+    "avg5": 92,
+    "avg6": 140
+   },
+   "playstyles": [
+    "Trickster",
+    "Speed Dribbler"
+   ],
+   "meta": null,
+   "added": "2026-11-04T09:25:23Z",
+   "layout": {
+    "player": {
+     "sizeX": 256,
+     "sizeY": 256,
+     "posX": 0,
+     "posY": 0
+    },
+    "rating": {
+     "sizeX": 80,
+     "sizeY": 80,
+     "posX": 36.167,
+     "posY": 4.083,
+     "fontSize": 36
+    },
+    "position": {
+     "sizeX": 40,
+     "sizeY": 20,
+     "posX": 56,
+     "posY": 64,
+     "fontSize": 24
+    },
+    "nation": {
+     "sizeX": 24,
+     "sizeY": 24,
+     "posX": 82.7,
+     "posY": 188
+    },
+    "club": {
+     "sizeX": 24,
+     "sizeY": 24,
+     "posX": 146.6,
+     "posY": 188
+    },
+    "name": {
+     "sizeX": 0,
+     "sizeY": 0,
+     "posX": 128,
+     "posY": 178,
+     "fontSize": 22
+    },
+    "level": {
+     "sizeX": 64,
+     "sizeY": 32,
+     "posX": 128,
+     "posY": 233,
+     "fontSize": 23
+    },
+    "rank": {
+     "sizeX": 32,
+     "sizeY": 32,
+     "posX": 128,
+     "posY": 232
+    }
+   },
+   "colors": {
+    "rating": "#FFFFFF",
+    "position": "#FFFFFF",
+    "name": "#FFFFFF",
+    "level": "#FFFFFF"
+   },
+   "url": "https://renderz.app/player/30922854",
+   "card": "assets/cards/rz/30922854.png",
+   "new_since": "2026-11-05"
+  },
+  "30922828": {
+   "id": 30922828,
+   "name": "Cannavaro",
+   "full_name": "Fabio Cannavaro",
+   "ovr": 124,
+   "pos": "CB",
+   "program": "PROGRAM_ICONS",
+   "weak_foot": 3,
+   "skill_moves": 2,
+   "work_rates": [
+    1,
+    2
+   ],
+   "height": 176,
+   "weight": 74,
+   "stats": {
+    "acc": 150,
+    "agg": 148,
+    "agi": 149,
+    "awr": 163,
+    "bac": 142,
+    "bal": 152,
+    "cro": 114,
+    "cur": 110,
+    "dri": 136,
+    "fin": 102,
+    "frk": 96,
+    "gkd": 8,
+    "gkk": 8,
+    "gkp": 8,
+    "han": 8,
+    "hea": 154,
+    "jmp": 153,
+    "lpa": 127,
+    "lsa": 96,
+    "mrk": 162,
+    "pen": 103,
+    "pos": 146,
+    "rea": 155,
+    "ref": 8,
+    "sho": 109,
+    "slt": 164,
+    "spa": 131,
+    "spd": 147,
+    "str": 155,
+    "stt": 162,
+    "vis": 114,
+    "vol": 96,
+    "sta": 81,
+    "total": 3757
+   },
+   "avg": {
+    "avg1": 148,
+    "avg2": 108,
+    "avg3": 120,
+    "avg4": 145,
+    "avg5": 161,
+    "avg6": 152
+   },
+   "playstyles": [
+    "Accelerator",
+    "Stand Tackle Master"
+   ],
+   "meta": null,
+   "added": "2026-11-04T09:25:23Z",
+   "layout": {
+    "player": {
+     "sizeX": 256,
+     "sizeY": 256,
+     "posX": 0,
+     "posY": 0
+    },
+    "rating": {
+     "sizeX": 80,
+     "sizeY": 80,
+     "posX": 36.167,
+     "posY": 4.083,
+     "fontSize": 36
+    },
+    "position": {
+     "sizeX": 40,
+     "sizeY": 20,
+     "posX": 56,
+     "posY": 64,
+     "fontSize": 24
+    },
+    "nation": {
+     "sizeX": 24,
+     "sizeY": 24,
+     "posX": 82.7,
+     "posY": 188
+    },
+    "club": {
+     "sizeX": 24,
+     "sizeY": 24,
+     "posX": 146.6,
+     "posY": 188
+    },
+    "name": {
+     "sizeX": 0,
+     "sizeY": 0,
+     "posX": 128,
+     "posY": 178,
+     "fontSize": 22
+    },
+    "level": {
+     "sizeX": 64,
+     "sizeY": 32,
+     "posX": 128,
+     "posY": 233,
+     "fontSize": 23
+    },
+    "rank": {
+     "sizeX": 32,
+     "sizeY": 32,
+     "posX": 128,
+     "posY": 232
+    }
+   },
+   "colors": {
+    "rating": "#FFFFFF",
+    "position": "#FFFFFF",
+    "name": "#FFFFFF",
+    "level": "#FFFFFF"
+   },
+   "url": "https://renderz.app/player/30922828",
+   "card": "assets/cards/rz/30922828.png",
+   "new_since": "2026-11-05"
+  },
+  "30922826": {
+   "id": 30922826,
+   "name": "Cannavaro",
+   "full_name": "Fabio Cannavaro",
+   "ovr": 124,
+   "pos": "CB",
+   "program": "PROGRAM_ICONS",
+   "weak_foot": 3,
+   "skill_moves": 2,
+   "work_rates": [
+    1,
+    2
+   ],
+   "height": 176,
+   "weight": 74,
+   "stats": {
+    "acc": 150,
+    "agg": 148,
+    "agi": 149,
+    "awr": 163,
+    "bac": 142,
+    "bal": 152,
+    "cro": 114,
+    "cur": 110,
+    "dri": 136,
+    "fin": 102,
+    "frk": 96,
+    "gkd": 8,
+    "gkk": 8,
+    "gkp": 8,
+    "han": 8,
+    "hea": 154,
+    "jmp": 153,
+    "lpa": 127,
+    "lsa": 96,
+    "mrk": 162,
+    "pen": 103,
+    "pos": 146,
+    "rea": 155,
+    "ref": 8,
+    "sho": 109,
+    "slt": 164,
+    "spa": 131,
+    "spd": 147,
+    "str": 155,
+    "stt": 162,
+    "vis": 114,
+    "vol": 96,
+    "sta": 81,
+    "total": 3757
+   },
+   "avg": {
+    "avg1": 148,
+    "avg2": 108,
+    "avg3": 120,
+    "avg4": 145,
+    "avg5": 161,
+    "avg6": 152
+   },
+   "playstyles": [
+    "Accelerator",
+    "Stand Tackle Master"
+   ],
+   "meta": null,
+   "added": "2026-11-04T09:25:23Z",
+   "layout": {
+    "player": {
+     "sizeX": 256,
+     "sizeY": 256,
+     "posX": 0,
+     "posY": 0
+    },
+    "rating": {
+     "sizeX": 80,
+     "sizeY": 80,
+     "posX": 36.167,
+     "posY": 4.083,
+     "fontSize": 36
+    },
+    "position": {
+     "sizeX": 40,
+     "sizeY": 20,
+     "posX": 56,
+     "posY": 64,
+     "fontSize": 24
+    },
+    "nation": {
+     "sizeX": 24,
+     "sizeY": 24,
+     "posX": 82.7,
+     "posY": 188
+    },
+    "club": {
+     "sizeX": 24,
+     "sizeY": 24,
+     "posX": 146.6,
+     "posY": 188
+    },
+    "name": {
+     "sizeX": 0,
+     "sizeY": 0,
+     "posX": 128,
+     "posY": 178,
+     "fontSize": 22
+    },
+    "level": {
+     "sizeX": 64,
+     "sizeY": 32,
+     "posX": 128,
+     "posY": 233,
+     "fontSize": 23
+    },
+    "rank": {
+     "sizeX": 32,
+     "sizeY": 32,
+     "posX": 128,
+     "posY": 232
+    }
+   },
+   "colors": {
+    "rating": "#FFFFFF",
+    "position": "#FFFFFF",
+    "name": "#FFFFFF",
+    "level": "#FFFFFF"
+   },
+   "url": "https://renderz.app/player/30922826",
+   "card": "assets/cards/rz/30922826.png",
+   "new_since": "2026-11-05"
+  },
+  "30922825": {
+   "id": 30922825,
+   "name": "Cannavaro",
+   "full_name": "Fabio Cannavaro",
+   "ovr": 124,
+   "pos": "CB",
+   "program": "PROGRAM_ICONS",
+   "weak_foot": 3,
+   "skill_moves": 2,
+   "work_rates": [
+    1,
+    2
+   ],
+   "height": 176,
+   "weight": 74,
+   "stats": {
+    "acc": 150,
+    "agg": 148,
+    "agi": 149,
+    "awr": 163,
+    "bac": 142,
+    "bal": 152,
+    "cro": 114,
+    "cur": 110,
+    "dri": 136,
+    "fin": 102,
+    "frk": 96,
+    "gkd": 8,
+    "gkk": 8,
+    "gkp": 8,
+    "han": 8,
+    "hea": 154,
+    "jmp": 153,
+    "lpa": 127,
+    "lsa": 96,
+    "mrk": 162,
+    "pen": 103,
+    "pos": 146,
+    "rea": 155,
+    "ref": 8,
+    "sho": 109,
+    "slt": 164,
+    "spa": 131,
+    "spd": 147,
+    "str": 155,
+    "stt": 162,
+    "vis": 114,
+    "vol": 96,
+    "sta": 81,
+    "total": 3757
+   },
+   "avg": {
+    "avg1": 148,
+    "avg2": 108,
+    "avg3": 120,
+    "avg4": 145,
+    "avg5": 161,
+    "avg6": 152
+   },
+   "playstyles": [
+    "Accelerator",
+    "Stand Tackle Master"
+   ],
+   "meta": null,
+   "added": "2026-11-04T09:25:23Z",
+   "layout": {
+    "player": {
+     "sizeX": 256,
+     "sizeY": 256,
+     "posX": 0,
+     "posY": 0
+    },
+    "rating": {
+     "sizeX": 80,
+     "sizeY": 80,
+     "posX": 36.167,
+     "posY": 4.083,
+     "fontSize": 36
+    },
+    "position": {
+     "sizeX": 40,
+     "sizeY": 20,
+     "posX": 56,
+     "posY": 64,
+     "fontSize": 24
+    },
+    "nation": {
+     "sizeX": 24,
+     "sizeY": 24,
+     "posX": 82.7,
+     "posY": 188
+    },
+    "club": {
+     "sizeX": 24,
+     "sizeY": 24,
+     "posX": 146.6,
+     "posY": 188
+    },
+    "name": {
+     "sizeX": 0,
+     "sizeY": 0,
+     "posX": 128,
+     "posY": 178,
+     "fontSize": 22
+    },
+    "level": {
+     "sizeX": 64,
+     "sizeY": 32,
+     "posX": 128,
+     "posY": 233,
+     "fontSize": 23
+    },
+    "rank": {
+     "sizeX": 32,
+     "sizeY": 32,
+     "posX": 128,
+     "posY": 232
+    }
+   },
+   "colors": {
+    "rating": "#FFFFFF",
+    "position": "#FFFFFF",
+    "name": "#FFFFFF",
+    "level": "#FFFFFF"
+   },
+   "url": "https://renderz.app/player/30922825",
+   "card": "assets/cards/rz/30922825.png",
+   "new_since": "2026-11-05"
+  },
+  "30922812": {
+   "id": 30922812,
+   "name": "Gullit",
+   "full_name": "Ruud Gullit",
+   "ovr": 124,
+   "pos": "CM",
+   "program": "PROGRAM_ICONS",
+   "weak_foot": 5,
+   "skill_moves": 4,
+   "work_rates": [
+    2,
+    0
+   ],
+   "height": 191,
+   "weight": 88,
+   "stats": {
+    "acc": 152,
+    "agg": 150,
+    "agi": 144,
+    "awr": 153,
+    "bac": 152,
+    "bal": 150,
+    "cro": 138,
+    "cur": 143,
+    "dri": 148,
+    "fin": 140,
+    "frk": 145,
+    "gkd": 8,
+    "gkk": 8,
+    "gkp": 8,
+    "han": 8,
+    "hea": 154,
+    "jmp": 152,
+    "lpa": 152,
+    "lsa": 158,
+    "mrk": 150,
+    "pen": 132,
+    "pos": 156,
+    "rea": 154,
+    "ref": 8,
+    "sho": 160,
+    "slt": 146,
+    "spa": 155,
+    "spd": 148,
+    "str": 157,
+    "stt": 154,
+    "vis": 151,
+    "vol": 140,
+    "sta": 92,
+    "total": 4166
+   },
+   "avg": {
+    "avg1": 150,
+    "avg2": 149,
+    "avg3": 149,
+    "avg4": 149,
+    "avg5": 151,
+    "avg6": 153
+   },
+   "playstyles": [
+    "Bullet Pass",
+    "Intimidator"
+   ],
+   "meta": null,
+   "added": "2026-11-04T09:25:23Z",
+   "layout": {
+    "player": {
+     "sizeX": 256,
+     "sizeY": 256,
+     "posX": 0,
+     "posY": 0
+    },
+    "rating": {
+     "sizeX": 80,
+     "sizeY": 80,
+     "posX": 36.167,
+     "posY": 4.083,
+     "fontSize": 36
+    },
+    "position": {
+     "sizeX": 40,
+     "sizeY": 20,
+     "posX": 56,
+     "posY": 64,
+     "fontSize": 24
+    },
+    "nation": {
+     "sizeX": 24,
+     "sizeY": 24,
+     "posX": 82.7,
+     "posY": 188
+    },
+    "club": {
+     "sizeX": 24,
+     "sizeY": 24,
+     "posX": 146.6,
+     "posY": 188
+    },
+    "name": {
+     "sizeX": 0,
+     "sizeY": 0,
+     "posX": 128,
+     "posY": 178,
+     "fontSize": 22
+    },
+    "level": {
+     "sizeX": 64,
+     "sizeY": 32,
+     "posX": 128,
+     "posY": 233,
+     "fontSize": 23
+    },
+    "rank": {
+     "sizeX": 32,
+     "sizeY": 32,
+     "posX": 128,
+     "posY": 232
+    }
+   },
+   "colors": {
+    "rating": "#FFFFFF",
+    "position": "#FFFFFF",
+    "name": "#FFFFFF",
+    "level": "#FFFFFF"
+   },
+   "url": "https://renderz.app/player/30922812",
+   "card": "assets/cards/rz/30922812.png",
+   "new_since": "2026-11-05"
+  },
+  "30922811": {
+   "id": 30922811,
+   "name": "Gullit",
+   "full_name": "Ruud Gullit",
+   "ovr": 124,
+   "pos": "CM",
+   "program": "PROGRAM_ICONS",
+   "weak_foot": 5,
+   "skill_moves": 4,
+   "work_rates": [
+    2,
+    0
+   ],
+   "height": 191,
+   "weight": 88,
+   "stats": {
+    "acc": 152,
+    "agg": 150,
+    "agi": 144,
+    "awr": 153,
+    "bac": 152,
+    "bal": 150,
+    "cro": 138,
+    "cur": 143,
+    "dri": 148,
+    "fin": 140,
+    "frk": 145,
+    "gkd": 8,
+    "gkk": 8,
+    "gkp": 8,
+    "han": 8,
+    "hea": 154,
+    "jmp": 152,
+    "lpa": 152,
+    "lsa": 158,
+    "mrk": 150,
+    "pen": 132,
+    "pos": 156,
+    "rea": 154,
+    "ref": 8,
+    "sho": 160,
+    "slt": 146,
+    "spa": 155,
+    "spd": 148,
+    "str": 157,
+    "stt": 154,
+    "vis": 151,
+    "vol": 140,
+    "sta": 92,
+    "total": 4166
+   },
+   "avg": {
+    "avg1": 150,
+    "avg2": 149,
+    "avg3": 149,
+    "avg4": 149,
+    "avg5": 151,
+    "avg6": 153
+   },
+   "playstyles": [
+    "Bullet Pass",
+    "Intimidator"
+   ],
+   "meta": null,
+   "added": "2026-11-04T09:25:23Z",
+   "layout": {
+    "player": {
+     "sizeX": 256,
+     "sizeY": 256,
+     "posX": 0,
+     "posY": 0
+    },
+    "rating": {
+     "sizeX": 80,
+     "sizeY": 80,
+     "posX": 36.167,
+     "posY": 4.083,
+     "fontSize": 36
+    },
+    "position": {
+     "sizeX": 40,
+     "sizeY": 20,
+     "posX": 56,
+     "posY": 64,
+     "fontSize": 24
+    },
+    "nation": {
+     "sizeX": 24,
+     "sizeY": 24,
+     "posX": 82.7,
+     "posY": 188
+    },
+    "club": {
+     "sizeX": 24,
+     "sizeY": 24,
+     "posX": 146.6,
+     "posY": 188
+    },
+    "name": {
+     "sizeX": 0,
+     "sizeY": 0,
+     "posX": 128,
+     "posY": 178,
+     "fontSize": 22
+    },
+    "level": {
+     "sizeX": 64,
+     "sizeY": 32,
+     "posX": 128,
+     "posY": 233,
+     "fontSize": 23
+    },
+    "rank": {
+     "sizeX": 32,
+     "sizeY": 32,
+     "posX": 128,
+     "posY": 232
+    }
+   },
+   "colors": {
+    "rating": "#FFFFFF",
+    "position": "#FFFFFF",
+    "name": "#FFFFFF",
+    "level": "#FFFFFF"
+   },
+   "url": "https://renderz.app/player/30922811",
+   "card": "assets/cards/rz/30922811.png",
+   "new_since": "2026-11-05"
+  },
+  "30922810": {
+   "id": 30922810,
+   "name": "Matthäus",
+   "full_name": "Lothar Matthäus",
+   "ovr": 124,
+   "pos": "CDM",
+   "program": "PROGRAM_ICONS",
+   "weak_foot": 5,
+   "skill_moves": 3,
+   "work_rates": [
+    2,
+    2
+   ],
+   "height": 174,
+   "weight": 71,
+   "stats": {
+    "acc": 156,
+    "agg": 153,
+    "agi": 145,
+    "awr": 161,
+    "bac": 155,
+    "bal": 151,
+    "cro": 138,
+    "cur": 142,
+    "dri": 146,
+    "fin": 135,
+    "frk": 148,
+    "gkd": 8,
+    "gkk": 8,
+    "gkp": 8,
+    "han": 8,
+    "hea": 146,
+    "jmp": 142,
+    "lpa": 158,
+    "lsa": 159,
+    "mrk": 155,
+    "pen": 145,
+    "pos": 146,
+    "rea": 156,
+    "ref": 8,
+    "sho": 158,
+    "slt": 156,
+    "spa": 160,
+    "spd": 149,
+    "str": 155,
+    "stt": 160,
+    "vis": 156,
+    "vol": 145,
+    "sta": 91,
+    "total": 4207
+   },
+   "avg": {
+    "avg1": 152,
+    "avg2": 147,
+    "avg3": 153,
+    "avg4": 150,
+    "avg5": 156,
+    "avg6": 151
+   },
+   "playstyles": [
+    "Tiki Taka",
+    "Intimidator"
+   ],
+   "meta": null,
+   "added": "2026-11-04T09:25:23Z",
+   "layout": {
+    "player": {
+     "sizeX": 256,
+     "sizeY": 256,
+     "posX": 0,
+     "posY": 0
+    },
+    "rating": {
+     "sizeX": 80,
+     "sizeY": 80,
+     "posX": 36.167,
+     "posY": 4.083,
+     "fontSize": 36
+    },
+    "position": {
+     "sizeX": 40,
+     "sizeY": 20,
+     "posX": 56,
+     "posY": 64,
+     "fontSize": 24
+    },
+    "nation": {
+     "sizeX": 24,
+     "sizeY": 24,
+     "posX": 82.7,
+     "posY": 188
+    },
+    "club": {
+     "sizeX": 24,
+     "sizeY": 24,
+     "posX": 146.6,
+     "posY": 188
+    },
+    "name": {
+     "sizeX": 0,
+     "sizeY": 0,
+     "posX": 128,
+     "posY": 178,
+     "fontSize": 22
+    },
+    "level": {
+     "sizeX": 64,
+     "sizeY": 32,
+     "posX": 128,
+     "posY": 233,
+     "fontSize": 23
+    },
+    "rank": {
+     "sizeX": 32,
+     "sizeY": 32,
+     "posX": 128,
+     "posY": 232
+    }
+   },
+   "colors": {
+    "rating": "#FFFFFF",
+    "position": "#FFFFFF",
+    "name": "#FFFFFF",
+    "level": "#FFFFFF"
+   },
+   "url": "https://renderz.app/player/30922810",
+   "card": "assets/cards/rz/30922810.png",
+   "new_since": "2026-11-05"
   }
  }
 }
