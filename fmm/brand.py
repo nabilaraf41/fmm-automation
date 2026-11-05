@@ -888,6 +888,8 @@ TEMPLATES = {"choose4": post_choose4, "compare": post_compare, "compare4": post_
 def render(post, out_dir=OUT):
     out_dir.mkdir(parents=True, exist_ok=True)
     img = TEMPLATES[post["type"]](post)
+    from fmm import atb
+    img = atb.add_badge(img, post["id"])  # owner rule: a small ATB photo on every photo post
     path = out_dir / f"{post['id']}.png"
     img.save(path, quality=95)
     return path
