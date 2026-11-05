@@ -48,15 +48,24 @@ def make_reel(src, music=None, seconds=8):
     n = seconds * FPS
     # 4K source + gentle zoom keeps small stat text crisp; unsharp offsets the platforms' recompression
     vf = (f"scale=4320:-1:flags=lanczos,zoompan=z='min(zoom+0.0003,1.05)':x='iw/2-(iw/zoom/2)':"
-          f"y='ih/2-(ih/zoom/2)':d={n}:s=1080x1920:fps={FPS},unsharp=5:5:0.8,fade=t=in:st=0:d=0.5,format=yuv420p")
+          f"y='ih/2-(ih/zoom/2)':d={n}:s=1080x1920:fps={FPS},unsharp=5:5:0.8,format=yuv420p")
     start = 0
     if not music:  # copyright-safe library track (fmm.music), else a silent track: platforms prefer an audio stream
         from fmm import music as lib
         music, start = lib.pick()
     if top:
         vf = None  # no zoom: it would crop the clip; the post stays still and sharp below the clip
+        # no fade-in: frame 0 is what platforms show when a cover is missing (black covers before)
         fc = (f"[0:v]fps={FPS},format=yuv420p[bg];[1:v]scale=1080:{TOP},fps={FPS}[t];"
-              f"[bg][t]overlay=0:0:shortest=0,unsharp=5:5:0.6,fade=t=in:st=0:d=0.4,format=yuv420p[v]")
+              f"[bg][t]overlay=0:0:shortest=0,unsharp=5:5:0.6,format=yuv420p[v]")
+        # cover = the post with ATB's reaction on top (used for IG cover, FB + YT thumbnail via cover_for)
+        cov = Image.open(frame).convert("RGB")
+        snap = out.with_name(out.stem + "_top.png")
+        subprocess.run(["ffmpeg", "-v", "error", "-y", "-ss", "2", "-i", str(top), "-frames:v", "1",
+                        "-vf", f"scale=1080:{TOP}", str(snap)], check=True)
+        cov.paste(Image.open(snap).convert("RGB"), (0, 0))
+        snap.unlink()
+        cov.save(out.with_name(out.stem + "_cover.jpg"), quality=92)
         cmd = ["ffmpeg", "-y", "-loop", "1", "-i", str(frame), "-stream_loop", "-1", "-i", str(top)]
         cmd += ["-ss", str(start), "-i", str(music)] if music else ["-f", "lavfi", "-i", "anullsrc=r=44100:cl=stereo"]
         # owner: music low under everything; ATB's voice only on clips whose line fits any post (those keep audio)

@@ -628,15 +628,9 @@ def render_reel(reel, out_dir=OUT, music=None, stills=None):
             "-c:a", "aac", "-b:a", "160k", "-movflags", "+faststart", str(out)]
     enc = subprocess.Popen(cmd, stdin=subprocess.PIPE)
     k = 0
-    from fmm import atb
-    face = atb.badge(reel["id"])  # owner rule: ATB is in every post — small round face, top-right
-    face = Image.open(face).convert("RGBA").resize((190, 190), Image.LANCZOS) if face else None
     def emit(img):
         nonlocal k
-        img = polish(img, k).convert("RGBA")
-        if face:
-            img.alpha_composite(face, (RW - 190 - 36, 150))
-        enc.stdin.write(img.convert("RGB").tobytes()); k += 1
+        enc.stdin.write(polish(img, k).convert("RGB").tobytes()); k += 1
     for i, (dur, fn) in enumerate(scenes):
         for j in range(int(round(dur * FPS))):
             emit(fn(j / FPS))
@@ -648,6 +642,20 @@ def render_reel(reel, out_dir=OUT, music=None, stills=None):
     enc.stdin.close()
     enc.wait()
     wav.unlink(missing_ok=True)
+    # owner rule: no Reel without ATB's video — his reaction clip boxed top-right for the whole Reel
+    from fmm import atb
+    clip = atb.clip(reel["id"])
+    if clip:
+        tmp = out.with_name(out.stem + "_atb.mp4")
+        subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", str(out), "-stream_loop", "-1", "-i", str(clip), "-filter_complex",
+                        "[1:v]scale=440:248,pad=452:260:6:6:color=0xE11D2E[p];[0:v][p]overlay=W-w-28:140:shortest=1[v]",
+                        "-map", "[v]", "-map", "0:a?", "-c:v", "libx264", "-preset", "medium", "-crf", "19",
+                        "-pix_fmt", "yuv420p", "-c:a", "copy", "-movflags", "+faststart", str(tmp)], check=True)
+        tmp.replace(out)
+    cover = out_dir / f"{reel['id']}_cover.jpg"
+    if not cover.exists():  # never a black/empty cover: take a full, settled frame
+        subprocess.run(["ffmpeg", "-v", "error", "-y", "-ss", "1.6", "-i", str(out), "-frames:v", "1", "-q:v", "2",
+                        str(cover)], check=True)
     return out
 
 
