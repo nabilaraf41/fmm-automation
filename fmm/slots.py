@@ -351,6 +351,8 @@ def build_versions(slot):
 def build(slot):
     from fmm import brand, motion
     _SLOT["v"] = slot
+    if slot == "pack" and build_pack():  # manual: slots.yml build with slot "pack"
+        return
     if slot == "2100" and dt.datetime.now().weekday() in (3, 6) and build_pack():  # Thu + Sun: pack opening Reel
         return
     if build_from_inbox(slot):  # your own gameplay always goes first, in any slot
