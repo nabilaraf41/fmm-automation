@@ -102,6 +102,10 @@ def cover(subject_path, text, out_path, sub=None, color="red", emoji="wow", flip
         img.alpha_composite(t, ((W - t.width) // 2, H - t.height - 70))
     # shocked emoji + red arrow pointing at the card
     em = Image.open(EMOJI / f"{emoji or 'wow'}.png").convert("RGBA")
+    from fmm import atb
+    face = atb.badge(f"{text}{emoji}")  # owner rule: ATB's real reaction instead of a cartoon emoji
+    if face and emoji is not None:
+        em = Image.open(face).convert("RGBA")
     if emoji is None:
         em = Image.new("RGBA", (1, 1), (0, 0, 0, 0))
     em = em.resize((260, int(260 * em.height / em.width)), Image.LANCZOS).rotate(-12, expand=True, resample=Image.BICUBIC)

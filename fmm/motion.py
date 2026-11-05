@@ -628,9 +628,15 @@ def render_reel(reel, out_dir=OUT, music=None, stills=None):
             "-c:a", "aac", "-b:a", "160k", "-movflags", "+faststart", str(out)]
     enc = subprocess.Popen(cmd, stdin=subprocess.PIPE)
     k = 0
+    from fmm import atb
+    face = atb.badge(reel["id"])  # owner rule: ATB is in every post — small round face, top-right
+    face = Image.open(face).convert("RGBA").resize((190, 190), Image.LANCZOS) if face else None
     def emit(img):
         nonlocal k
-        enc.stdin.write(polish(img, k).convert("RGB").tobytes()); k += 1
+        img = polish(img, k).convert("RGBA")
+        if face:
+            img.alpha_composite(face, (RW - 190 - 36, 150))
+        enc.stdin.write(img.convert("RGB").tobytes()); k += 1
     for i, (dur, fn) in enumerate(scenes):
         for j in range(int(round(dur * FPS))):
             emit(fn(j / FPS))
