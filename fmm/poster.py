@@ -201,6 +201,10 @@ def post(kind, media, caption, where="both", ctype=None, reel=True, extra=None):
     media = str(media)
     from fmm.captions import polish
     caption = polish(caption)  # humanized, hook-first, max 5 hashtags
+    pair = None
+    if kind == "photo" and where == "both" and reel:  # owner rule: never a photo alone; make its Reel first
+        from fmm import reel as reelmod
+        pair = reelmod.make_reel(media, seconds=10)  # raises (nothing posted) if the Reel can't be made
     done, errors = {}, {}
     steps = []
     if where in ("fb", "both"):
@@ -221,12 +225,8 @@ def post(kind, media, caption, where="both", ctype=None, reel=True, extra=None):
     if not done:
         raise RuntimeError(f"all platforms failed: {errors}")
     log({"kind": kind, "file": media, **({"type": ctype} if ctype else {}), **(extra or {}), **done})
-    if kind == "photo" and where == "both" and reel:  # every photo also goes out as a Reel/Short (slow zoom), for reach
-        try:
-            from fmm import reel
-            done["reel"] = post("reel", reel.make_reel(media, seconds=10), caption, where, ctype)
-        except Exception as ex:
-            print("photo reel skipped:", str(ex)[:150])
+    if pair:  # the photo's Reel on Facebook, Instagram and YouTube Shorts
+        done["reel"] = post("reel", pair, caption, where, ctype)
     return done
 
 

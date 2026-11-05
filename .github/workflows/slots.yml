@@ -4,7 +4,7 @@ name: FMM daily slots
 on:
   workflow_dispatch:
     inputs:
-      mode: {description: "build or post", required: true, default: build, type: choice, options: [build, post]}
+      mode: {description: "build or post", required: true, default: build, type: choice, options: [build, post, reel]}   # reel = only the Reel of the latest build
       slot: {description: "0700 / 1300 / 1900 / 2100", required: false, default: "1300"}
 
 run-name: "${{ github.event_name == 'workflow_dispatch' && format('{0} {1}', inputs.mode, inputs.slot) || 'scheduled' }}"
@@ -45,7 +45,7 @@ jobs:
 
       - name: Install
         run: |
-          [ "${{ steps.which.outputs.mode }}" = "build" ] && sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg || true
+          sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg   # post needs it too: every photo goes with its Reel
           pip install -r requirements.txt
 
       # ---------- build (30 min before) ----------
@@ -62,7 +62,7 @@ jobs:
 
       # ---------- post (at slot time) ----------
       - name: Fetch media from latest build
-        if: steps.which.outputs.mode == 'post'
+        if: steps.which.outputs.mode == 'post' || steps.which.outputs.mode == 'reel'
         run: |
           # newest successful run that has slot media, made in the last 60 min (never repost an old build)
           since=$(date -u -d '-60 min' +%Y-%m-%dT%H:%M:%SZ)
@@ -70,6 +70,16 @@ jobs:
             gh run download "$id" -R ${{ github.repository }} -n slot-media -D output/slot 2>/dev/null && { echo "build run: $id"; break; }
           done
           test -f output/slot/manifest.json || { echo "no fresh build in the last 60 min - nothing posted"; exit 1; }
+
+      - name: Publish the Reel only (photo already posted)
+        if: steps.which.outputs.mode == 'reel'
+        env:
+          META_PAGE_TOKEN: ${{ secrets.META_PAGE_TOKEN }}
+          META_PAGE_ID: ${{ secrets.META_PAGE_ID }}
+          IG_USER_ID: ${{ secrets.IG_USER_ID }}
+          YOUTUBE_TOKEN_JSON: ${{ secrets.YOUTUBE_TOKEN_JSON }}
+        run: |
+          python -u -c "from fmm import poster, reel; from pathlib import Path; p=Path('output/slot/slot.png'); print(poster.post('reel', reel.make_reel(p, seconds=10), Path('output/slot/caption.txt').read_text(encoding='utf-8')))"
 
       - name: Publish
         if: steps.which.outputs.mode == 'post'
