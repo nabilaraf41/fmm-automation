@@ -7,7 +7,7 @@ Slots (BDT): 0700 (USA evening, Reel) · 1300 (Asia lunch, photo) · 1900 (Indon
 New cards are featured first (newest/highest OVR); with nothing new, slots fall back to card battles,
 tier lists and countdowns built from the latest cards.
 """
-import datetime as dt, json, shutil, subprocess, sys
+import datetime as dt, json, re, shutil, subprocess, sys
 from pathlib import Path
 
 from fmm import renderz, review as rv
@@ -265,9 +265,12 @@ def build_pack(got=None, title=None, caption=None):
         if not got:
             return False
         f, src = got
-        who = Path(f["name"]).stem.lower().replace("pack opening", "").replace("pack", "").strip(" -_")
+        stem = Path(f["name"]).stem.lower()
+        # "Madrid Pack Opening 2, got Bellingham" -> who = "bellingham" (the packed player is after "got")
+        who = stem.split(" got ", 1)[1] if " got " in stem else stem.replace("pack opening", "").replace("pack", "")
+        who = re.sub(r"[^a-z' ]", " ", who).strip()
         title = title or (f"I PACKED {who.upper()}!!" if who else "PACK OPENING!!")
-        card = inbox.scorer_card(f["name"])
+        card = inbox.scorer_card(who or f["name"])
         if OUT.exists():
             shutil.rmtree(OUT)
         OUT.mkdir(parents=True)
@@ -292,9 +295,9 @@ def build_pack(got=None, title=None, caption=None):
                             "-movflags", "+faststart", str(OUT / "slot.mp4")], capture_output=True, text=True)
         if r.returncode:
             raise RuntimeError(r.stderr[-300:])
-        atb.box(OUT / "slot.mp4", f["name"])  # reaction video: owner's pack opening + ATB reacting
+        atb.box(OUT / "slot.mp4", f["name"], y=1400)  # reaction video; low, so it never covers the title
         frame = OUT / "frame.png"
-        subprocess.run(["ffmpeg", "-v", "error", "-y", "-ss", str(max(0.0, start + dur - 3)), "-i", str(src),  # packed card is on screen at the end
+        subprocess.run(["ffmpeg", "-v", "error", "-y", "-ss", str(max(0.0, full - 1.5)), "-i", str(src),  # reveal screen at the very end
                         "-frames:v", "1", "-vf", "crop=ih*3/4:ih:(iw-ih*3/4)/2:0", str(frame)])
         thumb.cover(card or (str(frame) if frame.exists() else None), title.replace("I PACKED ", "I PACKED\n", 1) if len(title) > 16 else title,
                     OUT / "slot_cover.jpg", sub="PACK OPENING", color="gold", bg=str(frame) if card and frame.exists() else None)

@@ -27,7 +27,7 @@ def clip(seed):
     return _pick(CLIPS, seed)
 
 
-def box(mp4, seed):
+def box(mp4, seed, y=140):
     """Reaction video: ATB's clip boxed top-right over a Reel for its whole length (in place). Owner rule:
     no Reel without his video. Keeps the Reel's own audio."""
     import subprocess
@@ -37,7 +37,7 @@ def box(mp4, seed):
     mp4 = Path(mp4)
     tmp = mp4.with_name(mp4.stem + "_atb.mp4")
     subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", str(mp4), "-stream_loop", "-1", "-i", str(c), "-filter_complex",
-                    "[1:v]scale=440:248,pad=452:260:6:6:color=0xE11D2E[p];[0:v][p]overlay=W-w-28:140:shortest=1[v]",
+                    f"[1:v]scale=440:248,pad=452:260:6:6:color=0xE11D2E[p];[0:v][p]overlay=W-w-28:{y}:shortest=1[v]",
                     "-map", "[v]", "-map", "0:a?", "-c:v", "libx264", "-preset", "medium", "-crf", "19",
                     "-pix_fmt", "yuv420p", "-c:a", "copy", "-movflags", "+faststart", str(tmp)], check=True)
     tmp.replace(mp4)
