@@ -4,7 +4,7 @@ name: FMM daily slots
 on:
   workflow_dispatch:
     inputs:
-      mode: {description: "build or post", required: true, default: build, type: choice, options: [build, post, reel]}   # reel = only the Reel of the latest build
+      mode: {description: "build or post", required: true, default: build, type: choice, options: [build, post, reel, ig]}   # reel = only the Reel of the latest build; ig = re-post the built video to Instagram only
       slot: {description: "0700 / 1300 / 1900 / 2100", required: false, default: "1300"}
 
 run-name: "${{ github.event_name == 'workflow_dispatch' && format('{0} {1}', inputs.mode, inputs.slot) || 'scheduled' }}"
@@ -62,7 +62,7 @@ jobs:
 
       # ---------- post (at slot time) ----------
       - name: Fetch media from latest build
-        if: steps.which.outputs.mode == 'post' || steps.which.outputs.mode == 'reel'
+        if: steps.which.outputs.mode == 'post' || steps.which.outputs.mode == 'reel' || steps.which.outputs.mode == 'ig'
         run: |
           # newest successful run that has slot media, made in the last 60 min (never repost an old build)
           since=$(date -u -d '-60 min' +%Y-%m-%dT%H:%M:%SZ)
@@ -70,6 +70,15 @@ jobs:
             gh run download "$id" -R ${{ github.repository }} -n slot-media -D output/slot 2>/dev/null && { echo "build run: $id"; break; }
           done
           test -f output/slot/manifest.json || { echo "no fresh build in the last 60 min - nothing posted"; exit 1; }
+
+      - name: Re-post the built video to Instagram only
+        if: steps.which.outputs.mode == 'ig'
+        env:
+          META_PAGE_TOKEN: ${{ secrets.META_PAGE_TOKEN }}
+          META_PAGE_ID: ${{ secrets.META_PAGE_ID }}
+          IG_USER_ID: ${{ secrets.IG_USER_ID }}
+        run: |
+          python -u -c "from fmm import poster; from pathlib import Path; print(poster.post('reel', 'output/slot/slot.mp4', Path('output/slot/caption.txt').read_text(encoding='utf-8'), where='ig'))"
 
       - name: Publish the Reel only (photo already posted)
         if: steps.which.outputs.mode == 'reel'
