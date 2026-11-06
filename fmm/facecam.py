@@ -12,7 +12,8 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 LONG = ROOT / "assets" / "atb_long"
-W, H = 480, 270  # box size on a 1920x1080 video (bottom-left, like big creators' facecams)
+OW, OH = 2560, 1440  # 1440p: YouTube gives 1440p+ uploads its sharper VP9 encode (source is 1080p, 4K adds little)
+W, H = 640, 360  # facecam box, bottom-left like big creators' facecams (= assets/atb_long size, no upscale)
 
 
 def _dur(p):
@@ -40,7 +41,7 @@ def timeline(total, goals):
 
 
 def add(video, out, goals=()):
-    """Burn the ATB facecam into a landscape long video (keeps the game audio, adds his goal voice)."""
+    """Burn the ATB facecam into a landscape long video (output 2560x1440) (keeps the game audio, adds his goal voice)."""
     video, out = Path(video), Path(out)
     total = _dur(video)
     tl = timeline(total, list(goals))
@@ -54,8 +55,8 @@ def add(video, out, goals=()):
                     "-c:a", "aac", "-ar", "44100", "-ac", "2", str(track)], check=True)
     has_a = lambda p: subprocess.run(["ffprobe", "-v", "error", "-select_streams", "a", "-show_entries", "stream=index",
                                       "-of", "csv=p=0", str(p)], capture_output=True, text=True).stdout.strip()
-    fc = (f"[0:v]scale=1920:1080:force_original_aspect_ratio=decrease,pad=1920:1080:(ow-iw)/2:(oh-ih)/2[g];"
-          f"[1:v]pad={W + 8}:{H + 8}:4:4:color=0xE11D2E[c];[g][c]overlay=24:H-h-24:shortest=1[v]")
+    fc = (f"[0:v]scale={OW}:{OH}:force_original_aspect_ratio=decrease:flags=lanczos,pad={OW}:{OH}:(ow-iw)/2:(oh-ih)/2[g];"
+          f"[1:v]pad={W + 8}:{H + 8}:4:4:color=0xE11D2E[c];[g][c]overlay=32:H-h-32:shortest=1[v]")
     game, cam = has_a(video), has_a(track)
     amap = ["-map", "0:a?"]
     if game and cam:  # calm loops are silent; goal clips carry his voice
@@ -64,7 +65,7 @@ def add(video, out, goals=()):
     elif cam:  # screen recording without sound (owner's H2H files): his voice only
         amap = ["-map", "1:a"]
     subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", str(video), "-i", str(track), "-filter_complex", fc,
-                    "-map", "[v]", *amap, "-c:v", "libx264", "-crf", "20", "-preset", "medium", "-c:a", "aac",
+                    "-map", "[v]", *amap, "-c:v", "libx264", "-crf", "18", "-preset", "fast", "-pix_fmt", "yuv420p", "-c:a", "aac",
                     "-b:a", "160k", "-movflags", "+faststart", str(out)], check=True)
     track.unlink(missing_ok=True); lst.unlink(missing_ok=True)
     return out
