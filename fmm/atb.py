@@ -23,8 +23,20 @@ def badge(seed):
     return _pick(BADGES, seed)
 
 
-def clip(seed):
-    return _pick(CLIPS, seed)
+def clip(seed=None):
+    """Least-recently-used reaction clip (owner: never the same clip again and again). Usage is saved in
+    content/clips_state.json -> "atb_used" (merged by fmm.savestate), so it rotates across cloud runs."""
+    import datetime as dt, json
+    if not CLIPS:
+        return None
+    sf = ROOT / "content" / "clips_state.json"
+    st = json.loads(sf.read_text(encoding="utf-8")) if sf.exists() else {}
+    used = st.setdefault("atb_used", {})
+    # never-used first (newest batch "n_*" before the first batch), then the one used longest ago
+    c = min(CLIPS, key=lambda p: (used.get(p.name, ""), not p.name.startswith("n_"), p.name))
+    used[c.name] = dt.datetime.now().isoformat(timespec="seconds")
+    sf.write_text(json.dumps(st, indent=1, ensure_ascii=False), encoding="utf-8")
+    return c
 
 
 def box(mp4, seed, y=140):
@@ -56,7 +68,7 @@ def add_badge(img, seed, size=150, margin=22, bottom=78):
 
 
 if __name__ == "__main__":
-    assert badge("x") == badge("x") and clip("a") in CLIPS, "deterministic pick"
+    assert badge("x") == badge("x"), "deterministic badge"
     im = add_badge(Image.new("RGB", (1080, 1350), (10, 10, 10)), "test")
     assert im.size == (1080, 1350) and im.getpixel((1080 - 22 - 75, 1350 - 78 - 75)) != (10, 10, 10)
     print(len(BADGES), "badges,", len(CLIPS), "clips: ok")
