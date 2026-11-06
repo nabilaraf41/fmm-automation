@@ -14,6 +14,9 @@ from PIL import Image, ImageDraw, ImageFilter
 ROOT = Path(__file__).resolve().parent.parent
 OUT = ROOT / "output" / "clips"
 RW, RH = 1080, 1920
+# FMM gameplay look (owner: sharper, clearer, more beautiful): sharpen at output size, a touch more contrast,
+# livelier colour without neon grass. One place so every Reel / long video looks the same.
+LOOK = "unsharp=5:5:0.8:5:5:0.0,eq=contrast=1.05:saturation=1.03:gamma=0.97"
 
 
 def run(cmd):
@@ -138,12 +141,12 @@ def make(video, title="WHAT A GOAL!!", index=0, sub=None, music=None, card=None)
         f"[0:v]trim=start={start}:end={end},setpts=PTS-STARTPTS,split=2[a][b];"
         f"[a]scale=-2:{RH},crop={RW}:{RH},boxblur=25:2,eq=brightness=-0.12:saturation=1.3[bg];"
         f"[b]{fg_zoom},scale='if(between(t,{rel - 0.4},{rel + 1.2}),1300,1080)':-2:eval=frame,"
-        f"crop=1080:ih*1080/iw:(iw-1080)/2:(ih-ih*1080/iw)/2[fg];"
+        f"crop=1080:ih*1080/iw:(iw-1080)/2:(ih-ih*1080/iw)/2,{LOOK}[fg];"
         f"[bg][fg]overlay=(W-w)/2:(H-h)/2-40[base];"
         f"[base][1:v]overlay=0:0,format=yuv420p[main];"
         f"[0:v]trim=start={start + slow_a}:end={start + slow_b},setpts=2*(PTS-STARTPTS),split=2[c][d];"
         f"[c]scale=-2:{RH},crop={RW}:{RH},boxblur=25:2,eq=brightness=-0.12:saturation=1.3[bg2];"
-        f"[d]scale=1900:-2,crop=1080:ih:(iw-1080)/2:0[fg2];"
+        f"[d]scale=1900:-2,crop=1080:ih:(iw-1080)/2:0,{LOOK}[fg2];"
         f"[bg2][fg2]overlay=(W-w)/2:(H-h)/2-40[base2];"
         f"[base2][2:v]overlay=0:0,format=yuv420p[replay];"
         f"[main][replay]concat=n=2:v=1:a=0[v]"

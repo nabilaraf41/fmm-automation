@@ -13,6 +13,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 LONG = ROOT / "assets" / "atb_long"
 OW, OH = 2560, 1440  # 1440p: YouTube gives 1440p+ uploads its sharper VP9 encode (source is 1080p, 4K adds little)
+from fmm.clips import LOOK  # shared gameplay sharpen + grade
 W, H = 640, 360  # facecam box, bottom-left like big creators' facecams (= assets/atb_long size, no upscale)
 
 
@@ -55,7 +56,7 @@ def add(video, out, goals=()):
                     "-c:a", "aac", "-ar", "44100", "-ac", "2", str(track)], check=True)
     has_a = lambda p: subprocess.run(["ffprobe", "-v", "error", "-select_streams", "a", "-show_entries", "stream=index",
                                       "-of", "csv=p=0", str(p)], capture_output=True, text=True).stdout.strip()
-    fc = (f"[0:v]scale={OW}:{OH}:force_original_aspect_ratio=decrease:flags=lanczos,pad={OW}:{OH}:(ow-iw)/2:(oh-ih)/2[g];"
+    fc = (f"[0:v]scale={OW}:{OH}:force_original_aspect_ratio=decrease:flags=lanczos,pad={OW}:{OH}:(ow-iw)/2:(oh-ih)/2,{LOOK}[g];"
           f"[1:v]pad={W + 8}:{H + 8}:4:4:color=0xE11D2E[c];[g][c]overlay=32:H-h-32:shortest=1[v]")
     game, cam = has_a(video), has_a(track)
     amap = ["-map", "0:a?"]
@@ -86,7 +87,7 @@ def highlight(video, goals, out, n=3):
         seg = out.with_name(f"{out.stem}_seg{i}.mp4")
         # ATB clip starts calm and reacts ~2 s in: start it 4.5 s into the segment so he reacts as the ball goes in
         fc = ("[0:v]split=2[a][b];[a]scale=-2:1920,crop=1080:1920,boxblur=25:2,eq=brightness=-0.15:saturation=1.3[bg];"
-              "[b]scale=1080:-2[fg];[bg][fg]overlay=(W-w)/2:1000[base];"
+              f"[b]scale=1080:-2:flags=lanczos,{LOOK}[fg];[bg][fg]overlay=(W-w)/2:1000[base];"
               "[1:v]scale=1350:760,crop=1080:760,fps=30,tpad=start_duration=4.5:start_mode=clone:stop_duration=4:stop_mode=clone[t];"
               "[base][t]overlay=0:0,fps=30,format=yuv420p[v];"
               "[1:a]aresample=44100,adelay=4500|4500,volume=1.3,apad[vo]")

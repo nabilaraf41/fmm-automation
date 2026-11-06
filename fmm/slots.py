@@ -296,7 +296,7 @@ def build_pack(got=None, title=None, caption=None):
         sfx.build()
         ms = int(max(0.0, reveal - 0.2) * 1000)
         vf = ("[0:v]split=2[a][b];[a]scale=-2:1920,crop=1080:1920,boxblur=25:2,eq=brightness=-0.15:saturation=1.3[bg];"
-              "[b]scale=1080:-2[fg];[bg][fg]overlay=(W-w)/2:1000[base0];"
+              f"[b]scale=1080:-2:flags=lanczos,{clips.LOOK}[fg];[bg][fg]overlay=(W-w)/2:1000[base0];"
               + ("[5:v]scale=1350:760,crop=1080:760,fps=30[t];[base0][t]overlay=0:0:shortest=0[base];" if top else "[base0]null[base];")
               + "[base][1:v]overlay=0:0,format=yuv420p[v]")
         has_voice = top and subprocess.run(["ffprobe", "-v", "error", "-select_streams", "a", "-show_entries", "stream=index",
