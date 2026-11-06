@@ -272,7 +272,7 @@ def build_pack(got=None, title=None, caption=None):
         if len(who.split()) > 3:  # a sentence ("...never got any players from here"), not a player name
             who = ""
         title = title or (f"I PACKED {who.upper()}!!" if who else "PACK OPENING!!")
-        card = inbox.scorer_card(who or f["name"])
+        card = None  # never a database card: its version may differ from the one actually packed (123 vs 120 Mbappe)
         if OUT.exists():
             shutil.rmtree(OUT)
         OUT.mkdir(parents=True)
