@@ -35,7 +35,8 @@ Private repo `nabilaraf41/fmm-automation`, GitHub Actions (PC can be off):
    in the Reel and as the cover subject (`inbox.scorer_card`).
    Pack openings: Drive videos named "pack …" → Thu + Sun 21:00 Reel (`slots.build_pack`, caption from
    content/pack_caption.txt); newest unused first, else the least recently used. "meme …" videos feed EA-logic Reels.
-   "long …" videos → one normal (long) YouTube + Facebook upload a day for watch hours (`inbox.post_long`).
+   "long …" / full "h2h" videos → one long YouTube + Facebook upload a day at 18:00 BDT, 1440p, ATB facecam, plus an
+  IG goal-highlight Reel (`inbox.post_long`, goal times in content/long_goals.json).
 2. Reel slots: review Reel of next unreviewed confirmed card from this week (trending on YouTube first, then OVR).
 3. Photo slots rotate: review, 1v1 stats comparison, pick-one (3 cards + reactions), guess, top-4 stats table,
    budget XI, rate, hidden gem, "is the event worth it", meme. Design references: assets/references/.

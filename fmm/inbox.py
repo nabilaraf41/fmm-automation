@@ -114,6 +114,9 @@ def mark_pack(f):
     STATE.write_text(json.dumps(st, indent=1, ensure_ascii=False), encoding="utf-8")
 
 
+LONG_HOUR = 18  # BDT; own data: 21:00 posts score best, so long videos land 3 h before (YouTube needs time to index)
+
+
 def is_long(f):
     """'long …' files, or full H2H recordings ('Random H2h', over 100 MB) the owner uploaded before the naming rule."""
     n = f["name"].lower()
@@ -124,9 +127,12 @@ def post_long():
     """One full video a day to YouTube as a normal (long) video, for watch hours toward monetization.
     Drive files named 'long …' (e.g. 'long full match vs real madrid.mp4'), oldest first, each posted once."""
     import datetime as dt
+    now = dt.datetime.now(dt.timezone(dt.timedelta(hours=6)))  # BDT
+    if now.hour < LONG_HOUR:  # long videos go out 18:00 BDT: indexed before the 20-23h BD/India viewing peak
+        return None
     st = state()
     done = st.setdefault("long", {})
-    today = dt.date.today().isoformat()
+    today = now.date().isoformat()
     if today in done.values():
         return None
     todo = [f for f in videos(drive()) if is_long(f) and done.get(f["id"], "redo") == "redo"]  # "redo" = post again
