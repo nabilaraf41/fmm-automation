@@ -23,17 +23,21 @@ def badge(seed):
     return _pick(BADGES, seed)
 
 
-def clip(seed=None):
+PACK = sorted((ROOT / "assets" / "atb_pack").glob("*.mp4"))  # pack reactions WITH his voice (lines fit any pull)
+
+
+def clip(seed=None, pool=None):
     """Least-recently-used reaction clip (owner: never the same clip again and again). Usage is saved in
     content/clips_state.json -> "atb_used" (merged by fmm.savestate), so it rotates across cloud runs."""
     import datetime as dt, json
-    if not CLIPS:
+    items = PACK if pool == "pack" and PACK else CLIPS
+    if not items:
         return None
     sf = ROOT / "content" / "clips_state.json"
     st = json.loads(sf.read_text(encoding="utf-8")) if sf.exists() else {}
     used = st.setdefault("atb_used", {})
     # never-used first (newest batch "n_*" before the first batch), then the one used longest ago
-    c = min(CLIPS, key=lambda p: (used.get(p.name, ""), not p.name.startswith("n_"), p.name))
+    c = min(items, key=lambda p: (used.get(p.name, ""), not p.name.startswith("n_"), p.name))
     used[c.name] = dt.datetime.now().isoformat(timespec="seconds")
     sf.write_text(json.dumps(st, indent=1, ensure_ascii=False), encoding="utf-8")
     return c

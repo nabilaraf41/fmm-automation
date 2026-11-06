@@ -278,7 +278,7 @@ def build_pack(got=None, title=None, caption=None):
         OUT.mkdir(parents=True)
         # owner layout: his Flow reaction clip big on top (0-760 px = 40%), title under it, pack recording below
         ov = clips.overlay_png(title, "PACK OPENING TRICK IN CAPTION", OUT / "ov.png", card, title_y=790)
-        top = atb.clip(f["name"])
+        top = atb.clip(f["name"], pool="pack")  # pack reactions keep ATB's voice
         full = clips.duration(src)
         # owner: never cut before the player reveal. The loudest moment is often the pack opening, not the
         # reveal, so always run to the END of the recording (reveal + card on screen), max 58 s for Reels.
@@ -299,8 +299,14 @@ def build_pack(got=None, title=None, caption=None):
               "[b]scale=1080:-2[fg];[bg][fg]overlay=(W-w)/2:1000[base0];"
               + ("[5:v]scale=1350:760,crop=1080:760,fps=30[t];[base0][t]overlay=0:0:shortest=0[base];" if top else "[base0]null[base];")
               + "[base][1:v]overlay=0:0,format=yuv420p[v]")
-        af = (f"[2:a]volume=0.8[r];[3:a]adelay={ms}|{ms}[i];[4:a]adelay={ms}|{ms}[s];"
-              f"[r][i][s]amix=inputs=3:normalize=0,apad,atrim=0:{dur:.2f},loudnorm=I=-14:TP=-1.5[a]")
+        has_voice = top and subprocess.run(["ffprobe", "-v", "error", "-select_streams", "a", "-show_entries", "stream=index",
+                                            "-of", "csv=p=0", str(top)], capture_output=True, text=True).stdout.strip()
+        game = subprocess.run(["ffprobe", "-v", "error", "-select_streams", "a", "-show_entries", "stream=index",
+                               "-of", "csv=p=0", str(src)], capture_output=True, text=True).stdout.strip()
+        voice = "[5:a]atrim=0:6,asetpts=PTS-STARTPTS,volume=1.5,apad[vo];" if has_voice else ""
+        ins = ("[g]" if game else "") + "[r][i][s]" + ("[vo]" if has_voice else "")
+        af = (("[0:a]volume=0.5[g];" if game else "") + f"[2:a]volume=0.6[r];[3:a]adelay={ms}|{ms}[i];[4:a]adelay={ms}|{ms}[s];{voice}"
+              f"{ins}amix=inputs={ins.count('[')}:normalize=0,apad,atrim=0:{dur:.2f},loudnorm=I=-14:TP=-1.5[a]")
         r = subprocess.run(["ffmpeg", "-v", "error", "-y", "-ss", f"{start:.2f}", "-i", str(src), "-i", str(ov), "-i", str(sfx.OUT / "riser.wav"),
                             "-i", str(sfx.OUT / "impact.wav"), "-i", str(sfx.OUT / "sparkle.wav"),
                             *(["-stream_loop", "-1", "-i", str(top)] if top else []),
