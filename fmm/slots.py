@@ -306,7 +306,7 @@ def build_pack(got=None, title=None, caption=None):
             raise RuntimeError(r.stderr[-300:])
         atb.box(OUT / "slot.mp4", f["name"], y=1400)  # reaction video; low, so it never covers the title
         frame = OUT / "frame.png"
-        subprocess.run(["ffmpeg", "-v", "error", "-y", "-ss", str(max(0.0, full - 1.5)), "-i", str(src),  # reveal screen at the very end
+        subprocess.run(["ffmpeg", "-v", "error", "-y", "-ss", str(max(0.0, full - 0.6)), "-i", str(src),  # final card is on screen in the last second
                         "-frames:v", "1", "-vf", "crop=ih*3/4:ih:(iw-ih*3/4)/2:0", str(frame)])
         thumb.cover(card or (str(frame) if frame.exists() else None), title.replace("I PACKED ", "I PACKED\n", 1) if len(title) > 16 else title,
                     OUT / "slot_cover.jpg", sub="PACK OPENING", color="gold", bg=str(frame) if card and frame.exists() else None)
