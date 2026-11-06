@@ -282,6 +282,13 @@ def build_pack(got=None, title=None, caption=None):
         # reveal, so always run to the END of the recording (reveal + card on screen), max 58 s for Reels.
         start = max(0.0, full - 58)
         dur = full - start
+        # exact cuts studied by hand (content/pack_trims.json: drive id -> [start, end] seconds):
+        # pack opens -> animation -> cards reveal -> pick -> final card; menus/shop screens cut out
+        trims = ROOT / "content" / "pack_trims.json"
+        cut = json.loads(trims.read_text(encoding="utf-8")).get(f["id"]) if trims.exists() else None
+        if cut:
+            start, dur = float(cut[0]), min(float(cut[1]), full) - float(cut[0])
+            full = start + dur
         lv = [x for x in clips.loudness(src) if x[0] >= start]
         reveal = (max(lv, key=lambda x: x[1])[0] if lv else full * 0.8) - start  # sfx hit only
         sfx.build()
