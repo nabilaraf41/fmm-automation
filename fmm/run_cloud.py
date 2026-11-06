@@ -67,10 +67,7 @@ if __name__ == "__main__":
     assert due_slot(dt.datetime(2026, 11, 1, 15, 0, tzinfo=BDT), {"2026-11-01-1300": 1}) is None
 
     now = dt.datetime.now(BDT)
-    try:
-        run_slot(now)
-    except Exception as ex:
-        print("slot failed (next hourly run retries):", str(ex)[:200])
+    # long video first: run_slot may wait up to an hour for the next slot, and the job has a 100-minute limit
     try:  # one long YouTube video a day from Drive 'long …' files (watch hours for the Partner Program)
         from fmm import inbox
         v = inbox.post_long()
@@ -78,6 +75,10 @@ if __name__ == "__main__":
             print("long video uploaded:", v)
     except Exception as ex:
         print("long video skipped:", str(ex)[:150])
+    try:
+        run_slot(now)
+    except Exception as ex:
+        print("slot failed (next hourly run retries):", str(ex)[:200])
     try:  # reply to the 2 best comments per recent post (Instagram + Facebook)
         from fmm import replies
         replies.run()

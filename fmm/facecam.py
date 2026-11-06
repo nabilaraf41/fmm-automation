@@ -66,7 +66,7 @@ def add(video, out, goals=()):
     elif cam:  # screen recording without sound (owner's H2H files): his voice only
         amap = ["-map", "1:a"]
     subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", str(video), "-i", str(track), "-filter_complex", fc,
-                    "-map", "[v]", *amap, "-c:v", "libx264", "-crf", "18", "-preset", "fast", "-pix_fmt", "yuv420p", "-c:a", "aac",
+                    "-map", "[v]", *amap, "-c:v", "libx264", "-crf", "18", "-preset", "veryfast", "-pix_fmt", "yuv420p", "-c:a", "aac",  # veryfast: the cloud runner encodes 1440p in time
                     "-b:a", "160k", "-movflags", "+faststart", str(out)], check=True)
     track.unlink(missing_ok=True); lst.unlink(missing_ok=True)
     return out
