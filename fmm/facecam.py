@@ -56,7 +56,7 @@ def add(video, out, goals=()):
                     "-c:a", "aac", "-ar", "44100", "-ac", "2", str(track)], check=True)
     has_a = lambda p: subprocess.run(["ffprobe", "-v", "error", "-select_streams", "a", "-show_entries", "stream=index",
                                       "-of", "csv=p=0", str(p)], capture_output=True, text=True).stdout.strip()
-    fc = (f"[0:v]scale={OW}:{OH}:force_original_aspect_ratio=decrease:flags=lanczos,pad={OW}:{OH}:(ow-iw)/2:(oh-ih)/2,{LOOK}[g];"
+    fc = (f"[0:v]scale={OW}:{OH}:force_original_aspect_ratio=decrease:flags=lanczos,pad={OW}:{OH}:(ow-iw)/2:(oh-ih)/2,fps=60,{LOOK}[g];"
           f"[1:v]pad={W + 8}:{H + 8}:4:4:color=0xE11D2E[c];[g][c]overlay=32:H-h-32:shortest=1[v]")
     game, cam = has_a(video), has_a(track)
     amap = ["-map", "0:a?"]
