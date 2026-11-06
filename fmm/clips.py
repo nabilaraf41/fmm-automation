@@ -87,14 +87,14 @@ def peaks(video, n=None, min_gap=25.0, pre=8.0, post=4.0):
     return [(max(0.0, p - pre), p, min(dur, p + post)) for p in sorted(picked)]
 
 
-def overlay_png(title, sub, path, card=None):
+def overlay_png(title, sub, path, card=None, title_y=230):
     """Transparent 1080x1920 layer: big title (top), scorer's card (lower right), FMM bar (bottom)."""
     from fmm.brand import font, LOGO, load_card
     from fmm.thumb import big_text
     im = Image.new("RGBA", (RW, RH), (0, 0, 0, 0))
     if title:
         t = big_text(title.upper(), 150, (255, 230, 0), stroke=12)
-        im.alpha_composite(t, ((RW - t.width) // 2, 230))
+        im.alpha_composite(t, ((RW - t.width) // 2, title_y))
     if card:
         c = load_card(card)
         c.thumbnail((330, 460), Image.LANCZOS)

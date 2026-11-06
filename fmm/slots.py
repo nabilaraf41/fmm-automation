@@ -276,7 +276,9 @@ def build_pack(got=None, title=None, caption=None):
         if OUT.exists():
             shutil.rmtree(OUT)
         OUT.mkdir(parents=True)
-        ov = clips.overlay_png(title, "PACK OPENING TRICK IN CAPTION", OUT / "ov.png", card)
+        # owner layout: his Flow reaction clip big on top (0-760 px = 40%), title under it, pack recording below
+        ov = clips.overlay_png(title, "PACK OPENING TRICK IN CAPTION", OUT / "ov.png", card, title_y=790)
+        top = atb.clip(f["name"])
         full = clips.duration(src)
         # owner: never cut before the player reveal. The loudest moment is often the pack opening, not the
         # reveal, so always run to the END of the recording (reveal + card on screen), max 58 s for Reels.
@@ -294,17 +296,19 @@ def build_pack(got=None, title=None, caption=None):
         sfx.build()
         ms = int(max(0.0, reveal - 0.2) * 1000)
         vf = ("[0:v]split=2[a][b];[a]scale=-2:1920,crop=1080:1920,boxblur=25:2,eq=brightness=-0.15:saturation=1.3[bg];"
-              "[b]scale=1080:-2[fg];[bg][fg]overlay=(W-w)/2:(H-h)/2-40[base];[base][1:v]overlay=0:0,format=yuv420p[v]")
+              "[b]scale=1080:-2[fg];[bg][fg]overlay=(W-w)/2:1000[base0];"
+              + ("[5:v]scale=1350:760,crop=1080:760,fps=30[t];[base0][t]overlay=0:0:shortest=0[base];" if top else "[base0]null[base];")
+              + "[base][1:v]overlay=0:0,format=yuv420p[v]")
         af = (f"[2:a]volume=0.8[r];[3:a]adelay={ms}|{ms}[i];[4:a]adelay={ms}|{ms}[s];"
               f"[r][i][s]amix=inputs=3:normalize=0,apad,atrim=0:{dur:.2f},loudnorm=I=-14:TP=-1.5[a]")
         r = subprocess.run(["ffmpeg", "-v", "error", "-y", "-ss", f"{start:.2f}", "-i", str(src), "-i", str(ov), "-i", str(sfx.OUT / "riser.wav"),
                             "-i", str(sfx.OUT / "impact.wav"), "-i", str(sfx.OUT / "sparkle.wav"),
+                            *(["-stream_loop", "-1", "-i", str(top)] if top else []),
                             "-filter_complex", vf + ";" + af, "-map", "[v]", "-map", "[a]", "-t", f"{dur:.2f}", "-r", "30",
                             "-c:v", "libx264", "-preset", "medium", "-crf", "20", "-c:a", "aac", "-b:a", "160k",
                             "-movflags", "+faststart", str(OUT / "slot.mp4")], capture_output=True, text=True)
         if r.returncode:
             raise RuntimeError(r.stderr[-300:])
-        atb.box(OUT / "slot.mp4", f["name"], y=1400)  # reaction video; low, so it never covers the title
         frame = OUT / "frame.png"
         subprocess.run(["ffmpeg", "-v", "error", "-y", "-ss", str(max(0.0, full - 0.6)), "-i", str(src),  # final card is on screen in the last second
                         "-frames:v", "1", "-vf", "crop=ih*3/4:ih:(iw-ih*3/4)/2:0", str(frame)])
