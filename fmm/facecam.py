@@ -52,14 +52,17 @@ def add(video, out, goals=()):
     subprocess.run(["ffmpeg", "-v", "error", "-y", "-f", "concat", "-safe", "0", "-i", str(lst),
                     "-vf", f"scale={W}:{H},fps=30", "-c:v", "libx264", "-crf", "20", "-preset", "fast",
                     "-c:a", "aac", "-ar", "44100", "-ac", "2", str(track)], check=True)
-    has_a = subprocess.run(["ffprobe", "-v", "error", "-select_streams", "a", "-show_entries", "stream=index",
-                            "-of", "csv=p=0", str(track)], capture_output=True, text=True).stdout.strip()
+    has_a = lambda p: subprocess.run(["ffprobe", "-v", "error", "-select_streams", "a", "-show_entries", "stream=index",
+                                      "-of", "csv=p=0", str(p)], capture_output=True, text=True).stdout.strip()
     fc = (f"[0:v]scale=1920:1080:force_original_aspect_ratio=decrease,pad=1920:1080:(ow-iw)/2:(oh-ih)/2[g];"
-          f"[1:v]pad={W + 8}:{H + 8}:4:4:color=0xE11D2E[c];[g][c]overlay=24:H-h-24[v]")
+          f"[1:v]pad={W + 8}:{H + 8}:4:4:color=0xE11D2E[c];[g][c]overlay=24:H-h-24:shortest=1[v]")
+    game, cam = has_a(video), has_a(track)
     amap = ["-map", "0:a?"]
-    if has_a:  # calm loops are near-silent; goal clips carry his voice
+    if game and cam:  # calm loops are silent; goal clips carry his voice
         fc += ";[0:a][1:a]amix=inputs=2:duration=first:normalize=0[a]"
         amap = ["-map", "[a]"]
+    elif cam:  # screen recording without sound (owner's H2H files): his voice only
+        amap = ["-map", "1:a"]
     subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", str(video), "-i", str(track), "-filter_complex", fc,
                     "-map", "[v]", *amap, "-c:v", "libx264", "-crf", "20", "-preset", "medium", "-c:a", "aac",
                     "-b:a", "160k", "-movflags", "+faststart", str(out)], check=True)
