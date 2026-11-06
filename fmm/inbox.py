@@ -129,7 +129,7 @@ def post_long():
     today = dt.date.today().isoformat()
     if today in done.values():
         return None
-    todo = [f for f in videos(drive()) if is_long(f) and f["id"] not in done]
+    todo = [f for f in videos(drive()) if is_long(f) and done.get(f["id"], "redo") == "redo"]  # "redo" = post again
     if not todo:
         return None
     f = todo[0]
