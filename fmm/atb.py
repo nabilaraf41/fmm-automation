@@ -36,8 +36,9 @@ def clip(seed=None, pool=None):
     sf = ROOT / "content" / "clips_state.json"
     st = json.loads(sf.read_text(encoding="utf-8")) if sf.exists() else {}
     used = st.setdefault("atb_used", {})
-    # never-used first (newest batch "n_*" before the first batch), then the one used longest ago
-    c = min(items, key=lambda p: (used.get(p.name, ""), not p.name.startswith("n_"), p.name))
+    # never-used first, shuffled (so rooms/places mix instead of one batch in a row), then the one used longest ago;
+    # a clip comes back only after every other clip in its pool was used
+    c = min(items, key=lambda p: (used.get(p.name, ""), hashlib.md5(p.name.encode()).hexdigest()))
     used[c.name] = dt.datetime.now().isoformat(timespec="seconds")
     sf.write_text(json.dumps(st, indent=1, ensure_ascii=False), encoding="utf-8")
     return c
