@@ -114,6 +114,12 @@ def mark_pack(f):
     STATE.write_text(json.dumps(st, indent=1, ensure_ascii=False), encoding="utf-8")
 
 
+def is_long(f):
+    """'long …' files, or full H2H recordings ('Random H2h', over 100 MB) the owner uploaded before the naming rule."""
+    n = f["name"].lower()
+    return n.startswith("long") or ("h2h" in n and int(f.get("size") or 0) > 100 * 2**20)
+
+
 def post_long():
     """One full video a day to YouTube as a normal (long) video, for watch hours toward monetization.
     Drive files named 'long …' (e.g. 'long full match vs real madrid.mp4'), oldest first, each posted once."""
@@ -123,11 +129,13 @@ def post_long():
     today = dt.date.today().isoformat()
     if today in done.values():
         return None
-    todo = [f for f in videos(drive()) if f["name"].lower().startswith("long") and f["id"] not in done]
+    todo = [f for f in videos(drive()) if is_long(f) and f["id"] not in done]
     if not todo:
         return None
     f = todo[0]
-    name = Path(f["name"]).stem[4:].strip(" -_").title() or "Full Match"
+    stem = Path(f["name"]).stem
+    name = stem[4:].strip(" -_").title() if stem.lower().startswith("long") else ""
+    name = name or "H2H Full Match Gameplay"
     nl = chr(10)
     title = f"{name} | FC Mobile"[:60]  # titles under 60 chars read fully in search and suggested
     # first 2 lines hook the scroller, then summary, links, then the words people actually search
