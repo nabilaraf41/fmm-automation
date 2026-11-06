@@ -439,6 +439,14 @@
    "media": "slot.mp4",
    "players": [],
    "built": "2026-11-06T13:24"
+  },
+  {
+   "slot": "2100",
+   "kind": "reel",
+   "type": "pack",
+   "media": "slot.mp4",
+   "players": [],
+   "built": "2026-11-06T13:31"
   }
  ],
  "force": {
