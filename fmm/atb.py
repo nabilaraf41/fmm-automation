@@ -24,13 +24,14 @@ def badge(seed):
 
 
 PACK = sorted((ROOT / "assets" / "atb_pack").glob("*.mp4"))  # pack reactions WITH his voice (lines fit any pull)
+EA = sorted((ROOT / "assets" / "atb_ea").glob("*.mp4"))  # EA-logic comedy + hooks WITH his voice ("EA... why?")
 
 
 def clip(seed=None, pool=None):
     """Least-recently-used reaction clip (owner: never the same clip again and again). Usage is saved in
     content/clips_state.json -> "atb_used" (merged by fmm.savestate), so it rotates across cloud runs."""
     import datetime as dt, json
-    items = PACK if pool == "pack" and PACK else CLIPS
+    items = {"pack": PACK, "ea": EA}.get(pool) or CLIPS
     if not items:
         return None
     sf = ROOT / "content" / "clips_state.json"
@@ -44,19 +45,33 @@ def clip(seed=None, pool=None):
     return c
 
 
-def box(mp4, seed, y=140):
-    """Reaction video: ATB's clip boxed top-right over a Reel for its whole length (in place). Owner rule:
-    no Reel without his video. Keeps the Reel's own audio."""
+def _has_audio(p):
     import subprocess
-    c = clip(seed)
+    return bool(subprocess.run(["ffprobe", "-v", "error", "-select_streams", "a", "-show_entries", "stream=index",
+                                "-of", "csv=p=0", str(p)], capture_output=True, text=True).stdout.strip())
+
+
+def box(mp4, seed, y=140, pool=None):
+    """Reaction video: ATB's clip boxed top-right over a Reel for its whole length (in place). Owner rule:
+    no Reel without his video. Keeps the Reel's own audio; pool="ea" also mixes in his voice line (first 6 s)."""
+    import subprocess
+    c = clip(seed, pool=pool)
     if not c:
         return mp4
     mp4 = Path(mp4)
     tmp = mp4.with_name(mp4.stem + "_atb.mp4")
+    fc = f"[1:v]scale=440:248,pad=452:260:6:6:color=0xE11D2E[p];[0:v][p]overlay=W-w-28:{y}:shortest=1[v]"
+    amap, acodec = ["-map", "0:a?"], ["-c:a", "copy"]
+    if pool == "ea" and _has_audio(c):
+        voice = "[1:a]atrim=0:6,asetpts=PTS-STARTPTS,volume=1.4,apad"
+        if _has_audio(mp4):
+            fc += f";{voice}[vo];[0:a]volume=0.6[g];[g][vo]amix=inputs=2:duration=first:normalize=0[a]"
+        else:
+            fc += f";{voice}[a]"
+        amap, acodec = ["-map", "[a]", "-shortest"], ["-c:a", "aac", "-b:a", "160k"]
     subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", str(mp4), "-stream_loop", "-1", "-i", str(c), "-filter_complex",
-                    f"[1:v]scale=440:248,pad=452:260:6:6:color=0xE11D2E[p];[0:v][p]overlay=W-w-28:{y}:shortest=1[v]",
-                    "-map", "[v]", "-map", "0:a?", "-c:v", "libx264", "-preset", "medium", "-crf", "19",
-                    "-pix_fmt", "yuv420p", "-c:a", "copy", "-movflags", "+faststart", str(tmp)], check=True)
+                    fc, "-map", "[v]", *amap, "-c:v", "libx264", "-preset", "medium", "-crf", "19",
+                    "-pix_fmt", "yuv420p", *acodec, "-movflags", "+faststart", str(tmp)], check=True)
     tmp.replace(mp4)
     return mp4
 

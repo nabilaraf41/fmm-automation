@@ -153,6 +153,8 @@ def make_reel(pr, meme, out_dir, seconds=None):
                         "-movflags", "+faststart", str(out)], capture_output=True, text=True)
     if r.returncode:
         raise RuntimeError(r.stderr[-500:])
+    from fmm import atb
+    atb.box(out, pr["name"], y=980, pool="ea")  # owner rule: ATB in every Reel; EA-logic line in his voice
     thumb.cover(str(top), "EA SPORTS\nLOGIC 🤡".replace(" 🤡", "!?"), out_dir / "slot_cover.jpg",
                 sub=f"{pr['name']} {pr['good']['ovr']} > {pr['bad']['ovr']}?!", color="red", emoji=None)
     top.unlink(missing_ok=True)

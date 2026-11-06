@@ -175,6 +175,17 @@ def post_long():
         poster.log({"kind": "long", "file": str(local), "type": "long", "youtube": vid, "facebook": fb})
     except Exception as ex:
         print("facebook long video skipped:", str(ex)[:150])
+    try:  # Instagram gets a vertical goal-highlight Reel of the match (ATB reacting big on top)
+        from fmm import facecam, poster
+        goals = facecam.goals_for(f["id"])
+        hl = facecam.highlight(download(f), goals, CACHE / f"{f['id']}_hl.mp4") if goals else None
+        if hl:
+            scored = sum(1 for _, k in goals if k == "scored")
+            cap = (f"{scored} goals in one H2H match 🔥 Full match on YouTube: FC Mobile Mania - FMM{nl}{nl}"
+                   "#FCMobile #FIFAMobile #EAFC #H2H #FMM")
+            print("ig highlight:", poster.post("reel", hl, cap, where="ig"))
+    except Exception as ex:
+        print("ig highlight skipped:", str(ex)[:150])
     done[f["id"]] = today
     STATE.write_text(json.dumps(st, indent=1, ensure_ascii=False), encoding="utf-8")
     return vid
