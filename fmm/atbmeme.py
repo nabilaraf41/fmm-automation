@@ -32,7 +32,8 @@ def find_card(spec):
         fresh, _, _ = slots.latest_players()
     except Exception:
         fresh = {}
-    cands = {**db, **fresh}
+    from fmm import versions
+    cands = {**versions.library(), **db, **fresh}  # card_library.json holds older versions too
     cands = slots.confirmed_only({k: v for k, v in cands.items() if (v.get("name") or "").lower().endswith(name.split()[-1])
                                   and name in (v.get("name") or "").lower() and v.get("ovr") == ovr
                                   and (not pos or v.get("pos") == pos)})
