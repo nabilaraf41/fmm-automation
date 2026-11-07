@@ -89,12 +89,19 @@ def cover_for(media):
     return c if c.exists() else None
 
 
-def fb_thumbnail(video_id, cover):
-    try:
-        with open(cover, "rb") as f:
-            call("POST", f"{video_id}/thumbnails", data={"is_preferred": "true"}, files={"source": f})
-    except Exception as ex:
-        print("fb thumbnail skipped:", str(ex)[:120])
+def fb_thumbnail(video_id, cover, tries=8):
+    """Right after upload the video "does not exist" while FB processes it: retry for ~4 min."""
+    for i in range(tries):
+        try:
+            with open(cover, "rb") as f:
+                call("POST", f"{video_id}/thumbnails", data={"is_preferred": "true"}, files={"source": f})
+            return True
+        except Exception as ex:
+            if i == tries - 1:
+                print("fb thumbnail skipped:", str(ex)[:120])
+            else:
+                time.sleep(30)
+    return False
 
 
 def fb_reel(path, caption):
