@@ -40,6 +40,8 @@ Private repo `nabilaraf41/fmm-automation`, GitHub Actions (PC can be off):
 2. Reel slots: review Reel of next unreviewed confirmed card from this week (trending on YouTube first, then OVR).
 3. Photo slots rotate: review, 1v1 stats comparison, pick-one (3 cards + reactions), guess, top-4 stats table,
    budget XI, rate, hidden gem, "is the event worth it", meme. Design references: assets/references/.
+- ATB Meme (`fmm.atbmeme`): owner says what goes on the right; add {top, bottom, label} to content/atb_meme.json
+  queue (cards as "Name OVR POS", confirmed only). Posts one a day at 15:00 BDT (photo + Reel). ATB images: assets/atb_meme.
 - Weekly growth loop (`fmm.growth`, Mondays): scores last week's posts (YT views, IG views/likes/comments, FB
   likes/comments) → content/weekly_report.md; sets featured.json boost (extra turns) / drop (skipped) for photo formats.
 - One-off overrides: `featured.json` → `force` keyed by date-slot (e.g. {"2026-11-05-0700": "countdown"}); undated keys are ignored.
