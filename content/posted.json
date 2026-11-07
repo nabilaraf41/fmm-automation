@@ -704,5 +704,22 @@
   "facebook": "1139968212015134",
   "instagram": "17975788890072437",
   "youtube": "3AsADdEHp8E"
+ },
+ {
+  "at": "2026-11-07 19:00:27",
+  "kind": "photo",
+  "file": "/home/runner/work/fmm-automation/fmm-automation/output/slot/slot.png",
+  "type": "statrank",
+  "facebook": "122207144756906131",
+  "instagram": "18114983429074798"
+ },
+ {
+  "at": "2026-11-07 19:01:11",
+  "kind": "reel",
+  "file": "/home/runner/work/fmm-automation/fmm-automation/output/slot/slot_reel.mp4",
+  "type": "statrank",
+  "facebook": "2012795169412327",
+  "instagram": "18107504759249049",
+  "youtube": "sXiT2pzmZRU"
  }
 ]
