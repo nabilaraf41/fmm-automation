@@ -43,6 +43,8 @@ def make_reel(src, music=None, seconds=8):
     src = Path(src)
     from fmm import atb
     top = atb.clip(src.stem)  # owner rule: ATB reacts in the top part of every photo Reel
+    if not top:  # no Reel without ATB: raising stops poster.post, so nothing posts
+        raise RuntimeError("no ATB clip in assets/atb_clips: Reel not made, post stopped")
     frame = make_frame_atb(src) if top else make_frame(src)
     out = src.with_name(src.stem + "_reel.mp4")
     n = seconds * FPS
