@@ -57,3 +57,8 @@ Weak parts we must NOT take: thin serif headlines, pink-on-purple low-contrast t
 3. Budget XI part → 3 big cards + price pills (brand.post_xi_part)
 4. Review → declutter: big card, verdict stamp, 6 tiles, 3 pros (brand.post_review)
 5. ATB safe zone → every template keeps bottom-right 230×250 empty (all templates; check script)
+
+## 7. Open-source techniques in use (8 Nov 2026)
+- Photos: `brand.finish` = soft bloom on bright parts, vignette, fine mono grain (ideas from easy-pil and filmgrainer, written with numpy, no new package).
+- Reels: `motion.progress_bar` = gold bar filling along the bottom edge (idea from shortsmith, ffmpeg only), added once per file in `poster.post`.
+- Next candidates: word-by-word captions on clips with a voice (AI Video Captions: faster-whisper + ASS subtitles), only if we add voice-over Reels.
