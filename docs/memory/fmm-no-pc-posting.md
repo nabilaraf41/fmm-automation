@@ -14,3 +14,5 @@ started a real run (args are ignored) and had to be killed. Owner said "stop my 
 **How to apply:** test with `slots.build_extra(...)`/`slots.build(...)` only, then `git checkout`/stash content;
 for real posting use the cloud (dated `force` overrides in featured.json, or dispatch codes.yml).
 Links: [[fmm-savestate-hazard]]
+
+8 Nov 2026: `python -m fmm.run_cloud --help` (meant as a harmless check) posted the Week 4 leak from the PC. Fixed: run_cloud exits unless GITHUB_ACTIONS=true; state saved so the cloud did not repost. Never run any fmm module with __main__ posting code "to check imports" — use `python -c "import fmm.x"`.
