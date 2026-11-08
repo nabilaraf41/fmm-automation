@@ -474,7 +474,8 @@ def build(slot):
         for x in (a, b):
             x["program_name"] = program_name(x.get("program"))
         media = brand.render({"id": "slot", "type": "compare", "a": a, "b": b}, OUT)
-        caption = (f"⚔️ {a['ovr']} {a['name']} ({a['pos']}) vs {b['ovr']} {b['name']} ({b['pos']})\n\n"
+        caption = (f"{a['name'].split()[-1]} vs {b['name'].split()[-1]}: Who Wins? ⚔️\n\n"
+                   f"{a['ovr']} {a['name']} ({a['pos']}) vs {b['ovr']} {b['name']} ({b['pos']})\n\n"
                    f"Only one goes in your starting XI. Who's your pick and why? 👇\n\n"
                    f"#FCMobile #FIFAMobile #EAFC #CardBattle #FMM")
     if ctype.startswith("review"):
@@ -534,7 +535,8 @@ def render_versus(pair, fresh):
         x["card"] = x.get("card") or ensure_card(x, fresh)
         x["program_name"] = program_name(x.get("program"))
     post = {"id": "slot", "type": "compare", "a": a, "b": b}
-    caption = (f"⚔️ {a['ovr']} {a['name']} ({a['pos']}) vs {b['ovr']} {b['name']} ({b['pos']})\n\n"
+    caption = (f"{a['name'].split()[-1]} vs {b['name'].split()[-1]}: Who Wins? ⚔️\n\n"
+                   f"{a['ovr']} {a['name']} ({a['pos']}) vs {b['ovr']} {b['name']} ({b['pos']})\n\n"
                f"Only one goes in your starting XI. Who's your pick and why? 👇\n\n"
                f"#FCMobile #FIFAMobile #EAFC #CardBattle #FMM")
     return brand.render(post, OUT), caption
@@ -607,13 +609,14 @@ def build_extra(ctype, latest, pool, fresh, state):
             sub = sum(p["shards"] for p in real(ps))
             return ({"id": f"xi_{today:%Y%m%d}_{key}", "type": "xi_part", "title": "Best Budget XI",
                      "subtitle": f"Part {i}/3 • {name} • {sub:,} shards", "players": real(ps)},
-                    f"💰 Budget XI part {i}/3: the {name.lower()} (every card under 14k Star Shards)\n\n{line(ps)}"
+                    f"Best Cheap {name.title()} in FC Mobile 💰\n\nBudget XI part {i}/3, every card under 14k Star Shards"
+                    f"\n\n{line(ps)}"
                     f"\n\n{name.title()} total: {sub:,} Star Shards. Next part tomorrow at the same time 👀"
                     f"\n\n{TAGS} #BudgetSquad")
         total = sum(p.get("shards") or 0 for p in real(team))
         post = {"id": "slot", "type": "xi", "title": "Best Budget XI", "subtitle": "Every card under 14,000 Star Shards",
                 "players": team}
-        caption = (f"💰 FMM BEST BUDGET XI: every card under 14k Star Shards\n\n{line(team)}"
+        caption = (f"Best Budget XI in FC Mobile 💰🔥\n\nFMM BEST BUDGET XI: every card under 14k Star Shards\n\n{line(team)}"
                    f"\n\nWhole team: {total:,} Star Shards (prices checked on 2 databases)"
                    "\n\nWho would you swap in? 👇 Save this for your next rebuild 📌\n\n" + TAGS + " #BudgetSquad")
         step = forced.split(":", 1)[1] if ":" in forced else \
@@ -643,7 +646,7 @@ def build_extra(ctype, latest, pool, fresh, state):
         post = {"id": "slot", "type": "gem", "card": p["card"], "subtitle": f"{p['ovr']} OVR {p['name']} • {p['pos']}",
                 "stats": labels}
         state.setdefault("used_photo", []).append(str(p["id"]))
-        caption = (f"💎 HIDDEN GEM: {p['ovr']} OVR {p['name']} ({p['pos']})\n\nLow OVR, but his key stats beat many "
+        caption = (f"{p['ovr']} {p['name']} is a HIDDEN GEM 💎\n\n{p['ovr']} OVR {p['name']} ({p['pos']}). Low OVR, but his key stats beat many "
                    f"higher-rated cards:\n" + "\n".join(f"• {l}: {v}" for l, v in labels)
                    + "\n\nWould you give him a chance? 👇\n\n" + TAGS + " #HiddenGem")
     elif ctype == "worth":
@@ -678,7 +681,7 @@ def build_extra(ctype, latest, pool, fresh, state):
         post = {"id": "slot", "type": "top10", "position": pos.upper(), "title": "This week",
                 "players": [{"name": p["name"], "card": p["card"], "ovr": p.get("ovr")} for p in ten]}
         nl = "\n"
-        caption = (f"🏆 TOP 10 {pos.upper()} in FC Mobile this week{nl}{nl}"
+        caption = (f"Top 10 {pos.upper()} Right Now 🏆🔥{nl}{nl}The best {pos.upper()} cards in FC Mobile this week:{nl}{nl}"
                    + nl.join(f"{i + 1}. {p.get('ovr')} {p['name']} ({program_name(p.get('program'))})"
                              for i, p in enumerate(ten))
                    + f"{nl}{nl}Who's missing? 👇 Save this for your next upgrade 📌{nl}{nl}" + TAGS + f" #Top10 #{pos.upper()}")
@@ -739,7 +742,7 @@ def build_extra(ctype, latest, pool, fresh, state):
         post = {"id": "slot", "type": "top10", "position": label if len(poss) == 1 else "ALL", "title": f"by {STAT_NAME[stat]}", "subtitle": "latest cards",
                 "players": [{"name": p["name"], "card": p["card"], "ovr": p.get("ovr"), "pos": p.get("pos"),
                              "stat": f"{stat} {p['face'][stat]}"} for p in ranked]}
-        caption = (f"🏆 Top 10 {label} in FC Mobile by {STAT_NAME[stat]} (120+ OVR cards)\n\n"
+        caption = (f"Top 10 {label} by {STAT_NAME[stat]} 🏆🔥\n\nFC Mobile, 120+ OVR cards only:\n\n"
                    + "\n".join(f"{i}. {p['name']} ({p['ovr']} {p['pos']}): {stat} {p['face'][stat]}"
                                for i, p in enumerate(ranked, 1))
                    + "\n\nWho's missing from this list? 👇\n\n" + TAGS)
@@ -780,7 +783,7 @@ def build_extra(ctype, latest, pool, fresh, state):
             return render_versus(next_pair(latest, state, pool), fresh)
         post = {"id": "slot", "type": "choose4", "title": "Choose 1", "subtitle": f"Best {pos} • 122+ OVR",
                 "cards": [p["card"] for p in four]}
-        caption = (f"Choose 1: which {pos} goes in your team? 👇\n\n"
+        caption = (f"Choose 1 {pos}: Who's Your Pick? 🤔\n\nWhich {pos} goes in your team? 👇\n\n"
                    + "\n".join(f"{i}. {p['ovr']} {p['name']}" for i, p in enumerate(four, 1))
                    + "\n\nComment 1, 2, 3 or 4\n\n" + TAGS)
     elif ctype == "pick3":  # Pick one of 3 cards from the same event (ref: pick_one_react.png)

@@ -51,7 +51,7 @@ def title_and_description(caption, short=True):
     """First caption line -> title (max 100 chars, with | FC Mobile), rest -> description."""
     lines = [l for l in caption.strip().splitlines()]
     title = lines[0].strip()
-    if "fc mobile" not in title.lower():
+    if "fc mobile" not in title.lower() and len(title) <= 40:  # short reaction titles first; the tag only if room
         title += " | FC Mobile"
     return title[:100], caption.strip() + ("\n\n#Shorts" if short else "")
 
