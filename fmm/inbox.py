@@ -42,9 +42,8 @@ def videos(d):
                           pageSize=100).execute().get("files", [])
 
 
-def scorer_card(file_name):
-    """Find the player named in the file name (e.g. 'kane free kick.mp4') among confirmed cards -> card path.
-    Picks the highest-OVR confirmed card of that player; builds the image if needed."""
+def scorer(file_name):
+    """Player named in the file name (e.g. 'kane free kick.mp4'): highest-OVR confirmed card of him, or None."""
     import re, unicodedata
     from fmm import renderz, slots
     norm = lambda s: unicodedata.normalize("NFKD", s or "").encode("ascii", "ignore").decode().lower()
@@ -57,9 +56,15 @@ def scorer_card(file_name):
         parts = [n] + ([n.split()[-1]] if len(n.split()) > 1 else [])
         if any(len(x) >= 3 and re.search(rf"\b{re.escape(x)}\b", fname) for x in parts):
             hits.append(p)
-    if not hits:
+    return max(hits, key=lambda p: ((p.get("ovr") or 0), len(p.get("name") or ""))) if hits else None
+
+
+def scorer_card(file_name):
+    """Card image of the player in the file name (built if needed) -> path or None."""
+    from fmm import renderz, slots
+    best = scorer(file_name)
+    if not best:
         return None
-    best = max(hits, key=lambda p: ((p.get("ovr") or 0), len(p.get("name") or "")))
     path = renderz.CARDS / f"{best['id']}.png"
     if path.exists():
         return str(path)
@@ -215,9 +220,38 @@ def meme_clip():
     return local
 
 
-def title_for(name):
+def title_for(name, player=None):
+    """On-screen title: player + moment ("KANE FREE KICK!!"), like the top Shorts. Short enough for one line."""
     n = name.lower()
-    return next((t for k, t in TITLES if k in n), "WHAT A GOAL!!")
+    moment = next((t for k, t in TITLES if k in n), "WHAT A GOAL!!")
+    who = (player or "").split()[-1].upper() if player else ""
+    if who and moment != "WHAT A GOAL!!":
+        short = moment.replace("INSANE ", "").replace("WHAT A ", "").replace(" GOAL!!", "!!")
+        both = f"{who} {short}"
+        return both if len(both) <= 18 else moment
+    return f"{who} GOAL!!" if who and len(who) <= 10 else moment
+
+
+def clip_hook(name, player=None):
+    """Caption first line = YouTube title: "Kane Free Kick💀🥶" (player + moment + emoji, max 6 words)."""
+    import re, unicodedata
+    plain = unicodedata.normalize("NFKD", Path(name).stem).encode("ascii", "ignore").decode()
+    words = re.sub(r"[^A-Za-z' ]", " ", plain).split()
+    if player and 1 < len(words) <= 6:  # the owner's own words ("kane free kick") read best
+        return " ".join(words).title() + "💀🥶"
+    t = title_for(name, player).rstrip("!").title()
+    return (t if player or t != "What A Goal" else "This Goal Was Unreal") + "💀🥶"
+
+
+if __name__ == "__main__" and "selftest" in __import__("sys").argv:
+    assert title_for("kane free kick.mp4", "Harry Kane") == "KANE FREE KICK!!"
+    assert title_for("messi skill.mp4", "Lionel Messi") == "MESSI SKILL!!"
+    assert title_for("ronaldo.mp4", "Cristiano Ronaldo") == "RONALDO GOAL!!"
+    assert clip_hook("kane free kick.mp4", "Harry Kane") == "Kane Free Kick💀🥶"
+    assert clip_hook("Rodríguez long shot.mp4", "James Rodríguez") == "Rodriguez Long Shot💀🥶"
+    assert clip_hook("raw recording.mp4") == "This Goal Was Unreal💀🥶"
+    print("inbox titles: ok")
+    raise SystemExit
 
 
 def next_clip():
@@ -243,13 +277,14 @@ def next_clip():
         rec["total"] = len(clips.peaks(local))
         if rec["used"] >= rec["total"]:
             continue
-        title = title_for(f["name"])
+        who = scorer(f["name"])
+        title = title_for(f["name"], who and who.get("name"))
         card = scorer_card(f["name"])
         print("scorer card:", card or "none found in file name")
         mp4 = clips.make(local, title, rec["used"], sub="FOLLOW FOR DAILY FC MOBILE", card=card)
         rec["used"] += 1
         STATE.write_text(json.dumps(st, indent=1, ensure_ascii=False), encoding="utf-8")
-        return mp4, title, f["name"]
+        return mp4, clip_hook(f["name"], who and who.get("name")), f["name"]
     return None
 
 

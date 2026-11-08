@@ -232,7 +232,7 @@ def build_from_inbox(slot):
         return False
     if not got:
         return False
-    mp4, title, src = got
+    mp4, hook, src = got
     if OUT.exists():
         shutil.rmtree(OUT)
     OUT.mkdir(parents=True)
@@ -242,9 +242,8 @@ def build_from_inbox(slot):
     cover = Path(mp4).with_name(Path(mp4).stem + "_cover.jpg")
     if cover.exists():
         shutil.copy(cover, OUT / "slot_cover.jpg")
-    # evergreen Shorts are titled like "Prime Neymar penalty☠️🔥": player + moment + emoji, nothing tied to an event
-    name = Path(src).stem.strip()
-    caption = (f"{name.title() if len(name) <= 40 else title.title()} ☠️🔥\n\nWould you have scored this? Rate it 1–10 👇\n\n"
+    # evergreen Shorts are titled like "Prime Ronaldo Free Kick💀🥶": player + moment + emoji (inbox.clip_hook)
+    caption = (f"{hook}\n\nWould you have scored this? Rate it 1–10 👇\n\n"
                "Follow FMM for daily FC Mobile goals, cards & codes 🔔\n\n"
                "#FCMobile #FIFAMobile #EAFC #FCMobileGoals #Gaming #FMM")
     (OUT / "caption.txt").write_text(caption, encoding="utf-8")
