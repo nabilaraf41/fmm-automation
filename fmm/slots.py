@@ -279,6 +279,8 @@ def build_pack(got=None, title=None, caption=None):
         # owner layout: his Flow reaction clip big on top (0-760 px = 40%), title under it, pack recording below
         ov = clips.overlay_png(title, "PACK OPENING TRICK IN CAPTION", OUT / "ov.png", card, title_y=790)
         top = atb.clip(f["name"], pool="pack")  # pack reactions keep ATB's voice
+        if not top:  # owner layout needs ATB on top: no clip -> no pack Reel
+            raise RuntimeError("no ATB pack clip in assets/atb_pack")
         full = clips.duration(src)
         # owner: never cut before the player reveal. The loudest moment is often the pack opening, not the
         # reveal, so always run to the END of the recording (reveal + card on screen), max 58 s for Reels.

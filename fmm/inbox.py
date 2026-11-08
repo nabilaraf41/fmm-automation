@@ -156,11 +156,9 @@ def post_long():
                "#FCMobile #FIFAMobile #EAFC #Gameplay #FMM")
     from fmm import youtube
     local = download(f)
-    try:  # owner rule: ATB facecam bottom-left (calm loops, goal reactions from content/long_goals.json)
-        from fmm import facecam
-        local = facecam.add(local, local.with_name(local.stem + "_cam.mp4"), facecam.goals_for(f["id"]))
-    except Exception as ex:
-        print("facecam skipped:", str(ex)[:150])
+    # owner rule: ATB facecam bottom-left (calm loops, goal reactions from content/long_goals.json); fails -> no upload
+    from fmm import facecam
+    local = facecam.add(local, local.with_name(local.stem + "_cam.mp4"), facecam.goals_for(f["id"]))
     try:  # 16:9 MrBeast-style cover from a frame at 40%, the player's card if the name has one
         import subprocess
         from fmm import clips, thumb

@@ -46,8 +46,8 @@ def add(video, out, goals=()):
     video, out = Path(video), Path(out)
     total = _dur(video)
     tl = timeline(total, list(goals))
-    if not tl:
-        return video
+    if not tl:  # owner rule: ATB facecam on every long video
+        raise RuntimeError("no ATB facecam clips in assets/atb_long: long video not made")
     track = out.with_name(out.stem + "_cam.mp4")
     lst = out.with_name(out.stem + "_cam.txt")
     lst.write_text("".join(f"file '{c.as_posix()}'\ninpoint 0\noutpoint {ln:.3f}\n" for c, _, ln in tl), encoding="utf-8")

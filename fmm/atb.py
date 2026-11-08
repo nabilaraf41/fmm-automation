@@ -56,8 +56,8 @@ def box(mp4, seed, y=140, pool=None):
     no Reel without his video. Keeps the Reel's own audio; pool="ea" also mixes in his voice line (first 6 s)."""
     import subprocess
     c = clip(seed, pool=pool)
-    if not c:
-        return mp4
+    if not c:  # no Reel without ATB: raising stops the build, so nothing posts
+        raise RuntimeError(f"no ATB clip ({pool or 'atb_clips'}): Reel not made")
     mp4 = Path(mp4)
     tmp = mp4.with_name(mp4.stem + "_atb.mp4")
     fc = f"[1:v]scale=440:248,pad=452:260:6:6:color=0xE11D2E[p];[0:v][p]overlay=W-w-28:{y}:shortest=1[v]"
@@ -79,8 +79,8 @@ def box(mp4, seed, y=140, pool=None):
 def add_badge(img, seed, size=150, margin=22, bottom=78):
     """Small round ATB face in the bottom-right corner of a photo post, above the footer line."""
     b = badge(seed)
-    if not b:
-        return img
+    if not b:  # every post shows ATB: no badge -> no photo
+        raise RuntimeError("no ATB badge in assets/atb_face: photo not made")
     face = Image.open(b).convert("RGBA").resize((size, size), Image.LANCZOS)
     out = img.convert("RGBA")
     out.alpha_composite(face, (out.width - size - margin, out.height - size - bottom))
