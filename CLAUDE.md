@@ -10,6 +10,7 @@ YouTube "FC Mobile Mania - FMM". Owner is in Bangladesh (BDT = UTC+6), zero budg
 give click-by-click steps and copy-paste commands.
 
 ## Rules
+- Follow docs/CREATOR_PLAYBOOK.md for every post; update it from the Monday growth report.
 - **Cross-check before posting anything** (cards, events, players): a 2nd source must confirm it
   (RenderZ or creators' YouTube titles). Enforced by `slots.confirmed_only`; manual list in
   `content/featured.json` → `confirmed_programs`, `hold_programs` (TOTW27 held until confirmed).

@@ -16,3 +16,4 @@
 - [Pack Reel standard](fmm-pack-reels.md) — ATB big on top 40%, exact cuts to final card, voice, rotating clips
 - [ATB Meme format](fmm-atb-meme.md) — NO/YES template; owner names the right side, add to content/atb_meme.json queue
 - [Leak posts](fmm-leaks.md) — unreleased cards made like FC Forum; FMF + MadridistaaFC sources; 2-source rule
+- [Creator playbook](fmm-creator-playbook.md) — docs/CREATOR_PLAYBOOK.md rules every post; YPP doubles 1 Feb 2027
