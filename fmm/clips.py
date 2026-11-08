@@ -68,9 +68,9 @@ def loudness(video, step=0.5):
 
 def peaks(video, n=None, min_gap=25.0, pre=8.0, post=4.0):
     """Top-n loudest moments, at least min_gap seconds apart -> [(start, peak, end)].
-    Long videos give more Reels: about one highlight per 75 s of footage (3 to 15)."""
+    Long videos give more Reels: about one highlight per 45 s of footage (3 to 20); top Shorts are single moments."""
     dur = duration(video)
-    n = n or max(3, min(15, int(dur // 75)))
+    n = n or max(3, min(20, int(dur // 45)))
     if dur <= 40:  # already a short goal clip: use all of it, peak at its loudest point
         lv = loudness(video) or [(dur * 0.6, 0)]
         pk = max(lv, key=lambda x: x[1])[0]
