@@ -338,37 +338,28 @@ def surname(name):
 
 
 def post_top10(p):
-    """Top 10: the #1 card big on the left (focal point), ranks 2-10 as readable rows (Design Playbook)."""
+    """Top 10 rankings, 3-4-3 card grid. Owner (9 Nov): this grid beats the #1-hero + rows layout; keep it."""
     img, d, c = base("top10", p.get("background"))
-    anton = lambda s: font("Anton-Regular.ttf", s)
-    title = f"TOP 10 {p['position'].upper()} {p.get('title', '').upper()}".strip()
-    f = anton(80)
-    while d.textlength(title, font=f) > W - 330 and f.size > 44:
-        f = anton(f.size - 4)
-    d.text((W // 2 + 110, 58), title, font=f, fill=WHITE, anchor="ma")
+    d.text((W // 2 + 60, 58), f"TOP 10 {p['position'].upper()}", font=title_font(58), fill=WHITE, anchor="ma")
+    d.text((W // 2 + 60, 122), p.get("title", "RANKINGS").upper(), font=title_font(104), fill=WHITE, anchor="ma",
+           stroke_width=3, stroke_fill=BLUE)
     players = p["players"][:10]
-    val = lambda pl: pl.get("stat") or f"{pl.get('ovr', '')} OVR"
-    hero = {"pos": p["position"], **players[0]}
-    card = player_card(hero, 400, 560)
-    img.paste(card, (40 - 30, 270 - 30), card)
-    d = ImageDraw.Draw(img)
-    d.text((250, 215), "#1", font=anton(110), fill=GOLD, anchor="mm", stroke_width=5, stroke_fill=BLACK)
-    d.text((250, 880), val(hero), font=anton(60), fill=GOLD, anchor="mm")
-    d.text((250, 950), surname(hero.get("name")), font=label_font(38), fill=WHITE, anchor="mm")
-    y = 200
-    for i, pl in enumerate(players[1:], 2):
-        d.rounded_rectangle((480, y, W - 40, y + 84), 14, fill=(18, 18, 30) if i % 2 else (30, 30, 48))
-        d.text((515, y + 42), str(i), font=anton(50), fill=GOLD if i <= 3 else WHITE, anchor="mm")
-        if pl.get("card") and Path(pl["card"]).exists():
-            th = fit_card(pl["card"], 56, 76)
-            img.paste(th, (550 - 30, y + 4 - 30), th)
-            d = ImageDraw.Draw(img)
-        name, nf = surname(pl.get("name")), label_font(34)
-        while d.textlength(name, font=nf) > 250 and nf.size > 22:
-            nf = label_font(nf.size - 2)
-        d.text((625, y + 42), name, font=nf, fill=WHITE, anchor="lm")
-        d.text((W - 60, y + 42), str(pl.get("stat") or pl.get("ovr", "")).split()[-1], font=anton(46), fill=GOLD, anchor="rm")
-        y += 94
+    cw, ch, gap = 210, 290, 30
+    rows = [(0, 3, 295), (3, 7, 650), (7, 10, 1005)]
+    for start, end, cy in rows:
+        n = end - start
+        x0 = (W - (n * cw + (n - 1) * gap)) // 2
+        for k, pl in enumerate(players[start:end]):
+            rank = start + k + 1
+            x = x0 + k * (cw + gap)
+            pl = {"pos": p["position"], **pl}
+            card = player_card(pl, cw, ch)
+            img.paste(card, (x - 30, cy - 30), card)
+            d.text((x + cw // 2, cy - 8), str(rank), font=font("Anton-Regular.ttf", 64),
+                   fill=GOLD if rank <= 3 else WHITE, anchor="mb", stroke_width=3, stroke_fill=(5, 5, 5))
+            if pl.get("stat"):  # stat-based Top 10: the ranked value under each card
+                d.rounded_rectangle((x + 25, cy + ch - 62, x + cw - 25, cy + ch - 26), 16, fill=(5, 5, 5))
+                d.text((x + cw // 2, cy + ch - 44), pl["stat"], font=label_font(24), fill=GOLD, anchor="mm")
     return img
 
 

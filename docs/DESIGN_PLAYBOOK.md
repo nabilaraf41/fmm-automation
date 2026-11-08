@@ -25,7 +25,7 @@ Weak parts we must NOT take: thin serif headlines, pink-on-purple low-contrast t
 
 ## 3. What our templates do worse (seen on output/design_now/)
 1. **ATB badge covers content**: the review's "MUST BUY" stamp, the last value on versus and Top 4. → keep a 230×250 safe zone bottom-right.
-2. **Top 10 grid has no focal point**: ten equal 210 px cards; names unreadable on a phone. → #1 hero + rows.
+2. Top 10 grid: owner prefers it (9 Nov); keep, only make sure ranks/stat pills stay readable.
 3. **Review is crowded**: 9 panels, 14–20 px text (key stats, pros/cons, alternatives, rating meter). On a phone only the card reads.
 4. **Budget XI parts are half empty**: 3 small cards in the middle, ~40% blank space.
 5. **Versus has 12 thin rows** with red/green bars that read as "bad/good", not "left/right". → 6 face stats, winner in gold.
@@ -39,7 +39,7 @@ Weak parts we must NOT take: thin serif headlines, pink-on-purple low-contrast t
   (score/10 + verdict, green/gold/red), 6 face stats as big tiles. Full detail stays in the caption and the Reel.
 - **Versus**: split background in two colours (diagonal), both cards big at the top, giant "VS" with glow, 6 face-stat rows,
   higher value in gold. Surnames in the title, not "stats comparison".
-- **Top 10**: "#1" hero card left with its value, ranks 2–10 as rows (rank, mini card, surname, value). Gold for 1–3.
+- **Top 10**: owner decision 9 Nov: keep the 3-4-3 card grid (cards + gold rank numbers + stat pill under each). The #1-hero + rows layout was tried and dropped.
 - **Pick one / Choose 1**: cards as large as the grid allows; numbers 1–4 in Anton above each card; reaction emoji only
   as decoration (never "react to vote").
 - **Budget XI part**: 3 cards fill the frame (2 top, 1 bottom), price pill under each, title = position ("Best Cheap Midfield").
@@ -52,7 +52,7 @@ Weak parts we must NOT take: thin serif headlines, pink-on-purple low-contrast t
   text under the ATB badge · "Stats comparison"-style labels instead of names · empty space in the middle of a post.
 
 ## 6. Proposed upgrades (mocks in output/design_mocks/, *_before.png vs *_after.png, waiting for owner OK)
-1. Top 10 → #1 hero + rows (brand.post_top10)
+1. ~~Top 10 → #1 hero + rows~~ reverted 9 Nov, owner prefers the 3-4-3 grid
 2. Versus → split colours, giant VS, 6 rows (brand.post_compare)
 3. Budget XI part → 3 big cards + price pills (brand.post_xi_part)
 4. Review → declutter: big card, verdict stamp, 6 tiles, 3 pros (brand.post_review)
