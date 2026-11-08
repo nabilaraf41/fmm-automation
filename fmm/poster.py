@@ -219,6 +219,12 @@ def post(kind, media, caption, where="both", ctype=None, reel=True, extra=None):
     if kind == "photo" and where == "both" and reel:  # owner rule: never a photo alone; make its Reel first
         from fmm import reel as reelmod
         pair = reelmod.make_reel(media, seconds=10)  # raises (nothing posted) if the Reel can't be made
+    if kind == "reel" and media.endswith(".mp4"):  # every Reel: gold progress bar (once per file)
+        try:
+            from fmm import motion
+            motion.progress_bar(media)
+        except Exception as ex:
+            print("progress bar skipped:", str(ex)[:120])
     done, errors = {}, {}
     steps = []
     if where in ("fb", "both"):

@@ -813,9 +813,25 @@ TEMPLATES = {"choose4": post_choose4, "compare": post_compare, "compare4": post_
              "news": post_quote, "quote": post_quote, "event": post_quote, "pack": post_quote, "top10": post_top10}
 
 
+def finish(img, seed=0):
+    """Final look on every photo (ideas from open-source easy-pil / filmgrainer, written here with numpy):
+    soft bloom on bright parts (cards, gold text glow), vignette (eye goes to the centre), fine mono grain
+    (flat digital gradients look printed, and survive platform recompression without banding)."""
+    import numpy as np
+    bright = img.convert("L").point(lambda v: 255 if v > 200 else 0)
+    glow = Image.composite(img, Image.new("RGB", img.size, BLACK), bright).filter(ImageFilter.GaussianBlur(28))
+    a = np.asarray(img, dtype=np.float32) + np.asarray(glow, dtype=np.float32) * 0.22
+    h, w = a.shape[:2]
+    yy, xx = np.ogrid[:h, :w]
+    r = np.sqrt(((xx - w / 2) / (w / 2)) ** 2 + ((yy - h / 2) / (h / 2)) ** 2)
+    a *= (1 - 0.32 * np.clip((r - 0.65) / 0.75, 0, 1) ** 2)[..., None]
+    a += np.random.default_rng(seed).normal(0, 5.5, (h, w, 1))
+    return Image.fromarray(np.clip(a, 0, 255).astype(np.uint8))
+
+
 def render(post, out_dir=OUT):
     out_dir.mkdir(parents=True, exist_ok=True)
-    img = TEMPLATES[post["type"]](post)
+    img = finish(TEMPLATES[post["type"]](post).convert("RGB"), abs(hash(post["id"])) % 2**32)
     from fmm import atb
     img = atb.add_badge(img, post["id"])  # owner rule: a small ATB photo on every photo post
     path = out_dir / f"{post['id']}.png"

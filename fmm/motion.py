@@ -654,6 +654,29 @@ def render_reel(reel, out_dir=OUT, music=None, stills=None):
     return out
 
 
+def progress_bar(mp4, color="0xFFD700", h=10):
+    """Thin gold bar along the bottom that fills over the Reel (retention cue used by top Shorts; ffmpeg-only idea
+    from open-source shortsmith). Done once per file: a .bar marker stops a retry from adding a second bar."""
+    mp4 = Path(mp4)
+    mark = mp4.with_name(mp4.name + ".bar")
+    if mark.exists():
+        return mp4
+    dur = float(subprocess.run(["ffprobe", "-v", "error", "-show_entries", "format=duration", "-of", "csv=p=0", str(mp4)],
+                               capture_output=True, text=True).stdout.strip() or 0)
+    if dur <= 0:
+        return mp4
+    tmp = mp4.with_name(mp4.stem + "_bar.mp4")
+    # a full-width strip slides in from the left: x = -w + w*t/dur, so it is t/dur full at time t
+    fc = (f"color=c={color}:s=1080x{h}:r=30[b];[0:v]scale=1080:1920,setsar=1[v0];"
+          f"[v0][b]overlay=x='-w+w*t/{dur:.3f}':y=H-{h}:shortest=1,format=yuv420p[v]")
+    subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", str(mp4), "-filter_complex", fc, "-map", "[v]", "-map", "0:a?",
+                    "-c:v", "libx264", "-preset", "medium", "-crf", "19", "-c:a", "copy", "-movflags", "+faststart",
+                    str(tmp)], check=True)
+    tmp.replace(mp4)
+    mark.touch()
+    return mp4
+
+
 def lead_with_cover(mp4, cover, secs=0.7):
     """Open the Reel on its payoff: the cover (final card / goal / verdict + big text + ATB face) for secs, then
     the Reel. Top Shorts show the result in frame 0; it is also what platforms show when no cover is set."""
