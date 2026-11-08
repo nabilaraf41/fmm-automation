@@ -247,7 +247,10 @@ def post(kind, media, caption, where="both", ctype=None, reel=True, extra=None):
         raise RuntimeError(f"all platforms failed: {errors}")
     log({"kind": kind, "file": media, **({"type": ctype} if ctype else {}), **(extra or {}), **done})
     if pair:  # the photo's Reel on Facebook, Instagram and YouTube Shorts
-        done["reel"] = post("reel", pair, caption, where, ctype)
+        # not the same text twice in a row on the Page (FB treats it like spam): Reel gets the hook + hashtags only
+        parts = [p for p in caption.split("\n\n") if p.strip()]
+        short = parts[0] + ("\n\n" + parts[-1] if len(parts) > 1 and "#" in parts[-1] else "")
+        done["reel"] = post("reel", pair, short if short != caption else "🎬 " + caption, where, ctype)
     return done
 
 
