@@ -154,6 +154,15 @@ def series_today():
     return SERIES[i] if 0 <= i < len(SERIES) else None
 
 
+def weak_reel(p, this_week, heat):
+    """Owner: skip a Reel slot when there's nothing strong (top channels post 1-3 strong Reels, not filler).
+    p = the card a review Reel would show (weak: not from this week, not trending, not a focus player);
+    p = None for countdown / tier list (weak: fewer than 3 new cards this week). Photo slots never skip."""
+    if p is not None:
+        return p not in this_week and heat(p) <= 0
+    return len(this_week) < 3
+
+
 def pick(kind, fresh, db, state):
     pool = list(db.values())
     hot = trend_boost()
@@ -201,10 +210,14 @@ def pick(kind, fresh, db, state):
         forced_rot = None
     if unfeatured:
         p = unfeatured[0]
+        if kind == "reel" and not force and weak_reel(p, this_week, heat):
+            return "skip", [], pool
         return ("review_reel" if kind == "reel" else "review_post"), [p], pool
     base_set = this_week if len(this_week) >= 5 else list(fresh.values())
     latest = sorted(base_set, key=lambda p: (heat(p), p.get("ovr") or 0), reverse=True)
     if kind == "reel":
+        if not force and weak_reel(None, this_week, heat):
+            return "skip", [], pool
         return ("tierlist" if weekday % 2 else "countdown"), latest[:8], pool
     rot = forced_rot or "versus"
     if rot in ("xi", "gem", "worth", "meme", "compare4", "pick3", "rank10"):
@@ -386,6 +399,9 @@ def build(slot):
     state = load_state()
     fresh, db, made = latest_players()
     ctype, players, pool = pick(kind, fresh, db, state)
+    if ctype == "skip":
+        print(f"Reel slot {slot} skipped: no clip, pack or strong new card")
+        return "skip"
     if OUT.exists():
         shutil.rmtree(OUT)
     OUT.mkdir(parents=True)

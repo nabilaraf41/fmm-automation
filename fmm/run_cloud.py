@@ -43,7 +43,12 @@ def run_slot(now):
     st["slot_tries"][key] = tries + 1
     slots.STATE.write_text(json.dumps(st, indent=1, ensure_ascii=False), encoding="utf-8")
     print("posting slot", key)
-    slots.build(slot)
+    if slots.build(slot) == "skip":  # weak Reel slot: nothing posts, marked done so later runs don't retry it
+        st = slots.load_state()
+        st.setdefault("done_slots", {})[key] = "skipped (nothing strong)"
+        st.get("slot_tries", {}).pop(key, None)
+        slots.STATE.write_text(json.dumps(st, indent=1, ensure_ascii=False), encoding="utf-8")
+        return
     t = dt.datetime.combine(dt.date.fromisoformat(key[:10]), dt.time(int(slot[:2]), int(slot[2:])), BDT)
     wait = (t - dt.datetime.now(BDT)).total_seconds()
     if wait > 0:  # built early: hold it until the exact slot time
