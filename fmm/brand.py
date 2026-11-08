@@ -242,122 +242,52 @@ def ps_name(raw):
 
 
 def post_review(p):
-    """Card review: card + info grid (WF/SM/work rates/body), playstyles, face stats, key-stat bars,
-    one-line pros/cons, alternatives and a rating meter. Falls back to the plain layout without p['info']."""
+    """Card review (Design Playbook): big card, surname huge, 3 pros, one big verdict stamp, 6 face-stat tiles,
+    playstyles + weak foot/skills as one line. Full detail is in the caption and the Reel. Falls back without p['info']."""
     info = p.get("info")
     if not info:
         return _post_review_plain(p)
-    from fmm.review import face_stats, GROUPS, DETAIL
+    from fmm.review import face_stats
     img, d, c = base("review", p.get("background"))
-    WR = {1: "LOW", 2: "MED", 3: "HIGH"}
-    # header: program tag right of logo
-    prog = (info.get("program") or "").replace("PROGRAM_", "")
-    d.text((W - 60, 70), "NEW CARD REVIEW", font=label_font(30), fill=GOLD, anchor="ra")
-    if prog:
-        d.text((W - 60, 112), prog, font=label_font(24), fill=GRAY, anchor="ra")
-    # card (left)
+    anton = lambda s: font("Anton-Regular.ttf", s)
+    d.text((W - 60, 60), "NEW CARD REVIEW", font=label_font(30), fill=GOLD, anchor="ra")
     card = player_card({"name": p["player"], "card": p.get("card"), "tier": "gold", "ovr": info.get("ovr"),
-                        "pos": info.get("pos")}, 390, 560)
-    img.paste(card, (50 - 30, 175 - 30), card)
+                        "pos": info.get("pos")}, 460, 640)
+    img.paste(card, (30 - 30, 150 - 30), card)
     d = ImageDraw.Draw(img)
-    # right column: name, ovr/pos, info grid, playstyles
-    x0, x1 = 480, W - 60
-    nf = title_font(76)
-    name = p["player"].upper()
-    while d.textlength(name, font=nf) > x1 - x0 and nf.size > 40:
-        nf = title_font(nf.size - 4)
-    d.text((x0, 185), name, font=nf, fill=WHITE)
-    d.text((x0, 275), f"{info.get('ovr')} OVR  •  {info.get('pos')}", font=label_font(34), fill=c)
-    wr = info.get("work_rates") or [None, None]
-    cells = [("WEAK FOOT", info.get("weak_foot")), ("SKILL MOVES", info.get("skill_moves")),
-             ("ATT WORK RATE", WR.get(wr[0], "-")), ("DEF WORK RATE", WR.get(wr[1], "-")),
-             ("HEIGHT", f"{info['height']} cm" if info.get("height") else "-"),
-             ("WEIGHT", f"{info['weight']} kg" if info.get("weight") else "-")]
-    cw, ch = (x1 - x0 - 16) // 2, 92
-    for i, (lab, val) in enumerate(cells):
-        bx, by = x0 + (i % 2) * (cw + 16), 335 + (i // 2) * (ch + 12)
-        _box(d, (bx, by, bx + cw, by + ch))
-        d.text((bx + cw // 2, by + 24), lab, font=label_font(20), fill=GRAY, anchor="mm")
-        if isinstance(val, int):  # stars
-            for k in range(5):
-                sx = bx + cw // 2 - 2 * 34 + k * 34
-                rr = [14 if j % 2 == 0 else 6.3 for j in range(10)]
-                star = [(sx + rr[j] * math.cos(math.pi / 2 + j * math.pi / 5), by + 62 - rr[j] * math.sin(math.pi / 2 + j * math.pi / 5))
-                        for j in range(10)]
-                d.polygon(star, fill=GOLD if k < val else (70, 70, 80))
-        else:
-            d.text((bx + cw // 2, by + 62), str(val), font=label_font(32), fill=WHITE, anchor="mm")
-    y = 335 + 3 * (ch + 12) + 8
-    d.text((x0, y), "PLAYSTYLES", font=label_font(22), fill=GRAY)
-    y += 36
-    px = x0
-    for ps in [ps_name(x) for x in (info.get("playstyles") or ["None"])][:2]:  # 2 fit above the stats row
-        pf = label_font(20)
-        tw = d.textlength(ps.upper(), font=pf)
-        if px + tw + 40 > x1:
-            px, y = x0, y + 46
-        d.rounded_rectangle((px, y, px + tw + 36, y + 42), 21, fill=(40, 20, 60), outline=PURPLE, width=2)
-        d.text((px + 18 + tw / 2, y + 21), ps.upper(), font=pf, fill=WHITE, anchor="mm")
-        px += tw + 50
-    # face stats row
-    y = 760
+    x0 = 530
+    name = surname(p["player"])
+    nf = anton(120)
+    while d.textlength(name, font=nf) > W - 60 - x0 and nf.size > 56:
+        nf = anton(nf.size - 6)
+    d.text((x0, 140), name, font=nf, fill=WHITE)
+    d.text((x0, 300), f"{info.get('ovr')} OVR  •  {info.get('pos')}", font=label_font(40), fill=c)
+    wf, sm = info.get("weak_foot"), info.get("skill_moves")
+    extra = "  •  ".join(x for x in (f"WEAK FOOT {wf}/5" if wf else "", f"SKILLS {sm}/5" if sm else "") if x)
+    if extra:
+        d.text((x0, 360), extra, font=label_font(32), fill=GRAY)
+    y = 430
+    for pro in (p.get("pros") or [])[:3]:
+        d.text((x0, y), f"+ {pro}", font=label_font(34), fill=WHITE)
+        y += 56
+    verdict, score = p.get("verdict") or "", p.get("score") or 0
+    col = {"MUST BUY": GREEN, "WORTH IT": GREEN, "SITUATIONAL": GOLD, "SKIP": RED}.get(verdict, c)
+    d.rounded_rectangle((x0, 630, W - 50, 790), 26, fill=col)
+    vf = anton(62)
+    txt = f"{score:g}/10  {verdict}"
+    while d.textlength(txt, font=vf) > W - 50 - x0 - 40 and vf.size > 36:
+        vf = anton(vf.size - 4)
+    d.text(((x0 + W - 50) // 2, 710), txt, font=vf, fill=BLACK, anchor="mm")
     fs = face_stats(info)
-    bw = (W - 120 - 5 * 12) / 6
+    bw, gap, y = 145, 14, 860
     for i, (k, v) in enumerate(fs.items()):
-        bx = 60 + i * (bw + 12)
-        col = GREEN if v >= 150 else GOLD if v >= 130 else RED if v < 100 else WHITE
-        _box(d, (bx, y, bx + bw, y + 110))
-        d.text((bx + bw / 2, y + 48), str(v), font=font("Anton-Regular.ttf", 50), fill=col, anchor="mm")
-        d.text((bx + bw / 2, y + 90), k, font=label_font(22), fill=GRAY, anchor="mm")
-    # key stats (left) + pros/cons (right)
-    y = 900
-    st = info.get("stats") or {}
-    label = {k: l for _, rows in DETAIL for k, l in rows}
-    g = p.get("group", "att")
-    keys = [k for k in GROUPS[g]["keys"] if k in st and k in label][:6]
-    _box(d, (60, y, 560, y + 270))
-    d.text((84, y + 18), "KEY STATS", font=label_font(24), fill=GOLD)
-    top = max([st[k] for k in keys] or [1])
-    for i, k in enumerate(keys):
-        ry = y + 78 + i * 31
-        d.text((84, ry), label[k], font=body_font(22), fill=WHITE, anchor="lm")
-        d.rounded_rectangle((290, ry - 7, 480, ry + 7), 7, fill=(40, 40, 50))
-        d.rounded_rectangle((290, ry - 7, 290 + int(190 * st[k] / max(top, 1)), ry + 7), 7, fill=c)
-        d.text((536, ry), str(st[k]), font=label_font(22), fill=WHITE, anchor="rm")
-    _box(d, (580, y, W - 60, y + 270))
-    yy = y + 18
-    for head, items, colr, mark in (("PROS", p.get("pros", [])[:3], GREEN, "+"), ("CONS", p.get("cons", [])[:2], RED, "–")):
-        d.text((604, yy), head, font=label_font(24), fill=colr); yy += 34
-        for it in items:
-            d.text((604, yy), f"{mark}  {it}", font=body_font(25), fill=WHITE); yy += 32
-        yy += 4
-    # bottom: alternatives + rating meter
-    y = 1190
-    from fmm.renderz import CARDS
-    peers = [x for x in (p.get("pool") or []) if x.get("name") != info.get("name") and x.get("pos") == info.get("pos")]
-    alts = [a for a in (str(CARDS / f"{x['id']}.png") for x in sorted(peers, key=lambda x: abs((x.get("ovr") or 0) - (info.get("ovr") or 0))))
-            if Path(a).exists()][:3]
-    if alts:
-        d.text((60, y - 2), "ALTERNATIVES", font=label_font(20), fill=GRAY)
-        for i, a in enumerate(alts):
-            ac = fit_card(a, 72, 100)
-            img.paste(ac, (60 + i * 86 - 30, y + 22 - 30), ac)
-        d = ImageDraw.Draw(img)
-    score = p.get("score") or 0
-    mx0, mx1 = 360, W - 230
-    d.text((mx0, y - 2), "FMM RATING METER", font=label_font(20), fill=GRAY)
-    bands = [("POOR", (150, 20, 20)), ("AVERAGE", (170, 100, 20)), ("GOOD", (170, 160, 20)), ("GREAT", (90, 140, 20)), ("ELITE", (0, 170, 60))]
-    seg = (mx1 - mx0) / 5
-    pick = min(4, max(0, int(score) - 5))
-    for i, (lab, col) in enumerate(bands):
-        sx = mx0 + i * seg
-        on = i == pick
-        d.rounded_rectangle((sx + 3, y + 30 - (6 if on else 0), sx + seg - 3, y + 90 + (6 if on else 0)), 10, fill=col,
-                            outline=WHITE if on else None, width=3)
-        d.text((sx + seg / 2, y + 60), lab, font=label_font(17 if on else 15), fill=WHITE, anchor="mm")
-    d.rounded_rectangle((W - 210, y - 6, W - 60, y + 100), 20, fill=c)
-    d.text((W - 135, y + 40), f"{score:g}", font=font("Anton-Regular.ttf", 58), fill=WHITE, anchor="mm")
-    d.text((W - 135, y + 84), (p.get("verdict") or "/10"), font=label_font(17), fill=WHITE, anchor="mm")
+        bx = 60 + i * (bw + gap)
+        _box(d, (bx, y, bx + bw, y + 170), outline=GREEN if v >= 150 else GOLD if v >= 130 else (60, 60, 70))
+        d.text((bx + bw / 2, y + 72), str(v), font=anton(72), fill=WHITE, anchor="mm")
+        d.text((bx + bw / 2, y + 140), k, font=label_font(30), fill=GRAY, anchor="mm")
+    pss = [ps_name(x) for x in (info.get("playstyles") or [])][:3]
+    if pss:
+        d.text((60, 1080), "PLAYSTYLES:  " + "  •  ".join(x.upper() for x in pss), font=label_font(28), fill=PURPLE)
     return img
 
 
@@ -401,29 +331,44 @@ def post_quote(p):
     return img
 
 
+def surname(name):
+    """Last name for big labels; 'Vini Jr.' -> 'VINI JR.' instead of 'JR.'."""
+    w = (name or "").split()
+    return (" ".join(w[-2:]) if len(w) > 1 and w[-1].rstrip(".").lower() in ("jr", "junior") else (w[-1] if w else "")).upper()
+
+
 def post_top10(p):
-    """Top 10 rankings for one position, 3-4-3 card grid (reference: Top 10 CDM Rankings)."""
+    """Top 10: the #1 card big on the left (focal point), ranks 2-10 as readable rows (Design Playbook)."""
     img, d, c = base("top10", p.get("background"))
-    d.text((W // 2 + 60, 58), f"TOP 10 {p['position'].upper()}", font=title_font(58), fill=WHITE, anchor="ma")
-    d.text((W // 2 + 60, 122), p.get("title", "RANKINGS").upper(), font=title_font(104), fill=WHITE, anchor="ma",
-           stroke_width=3, stroke_fill=BLUE)
+    anton = lambda s: font("Anton-Regular.ttf", s)
+    title = f"TOP 10 {p['position'].upper()} {p.get('title', '').upper()}".strip()
+    f = anton(80)
+    while d.textlength(title, font=f) > W - 330 and f.size > 44:
+        f = anton(f.size - 4)
+    d.text((W // 2 + 110, 58), title, font=f, fill=WHITE, anchor="ma")
     players = p["players"][:10]
-    cw, ch, gap = 210, 290, 30
-    rows = [(0, 3, 295), (3, 7, 650), (7, 10, 1005)]
-    for start, end, cy in rows:
-        n = end - start
-        x0 = (W - (n * cw + (n - 1) * gap)) // 2
-        for k, pl in enumerate(players[start:end]):
-            rank = start + k + 1
-            x = x0 + k * (cw + gap)
-            pl = {"pos": p["position"], **pl}
-            card = player_card(pl, cw, ch)
-            img.paste(card, (x - 30, cy - 30), card)
-            d.text((x + cw // 2, cy - 8), str(rank), font=font("Anton-Regular.ttf", 64),
-                   fill=GOLD if rank <= 3 else WHITE, anchor="mb", stroke_width=3, stroke_fill=(5, 5, 5))
-            if pl.get("stat"):  # stat-based Top 10: the ranked value under each card
-                d.rounded_rectangle((x + 25, cy + ch - 62, x + cw - 25, cy + ch - 26), 16, fill=(5, 5, 5))
-                d.text((x + cw // 2, cy + ch - 44), pl["stat"], font=label_font(24), fill=GOLD, anchor="mm")
+    val = lambda pl: pl.get("stat") or f"{pl.get('ovr', '')} OVR"
+    hero = {"pos": p["position"], **players[0]}
+    card = player_card(hero, 400, 560)
+    img.paste(card, (40 - 30, 270 - 30), card)
+    d = ImageDraw.Draw(img)
+    d.text((250, 215), "#1", font=anton(110), fill=GOLD, anchor="mm", stroke_width=5, stroke_fill=BLACK)
+    d.text((250, 880), val(hero), font=anton(60), fill=GOLD, anchor="mm")
+    d.text((250, 950), surname(hero.get("name")), font=label_font(38), fill=WHITE, anchor="mm")
+    y = 200
+    for i, pl in enumerate(players[1:], 2):
+        d.rounded_rectangle((480, y, W - 40, y + 84), 14, fill=(18, 18, 30) if i % 2 else (30, 30, 48))
+        d.text((515, y + 42), str(i), font=anton(50), fill=GOLD if i <= 3 else WHITE, anchor="mm")
+        if pl.get("card") and Path(pl["card"]).exists():
+            th = fit_card(pl["card"], 56, 76)
+            img.paste(th, (550 - 30, y + 4 - 30), th)
+            d = ImageDraw.Draw(img)
+        name, nf = surname(pl.get("name")), label_font(34)
+        while d.textlength(name, font=nf) > 250 and nf.size > 22:
+            nf = label_font(nf.size - 2)
+        d.text((625, y + 42), name, font=nf, fill=WHITE, anchor="lm")
+        d.text((W - 60, y + 42), str(pl.get("stat") or pl.get("ovr", "")).split()[-1], font=anton(46), fill=GOLD, anchor="rm")
+        y += 94
     return img
 
 
@@ -606,28 +551,28 @@ def _card_or_frame(p, cw, ch):
 
 
 def post_xi_part(p):
-    """One line of the Budget XI (part 1/3 ...): big cards in rows of 3 with a Star Shards price pill under each."""
+    """One line of the Budget XI: up to 3 big cards filling the frame (2 top, 1 bottom-centre), a price pill
+    under each (Design Playbook: no empty middle). Bottom-right stays free for the ATB badge."""
     img, d, c = base("squad", p.get("background"))
-    d.text((W // 2 + 60, 60), p.get("title", "BEST BUDGET XI").upper(), font=font("Anton-Regular.ttf", 96), fill=GOLD,
+    d.text((W // 2 + 90, 48), p.get("title", "BEST BUDGET XI").upper(), font=font("Anton-Regular.ttf", 84), fill=GOLD,
            anchor="ma", stroke_width=3, stroke_fill=(5, 5, 5))
-    d.text((W // 2 + 60, 185), p.get("subtitle", "").upper(), font=label_font(36), fill=WHITE, anchor="ma")
+    d.text((W // 2 + 90, 155), p.get("subtitle", "").upper(), font=label_font(32), fill=WHITE, anchor="ma")
     pl = p["players"]
-    rows = [pl[i:i + 3] for i in range(0, len(pl), 3)]
-    cw, ch = (300, 420) if len(rows) == 1 else (250, 350)
-    top, gap = 280, (H - 280 - 150) / len(rows)
-    for r, row in enumerate(rows):
-        for i, q in enumerate(row):
-            x = W / 2 + (i - (len(row) - 1) / 2) * (cw + 60)
-            y = top + gap * r + gap / 2 - 30
-            card = _card_or_frame(q, cw, ch)
-            img.paste(card, (int(x - card.width / 2), int(y - card.height / 2)), card)
-            box = card.getchannel("A").getbbox() if card.mode == "RGBA" else None
-            ty = y - card.height / 2 + (box[3] if box else card.height) + 4
-            txt, f = f"{q['shards']:,} SHARDS", label_font(28)
-            tw = d.textlength(txt, font=f)
-            d.rounded_rectangle((x - tw / 2 - 14, ty, x + tw / 2 + 14, ty + 42), 18, fill=(5, 5, 5))
-            d.text((x, ty + 5), txt, font=f, fill=GOLD, anchor="ma")
-    footer(d, p["footer"]) if p.get("footer") else footer(d)
+    if len(pl) > 3:  # 4 defenders: 2 x 2
+        spots = [(270, 400), (810, 400), (270, 870), (810, 870)]
+        cw, ch = 300, 400
+    else:
+        spots = [(270, 470), (810, 470), (540, 960)][:len(pl)] if len(pl) > 1 else [(540, 640)]
+        cw, ch = (340, 470) if len(pl) > 1 else (460, 640)
+    for q, (x, y) in zip(pl, spots):
+        card = _card_or_frame(q, cw, ch)
+        img.paste(card, (int(x - card.width / 2), int(y - card.height / 2)), card)
+        d = ImageDraw.Draw(img)
+        txt, f = f"{q['shards']:,} SHARDS", font("Anton-Regular.ttf", 36)
+        tw = d.textlength(txt, font=f)
+        ty = y + ch / 2 + 8
+        d.rounded_rectangle((x - tw / 2 - 20, ty, x + tw / 2 + 20, ty + 54), 27, fill=GOLD)
+        d.text((x, ty + 27), txt, font=f, fill=BLACK, anchor="mm")
     return img
 
 
@@ -743,62 +688,45 @@ def _stars(n):
 
 
 def post_compare(p):
-    """1 vs 1 stat comparison: cards on top, 6 face stats, detailed mirror table (green = better, red = worse)."""
-    from fmm.review import face_stats, DETAIL
+    """1 vs 1: background split in two colours, both cards big, giant VS, 6 face stats with the winner in gold
+    (Design Playbook). Full detail stays in the caption."""
+    from fmm.review import face_stats
     a, b = p["a"], p["b"]
-    img, d, c = base("comparison", p.get("background"))
-    title = f"{a['name']} vs {b['name']}".upper()
-    tf = title_font(64)
-    while d.textlength(title, font=tf) > W - 420 and tf.size > 36:
-        tf = title_font(tf.size - 4)
-    d.text((W // 2 + 130, 55), title, font=tf, fill=WHITE, anchor="ma")
-    d.text((W // 2 + 130, 130), "STATS COMPARISON", font=label_font(28), fill=GOLD, anchor="ma")
-    for side, pl in ((0, a), (1, b)):  # cards + mini info
-        x0 = 70 if side == 0 else W // 2 + 30
-        card = fit_card(pl["card"], 200, 280, PURPLE if side == 0 else BLUE)
-        img.paste(card, (x0 - 30, 160), card)
-        d = ImageDraw.Draw(img)
-        ix = x0 + 215
-        d.text((ix, 190), f"{pl['ovr']} {pl['pos']}", font=title_font(44), fill=WHITE)
-        info = [f"WF {_stars(pl.get('weak_foot'))}", f"SM {_stars(pl.get('skill_moves'))}",
-                f"{pl.get('height')} cm" if pl.get("height") else ""]
-        for i, t in enumerate(x for x in info if x.strip() not in ("WF", "SM")):
-            d.text((ix, 250 + i * 40), t, font=body_font(26), fill=GRAY)
-        prog = pl.get("program_name") or (pl.get("program") or "").replace("PROGRAM_", "")
-        if prog:
-            d.text((ix, 380), prog.upper(), font=label_font(24), fill=GOLD)
+    img = Image.new("RGB", (W, H), BLACK)
+    d = ImageDraw.Draw(img)
+    d.polygon([(0, 0), (W // 2 + 90, 0), (W // 2 - 90, H), (0, H)], fill=(110, 6, 28))
+    d.polygon([(W // 2 + 90, 0), (W, 0), (W, H), (W // 2 - 90, H)], fill=(16, 44, 130))
+    shade = Image.new("L", (W, H), 0)
+    ImageDraw.Draw(shade).rectangle((0, 700, W, H), fill=150)
+    img = Image.composite(Image.new("RGB", (W, H), BLACK), img, shade.filter(ImageFilter.GaussianBlur(80)))
+    logo = Image.open(LOGO).convert("RGBA")
+    logo.putalpha(logo.convert("L").point(lambda v: 0 if v < 40 else 255))
+    logo.thumbnail((180, 90))
+    img.paste(logo, (40, 30), logo)
+    anton = lambda s: font("Anton-Regular.ttf", s)
+    for pl, x in ((a, 40), (b, 600)):
+        card = fit_card(pl["card"], 380, 520, GOLD)
+        img.paste(card, (x - 30, 120 - 30), card)
+    g = Image.new("RGBA", (W, H), (0, 0, 0, 0))
+    ImageDraw.Draw(g).text((W // 2, 380), "VS", font=anton(220), fill=RED + (255,), anchor="mm")
+    g = g.filter(ImageFilter.GaussianBlur(22))
+    img.paste(g, (0, 0), g)
+    d = ImageDraw.Draw(img)
+    d.text((W // 2, 380), "VS", font=anton(220), fill=WHITE, anchor="mm", stroke_width=5, stroke_fill=BLACK)
+    for pl, x in ((a, 230), (b, 790)):
+        d.text((x, 670), surname(pl["name"]), font=anton(54), fill=WHITE, anchor="mm")
+        d.text((x, 720), f"{pl['ovr']} {pl['pos']}", font=label_font(30), fill=GOLD, anchor="mm")
     fa, fb = face_stats(a), face_stats(b)
-    y = 470
-    for side, (me, other) in ((0, (fa, fb)), (1, (fb, fa))):  # face stats boxes
-        x0 = 60 if side == 0 else W // 2 + 20
-        bw = (W // 2 - 80) / 6
-        for i, k in enumerate(me):
-            col = GREEN if me[k] > other[k] else RED if me[k] < other[k] else GRAY
-            bx = x0 + i * bw
-            d.rounded_rectangle((bx + 3, y, bx + bw - 3, y + 96), 12, fill=(20, 20, 26), outline=col, width=3)
-            d.text((bx + bw / 2, y + 22), k, font=label_font(22), fill=GRAY, anchor="mm")
-            d.text((bx + bw / 2, y + 64), str(me[k]), font=font("Anton-Regular.ttf", 40), fill=col, anchor="mm")
-    # detailed mirror table: value A | label | value B
-    sa, sb = a.get("stats") or {}, b.get("stats") or {}
-    y = 600
-    row = 52
-    for head, rows in DETAIL:
-        for key, label in rows[:2]:  # 2 key stats per category keeps it readable
-            label = f"{label}"
-            va, vb = sa.get(key), sb.get(key)
-            if va is None or vb is None:
-                continue
-            ca = GREEN if va > vb else RED if va < vb else GRAY
-            cb = GREEN if vb > va else RED if vb < va else GRAY
-            d.rounded_rectangle((60, y, W - 60, y + row - 6), 12, fill=(18, 18, 22))
-            d.text((W // 2, y + row / 2 - 3), label, font=label_font(26), fill=WHITE, anchor="mm")
-            d.text((120, y + row / 2 - 3), str(va), font=font("Anton-Regular.ttf", 34), fill=ca, anchor="mm")
-            d.text((W - 120, y + row / 2 - 3), str(vb), font=font("Anton-Regular.ttf", 34), fill=cb, anchor="mm")
-            wa = int(200 * min(1, va / 200)); wb = int(200 * min(1, vb / 200))
-            d.rounded_rectangle((170, y + 16, 170 + wa, y + row - 22), 7, fill=ca)
-            d.rounded_rectangle((W - 170 - wb, y + 16, W - 170, y + row - 22), 7, fill=cb)
-            y += row
-    footer(d, "WHO WINS? TELL US IN THE COMMENTS")
+    y = 780
+    for k in fa:
+        va, vb = fa[k], fb.get(k, 0)
+        x1 = W - 60 if y < 1050 else W - 250  # last rows end left of the ATB badge
+        d.rounded_rectangle((60, y, x1, y + 68), 14, fill=(8, 8, 12))
+        d.text((170, y + 34), str(va), font=anton(54), fill=GOLD if va > vb else WHITE, anchor="mm")
+        d.text(((60 + x1) // 2, y + 34), k, font=label_font(32), fill=GRAY, anchor="mm")
+        d.text((x1 - 110, y + 34), str(vb), font=anton(54), fill=GOLD if vb > va else WHITE, anchor="mm")
+        y += 80
+    d.rectangle((0, H - 14, W, H), fill=RED)
     return img
 
 
@@ -817,19 +745,19 @@ def post_compare4(p):
         img.paste(card, (int(cx - card.width / 2), 230), card)
     d = ImageDraw.Draw(img)
     faces = [face_stats(x) for x in pl]
-    y = 560
+    y = 530  # table ends above the ATB badge (bottom-right safe zone)
     for k in ["PAC", "SHO", "PAS", "DRI", "DEF", "PHY"]:
         vals = [f[k] for f in faces]
         best = max(vals)
-        d.rounded_rectangle((60, y, W - 60, y + 96), 18, fill=(18, 18, 24))
-        d.rounded_rectangle((60, y, 190, y + 96), 18, fill=(40, 30, 70))
-        d.text((125, y + 48), k, font=label_font(34), fill=WHITE, anchor="mm")
+        d.rounded_rectangle((60, y, W - 60, y + 86), 18, fill=(18, 18, 24))
+        d.rounded_rectangle((60, y, 190, y + 86), 18, fill=(40, 30, 70))
+        d.text((125, y + 43), k, font=label_font(34), fill=WHITE, anchor="mm")
         for i, v in enumerate(vals):
             cx = 200 + colw * i + colw / 2
             if v == best:
-                d.rounded_rectangle((cx - 70, y + 14, cx + 70, y + 82), 14, fill=(0, 120, 60))
-            d.text((cx, y + 48), str(v), font=font("Anton-Regular.ttf", 50), fill=WHITE, anchor="mm")
-        y += 108
+                d.rounded_rectangle((cx - 70, y + 10, cx + 70, y + 76), 14, fill=(0, 120, 60))
+            d.text((cx, y + 43), str(v), font=font("Anton-Regular.ttf", 50), fill=WHITE, anchor="mm")
+        y += 96
     footer(d, "WHO'S THE BEST? COMMENT YOUR PICK")
     return img
 
@@ -872,8 +800,8 @@ def post_choose4(p):
            anchor="ma", stroke_width=3, stroke_fill=PURPLE)
     d.text((W // 2 + 60, 180), p.get("subtitle", "").upper(), font=label_font(34), fill=GOLD, anchor="ma")
     for i, cd in enumerate(p["cards"][:4]):
-        x, y = 300 + (i % 2) * 480, 250 + (i // 2) * 520
-        card = fit_card(cd, 330, 460, GOLD)
+        x, y = 300 + (i % 2) * 460, 240 + (i // 2) * 460  # bottom-right card stays clear of the ATB badge
+        card = fit_card(cd, 300, 420, GOLD)
         img.paste(card, (int(x - card.width / 2), y), card)
         d.ellipse((x - 175, y + 10, x - 105, y + 80), fill=GOLD)
         d.text((x - 140, y + 45), str(i + 1), font=font("Anton-Regular.ttf", 52), fill=(5, 5, 5), anchor="mm")
