@@ -748,5 +748,32 @@
   "hook": "This 124 LW is INSANE!",
   "hook_style": 3,
   "instagram": "18119282549081935"
+ },
+ {
+  "at": "2026-11-08 07:00:50",
+  "kind": "reel",
+  "file": "/home/runner/work/fmm-automation/fmm-automation/output/slot/slot.mp4",
+  "type": "review_reel",
+  "hook_style": 1,
+  "facebook": "977768361645053",
+  "instagram": "18132440518888552",
+  "youtube": "oSPp920rtmU"
+ },
+ {
+  "at": "2026-11-08 07:01:06",
+  "kind": "photo",
+  "file": "/home/runner/work/fmm-automation/fmm-automation/output/slot/stats.png",
+  "type": "review_post",
+  "facebook": "122207214302906131",
+  "instagram": "18435799621147919"
+ },
+ {
+  "at": "2026-11-08 07:01:41",
+  "kind": "reel",
+  "file": "/home/runner/work/fmm-automation/fmm-automation/output/slot/slot.mp4",
+  "type": "review_reel_trial",
+  "hook": "121 OVR Afif... Buy or skip?",
+  "hook_style": 4,
+  "instagram": "18114693713177521"
  }
 ]
