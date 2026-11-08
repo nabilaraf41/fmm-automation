@@ -644,12 +644,34 @@ def render_reel(reel, out_dir=OUT, music=None, stills=None):
     wav.unlink(missing_ok=True)
     # owner rule: no Reel without ATB's video — his reaction clip boxed top-right for the whole Reel
     from fmm import atb
-    atb.box(out, reel["id"])
     cover = out_dir / f"{reel['id']}_cover.jpg"
+    if reel.get("cover"):  # review Reels open on the verdict cover (payoff in frame 0)
+        lead_with_cover(out, cover)
+    atb.box(out, reel["id"])
     if not cover.exists():  # never a black/empty cover: take a full, settled frame
         subprocess.run(["ffmpeg", "-v", "error", "-y", "-ss", "1.6", "-i", str(out), "-frames:v", "1", "-q:v", "2",
                         str(cover)], check=True)
     return out
+
+
+def lead_with_cover(mp4, cover, secs=0.7):
+    """Open the Reel on its payoff: the cover (final card / goal / verdict + big text + ATB face) for secs, then
+    the Reel. Top Shorts show the result in frame 0; it is also what platforms show when no cover is set."""
+    mp4, cover = Path(mp4), Path(cover)
+    if not cover.exists():
+        return mp4
+    tmp = mp4.with_name(mp4.stem + "_lead.mp4")
+    has_a = subprocess.run(["ffprobe", "-v", "error", "-select_streams", "a", "-show_entries", "stream=index",
+                            "-of", "csv=p=0", str(mp4)], capture_output=True, text=True).stdout.strip()
+    fc = (f"[0:v]scale=1080:1920,setsar=1,fps=30,format=yuv420p[c];[1:v]scale=1080:1920,setsar=1,fps=30,format=yuv420p[m];"
+          + ("[2:a]atrim=0:%s[s];[1:a]aresample=44100[ma];[c][s][m][ma]concat=n=2:v=1:a=1[v][a]" % secs if has_a
+             else "[c][m]concat=n=2:v=1:a=0[v]"))
+    subprocess.run(["ffmpeg", "-v", "error", "-y", "-loop", "1", "-t", str(secs), "-i", str(cover), "-i", str(mp4),
+                    "-f", "lavfi", "-t", str(secs), "-i", "anullsrc=r=44100:cl=stereo", "-filter_complex", fc,
+                    "-map", "[v]", *(["-map", "[a]", "-c:a", "aac", "-b:a", "160k"] if has_a else []),
+                    "-c:v", "libx264", "-preset", "medium", "-crf", "19", "-movflags", "+faststart", str(tmp)], check=True)
+    tmp.replace(mp4)
+    return mp4
 
 
 if __name__ == "__main__":

@@ -237,11 +237,12 @@ def build_from_inbox(slot):
         shutil.rmtree(OUT)
     OUT.mkdir(parents=True)
     shutil.copy(mp4, OUT / "slot.mp4")
-    from fmm import atb
-    atb.box(OUT / "slot.mp4", src)  # reaction video: owner's recording + ATB reacting
+    from fmm import atb, motion
     cover = Path(mp4).with_name(Path(mp4).stem + "_cover.jpg")
     if cover.exists():
         shutil.copy(cover, OUT / "slot_cover.jpg")
+        motion.lead_with_cover(OUT / "slot.mp4", cover)  # payoff (goal frame + title) in frame 0
+    atb.box(OUT / "slot.mp4", src)  # reaction video: owner's recording + ATB reacting
     # evergreen Shorts are titled like "Prime Ronaldo Free Kick💀🥶": player + moment + emoji (inbox.clip_hook)
     caption = (f"{hook}\n\nWould you have scored this? Rate it 1–10 👇\n\n"
                "Follow FMM for daily FC Mobile goals, cards & codes 🔔\n\n"
@@ -322,6 +323,8 @@ def build_pack(got=None, title=None, caption=None):
         thumb.cover(card or (str(frame) if frame.exists() else None), title.replace("I PACKED ", "I PACKED\n", 1) if len(title) > 16 else title,
                     OUT / "slot_cover.jpg", sub="PACK OPENING", color="gold", bg=str(frame) if card and frame.exists() else None)
         ov.unlink(missing_ok=True); frame.unlink(missing_ok=True)
+        from fmm import motion
+        motion.lead_with_cover(OUT / "slot.mp4", OUT / "slot_cover.jpg")  # final card + ATB face in frame 0
         caption = caption or PACK_CAPTION.read_text(encoding="utf-8").replace("{title}", title.title())
         inbox.mark_pack(f)
         finish("2100", "reel", "pack", OUT / "slot.mp4", caption, [], load_state())

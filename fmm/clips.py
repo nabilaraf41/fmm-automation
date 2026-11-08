@@ -131,7 +131,7 @@ def make(video, title="WHAT A GOAL!!", index=0, sub=None, music=None, card=None)
     start, peak, end = pk[index]
     name = f"{video.stem}_{index}"
     out = OUT / f"{name}.mp4"
-    ov = overlay_png(title, sub, OUT / f"{name}_ov.png", card)
+    ov = overlay_png(title, sub, OUT / f"{name}_ov.png", card, title_y=430)  # below the ATB box (y 140-400)
     rel = peak - start            # highlight time inside the clip
     slow_a, slow_b = max(0.0, rel - 1.5), rel + 0.8
     clip_len = end - start
@@ -151,7 +151,7 @@ def make(video, title="WHAT A GOAL!!", index=0, sub=None, music=None, card=None)
         f"[base2][2:v]overlay=0:0,format=yuv420p[replay];"
         f"[main][replay]concat=n=2:v=1:a=0[v]"
     )
-    replay_png = overlay_png("REPLAY", sub, OUT / f"{name}_ov2.png", card)
+    replay_png = overlay_png("REPLAY", sub, OUT / f"{name}_ov2.png", card, title_y=430)
     # audio: game audio (+ slowed replay audio) with whoosh at start and impact on the goal
     sfx.build() if not (sfx.OUT / "impact.wav").exists() else None
     ga = "0:a" if has_audio(video) else "5:a"  # silent recordings: a silent track keeps the mix working
