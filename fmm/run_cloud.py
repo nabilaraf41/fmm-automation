@@ -6,7 +6,7 @@
 Safe to run any number of times: featured.json "done_slots", codes_state.json and posted.json stop repeats.
 """
 import datetime as dt
-import json
+import json, os, sys
 import time
 from fmm import codes, poster, slots
 
@@ -71,6 +71,9 @@ if __name__ == "__main__":
     assert due_slot(dt.datetime(2026, 11, 1, 12, 30, tzinfo=BDT), {}) == ("2026-11-01-1300", "1300")  # early start
     assert due_slot(dt.datetime(2026, 11, 1, 15, 0, tzinfo=BDT), {"2026-11-01-1300": 1}) is None
 
+    # owner rule: only the cloud posts. A PC run (even "--help") posted the 8 Nov leak by mistake, so refuse here.
+    if os.environ.get("GITHUB_ACTIONS") != "true":
+        sys.exit("run_cloud posts for real: it only runs on GitHub Actions (owner rule: never post from the PC)")
     now = dt.datetime.now(BDT)
     # long video first: run_slot may wait up to an hour for the next slot, and the job has a 100-minute limit
     try:  # one long YouTube video a day from Drive 'long …' files (watch hours for the Partner Program)
