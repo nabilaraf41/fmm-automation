@@ -79,6 +79,13 @@ if __name__ == "__main__":
         run_slot(now)
     except Exception as ex:
         print("slot failed (next hourly run retries):", str(ex)[:200])
+    try:  # leaks / predictions made on the PC (content/leaks.json): one a day from 11:00 BDT, photo + Reel
+        from fmm import leaks
+        m = leaks.post_due()
+        if m:
+            print("leak posted:", m)
+    except Exception as ex:
+        print("leak skipped:", str(ex)[:150])
     try:  # owner's "ATB Meme" (content/atb_meme.json queue): one a day from 15:00 BDT, photo + Reel
         from fmm import atbmeme
         m = atbmeme.post_due()

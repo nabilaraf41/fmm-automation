@@ -51,6 +51,7 @@ def js_to_json(src):
                 out.append(f'"{src[i:j]}"'); i = j; continue
         out.append(c); i += 1
     s = "".join(out)
+    s = re.sub(r"(?<=[:\[,])(-?)\.(\d)", r"\g<1>0.\2", s)  # JS short floats like -.8 (player pages)
     return re.sub(r"(?<=[:\[,])\s*(?:void 0|undefined)\s*(?=[,}\]])", "null", s)
 
 

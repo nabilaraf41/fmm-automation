@@ -1,0 +1,17 @@
+{
+ "queue": [
+  {
+   "title": "BALLON D'OR WEEK 4",
+   "tag": "PREDICTION",
+   "sources": ["FC Mobile Forum", "MadridistaaFC", "Sportsdunia"],
+   "groups": [
+    {"name": "DRAFT A", "cards": [
+     {"player": "https://renderz.app/player/30912663-owen", "ovr": 123, "pos": "ST", "bg": "https://renderz.app/player/30922860"},
+     {"player": "https://renderz.app/player/30909502-cruyff", "ovr": 124, "pos": "CAM", "bg": "https://renderz.app/player/30922860"}]},
+    {"name": "DRAFT B", "cards": [
+     {"player": "https://renderz.app/player/24048902-olise", "ovr": 123, "pos": "RW", "bg": "https://renderz.app/player/24053826"},
+     {"player": "https://renderz.app/player/24046020-gabriel", "ovr": 122, "pos": "CB", "bg": "https://renderz.app/player/24053826"}]}
+   ]
+  }
+ ]
+}

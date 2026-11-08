@@ -42,6 +42,8 @@ Private repo `nabilaraf41/fmm-automation`, GitHub Actions (PC can be off):
    budget XI, rate, hidden gem, "is the event worth it", meme. Design references: assets/references/.
 - ATB Meme (`fmm.atbmeme`): owner says what goes on the right; add {top, bottom, label} to content/atb_meme.json
   queue (cards as "Name OVR POS", confirmed only). Posts one a day at 15:00 BDT (photo + Reel). ATB images: assets/atb_meme.
+- Leaks / predictions (`fmm.leaks`): cards not out yet are made on the PC like FC Mobile Forum (old RenderZ render on
+  the new event's bg); queue in content/leaks.json (2+ sources), `python -m fmm.leaks make`, commit; cloud posts 11:00 BDT.
 - Weekly growth loop (`fmm.growth`, Mondays): scores last week's posts (YT views, IG views/likes/comments, FB
   likes/comments) → content/weekly_report.md; sets featured.json boost (extra turns) / drop (skipped) for photo formats.
 - One-off overrides: `featured.json` → `force` keyed by date-slot (e.g. {"2026-11-05-0700": "countdown"}); undated keys are ignored.
