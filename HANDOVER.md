@@ -27,6 +27,9 @@ Handbook = CLAUDE.md. Memory notes (~/.claude/projects/E--Claude-FMM/memory, bac
 - renderz.js_to_json handles JS short floats (-.8).
 
 ## Fixed earlier (don't reintroduce)
+- Long videos post at 18:00 BDT so they're indexed before the 20–23h BD/India viewing peak (own data: 21:00 is the best hour).
+- Never name a scratch/helper file after a stdlib module: queue.py shadowed Python's `queue` and broke urllib3/requests
+  (renamed queuepk.py).
 - State is saved only with `python -m fmm.savestate` (merges; can add but not remove keys → use marker values like "redo").
   Commit code before savestate. Local test runs change content/players_db.json + clips_state.json: `git checkout -- content` them.
 - Workflows check out `ref: main`. `force` overrides are keyed "YYYY-MM-DD-HHMM".
