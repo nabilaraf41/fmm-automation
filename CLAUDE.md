@@ -1,6 +1,9 @@
 # FMM (FC Mobile Mania) — automation handbook
 
 New chat? Read HANDOVER.md first (status, open items, what was fixed and must not be reintroduced).
+Full text of every earlier chat (owner's words, decisions, fixes) is in docs/history/*.md (PC only, gitignored, secrets removed).
+Whenever the owner refers to something earlier, or you're unsure what was decided, Grep docs/history before answering or asking.
+At the end of a long chat, export it there too (same format) so nothing is forgotten.
 
 Owner's social accounts: FB Page "FC Mobile Mania - FMM" (id 705738725948110), IG @fc_fmm (17841473352545444),
 YouTube "FC Mobile Mania - FMM". Owner is in Bangladesh (BDT = UTC+6), zero budget, non-technical:
