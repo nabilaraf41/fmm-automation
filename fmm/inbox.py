@@ -148,7 +148,9 @@ def post_long():
     name = stem[4:].strip(" -_").title() if stem.lower().startswith("long") else ""
     name = name or "H2H Full Match Gameplay"
     nl = chr(10)
-    title = f"{name} | FC Mobile"[:60]  # titles under 60 chars read fully in search and suggested
+    # a numbered series ("FMM H2H #4") brings viewers back for the next one (RkReddy "#13", Vishy "Road to 132")
+    n = sum(1 for v in done.values() if v != "redo") + 1
+    title = f"FMM H2H #{n}: {name} 🔥"[:60]  # titles under 60 chars read fully in search and suggested
     # first 2 lines hook the scroller, then summary, links, then the words people actually search
     caption = (f"{title}{nl}{nl}"
                f"Watch how this one plays out in FC Mobile 26 🔥 Stay till the end.{nl}"

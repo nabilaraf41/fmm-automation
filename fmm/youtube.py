@@ -56,9 +56,19 @@ def title_and_description(caption, short=True):
     return title[:100], caption.strip() + ("\n\n#Shorts" if short else "")
 
 
+def latest_long():
+    """YouTube id of the newest long video in content/posted.json, or None."""
+    import json
+    log = Path(__file__).resolve().parent.parent / "content" / "posted.json"
+    ids = [e["youtube"] for e in json.loads(log.read_text(encoding="utf-8")) if e.get("kind") == "long" and e.get("youtube")]         if log.exists() else []
+    return ids[-1] if ids else None
+
+
 def upload(path, caption, privacy="public", short=True):
     from googleapiclient.http import MediaFileUpload
     title, desc = title_and_description(caption, short)
+    if short and (lv := latest_long()):  # every Short points to the newest full match (watch hours for YPP)
+        desc = desc.replace("\n\n#Shorts", f"\n\nFull match: https://youtu.be/{lv}\n\n#Shorts")
     body = {"snippet": {"title": title, "description": desc, "categoryId": "20",  # Gaming
                         "tags": ["FC Mobile", "FC Mobile 26", "EA Sports FC Mobile", "FMM", "FC Mobile Mania"]},
             "status": {"privacyStatus": privacy, "selfDeclaredMadeForKids": False}}

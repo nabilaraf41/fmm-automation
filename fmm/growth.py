@@ -119,6 +119,12 @@ def run(force=False):
         slots.STATE.write_text(json.dumps(st, indent=1, ensure_ascii=False), encoding="utf-8")
         lines += ["", "## Hook test (Instagram views)", "", "| Hook style | Avg views | Posts |", "|---|---|---|"]
         lines += [f"| {HOOKS[h]} | {avg[h]:.0f} | {len(by_hook[h])} |" for h in sorted(avg, key=lambda h: -avg[h])]
+    longs = [e for e in log if e.get("kind") == "long" and e.get("youtube")]
+    if longs:  # YPP needs 4,000 watch hours (8,000 from 1 Feb 2027); watch time itself needs the yt-analytics scope
+        lv = [(e["at"][:10], e["youtube"], metrics(e).get("yt_views", 0)) for e in longs]
+        lines += ["", "## Long videos (all time, YouTube views)", "", "| Posted | Video | Views |", "|---|---|---|"]
+        lines += [f"| {a} | https://youtu.be/{v} | {n:,} |" for a, v, n in lv]
+        lines += ["", f"Total long-video views: {sum(n for *_, n in lv):,} (watch hours: YouTube Studio → Analytics)"]
     lines += ["", "## Top 5 posts", ""] + [f"{i}. {p['at']} {p['type']} ({p['kind']}): score {p['score']:,}"
                                            for i, p in enumerate(sorted(posts, key=lambda p: -p["score"])[:5], 1)]
     lines += ["", f"More of: **{st['boost'] or '—'}** · less of: **{st['drop'] or '—'}**",
