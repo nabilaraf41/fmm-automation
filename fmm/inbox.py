@@ -189,7 +189,7 @@ def post_long():
             scored = sum(1 for _, k in goals if k == "scored")
             cap = (f"{scored} goals in one H2H match 🔥 Full match on YouTube: FC Mobile Mania - FMM{nl}{nl}"
                    "#FCMobile #FIFAMobile #EAFC #H2H #FMM")
-            print("ig highlight:", poster.post("reel", hl, cap, where="ig"))
+            print("highlight Reel:", poster.post("reel", hl, cap))  # owner rule: all 3 platforms
     except Exception as ex:
         print("ig highlight skipped:", str(ex)[:150])
     done[f["id"]] = today

@@ -138,8 +138,15 @@ def ig_wait(cid, tries=60):
     raise RuntimeError("IG processing timed out")
 
 
-def ig_publish(cid):
-    return call("POST", f"{IG}/media_publish", data={"creation_id": cid})["id"]
+def ig_publish(cid, tries=5):
+    """IG sometimes says "Media ID is not available" right after FINISHED: wait and retry (seen 7 Nov)."""
+    for i in range(tries):
+        try:
+            return call("POST", f"{IG}/media_publish", data={"creation_id": cid})["id"]
+        except Exception as ex:
+            if i == tries - 1 or "not available" not in str(ex) and "not ready" not in str(ex).lower():
+                raise
+            time.sleep(20)
 
 
 def ig_photo(path, caption):
@@ -223,12 +230,19 @@ def post(kind, media, caption, where="both", ctype=None, reel=True, extra=None):
             from fmm import youtube
             return youtube.upload(media, caption)[0]
         steps.append(("youtube", yt))
-    for name, fn in steps:
-        try:
-            done[name] = fn()
-        except Exception as ex:
-            errors[name] = str(ex)[:200]
-            print(f"{name} failed:", errors[name])
+    for attempt in range(2):  # owner rule: every post on all platforms; a failed one gets a 2nd try
+        for name, fn in steps:
+            if name in done:
+                continue
+            try:
+                done[name] = fn()
+                errors.pop(name, None)
+            except Exception as ex:
+                errors[name] = str(ex)[:200]
+                print(f"{name} failed (try {attempt + 1}):", errors[name])
+        if not errors or attempt:
+            break
+        time.sleep(60)
     if not done:
         raise RuntimeError(f"all platforms failed: {errors}")
     log({"kind": kind, "file": media, **({"type": ctype} if ctype else {}), **(extra or {}), **done})
@@ -252,11 +266,10 @@ def posted_files():
 
 
 def run_queue(folder, where="both", gap=90):
-    done = posted_files()
     items = sorted(Path(folder).glob("*.png")) + sorted(Path(folder).glob("*.mp4"))  # covers are .jpg, never posted alone
     for m in items:
         cap = caption_for(m)
-        if m.name in done or cap is None:
+        if m.name in posted_files() or cap is None:  # re-read: posting a photo also posts its _reel.mp4 (was posted twice)
             continue
         kind = "reel" if m.suffix == ".mp4" else "photo"
         print("posting", kind, m.name, "->", post(kind, m, cap, where))
