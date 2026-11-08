@@ -17,6 +17,12 @@
    "code": "COSTUMEPARTY",
    "reward": "Festive Draft Voucher & 1k Gems",
    "date": "31st October"
+  },
+  "UNDERTHELIGHTS": {
+   "first_seen": "2026-11-08",
+   "code": "UNDERTHELIGHTS",
+   "reward": "300 Shards",
+   "date": "8th November"
   }
  },
  "roundups": [
