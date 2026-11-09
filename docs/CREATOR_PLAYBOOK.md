@@ -111,7 +111,10 @@ What already works for us (keep): pack openings (score 1,906, best type), review
    restricted reach, not bad content: IG gets 1.4k–4.5k for the same Reel.
 2. Facebook rewards original vertical video and demotes reposts/watermarks and link posts (2026 guides, not Meta itself).
    Post Reels natively, no YouTube/IG watermark, no links in the post.
-3. One post a day to FB groups by hand (best Reel only) + share to the owner's profile. Groups stay manual.
+3. FB groups by hand (groups stay manual). Owner data 9 Nov: the Top 10 ST photo in "FC Mobile Community" got
+   99 likes + 37 comments (the Page itself gets 0-2) and group posts already earn (cents, Last 28 days earnings list).
+   Daily: 2-3 posts in 3-5 different groups, a different group set each day; best = rankings/Top 10, Choose 1,
+   versus, leaks, Reels. Caption ends with a debatable question ("Who's missing?"), never "like/react/tag".
 4. Fewer, stronger FB posts: 2 Reels + 1 photo a day. Keep photo + Reel (owner's decision), but not 6 a day.
 5. Reply to comments in the first hour.
 
