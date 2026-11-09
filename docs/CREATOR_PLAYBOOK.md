@@ -105,6 +105,10 @@ What already works for us (keep): pack openings (score 1,906, best type), review
 **Captions**
 - Line 1 = the title hook. Then 1–2 lines of facts (stats, price). A real question is fine; no "like / tag / react to vote".
 - 3 hashtags: #FCMobile #FIFAMobile #EAFC (+ #shorts on YouTube).
+- Keyword-DM posts (studied 9 Nov, seb.ai 130 comments): line 1 = "Comment 🙌 and I'll send you <the thing> 👇"
+  (one easy word/emoji, the reward named), then 2 lines with one concrete number/benefit ("checked every hour"),
+  then "Save this before <moment>." 🙌 is the FMM keyword (owner: people use it, easier than a word).
+  Evergreen pinned post: output/evergreen/codes_comment.* ; ManyChat sends https://nabilaraf41.github.io/fmm-codes/
 
 ## 4. Facebook growth plan
 1. Check the Page first: Professional dashboard → Page status (owner, screenshot). 0–2 plays per Reel looks like
