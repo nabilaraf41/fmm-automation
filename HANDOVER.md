@@ -35,6 +35,12 @@ Handbook = CLAUDE.md. Memory notes (~/.claude/projects/E--Claude-FMM/memory, bac
 - Workflows check out `ref: main`. `force` overrides are keyed "YYYY-MM-DD-HHMM".
 - Poster posts each platform independently; a slot is done once any platform succeeds.
 
+## Codes page (9 Nov)
+- Public repo nabilaraf41/fmm-codes = https://nabilaraf41.github.io/fmm-codes/ (latest 5 codes, copy buttons).
+  Updates itself hourly (its own Action reads fcmobileforum; no token). Edit design in that repo's codespage.py.
+- Comment "CODE" -> DM with follow button -> this link: owner sets it up in ManyChat (Claude can't create accounts).
+  Add 'Comment "CODE" ...' to code captions only after ManyChat is live.
+
 ## Open items
 - FB Page reach ~0 (Reels 0–2 plays vs IG 1.4k–4.5k, 0 reactions). Owner to check Professional dashboard → Page status
   (send screenshot) and share Reels to FB groups/personal profile. Owner wants photo + Reel on FB kept.

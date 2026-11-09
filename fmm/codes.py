@@ -101,11 +101,6 @@ def run(dry=False):
         (day_dir / "codes_roundup.txt").write_text(caption_roundup(active), encoding="utf-8")
         state["roundups"].append(today)
     STATE.write_text(json.dumps(state, indent=1, ensure_ascii=False), encoding="utf-8")
-    try:  # public codes page (the link the comment -> DM automation sends): new codes appear in this same run
-        from fmm import codespage
-        print("codes page:", codespage.publish(active))
-    except Exception as ex:
-        print("codes page skipped:", str(ex)[:150])
     for m in made:
         print("made", m)
 
