@@ -59,7 +59,10 @@ def make_reel(src, music=None, seconds=8):
         vf = None  # no zoom: it would crop the clip; the post stays still and sharp below the clip
         # no fade-in: frame 0 is what platforms show when a cover is missing (black covers before)
         fc = (f"[0:v]fps={FPS},format=yuv420p[bg];[1:v]scale=1080:{TOP},fps={FPS}[t];"
-              f"[bg][t]overlay=0:0:shortest=0,unsharp=5:5:0.6,format=yuv420p[v]")
+              # 3 punch-zoom pulses on the post (a new visual beat every ~3 s, motion-reel study), ATB clip stays still
+              "[bg]scale=w='2*trunc(540*(1+0.07*(exp(-pow((t-1.5)/0.22,2))+exp(-pow((t-4.5)/0.22,2))+exp(-pow((t-7.5)/0.22,2)))))':"
+              "h=-2:eval=frame,crop=1080:1920:(iw-1080)/2:(ih-1920)/2[bgz];"
+              f"[bgz][t]overlay=0:0:shortest=0,unsharp=5:5:0.6,format=yuv420p[v]")
         # cover = the post with ATB's reaction on top (used for IG cover, FB + YT thumbnail via cover_for)
         cov = Image.open(frame).convert("RGB")
         snap = out.with_name(out.stem + "_top.png")

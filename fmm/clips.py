@@ -143,7 +143,9 @@ def make(video, title="WHAT A GOAL!!", index=0, sub=None, music=None, card=None)
         f"[b]{fg_zoom},scale='if(between(t,{rel - 0.4},{rel + 1.2}),1300,1080)':-2:eval=frame,"
         f"crop=1080:ih*1080/iw:(iw-1080)/2:(ih-ih*1080/iw)/2,{LOOK}[fg];"
         f"[bg][fg]overlay=(W-w)/2:(H-h)/2-40[base];"
-        f"[base][1:v]overlay=0:0,format=yuv420p[main];"
+        # kinetic title (motion-reel study): overlay fades in and rises 26 px over ~0.5 s instead of just appearing
+        f"[1:v]format=rgba,loop=-1:1,setpts=N/30/TB,fade=in:st=0:d=0.45:alpha=1[ovk];"
+        f"[base][ovk]overlay=0:'max(0,26-26*t/0.55)':shortest=1,format=yuv420p[main];"
         f"[0:v]trim=start={start + slow_a}:end={start + slow_b},setpts=2*(PTS-STARTPTS),split=2[c][d];"
         f"[c]scale=-2:{RH},crop={RW}:{RH},boxblur=25:2,eq=brightness=-0.12:saturation=1.3[bg2];"
         f"[d]scale=1900:-2,crop=1080:ih:(iw-1080)/2:0,{LOOK}[fg2];"
