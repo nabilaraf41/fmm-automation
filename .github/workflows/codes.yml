@@ -37,6 +37,8 @@ jobs:
           META_PAGE_ID: ${{ secrets.META_PAGE_ID }}
           IG_USER_ID: ${{ secrets.IG_USER_ID }}
           YOUTUBE_TOKEN_JSON: ${{ secrets.YOUTUBE_TOKEN_JSON }}
+          PAGES_REPO: ${{ secrets.PAGES_REPO }}
+          PAGES_TOKEN: ${{ secrets.PAGES_TOKEN }}
           TZ: Asia/Dhaka
         run: python -u -m fmm.run_cloud
 
