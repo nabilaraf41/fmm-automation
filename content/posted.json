@@ -875,5 +875,32 @@
   "facebook": "1120341694304881",
   "youtube": "iU8bdOa_Avg",
   "instagram": "17998594002020905"
+ },
+ {
+  "at": "2026-11-09 07:01:52",
+  "kind": "reel",
+  "file": "/home/runner/work/fmm-automation/fmm-automation/output/slot/slot.mp4",
+  "type": "review_reel",
+  "hook_style": 1,
+  "facebook": "2006059343401308",
+  "instagram": "18116836499029757",
+  "youtube": "4uaL7G0CBQo"
+ },
+ {
+  "at": "2026-11-09 07:02:09",
+  "kind": "photo",
+  "file": "/home/runner/work/fmm-automation/fmm-automation/output/slot/stats.png",
+  "type": "review_post",
+  "facebook": "122207361392906131",
+  "instagram": "18125053591714861"
+ },
+ {
+  "at": "2026-11-09 07:02:40",
+  "kind": "reel",
+  "file": "/home/runner/work/fmm-automation/fmm-automation/output/slot/slot.mp4",
+  "type": "review_reel_trial",
+  "hook": "Hakimi 123 OVR: hype or worth having?",
+  "hook_style": 2,
+  "instagram": "18117228767115422"
  }
 ]
