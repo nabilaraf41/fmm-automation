@@ -47,11 +47,14 @@ def load_state():
     return json.loads(STATE.read_text(encoding="utf-8")) if STATE.exists() else {"seen": {}, "roundups": []}
 
 
+PINNED = "All working codes in one link: comment 🙌 on our pinned post 📌"  # ManyChat DMs the codes page
+
+
 def caption_new(c):
     return (f"🎁 NEW FC MOBILE CODE: {c['code']}\n\n"
             f"Reward: {c['reward']}\n"
             f"Redeem now at {REDEEM_SITE} before it expires ⏳\n\n"
-            f"👇 Did it work for you? Tell us what you got!\n\n"
+            f"👇 Did it work for you? Tell us what you got!\n\n{PINNED}\n\n"
             f"#FCMobile #FCMobile26 #FCMobileCodes #RedeemCode #FMM")
 
 
@@ -59,7 +62,7 @@ def caption_roundup(active):
     lines = "\n".join(f"✅ {c['code']} — {c['reward']}" for c in active)
     return (f"📋 ALL ACTIVE FC MOBILE CODES ({dt.date.today():%d %b})\n\n{lines}\n\n"
             f"Redeem at {REDEEM_SITE}\n"
-            f"🔔 Follow FMM — we post every new code first.\n\n"
+            f"🔔 Follow FMM — we post every new code first.\n{PINNED}\n\n"
             f"#FCMobile #FCMobile26 #FCMobileCodes #FreeRewards #FMM")
 
 
