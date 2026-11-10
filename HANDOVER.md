@@ -48,4 +48,4 @@ Handbook = CLAUDE.md. Memory notes (~/.claude/projects/E--Claude-FMM/memory, bac
 - Owner may delete one copy of the duplicate code Reel (FB 1633325401906458, IG 18029433419920196, YT MA4V7xdGBWM).
 - After Flow credits reset: chained 20 s pack reaction; retry 5 hook clips. Idea: music bed for silent long videos.
 - Possible: Top 10 series with fully-trained stats / CM by Pace (owner asked if this format posts — it does, 19:00).
-- Instagram comment replies off (IG_REPLIES=False) until the token gets instagram_manage_comments. YouTube API audit not submitted.
+- Instagram comment replies ON since 10 Nov (2 per post, spam skipped). YouTube API audit not submitted.
