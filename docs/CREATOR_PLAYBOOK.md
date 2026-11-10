@@ -171,3 +171,11 @@ Pack openings (coming soon): title "I Packed <best card OVR + name>!" / "My LUCK
   thumbnail = face + the best card pulled + gems/draft count. 12-20 min. Show the best walkout in the first 30 s, then the build-up.
 Every post: "DAY N/365 · <series>" pill (poster.day_label), N = days that format has been posted.
 Trial Reels: already 1 per Reel slot (other hook, non-followers only). Not 30 copies: duplicate uploads get flagged as unoriginal.
+
+## Meta audit (10 Nov 2026, Business Suite + API)
+- IG followers 3,902. Countries: Brazil 24%, India 17%, US 9%, Indonesia 4%, Bangladesh 4%, Uzbekistan/Iran/Turkey 3%.
+  Ages 35-44 27%, 25-34 22%, 18-24 22%. 07:00 BDT = 22:00 in Brazil (prime time) -> keep the strongest format (Top 10) at 07:00.
+- FB Page: 91.6k views in 28 days and first earnings ($0.16), but the Page's own posts total ~1k views (best 68).
+  The views come from shares in FB groups. Meta: no account/asset issues. So the FB feed doesn't push the Page;
+  groups do. Owner keeps sharing Top 10 / Cheap XI Reels to groups (highest-value manual task).
+- Comment -> DM works (test DM delivered 10 Nov, via Page /messages private reply).
