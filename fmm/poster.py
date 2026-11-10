@@ -209,10 +209,73 @@ def ig_reel(path, caption, share_to_feed=True, trial=False):
 
 
 # ---------- high level ----------
-def post(kind, media, caption, where="both", ctype=None, reel=True, extra=None):
+# owner rule (10 Nov 2026): every post carries "DAY N/365 · <series>" (N = days that format has been posted)
+SERIES = {"xi": "BEST CHEAP XI", "review_reel": "CARD REVIEW", "review_post": "CARD REVIEW", "statrank": "TOP 10 BY STAT",
+          "rank10": "TOP 10", "choose": "CHOOSE 1", "pack": "PACK OPENING", "versus": "1V1 STATS", "pick3": "PICK ONE",
+          "goat": "GOAT DEBATE", "atb_meme": "ATB MEME", "leak": "LEAKS", "guess": "GUESS THE PLAYER",
+          "rate": "RATE IT", "gem": "HIDDEN GEM", "worth": "IS IT WORTH IT", "meme": "EA LOGIC", "clip": "MY GOALS",
+          "long": "H2H FULL MATCH", "codes": "REDEEM CODES"}
+
+
+def day_label(ctype):
+    """'DAY 3/365 · BEST CHEAP XI' or None for types without a series."""
+    if not ctype or ctype not in SERIES:
+        return None
+    today = time.strftime("%Y-%m-%d", time.gmtime(time.time() + 6 * 3600))  # BDT
+    data = json.loads(LOG.read_text(encoding="utf-8")) if LOG.exists() else []
+    days = {e["at"][:10] for e in data if e.get("type") == ctype and e.get("at", "")[:10] < today}
+    return f"DAY {len(days) + 1}/365 · {SERIES[ctype]}"
+
+
+def _pill(label, side):
+    from PIL import Image, ImageDraw
+    from fmm.brand import title_font
+    f = title_font(max(28, side // 17))
+    tw = int(f.getlength(label)); th = f.size
+    img = Image.new("RGBA", (tw + th * 2, int(th * 1.7)), (0, 0, 0, 0))
+    d = ImageDraw.Draw(img)
+    d.rounded_rectangle((0, 0, img.width - 1, img.height - 1), radius=img.height // 2, fill=(255, 215, 0, 245),
+                        outline=(0, 0, 0, 255), width=4)
+    d.text((img.width // 2, img.height // 2), label, font=f, fill=(0, 0, 0, 255), anchor="mm")
+    return img
+
+
+def stamp(media, label):
+    """Copy of media with the day pill top-centre -> new path (original untouched, so retries never double-stamp)."""
+    from PIL import Image
+    src = Path(media)
+    if src.suffix.lower() in (".png", ".jpg", ".jpeg"):
+        im = Image.open(src).convert("RGBA")
+        pill = _pill(label, min(im.size))
+        im.alpha_composite(pill, ((im.width - pill.width) // 2, int(im.height * 0.02)))
+        out = src.with_name(src.stem + "_day" + src.suffix)
+        im.convert("RGB").save(out, quality=95)
+        return str(out)
+    import subprocess
+    w = int(subprocess.run(["ffprobe", "-v", "error", "-select_streams", "v:0", "-show_entries", "stream=width,height",
+                            "-of", "csv=p=0", str(src)], capture_output=True, text=True).stdout.split()[0].split(",")[0])
+    png = src.with_name(src.stem + "_daypill.png")
+    _pill(label, w).save(png)
+    out = src.with_name(src.stem + "_day.mp4")
+    subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", str(src), "-i", str(png), "-filter_complex",
+                    "overlay=(W-w)/2:H*0.02", "-c:a", "copy", "-crf", "18", str(out)], check=True)  # top edge, above the ATB face
+    cover = cover_for(src)
+    if cover:  # keep the cover pairing (cover_for looks next to the mp4)
+        import shutil
+        shutil.copy(cover, out.with_name(out.stem + Path(cover).name[len(src.stem):]))
+    return str(out)
+
+
+def post(kind, media, caption, where="both", ctype=None, reel=True, extra=None, _stamp=True):
     """Post to each platform independently. One platform failing never re-posts the others:
     the result is logged as soon as any platform succeeds; it raises only if all of them failed."""
     media = str(media)
+    label = day_label(ctype) if _stamp else None
+    if label:
+        try:
+            media = stamp(media, label)
+        except Exception as ex:  # a missing pill never blocks the post
+            print("day label skipped:", str(ex)[:120])
     from fmm.captions import polish
     caption = polish(caption)  # humanized, hook-first, max 5 hashtags
     pair = None
@@ -256,7 +319,7 @@ def post(kind, media, caption, where="both", ctype=None, reel=True, extra=None):
         # not the same text twice in a row on the Page (FB treats it like spam): Reel gets the hook + hashtags only
         parts = [p for p in caption.split("\n\n") if p.strip()]
         short = parts[0] + ("\n\n" + parts[-1] if len(parts) > 1 and "#" in parts[-1] else "")
-        done["reel"] = post("reel", pair, short if short != caption else "🎬 " + caption, where, ctype)
+        done["reel"] = post("reel", pair, short if short != caption else "🎬 " + caption, where, ctype, _stamp=False)
     return done
 
 

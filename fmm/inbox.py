@@ -150,12 +150,26 @@ def post_long():
     nl = chr(10)
     # a numbered series ("FMM H2H #4") brings viewers back for the next one (RkReddy "#13", Vishy "Road to 132")
     n = sum(1 for v in done.values() if v != "redo") + 1
-    title = f"FMM H2H #{n}: {name} 🔥"[:60]  # titles under 60 chars read fully in search and suggested
+    # top H2H/pack videos (Vishy, RkReddy, De MYSTeRIO, Nov 2026) lead with OVR + player + a reaction, never "Gameplay #n"
+    from fmm import facecam
+    goals = sum(1 for _, k in facecam.goals_for(f["id"]) if k == "scored")
+    best = scorer(f["name"])
+    who = f"{best['ovr']} {best['name'].split()[-1]}" if best else ""
+    if who and goals >= 2:
+        hook = f"{who} Scored {goals} in ONE H2H Game?! 😱"
+    elif who:
+        hook = f"{who} Is INSANE in H2H! 😱"
+    elif goals >= 2:
+        hook = f"{goals} Goals in ONE H2H Game?! 😱"
+    else:
+        hook = f"{name} 😱"
+    title = f"{hook} - FC Mobile"[:70]  # series number stays in the description, not the title
+    thumb_text = (f"{goals} GOALS?!" if goals >= 2 else who or name).upper()
     # first 2 lines hook the scroller, then summary, links, then the words people actually search
     caption = (f"{title}{nl}{nl}"
                f"Watch how this one plays out in FC Mobile 26 🔥 Stay till the end.{nl}"
                f"Full gameplay with real tactics, skill moves and finishing you can copy in your own matches.{nl}{nl}"
-               f"In this video: {name} — full FC Mobile gameplay, H2H / VSA match, best formation and the cards I used.{nl}{nl}"
+               f"FMM H2H #{n}. In this video: {name} — full FC Mobile gameplay, H2H / VSA match, best formation and the cards I used.{nl}{nl}"
                f"🔔 Subscribe for daily FC Mobile cards, redeem codes and gameplay{nl}"
                f"📘 Facebook: https://www.facebook.com/61577183936749{nl}"
                f"📸 Instagram: https://www.instagram.com/fc_fmm/{nl}{nl}"
@@ -172,8 +186,8 @@ def post_long():
         frame = local.with_name(local.stem + "_frame.png")
         subprocess.run(["ffmpeg", "-v", "error", "-y", "-ss", str(clips.duration(local) * 0.4), "-i", str(local),
                         "-frames:v", "1", str(frame)])
-        thumb.cover_wide(frame, name, local.with_name(local.stem + "_cover.jpg"), card=scorer_card(f["name"]),
-                         sub="FC MOBILE")
+        thumb.cover_wide(frame, thumb_text, local.with_name(local.stem + "_cover.jpg"), card=scorer_card(f["name"]),
+                         face=thumb.face_for(n))
     except Exception as ex:
         print("long cover skipped:", str(ex)[:100])
     vid = youtube.upload(local, caption, short=False)[0]

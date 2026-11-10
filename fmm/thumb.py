@@ -131,7 +131,17 @@ if __name__ == "__main__":
                 sub=sys.argv[4] if len(sys.argv) > 4 else None))
 
 
-def cover_wide(frame, text, out_path, card=None, sub=None, big=None, emoji="wow"):
+FACES = sorted((Path(__file__).resolve().parent.parent / "assets" / "atb").glob("thumb_*.png"))
+
+
+def face_for(n):
+    """ATB reaction cutout for long-video thumbnail n (rotates so the channel page doesn't repeat one face)."""
+    return FACES[n % len(FACES)] if FACES else None
+
+
+def cover_wide(frame, text, out_path, card=None, sub=None, big=None, emoji="wow", face=None):
+    if face:  # owner rule (10 Nov): ATB face ~50% of the thumbnail, like Vishy/RkReddy/De MYSTeRIO covers
+        return _cover_face(frame, text, out_path, card, face)
     """big = huge right-side text (e.g. the score "4-0") when there is no card."""
     """16:9 thumbnail (1280x720) for long videos: punchy frame, huge outlined text left, card right, red arrow."""
     w, h = 1280, 720
@@ -168,5 +178,42 @@ def cover_wide(frame, text, out_path, card=None, sub=None, big=None, emoji="wow"
     logo = Image.open(LOGO).convert("RGBA")
     logo.putalpha(logo.convert("L").point(lambda v: 0 if v < 40 else 255)); logo.thumbnail((160, 80))
     img.alpha_composite(logo, (w - logo.width - 20, 20))
+    img.convert("RGB").save(out_path, quality=92)
+    return Path(out_path)
+
+
+def _cover_face(frame, text, out_path, card, face):
+    """1280x720: gameplay bg, ATB cutout left half (head big, cut at the chest), card right, huge text top right."""
+    w, h = 1280, 720
+    img = Image.new("RGBA", (w, h), (10, 10, 10, 255))
+    if frame and Path(frame).exists():
+        ph = Image.open(frame).convert("RGB")
+        s = max(w / ph.width, h / ph.height)
+        ph = ph.resize((int(ph.width * s), int(ph.height * s)), Image.LANCZOS)
+        ph = ph.crop(((ph.width - w) // 2, (ph.height - h) // 2, (ph.width + w) // 2, (ph.height + h) // 2))
+        ph = ImageEnhance.Color(ImageEnhance.Contrast(ph).enhance(1.2)).enhance(1.5).filter(ImageFilter.GaussianBlur(3))
+        img = ph.convert("RGBA")
+        img.alpha_composite(Image.new("RGBA", (w, h), (0, 0, 0, 90)))
+    p = Image.open(face).convert("RGBA")
+    p = p.crop(p.getbbox())
+    p = p.crop((0, 0, p.width, int(p.height * 0.62)))  # head + shoulders only, so the face itself is big
+    s = 760 / p.height
+    p = p.resize((int(p.width * s), 760), Image.LANCZOS)
+    if p.width > 700:  # keep the face centred in the left half
+        cx = p.width // 2
+        p = p.crop((cx - 350, 0, cx + 350, p.height))
+    rim = Image.new("RGBA", p.size, (255, 255, 255, 255)); glow = Image.new("RGBA", p.size, (0, 0, 0, 0))
+    glow.paste(rim, (0, 0), p.split()[3])
+    img.alpha_composite(glow.filter(ImageFilter.GaussianBlur(10)), (-20, h - p.height + 40))
+    img.alpha_composite(p, (-20, h - p.height + 40))
+    if card:
+        c = load_card(card); c.thumbnail((400, 560), Image.LANCZOS)
+        g = Image.new("RGBA", c.size, (0, 0, 0, 0)); g.paste(Image.new("RGBA", c.size, (255, 230, 120, 230)), (0, 0), c)
+        x, y = w - c.width - 50, h - c.height - 30
+        img.alpha_composite(g.filter(ImageFilter.GaussianBlur(25)), (x, y)); img.alpha_composite(c, (x, y))
+        a = arrow(220, 55).rotate(-160, expand=True, resample=Image.BICUBIC)
+        img.alpha_composite(a, (x - a.width + 30, y + 120))
+    t = big_text(text, 140, (255, 230, 0), stroke=12, max_w=620)
+    img.alpha_composite(t, (w - t.width - 30 if not card else 640, 20))
     img.convert("RGB").save(out_path, quality=92)
     return Path(out_path)
