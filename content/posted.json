@@ -1066,5 +1066,24 @@
   "facebook": "1788779982415761",
   "instagram": "17868395289677386",
   "youtube": "ds4T82hTjtk"
+ },
+ {
+  "at": "2026-11-10 21:02:06",
+  "kind": "reel",
+  "file": "/home/runner/work/fmm-automation/fmm-automation/output/slot/slot_day.mp4",
+  "type": "review_reel",
+  "hook_style": 1,
+  "facebook": "986984863931054",
+  "instagram": "18108374984570167",
+  "youtube": "28adDx2Ormc"
+ },
+ {
+  "at": "2026-11-10 21:02:53",
+  "kind": "reel",
+  "file": "/home/runner/work/fmm-automation/fmm-automation/output/slot/slot.mp4",
+  "type": "review_reel_trial",
+  "hook": "Vini Jr. 121 OVR: hype or worth having?",
+  "hook_style": 2,
+  "instagram": "18112454858234870"
  }
 ]
