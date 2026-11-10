@@ -55,7 +55,7 @@ def keyword_posts(st):
     cache = st.setdefault("asks", {})
     out = []
     for e in log:
-        if e.get("at", "") < since and e.get("type") != "evergreen":  # the pinned post keeps working forever
+        if e.get("at", "") < since or e.get("type") == "evergreen":  # owner (10 Nov): ManyChat answers the pinned codes post
             continue
         for platform, field, cap in (("instagram", "instagram", "caption"), ("facebook", "facebook", "message")):
             mid = str(e.get(field) or "")
@@ -79,11 +79,12 @@ def comments(platform, mid):
 
 def post_evergreen(st):
     """One-time: the pinned 'Comment 🙌' codes post (photo + Reel, all platforms)."""
-    if st.get("evergreen_posted") or not EVERGREEN.exists():
+    # v2: owner deleted the 10 Nov copy (hands-on-head ATB clip looked bald) and asked for a repost
+    if st.get("evergreen_posted2") or not EVERGREEN.exists():
         return
     cap = EVERGREEN.with_suffix(".txt").read_text(encoding="utf-8")
     poster.post("photo", EVERGREEN, cap, "both", "evergreen")
-    st["evergreen_posted"] = time.strftime("%Y-%m-%d")
+    st["evergreen_posted2"] = time.strftime("%Y-%m-%d")
     print("evergreen codes post published: pin it on Instagram (⋯ -> Pin to profile)")
 
 
