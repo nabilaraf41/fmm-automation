@@ -101,6 +101,11 @@ if __name__ == "__main__":
             print("atb meme posted:", m)
     except Exception as ex:
         print("atb meme skipped:", str(ex)[:150])
+    try:  # comment 🙌 -> DM with the codes page (our own ManyChat); before replies so DMs go first
+        from fmm import dm
+        dm.run()
+    except Exception as ex:
+        print("dm skipped:", str(ex)[:150])
     try:  # reply to the 2 best comments per recent post (Instagram + Facebook)
         from fmm import replies
         replies.run()
