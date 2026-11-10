@@ -159,3 +159,15 @@ Sources: vidIQ channel/outlier data (8 Nov 2026);
 [Facebook 2026 algorithm (Fanpage Karma)](https://www.fanpagekarma.com/insights/the-facebook-algorithm-2026-explained-what-marketers-need-to-know/) ·
 [Facebook monetization (Buffer)](https://www.buffer.com/resources/how-to-make-money-on-facebook/) ·
 [Ad Breaks for Bangladesh (Daily Star)](https://www.thedailystar.net/node/1657360)
+
+## Long videos + pack openings (study 10 Nov 2026, vidIQ outliers, last 3-6 months)
+Our H2H #3 got 33 views: title "FMM H2H #n: <name>" reads like a channel log, nobody searches it.
+What the top long videos do (Vishy 150-330k, RkReddy 237k, De MYSTeRIO 81k, Total FC 65k in 2 days):
+- Title = OVR + player + reaction, or a challenge/number: "I Reached 132 OVR First!", "I Ruined My F2P Account For 129 Lamine Yamal!",
+  "LEVEL 3 RAPID RONALDINHO IS INSANE!", "I Beat FC Mobile H2H with My F2P Account!". " - FC Mobile" at the end. Series number never first.
+- Thumbnail: creator face 40-50% (shocked/excited), ONE card big, ONE huge number (OVR or goals). Max 3 words. Built: thumb._cover_face.
+- Small H2H channels grow with a series in the title ("Road To 71 Stars" 32k on a 3k channel): use when owner climbs H2H ranks.
+Pack openings (coming soon): title "I Packed <best card OVR + name>!" / "My LUCKIEST <event> Pack Opening!" / "<N> Drafts for <player>";
+  thumbnail = face + the best card pulled + gems/draft count. 12-20 min. Show the best walkout in the first 30 s, then the build-up.
+Every post: "DAY N/365 · <series>" pill (poster.day_label), N = days that format has been posted.
+Trial Reels: already 1 per Reel slot (other hook, non-followers only). Not 30 copies: duplicate uploads get flagged as unoriginal.
