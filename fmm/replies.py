@@ -13,7 +13,7 @@ from fmm.captions import polish
 ROOT = Path(__file__).resolve().parent.parent
 STATE = ROOT / "content" / "replies.json"
 PER_POST = 2
-IG_REPLIES = False  # owner skipped adding the Instagram comments permission (1 Nov 2026)
+IG_REPLIES = True  # token has instagram_manage_comments (checked 10 Nov 2026)
 DAYS = 3
 
 QUESTION = ["Good question! {short}", "{short} Hope that helps 🙌", "{short} Let us know how it goes!"]
@@ -29,7 +29,12 @@ def clean(t):
     return re.sub(r"\s+", " ", t or "").strip()
 
 
+SPAM = re.compile(r"(join|tournament|dm me|check (my|our)|promo|giveaway|follow (me|back)|http|www\.|\.com|whatsapp|telegram|t\.me)", re.I)
+
+
 def worth_replying(text):
+    if SPAM.search(text):  # promo/bot comments never get a reply (it would boost them under our post)
+        return False
     words = re.findall(r"[A-Za-zঀ-৿]{2,}", text)  # Latin or Bangla words
     return len(words) >= 2
 
@@ -82,7 +87,6 @@ def run():
         if e.get("at", "") < since:
             continue
         for platform, obj, targets, send in (
-            # shortcut: Instagram replies need instagram_manage_comments on the token; re-enable by removing this guard
             ("instagram", None if not IG_REPLIES else e.get("instagram"), lambda o: ig_targets(o, me),
              lambda cid, msg: poster.call("POST", f"{cid}/replies", data={"message": msg})),
             ("facebook", e.get("facebook"), fb_targets,
