@@ -266,6 +266,31 @@ def stamp(media, label):
     return str(out)
 
 
+# owner (10 Nov): every post asks for 🙌 in caption + first comment; fmm.dm DMs the codes page to whoever comments it
+CTA = "📩 Comment 🙌 and I'll DM you every working FC Mobile code"
+
+
+def with_cta(caption):
+    if "comment 🙌" in caption.lower():
+        return caption
+    parts = caption.rstrip().split("\n\n")
+    if len(parts) > 1 and parts[-1].lstrip().startswith("#"):  # keep hashtags last
+        return "\n\n".join(parts[:-1] + [CTA, parts[-1]])
+    return caption.rstrip() + "\n\n" + CTA
+
+
+def cta_comment(done):
+    """Same line as the first comment under the new post (Instagram + Facebook). Never blocks the post."""
+    for platform, edge in (("instagram", "comments"), ("facebook", "comments")):
+        mid = done.get(platform)
+        if not mid or not isinstance(mid, str):
+            continue
+        try:
+            call("POST", f"{mid}/{edge}", data={"message": CTA})
+        except Exception as ex:
+            print(f"{platform} cta comment skipped:", str(ex)[:120])
+
+
 def post(kind, media, caption, where="both", ctype=None, reel=True, extra=None, _stamp=True):
     """Post to each platform independently. One platform failing never re-posts the others:
     the result is logged as soon as any platform succeeds; it raises only if all of them failed."""
@@ -277,7 +302,7 @@ def post(kind, media, caption, where="both", ctype=None, reel=True, extra=None, 
         except Exception as ex:  # a missing pill never blocks the post
             print("day label skipped:", str(ex)[:120])
     from fmm.captions import polish
-    caption = polish(caption)  # humanized, hook-first, max 5 hashtags
+    caption = with_cta(polish(caption))  # humanized, hook-first, max 5 hashtags; + the 🙌 -> DM line
     pair = None
     if kind == "photo" and where == "both" and reel:  # owner rule: never a photo alone; make its Reel first
         from fmm import reel as reelmod
@@ -297,7 +322,7 @@ def post(kind, media, caption, where="both", ctype=None, reel=True, extra=None, 
     if kind == "reel" and where == "both":  # Reels also go to YouTube Shorts
         def yt():
             from fmm import youtube
-            return youtube.upload(media, caption)[0]
+            return youtube.upload(media, caption.replace("\n\n" + CTA, ""))[0]  # no DMs on YouTube
         steps.append(("youtube", yt))
     for attempt in range(2):  # owner rule: every post on all platforms; a failed one gets a 2nd try
         for name, fn in steps:
@@ -315,6 +340,7 @@ def post(kind, media, caption, where="both", ctype=None, reel=True, extra=None, 
     if not done:
         raise RuntimeError(f"all platforms failed: {errors}")
     log({"kind": kind, "file": media, **({"type": ctype} if ctype else {}), **(extra or {}), **done})
+    cta_comment(done)
     if pair:  # the photo's Reel on Facebook, Instagram and YouTube Shorts
         # not the same text twice in a row on the Page (FB treats it like spam): Reel gets the hook + hashtags only
         parts = [p for p in caption.split("\n\n") if p.strip()]

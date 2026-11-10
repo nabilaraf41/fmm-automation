@@ -47,7 +47,7 @@ def load_state():
     return json.loads(STATE.read_text(encoding="utf-8")) if STATE.exists() else {"seen": {}, "roundups": []}
 
 
-PINNED = "All working codes in one link: comment 🙌 on our pinned post 📌"  # ManyChat DMs the codes page
+PINNED = "📩 Comment 🙌 and I'll DM you every working code"  # fmm.dm sends the codes page
 
 
 def caption_new(c):
