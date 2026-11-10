@@ -38,7 +38,7 @@ Handbook = CLAUDE.md. Memory notes (~/.claude/projects/E--Claude-FMM/memory, bac
 ## Codes page (9 Nov)
 - Public repo nabilaraf41/fmm-codes = https://nabilaraf41.github.io/fmm-codes/ (latest 5 codes, copy buttons).
   Updates itself hourly (its own Action reads fcmobileforum; no token). Edit design in that repo's codespage.py.
-- Comment "CODE" -> DM with follow button -> this link: owner sets it up in ManyChat (Claude can't create accounts).
+- Comment 🙌/code -> DM: built in-house (fmm/dm.py, Page /messages private reply), no ManyChat needed. Owner pins the evergreen post.
   Add 'Comment "CODE" ...' to code captions only after ManyChat is live.
 
 ## Open items
