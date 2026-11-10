@@ -15,7 +15,7 @@ from fmm import renderz, review as rv
 ROOT = Path(__file__).resolve().parent.parent
 OUT = ROOT / "output" / "slot"
 STATE = ROOT / "content" / "featured.json"
-SLOTS = {"0700": "reel", "1300": "photo", "1700": "photo", "1900": "photo", "2100": "reel"}  # FC Mobile is biggest in South/SE Asia; 07:00 keeps one high-pay US slot
+SLOTS = {"0700": "photo", "1300": "photo", "1700": "photo", "1900": "photo", "2100": "reel"}  # FC Mobile is biggest in South/SE Asia; 07:00 keeps one high-pay US slot
 VERDICT_COLOR = {"MUST BUY": (0, 200, 83), "WORTH IT": (255, 215, 0), "SITUATIONAL": (255, 152, 0), "SKIP": (225, 6, 44)}
 
 
@@ -149,8 +149,19 @@ SERIES = [(s, p) for s, ps in [("SHO", "ST RW LW CAM"), ("DRI", "ST RW LW CAM LM
 STAT_NAME = {"SHO": "Shooting", "DRI": "Dribbling", "PAC": "Pace", "PAS": "Passing", "DEF": "Defending", "PHY": "Physical"}
 
 
+# owner (10 Nov): 2nd daily Top 10 at 07:00 (Top 10 was 28-32k views vs 5k for the next format); the lists that
+# went viral (Dribbling ST/RW) and other skill/speed lists people argue about, never the same as 19:00
+POPULAR = [("DRI", "LW"), ("PAC", "ST"), ("DRI", "CAM"), ("PAC", "RW"), ("SHO", "CAM"), ("PAC", "LW"), ("DRI", "CM"),
+           ("PAC", "CB"), ("SHO", "ST"), ("DRI", "ALL ST RW LW CAM"), ("PAC", "ALL ST RW LW CAM"), ("PAS", "CM"),
+           ("DEF", "CB"), ("PHY", "ST")]
+
+
 def series_today():
     i = (dt.date.today() - SERIES_START).days
+    if slot_now() == "0700":
+        main = SERIES[i] if 0 <= i < len(SERIES) else None
+        opts = [x for x in POPULAR if x != main]
+        return opts[i % len(opts)]
     return SERIES[i] if 0 <= i < len(SERIES) else None
 
 
@@ -189,7 +200,7 @@ def pick(kind, fresh, db, state):
             cards = list(confirmed_only({c["id"]: c for c in cardstats.load()}).values())
             best = lambda n: max([c for c in cards if c["name"] == n], key=lambda c: c["ovr"])
             return "goat", [best("C. Ronaldo"), best("Messi")], pool
-        if slot_now() == "1900" and series_today():  # owner: 31-day "Top 10 by stat" series at 19:00
+        if slot_now() in ("0700", "1900") and series_today():  # owner: Top 10 by stat at 19:00 (31-day series) + 07:00
             return "statrank", list(fresh.values()), pool
         if slot_now() == "1700":  # owner: daily "Choose 1" at 17:00
             return "choose", list(fresh.values()), pool
@@ -848,11 +859,7 @@ def post():
     hk = json.loads((OUT / "hooks.json").read_text()) if (OUT / "hooks.json").exists() else {}
     print("posted", poster.post(kind, OUT / m["media"], caption, "both", m.get("type"),  # type feeds the weekly growth loop
                                 extra={"hook_style": hk["main"]} if "main" in hk else None))
-    if m.get("type") == "review_reel" and (OUT / "stats.png").exists():  # owner: review Reels come with the stats photo too
-        try:
-            print("posted stats photo", poster.post("photo", OUT / "stats.png", caption, "both", "review_post", reel=False))
-        except Exception as ex:
-            print("stats photo skipped:", str(ex)[:150])
+    # owner (10 Nov): review stats photo dropped (under 100 views each); review Reels post alone
     trial = OUT / "trial_caption.txt"
     if kind == "reel" and trial.exists():  # hook test; a failure here never affects the main post
         try:
