@@ -146,14 +146,17 @@ SERIES_START = dt.date(2026, 11, 3)
 SERIES = [(s, p) for s, ps in [("SHO", "ST RW LW CAM"), ("DRI", "ST RW LW CAM LM RM"), ("PAC", "ST RW LW CAM LM RM"),
                                ("PAS", "CM CAM CDM"), ("DEF", "RB CB LB"), ("PHY", "RB CB LB")]
           for p in ps.split() + ["ALL " + ps]]
-STAT_NAME = {"SHO": "Shooting", "DRI": "Dribbling", "PAC": "Pace", "PAS": "Passing", "DEF": "Defending", "PHY": "Physical"}
+STAT_NAME = {"SHO": "Shooting", "DRI": "Dribbling", "PAC": "Pace", "PAS": "Passing", "DEF": "Defending", "PHY": "Physical",
+             "AGI": "Agility", "BAL": "Balance", "FIN": "Finishing", "CUR": "Curve", "LSA": "Long Shots", "SPD": "Sprint Speed"}
 
 
 # owner (10 Nov): 2nd daily Top 10 at 07:00 (Top 10 was 28-32k views vs 5k for the next format); the lists that
 # went viral (Dribbling ST/RW) and other skill/speed lists people argue about, never the same as 19:00
 POPULAR = [("DRI", "LW"), ("PAC", "ST"), ("DRI", "CAM"), ("PAC", "RW"), ("SHO", "CAM"), ("PAC", "LW"), ("DRI", "CM"),
            ("PAC", "CB"), ("SHO", "ST"), ("DRI", "ALL ST RW LW CAM"), ("PAC", "ALL ST RW LW CAM"), ("PAS", "CM"),
-           ("DEF", "CB"), ("PHY", "ST")]
+           ("DEF", "CB"), ("PHY", "ST"), ("AGI", "ALL ST RW LW CAM"), ("DRI", "ICONS ST RW LW CAM"),
+           ("BAL", "ALL ST RW LW CAM"), ("FIN", "ST"), ("CUR", "ALL ST RW LW CAM CM"), ("DRI", "RW"),
+           ("SPD", "ALL ST RW LW"), ("LSA", "ALL ST CAM CM"), ("DRI", "ICONS CM CAM CDM"), ("PAC", "ICONS ST RW LW")]
 
 
 def series_today():
@@ -744,7 +747,9 @@ def build_extra(ctype, latest, pool, fresh, state):
                        "Who's your GOAT in FC Mobile? 👇\n\n#FCMobile #FIFAMobile #EAFC #Ronaldo #Messi")
     elif ctype == "statrank":  # Top 10 by one stat (series_today), from the cross-checked cards we have stats for
         stat, pos = series_today()
-        poss = pos.split()[1:] if pos.startswith("ALL") else [pos]
+        icons = pos.startswith("ICONS")  # "ICONS ST RW": Icons only, those positions together
+        poss = pos.split()[1:] if pos.startswith(("ALL", "ICONS")) else [pos]
+        val = lambda c: c["face"].get(stat) or c.get("stats", {}).get(stat.lower(), 0)  # main stats or sub-stats (AGI, FIN...)
         try:  # every 120+ card with stats (FC Mobile Forum filter), events cross-checked like everything else
             from fmm import cardstats, fmf
             allc = list(confirmed_only({c["id"]: c for c in cardstats.load()}).values())
@@ -752,7 +757,7 @@ def build_extra(ctype, latest, pool, fresh, state):
             print("card stats unavailable:", str(ex)[:100])
             allc = []
         ranked, names = [], set()
-        for p in sorted([c for c in allc if c["pos"] in poss], key=lambda c: (-c["face"][stat], -c["ovr"])):
+        for p in sorted([c for c in allc if c.get("name") and c["pos"] in poss and (not icons or c.get("program") == "ICONS")], key=lambda c: (-val(c), -c["ovr"])):
             if p["name"] not in names:  # best card per player
                 names.add(p["name"]); ranked.append(p)
         ranked = ranked[:10]
@@ -771,9 +776,9 @@ def build_extra(ctype, latest, pool, fresh, state):
         label = "/".join(poss) if len(poss) > 1 else pos
         post = {"id": "slot", "type": "top10", "position": label if len(poss) == 1 else "ALL", "title": f"by {STAT_NAME[stat]}", "subtitle": "latest cards",
                 "players": [{"name": p["name"], "card": p["card"], "ovr": p.get("ovr"), "pos": p.get("pos"),
-                             "stat": f"{stat} {p['face'][stat]}"} for p in ranked]}
+                             "stat": f"{stat} {val(p)}"} for p in ranked]}
         caption = (f"Top 10 {label} by {STAT_NAME[stat]} 🏆🔥\n\nFC Mobile, 120+ OVR cards only:\n\n"
-                   + "\n".join(f"{i}. {p['name']} ({p['ovr']} {p['pos']}): {stat} {p['face'][stat]}"
+                   + "\n".join(f"{i}. {p['name']} ({p['ovr']} {p['pos']}): {stat} {val(p)}"
                                for i, p in enumerate(ranked, 1))
                    + "\n\nWho's missing from this list? 👇\n\n" + TAGS)
     elif ctype == "choose":  # 17:00 "Choose 1": 4 cards of one position, 122+; defenders/attackers/midfielders by day
