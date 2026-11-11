@@ -1119,5 +1119,90 @@
   "facebook": "1483616243904962",
   "instagram": "18118250717011417",
   "youtube": "ApdQXcxgK5A"
+ },
+ {
+  "at": "2026-11-11 17:00:39",
+  "kind": "photo",
+  "file": "/home/runner/work/fmm-automation/fmm-automation/output/slot/slot_day.png",
+  "type": "choose",
+  "facebook": "122207751704906131",
+  "instagram": "18110957321223375"
+ },
+ {
+  "at": "2026-11-11 17:01:52",
+  "kind": "reel",
+  "file": "/home/runner/work/fmm-automation/fmm-automation/output/slot/slot_day_reel.mp4",
+  "type": "choose",
+  "facebook": "1832967604517295",
+  "instagram": "18103088183649948",
+  "youtube": "Dwut04F9qWk"
+ },
+ {
+  "at": "2026-11-11 17:04:57",
+  "kind": "photo",
+  "file": "/home/runner/work/fmm-automation/fmm-automation/output/newplayers/b_drop_grid.png",
+  "facebook": "122207752424906131",
+  "instagram": "18139165279637047"
+ },
+ {
+  "at": "2026-11-11 17:05:59",
+  "kind": "reel",
+  "file": "/home/runner/work/fmm-automation/fmm-automation/output/newplayers/b_drop_grid_reel.mp4",
+  "facebook": "1639666487569919",
+  "instagram": "18122217886754187",
+  "youtube": "1Df5DOxtHZ8"
+ },
+ {
+  "at": "2026-11-11 17:11:40",
+  "kind": "photo",
+  "file": "/home/runner/work/fmm-automation/fmm-automation/output/newplayers/c_review_0.png",
+  "facebook": "122207753612906131",
+  "instagram": "18127478896920474"
+ },
+ {
+  "at": "2026-11-11 17:12:49",
+  "kind": "reel",
+  "file": "/home/runner/work/fmm-automation/fmm-automation/output/newplayers/c_review_0_reel.mp4",
+  "facebook": "1507280251458388",
+  "instagram": "17961307596014053",
+  "youtube": "0AIiQAggFzU"
+ },
+ {
+  "at": "2026-11-11 17:18:34",
+  "kind": "photo",
+  "file": "/home/runner/work/fmm-automation/fmm-automation/output/newplayers/c_review_1.png",
+  "facebook": "122207754512906131",
+  "instagram": "18130481977848022"
+ },
+ {
+  "at": "2026-11-11 17:19:52",
+  "kind": "reel",
+  "file": "/home/runner/work/fmm-automation/fmm-automation/output/newplayers/c_review_1_reel.mp4",
+  "facebook": "1504906701495929",
+  "instagram": "17956696212316293",
+  "youtube": "HtP7WM_3q24"
+ },
+ {
+  "at": "2026-11-11 17:25:35",
+  "kind": "photo",
+  "file": "/home/runner/work/fmm-automation/fmm-automation/output/newplayers/c_review_2.png",
+  "facebook": "122207755508906131",
+  "instagram": "18481085839142901"
+ },
+ {
+  "at": "2026-11-11 17:26:44",
+  "kind": "reel",
+  "file": "/home/runner/work/fmm-automation/fmm-automation/output/newplayers/c_review_2_reel.mp4",
+  "facebook": "2014304172530739",
+  "instagram": "18133811716688622",
+  "youtube": "sv5N6iDSHT8"
+ },
+ {
+  "at": "2026-11-11 17:32:59",
+  "kind": "reel",
+  "file": "/home/runner/work/fmm-automation/fmm-automation/output/newplayers/a_drop_reel.mp4",
+  "facebook": "28746692191696945",
+  "instagram": "17884907298535231",
+  "youtube": "VC2M57KH-Fo"
  }
 ]
