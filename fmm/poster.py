@@ -156,7 +156,7 @@ _NO_COLLAB = False  # set by post() for formats partners must never be tagged on
 
 
 def collab_data():
-    """Instagram collab invite, max 3 per post: "always" names on every post, "rotate" names take turns (daily)
+    """Instagram collab invite, max 3 per post: "always" names on every post, "rotate" names take turns (each post)
     for the spots left; {} when none. File: {"always": [...], "rotate": [...]} (old {"usernames": [...]} = rotate)."""
     if _NO_COLLAB:
         return {}
@@ -166,7 +166,9 @@ def collab_data():
         return {}
     clean = lambda xs: [n.lstrip("@") for n in xs if n]
     always, rot = clean(j.get("always", []))[:3], clean(j.get("rotate", j.get("usernames", [])))
-    k = int(time.time() // 86400) % len(rot) if rot else 0
+    # rotate per post (not per day) so every partner is invited several times a day (owner, 12 Nov)
+    n = len(json.loads(LOG.read_text(encoding="utf-8"))) if LOG.exists() else 0
+    k = (n * (3 - len(always))) % len(rot) if rot else 0
     names = always + (rot[k:] + rot[:k])[:3 - len(always)]
     return {"collaborators": json.dumps(names)} if names else {}
 
