@@ -463,11 +463,20 @@ def build(slot):
             (OUT / "trial_caption.txt").write_text(caption.replace(line(best), line(test), 1), encoding="utf-8")
             state.setdefault("hook_tries", {})[str(test)] = tries.get(str(test), 0) + 1
     elif ctype == "stopgame":
-        from fmm.versions import FOCUS  # target = a star people want (CR7, Messi, Neymar, Kane...), else top OVR
-        star = [x for x in players if any(f in (x.get("name") or "").lower() for f in FOCUS)]
-        t = (star or players)[dt.date.today().toordinal() % len(star or players)]
-        others = [x["card"] for x in players if x is not t and x.get("name") != t.get("name")]
-        name = f"{t['ovr']} {t['name'].split()[-1]}".upper()
+        # owner twist (11 Nov): the title names one GOAT, the card that flashes in is his rival (Messi <-> CR7, swapped
+        # daily), so people comment "that's not Messi!". Only this Reel uses the wrong name on purpose.
+        from fmm import cardstats, fmf
+        cards = list(confirmed_only({c["id"]: c for c in cardstats.load()}).values())
+        best = lambda n: max([c for c in cards if c["name"] == n], key=lambda c: c["ovr"])
+        said, shown = ("Messi", "C. Ronaldo") if dt.date.today().toordinal() % 2 else ("C. Ronaldo", "Messi")
+        a, t = best(said), best(shown)
+        path = renderz.CARDS / f"{t['id']}.png"
+        if not path.exists():
+            renderz.CARDS.mkdir(parents=True, exist_ok=True)
+            fmf.build_card({**t, "layout": {}, "colors": {}}).save(path)
+        t = {**t, "card": str(path), "ovr": a["ovr"], "name": a["name"]}  # what the title claims
+        others = [x["card"] for x in players if x.get("name") not in ("Messi", "Ronaldo", "C. Ronaldo")]
+        name = f"{t['ovr']} {'RONALDO' if 'Ronaldo' in t['name'] else 'MESSI'}"
         reel = {"id": "slot", "outro": False,
                 "cover": {"subject": t["card"], "text": "CAN YOU\nSTOP ON HIM?", "sub": name, "color": "gold"},
                 "scenes": [{"scene": "stopgame", "target": name, "target_card": t["card"], "cards": others}]}
