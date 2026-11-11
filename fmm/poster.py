@@ -149,8 +149,34 @@ def ig_publish(cid, tries=5):
             time.sleep(20)
 
 
+COLLAB = ROOT / "content" / "collaborators.json"  # {"usernames": ["name1", ...]} owner's agreed collab partners
+
+
+def collab_data():
+    """Instagram collab invite (max 3 per post, rotating daily if more agreed); {} when none."""
+    try:
+        names = [n.lstrip("@") for n in json.loads(COLLAB.read_text(encoding="utf-8")).get("usernames", []) if n]
+    except Exception:
+        return {}
+    if not names:
+        return {}
+    k = int(time.time() // 86400) % len(names)
+    return {"collaborators": json.dumps((names[k:] + names[:k])[:3])}
+
+
+def ig_container(data):
+    """Create a media container with the collab invite; a bad/ineligible username never blocks the post."""
+    extra = collab_data()
+    if extra:
+        try:
+            return call("POST", f"{IG}/media", data={**data, **extra})
+        except Exception as ex:
+            print("collab invite skipped:", str(ex)[:150])
+    return call("POST", f"{IG}/media", data=data)
+
+
 def ig_photo(path, caption):
-    cid = call("POST", f"{IG}/media", data={"image_url": public_url_for(path), "caption": caption})["id"]
+    cid = ig_container({"image_url": public_url_for(path), "caption": caption})["id"]
     ig_wait(cid)
     return ig_publish(cid)
 
@@ -161,7 +187,7 @@ def ig_carousel(paths, caption):
         cid = call("POST", f"{IG}/media", data={"image_url": public_url_for(p), "is_carousel_item": "true"})["id"]
         ig_wait(cid)
         kids.append(cid)
-    cid = call("POST", f"{IG}/media", data={"media_type": "CAROUSEL", "children": ",".join(kids), "caption": caption})["id"]
+    cid = ig_container({"media_type": "CAROUSEL", "children": ",".join(kids), "caption": caption})["id"]
     ig_wait(cid)
     return ig_publish(cid)
 
@@ -197,7 +223,7 @@ def ig_reel(path, caption, share_to_feed=True, trial=False):
         data["trial_params"] = json.dumps({"graduation_strategy": "MANUAL"})
     if cover_for(path):
         data["cover_url"] = public_url_for(cover_for(path))
-    j = call("POST", f"{IG}/media", data=data)
+    j = call("POST", f"{IG}/media", data=data) if trial else ig_container(data)  # trial Reels: no collab
     size = os.path.getsize(path)
     with open(path, "rb") as f:
         r = requests.post(j["uri"], data=f, timeout=600,
