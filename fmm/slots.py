@@ -468,15 +468,18 @@ def build(slot):
         from fmm import cardstats, fmf
         cards = list(confirmed_only({c["id"]: c for c in cardstats.load()}).values())
         best = lambda n: max([c for c in cards if c["name"] == n], key=lambda c: c["ovr"])
-        said, shown = ("Messi", "C. Ronaldo") if dt.date.today().toordinal() % 2 else ("C. Ronaldo", "Messi")
+        from fmm.poster import LOG as poster_log
+        log = json.loads(poster_log.read_text(encoding="utf-8")) if poster_log.exists() else []
+        n_done = sum(1 for e in log if e.get("type") == "stopgame" and e.get("kind") == "reel")
+        said, shown = RIVALS[n_done % len(RIVALS)]  # next pair each time this Reel posts
         a, t = best(said), best(shown)
         path = renderz.CARDS / f"{t['id']}.png"
         if not path.exists():
             renderz.CARDS.mkdir(parents=True, exist_ok=True)
             fmf.build_card({**t, "layout": {}, "colors": {}}).save(path)
         t = {**t, "card": str(path), "ovr": a["ovr"], "name": a["name"]}  # what the title claims
-        others = [x["card"] for x in players if x.get("name") not in ("Messi", "Ronaldo", "C. Ronaldo")]
-        name = f"{t['ovr']} {'RONALDO' if 'Ronaldo' in t['name'] else 'MESSI'}"
+        others = [x["card"] for x in players if x.get("name") not in (said, shown)]
+        name = f"{t['ovr']} {SAY.get(t['name'], t['name']).upper()}"
         reel = {"id": "slot", "outro": False,
                 "cover": {"subject": t["card"], "text": "CAN YOU\nSTOP ON HIM?", "sub": name, "color": "gold"},
                 "scenes": [{"scene": "stopgame", "target": name, "target_card": t["card"], "cards": others}]}
@@ -559,6 +562,11 @@ MEMES = [("When you finally pack {name}", "When you check his weak foot"),
          ("Opponent's {name}", "My {name}"),
          ("Me: one more pack", "Me 2 hours later, still no {name}")]
 TAGS = "#FCMobile #FIFAMobile #EAFC #FMM"
+# stop-game twist (owner, 11 Nov): (name in the title, rival whose card actually flashes); rivals people argue about
+RIVALS = [("Messi", "C. Ronaldo"), ("C. Ronaldo", "Messi"), ("Mbappé", "Haaland"), ("Pelé", "Maradona"),
+          ("Ronaldo", "Ronaldinho"), ("Neymar Jr", "Vini Jr."), ("Zidane", "Kaká"), ("Lamine Yamal", "Mbappé"),
+          ("Kane", "Haaland"), ("Henry", "Drogba")]
+SAY = {"C. Ronaldo": "Ronaldo", "Ronaldo": "R9 Ronaldo", "Neymar Jr": "Neymar", "Vini Jr.": "Vinicius", "Lamine Yamal": "Yamal"}
 # Trial Reel hooks for photo formats (non-followers only); the weekly report compares them with the main first line
 PHOTO_HOOKS = {"statrank": ["Most people get number 1 wrong 👀", "Number 1 surprised me 😳", "Is your favourite on this list? 🤔"],
                "xi": ["This XI costs less than you think 🤑", "Budget team that actually wins 💰", "No gems needed for this XI 😮"]}
