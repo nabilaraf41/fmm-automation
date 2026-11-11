@@ -1204,5 +1204,30 @@
   "facebook": "28746692191696945",
   "instagram": "17884907298535231",
   "youtube": "VC2M57KH-Fo"
+ },
+ {
+  "at": "2026-11-11 19:01:12",
+  "kind": "photo",
+  "file": "/home/runner/work/fmm-automation/fmm-automation/output/slot/slot_day.png",
+  "type": "statrank",
+  "facebook": "122207763650906131",
+  "instagram": "18076127432756837"
+ },
+ {
+  "at": "2026-11-11 19:02:23",
+  "kind": "reel",
+  "file": "/home/runner/work/fmm-automation/fmm-automation/output/slot/slot_day_reel.mp4",
+  "type": "statrank",
+  "facebook": "983162854375486",
+  "instagram": "17955272598302036",
+  "youtube": "2uDiaVQsdrQ"
+ },
+ {
+  "at": "2026-11-11 19:03:10",
+  "kind": "reel",
+  "file": "/home/runner/work/fmm-automation/fmm-automation/output/slot/slot_day_reel.mp4",
+  "type": "statrank_trial",
+  "hook": "Is your favourite on this list? 🤔",
+  "instagram": "18115995599130725"
  }
 ]
