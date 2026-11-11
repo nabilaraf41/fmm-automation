@@ -56,7 +56,7 @@ Private repo `nabilaraf41/fmm-automation`, GitHub Actions (PC can be off):
   the new event's bg); queue in content/leaks.json (2+ sources), `python -m fmm.leaks make`, commit; cloud posts 11:00 BDT.
 - Weekly growth loop (`fmm.growth`, Mondays): scores last week's posts (YT views, IG views/likes/comments, FB
   likes/comments) → content/weekly_report.md; sets featured.json boost (extra turns) / drop (skipped) for photo formats.
-- Instagram collabs: content/collaborators.json {"usernames": [...]} (owner-agreed partners), up to 3 invited per post, rotating daily; bad name -> posts without collab.
+- Instagram collabs: content/collaborators.json {"always": [...], "rotate": [...]} (owner-agreed partners), max 3 per post: always + rotating smaller pages daily; bad name -> posts without collab.
 - One-off overrides: `featured.json` → `force` keyed by date-slot (e.g. {"2026-11-05-0700": "countdown"}); undated keys are ignored.
 - Card sources: RenderZ (blocked from cloud, 403) → fcmobileforum `/players` (`fmm.fmf`, card = bg + render).
 

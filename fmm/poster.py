@@ -153,15 +153,17 @@ COLLAB = ROOT / "content" / "collaborators.json"  # {"usernames": ["name1", ...]
 
 
 def collab_data():
-    """Instagram collab invite (max 3 per post, rotating daily if more agreed); {} when none."""
+    """Instagram collab invite, max 3 per post: "always" names on every post, "rotate" names take turns (daily)
+    for the spots left; {} when none. File: {"always": [...], "rotate": [...]} (old {"usernames": [...]} = rotate)."""
     try:
-        names = [n.lstrip("@") for n in json.loads(COLLAB.read_text(encoding="utf-8")).get("usernames", []) if n]
+        j = json.loads(COLLAB.read_text(encoding="utf-8"))
     except Exception:
         return {}
-    if not names:
-        return {}
-    k = int(time.time() // 86400) % len(names)
-    return {"collaborators": json.dumps((names[k:] + names[:k])[:3])}
+    clean = lambda xs: [n.lstrip("@") for n in xs if n]
+    always, rot = clean(j.get("always", []))[:3], clean(j.get("rotate", j.get("usernames", [])))
+    k = int(time.time() // 86400) % len(rot) if rot else 0
+    names = always + (rot[k:] + rot[:k])[:3 - len(always)]
+    return {"collaborators": json.dumps(names)} if names else {}
 
 
 def ig_container(data):
