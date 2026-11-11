@@ -28,7 +28,7 @@ give click-by-click steps and copy-paste commands.
 - No engagement bait ("tag a friend", "react to vote"); FB Groups stay manual.
 
 ## Where it runs
-Private repo `nabilaraf41/fmm-automation`, GitHub Actions (PC can be off):
+PUBLIC repo `nabilaraf41/fmm-automation` (made public 11 Nov 2026: free unlimited Actions minutes; private used ~6,500 of 3,000/month). NEVER commit secrets, tokens, .env or chat history. GitHub Actions (PC can be off):
 - `.github/workflows/codes.yml` ("FMM hourly") — every 2 hours at :05: `fmm.run_cloud` → posts any slot due in the last
   5 h and not yet done (`featured.json` → `done_slots`; GitHub cron can be late or skip runs), then new-player drops
   (`fmm.newplayers`) and redeem codes (`fmm.codes`). Slots (BDT): 07:00 Top 10 (photo + Reel), 13:00 photo, 19:00 photo (Indonesia peak), 21:00 Reel (BD/India peak).
