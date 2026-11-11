@@ -346,6 +346,7 @@ def post(kind, media, caption, where="both", ctype=None, reel=True, extra=None, 
         parts = [p for p in caption.split("\n\n") if p.strip()]
         short = parts[0] + ("\n\n" + parts[-1] if len(parts) > 1 and "#" in parts[-1] else "")
         done["reel"] = post("reel", pair, short if short != caption else "🎬 " + caption, where, ctype, _stamp=False)
+        done["reel_file"] = str(pair)  # lets slots run an Instagram Trial Reel hook test on the same video
     return done
 
 

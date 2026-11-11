@@ -539,6 +539,9 @@ MEMES = [("When you finally pack {name}", "When you check his weak foot"),
          ("Opponent's {name}", "My {name}"),
          ("Me: one more pack", "Me 2 hours later, still no {name}")]
 TAGS = "#FCMobile #FIFAMobile #EAFC #FMM"
+# Trial Reel hooks for photo formats (non-followers only); the weekly report compares them with the main first line
+PHOTO_HOOKS = {"statrank": ["Most people get number 1 wrong 👀", "Number 1 surprised me 😳", "Is your favourite on this list? 🤔"],
+               "xi": ["This XI costs less than you think 🤑", "Budget team that actually wins 💰", "No gems needed for this XI 😮"]}
 
 
 def next_pair(latest, state, pool=()):
@@ -871,8 +874,20 @@ def post():
         print("posted", poster.post_carousel([OUT / f for f in json.loads(car.read_text(encoding="utf-8"))], caption, m.get("type")))
         return
     hk = json.loads((OUT / "hooks.json").read_text()) if (OUT / "hooks.json").exists() else {}
-    print("posted", poster.post(kind, OUT / m["media"], caption, "both", m.get("type"),  # type feeds the weekly growth loop
-                                extra={"hook_style": hk["main"]} if "main" in hk else None))
+    res = poster.post(kind, OUT / m["media"], caption, "both", m.get("type"),  # type feeds the weekly growth loop
+                      extra={"hook_style": hk["main"]} if "main" in hk else None)
+    print("posted", res)
+    alt = PHOTO_HOOKS.get(m.get("type"))
+    if kind == "photo" and alt and res.get("reel_file"):  # owner idea 5 (11 Nov): hook test on Top 10 / Cheap XI too
+        try:
+            from fmm.captions import polish
+            day = dt.date.today().toordinal()
+            t = polish(alt[day % len(alt)] + "\n\n" + caption.split("\n", 1)[1].lstrip())
+            poster.log({"kind": "reel", "file": res["reel_file"], "type": f"{m.get('type')}_trial", "hook": t.splitlines()[0],
+                        "instagram": poster.ig_reel(res["reel_file"], t, trial=True)})
+            print("trial reel posted:", t.splitlines()[0])
+        except Exception as ex:
+            print("trial reel skipped:", str(ex)[:150])
     # owner (10 Nov): review stats photo dropped (under 100 views each); review Reels post alone
     trial = OUT / "trial_caption.txt"
     if kind == "reel" and trial.exists():  # hook test; a failure here never affects the main post
