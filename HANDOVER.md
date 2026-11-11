@@ -49,3 +49,11 @@ Handbook = CLAUDE.md. Memory notes (~/.claude/projects/E--Claude-FMM/memory, bac
 - After Flow credits reset: chained 20 s pack reaction; retry 5 hook clips. Idea: music bed for silent long videos.
 - Possible: Top 10 series with fully-trained stats / CM by Pace (owner asked if this format posts — it does, 19:00).
 - Instagram comment replies ON since 10 Nov (2 per post, spam skipped). YouTube API audit not submitted.
+
+## Added 11 Nov
+- Phone alerts: ntfy.sh topic in fmm/notify.py (owner subscribes in the ntfy app). Hourly run log is scanned; failures alert.
+- 21:30 BDT share list (fmm/sharelist.py): day's 2 best posts with FB links -> phone, owner shares to FB groups.
+- Recap long videos (fmm/recap.py): Sunday Top 5 of the week, month-end Best of (top 10), from 20:00 BDT.
+- Top 10: "Part N" in title (no '#': polish turns #N into a hashtag), 07:00 Brazil line + #FCMobileBrasil,
+  Trial Reel hook tests on Top 10 + Cheap XI (slots.PHOTO_HOOKS). Comment 🙌 -> DM (fmm/dm.py) on all posts except the
+  pinned codes post (ManyChat owns that one). Hands-on-head ATB clip deleted (looked bald).
