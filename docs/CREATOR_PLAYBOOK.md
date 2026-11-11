@@ -179,3 +179,12 @@ Trial Reels: already 1 per Reel slot (other hook, non-followers only). Not 30 co
   The views come from shares in FB groups. Meta: no account/asset issues. So the FB feed doesn't push the Page;
   groups do. Owner keeps sharing Top 10 / Cheap XI Reels to groups (highest-value manual task).
 - Comment -> DM works (test DM delivered 10 Nov, via Page /messages private reply).
+
+## Top FC Mobile short-form study (11 Nov 2026: 30 top YT Shorts this month + IG/TikTok outliers, 4 watched)
+- Biggest: gameplay comedy. "What a bug 😂" glitch montage 3.7M (29 s), "My Best Goalkeepers 🤨😂" card swap -> GK fail 1.3M (21 s),
+  "Everyone thought it was over, but Del Piero..." last-minute drama 3.4M, "His keeper's reflexes humbled my team 😭" 2.2M.
+  Pattern: real gameplay + meme reaction pop-ups + sfx, cuts every 2-5 s, 20-30 s, title = reaction + emoji.
+- Utility that gets saved: "CHEAP PLAYERS" Ballon d'Or grid with prices, 7.5 s loop, 416k (32k-sub channel) = our Cheap XI, shorter.
+- IG: "Can you stop on the correct player? 🤔" rapid card cycle 10 s loop (FUTBIN 821k); "how to get / trick" event-exchange
+  tutorials 0.5-1.5M on TikTok; pack openings cut to a phonk beat (Lucks Games, ilovefcmobile 1.5M).
+- Captions: 2-5 words + ☠️🔥🤯😂. Brazilian creators (Lucks, Mike, Gabriel, Xotic EA FC) dominate: matches our Brazil audience.
