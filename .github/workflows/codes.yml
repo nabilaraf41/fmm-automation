@@ -12,12 +12,16 @@ concurrency:
 
 permissions:
   contents: write             # to save codes_state.json / posted.json back
+  actions: write              # to start the next run (self-chain below)
 
 jobs:
   run:
     runs-on: ubuntu-latest
     timeout-minutes: 100
     steps:
+      - name: Note start time
+        run: echo "STARTED=$(date +%s)" >> "$GITHUB_ENV"
+
       - uses: actions/checkout@v4
         with: {ref: main}   # latest state at start, not at trigger time (queued runs reposted slots)
 
@@ -46,3 +50,15 @@ jobs:
           git config user.name "fmm-bot"
           git config user.email "fmm-bot@users.noreply.github.com"
           python -m fmm.savestate "Update state [skip ci]"   # merges with anything saved meanwhile
+
+      # owner (12 Nov): nothing may be skipped. GitHub cron skips runs and the Apps Script trigger can stall, so every
+      # run starts the next one ~55 min after it began (workflow_dispatch from GITHUB_TOKEN is allowed; repo is public,
+      # so minutes are free). Cron + Apps Script stay as backups that restart the chain if it ever breaks.
+      - name: Start the next run
+        if: always()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          left=$(( STARTED + 3300 - $(date +%s) ))
+          if [ "$left" -gt 0 ]; then sleep "$left"; fi
+          gh workflow run codes.yml -R "$GITHUB_REPOSITORY" --ref main
