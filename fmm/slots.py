@@ -224,6 +224,9 @@ def pick(kind, fresh, db, state):
         forced_rot = None
     if unfeatured:
         p = unfeatured[0]
+        if kind == "reel" and not force and slot_now() == "2100" and weekday in (4, 5) and this_week:
+            # owner (11 Nov): Fri + Sat after the Thursday drop people search the new cards -> stop game with a new card
+            return "stopgame", sorted(fresh.values(), key=lambda x: -(x.get("ovr") or 0))[:24], pool
         if kind == "reel" and not force and weak_reel(p, this_week, heat):
             return "skip", [], pool
         return ("review_reel" if kind == "reel" else "review_post"), [p], pool
@@ -463,22 +466,44 @@ def build(slot):
             (OUT / "trial_caption.txt").write_text(caption.replace(line(best), line(test), 1), encoding="utf-8")
             state.setdefault("hook_tries", {})[str(test)] = tries.get(str(test), 0) + 1
     elif ctype == "stopgame":
-        # owner twist (11 Nov): the title names one GOAT, the card that flashes in is his rival (Messi <-> CR7, swapped
-        # daily), so people comment "that's not Messi!". Only this Reel uses the wrong name on purpose.
+        # owner twist (11 Nov): the title names one player, the card that flashes in is another (Messi named, CR7 shown),
+        # so people comment "that's not Messi!". Only this Reel uses the wrong name on purpose.
         from fmm import cardstats, fmf
         cards = list(confirmed_only({c["id"]: c for c in cardstats.load()}).values())
         best = lambda n: max([c for c in cards if c["name"] == n], key=lambda c: c["ovr"])
         from fmm.poster import LOG as poster_log
         log = json.loads(poster_log.read_text(encoding="utf-8")) if poster_log.exists() else []
         n_done = sum(1 for e in log if e.get("type") == "stopgame" and e.get("kind") == "reel")
-        said, shown = RIVALS[n_done % len(RIVALS)]  # next pair each time this Reel posts
-        a, t = best(said), best(shown)
-        path = renderz.CARDS / f"{t['id']}.png"
-        if not path.exists():
-            renderz.CARDS.mkdir(parents=True, exist_ok=True)
-            fmf.build_card({**t, "layout": {}, "colors": {}}).save(path)
-        t = {**t, "card": str(path), "ovr": a["ovr"], "name": a["name"]}  # what the title claims
-        others = [x["card"] for x in players if x.get("name") not in (said, shown)]
+        def card_of(c):  # cardstats card -> image path (built from the forum render if missing)
+            path = renderz.CARDS / f"{c['id']}.png"
+            if not path.exists():
+                renderz.CARDS.mkdir(parents=True, exist_ok=True)
+                fmf.build_card({**c, "layout": {}, "colors": {}}).save(path)
+            return str(path)
+        # owner (11 Nov): after the Thursday drop people search the new cards, so a new card of this week comes first:
+        # old star's name + the NEW card, then (next time) the reverse; every new card once each way, then RIVALS again
+        week_ago = (dt.datetime.now(dt.UTC) - dt.timedelta(days=7)).strftime("%Y-%m-%dT%H:%M:%S")
+        new = sorted([x for x in confirmed_only(fresh).values() if (x.get("added") or "") >= week_ago],
+                     key=lambda x: -(x.get("ovr") or 0))
+        used = set(state.setdefault("stop_new", []))
+        job = next(((x, d) for x in new for d in ("old_name", "new_name") if f"{x['id']}:{d}" not in used), None)
+        stars = {n for pair in RIVALS for n in pair}
+        if job and ensure_card(job[0], fresh):
+            x, d = job
+            pool_old = [best(n) for n in sorted(stars) if n != x["name"] and any(c["name"] == n for c in cards)]
+            same = [c for c in pool_old if c["pos"] == x.get("pos")] or pool_old  # same position looks most alike
+            old = same[sum(map(ord, str(x["id"]))) % len(same)]  # fixed per new card, so the reverse uses the same star
+            if d == "old_name":
+                said_name, said_ovr, shown_card = old["name"], old["ovr"], ensure_card(x, fresh)
+            else:
+                said_name, said_ovr, shown_card = x["name"], x["ovr"], card_of(old)
+            state["stop_new"].append(f"{x['id']}:{d}")
+            pair_names = (old["name"], x["name"])
+        else:
+            said, shown = RIVALS[n_done % len(RIVALS)]  # next pair each time this Reel posts
+            said_name, said_ovr, shown_card, pair_names = said, best(said)["ovr"], card_of(best(shown)), (said, shown)
+        t = {"card": shown_card, "ovr": said_ovr, "name": said_name}  # title claims one player, card is the other
+        others = [c["card"] for c in players if c.get("name") not in pair_names]
         name = f"{t['ovr']} {SAY.get(t['name'], t['name']).upper()}"
         reel = {"id": "slot", "outro": False,
                 "cover": {"subject": t["card"], "text": "CAN YOU\nSTOP ON HIM?", "sub": name, "color": "gold"},
