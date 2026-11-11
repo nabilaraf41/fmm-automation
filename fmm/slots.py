@@ -566,6 +566,7 @@ TAGS = "#FCMobile #FIFAMobile #EAFC #FMM"
 RIVALS = [("Messi", "C. Ronaldo"), ("C. Ronaldo", "Messi"), ("Mbappé", "Haaland"), ("Pelé", "Maradona"),
           ("Ronaldo", "Ronaldinho"), ("Neymar Jr", "Vini Jr."), ("Zidane", "Kaká"), ("Lamine Yamal", "Mbappé"),
           ("Kane", "Haaland"), ("Henry", "Drogba")]
+RIVALS += [(b, a) for a, b in RIVALS[2:]]  # owner: then every pair the other way round (Haaland named, Mbappé shown...)
 SAY = {"C. Ronaldo": "Ronaldo", "Ronaldo": "R9 Ronaldo", "Neymar Jr": "Neymar", "Vini Jr.": "Vinicius", "Lamine Yamal": "Yamal"}
 # Trial Reel hooks for photo formats (non-followers only); the weekly report compares them with the main first line
 PHOTO_HOOKS = {"statrank": ["Most people get number 1 wrong 👀", "Number 1 surprised me 😳", "Is your favourite on this list? 🤔"],
