@@ -106,6 +106,11 @@ if __name__ == "__main__":
         dm.run()
     except Exception as ex:
         print("dm skipped:", str(ex)[:150])
+    try:  # 21:30 BDT: today's 2 best posts -> owner's phone, to share in FB groups
+        from fmm import sharelist
+        sharelist.run()
+    except Exception as ex:
+        print("share list skipped:", str(ex)[:150])
     try:  # reply to the 2 best comments per recent post (Instagram + Facebook)
         from fmm import replies
         replies.run()

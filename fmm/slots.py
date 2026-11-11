@@ -777,10 +777,19 @@ def build_extra(ctype, latest, pool, fresh, state):
         post = {"id": "slot", "type": "top10", "position": label if len(poss) == 1 else "ALL", "title": f"by {STAT_NAME[stat]}", "subtitle": "latest cards",
                 "players": [{"name": p["name"], "card": p["card"], "ovr": p.get("ovr"), "pos": p.get("pos"),
                              "stat": f"{stat} {val(p)}"} for p in ranked]}
-        caption = (f"Top 10 {label} by {STAT_NAME[stat]} 🏆🔥\n\nFC Mobile, 120+ OVR cards only:\n\n"
+        if icons:
+            label = "Icon " + label
+        # numbered series ("Part 12", no '#': captions.polish would turn "#12" into a hashtag); owner's idea 5, 10 Nov
+        from fmm.poster import LOG as poster_log
+        log = json.loads(poster_log.read_text(encoding="utf-8")) if poster_log.exists() else []
+        num = 1 + sum(1 for e in log if e.get("type") == "statrank" and e.get("kind") != "reel")
+        br = slot_now() == "0700"  # 07:00 BDT = 22:00 in Brazil, our #1 Instagram country (24%, Meta audit 10 Nov)
+        caption = (f"Top 10 {label} by {STAT_NAME[stat]} 🏆🔥 Part {num}\n\nFC Mobile, 120+ OVR cards only:\n\n"
                    + "\n".join(f"{i}. {p['name']} ({p['ovr']} {p['pos']}): {stat} {val(p)}"
                                for i, p in enumerate(ranked, 1))
-                   + "\n\nWho's missing from this list? 👇\n\n" + TAGS)
+                   + "\n\nWho's missing from this list? 👇"
+                   + ("\n🇧🇷 Quem ficou de fora? Comenta aí 👇" if br else "")
+                   + "\n\n" + (TAGS.replace("#FMM", "#FCMobileBrasil #FMM") if br else TAGS))
     elif ctype == "choose":  # 17:00 "Choose 1": 4 cards of one position, 122+; defenders/attackers/midfielders by day
         day = dt.date.today().toordinal()
         groups = [["CB", "LB", "RB"], ["ST", "LW", "RW"], ["CM", "CAM", "CDM"]]
