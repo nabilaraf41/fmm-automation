@@ -106,6 +106,13 @@ if __name__ == "__main__":
         dm.run()
     except Exception as ex:
         print("dm skipped:", str(ex)[:150])
+    try:  # Sunday "Top 5 of the week" / month-end "Best of" long video from our best Reels (from 20:00 BDT)
+        from fmm import recap
+        r = recap.run()
+        if r:
+            print("recap posted:", r)
+    except Exception as ex:
+        print("recap skipped:", str(ex)[:150])
     try:  # 21:30 BDT: today's 2 best posts -> owner's phone, to share in FB groups
         from fmm import sharelist
         sharelist.run()
