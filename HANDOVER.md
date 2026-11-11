@@ -65,5 +65,5 @@ Handbook = CLAUDE.md. Memory notes (~/.claude/projects/E--Claude-FMM/memory, bac
 - Recap videos (fmm/recap.py) Sunday + month-end from 20:00 BDT. Comment 🙌 line in every caption + first comment.
 - Research 11 Nov (docs/CREATOR_PLAYBOOK.md end): gameplay comedy/bugs/GK fails go most viral -> owner to upload
   'meme ….mp4' clips; cheap-players 7 s loops; stop-game format built from that study.
-- IG collabs (11 Nov): content/collaborators.json "always" newcomer_fm (27.7k) + "rotate" hatedsurvivorsfcm, theeliteelastico, tazeafc (2 of them daily)
+- IG collabs (11 Nov): content/collaborators.json "always" newcomer_fm (27.7k) + "rotate" hatedsurvivorsfcm, theeliteelastico, tazeafc, fc_highlightss (2 of them daily). NEVER on stop-game (wrong-name) Reels (poster._NO_COLLAB)
   (max 3 per post). Owner sends more usernames -> add them (rotates daily if >3).

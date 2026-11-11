@@ -152,9 +152,14 @@ def ig_publish(cid, tries=5):
 COLLAB = ROOT / "content" / "collaborators.json"  # {"usernames": ["name1", ...]} owner's agreed collab partners
 
 
+_NO_COLLAB = False  # set by post() for formats partners must never be tagged on
+
+
 def collab_data():
     """Instagram collab invite, max 3 per post: "always" names on every post, "rotate" names take turns (daily)
     for the spots left; {} when none. File: {"always": [...], "rotate": [...]} (old {"usernames": [...]} = rotate)."""
+    if _NO_COLLAB:
+        return {}
     try:
         j = json.loads(COLLAB.read_text(encoding="utf-8"))
     except Exception:
@@ -323,6 +328,8 @@ def post(kind, media, caption, where="both", ctype=None, reel=True, extra=None, 
     """Post to each platform independently. One platform failing never re-posts the others:
     the result is logged as soon as any platform succeeds; it raises only if all of them failed."""
     media = str(media)
+    global _NO_COLLAB
+    _NO_COLLAB = ctype == "stopgame"  # owner: never tag partners on the deliberate wrong-name Reel
     label = day_label(ctype) if _stamp else None
     if label:
         try:
