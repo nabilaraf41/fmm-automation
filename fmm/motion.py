@@ -465,8 +465,27 @@ def sc_outro(s):
     return dur, draw
 
 
+def sc_stopgame(s):
+    """"Can you stop on <target>?" (FUTBIN 821k, 11 Nov study): cards flash every STEP s, the target shows up 3 times
+    for one beat each; no intro/outro so the Reel loops cleanly. s = {"target": name, "target_card", "cards": [paths]}."""
+    STEP, dur = 0.18, s.get("dur", 9.0)
+    n = int(dur / STEP)
+    seq = [s["cards"][i % len(s["cards"])] for i in range(n)]
+    for k in (n // 4, n // 2 + 3, n - 9):  # 3 short chances, never on the first or last frame (loop point)
+        seq[k] = s["target_card"]
+    def draw(t):
+        f = background(s.get("theme", "event"))
+        headline(f, "CAN YOU STOP ON", 480, 92, WHITE, BLUE)  # below the ATB box (y 140-400)
+        headline(f, s["target"], 600, 120, GOLD, RED)
+        i = min(n - 1, int(t / STEP))
+        paste_center(f, card_img(seq[i], 880), RW / 2, 1170)
+        headline(f, "COMMENT IF YOU GOT HIM", 1680, 60, WHITE, None)
+        return f
+    return dur, draw
+
+
 SCENES = {"image": sc_image, "reveal": sc_reveal, "countdown": sc_countdown, "code": sc_code, "stamp": sc_stamp, "messages": sc_messages,
-          "stat": sc_stat, "swipe": sc_swipe, "tierlist": sc_tierlist, "outro": sc_outro}
+          "stat": sc_stat, "swipe": sc_swipe, "tierlist": sc_tierlist, "outro": sc_outro, "stopgame": sc_stopgame}
 
 
 # ---------- polish: sparkles, shake, grain, vignette ----------
@@ -556,6 +575,8 @@ def scene_sfx(s, dur):
         return [(0.6 + i * s.get("gap", 0.7), "ding" if i == 0 else "pop", .6) for i in range(len(s["lines"][:5]))]
     if n == "stat":
         return [(0.4, "riser", .5), (2.6, "ding", .7)]
+    if n == "stopgame":  # a tick on every card change keeps the rhythm
+        return [(k * 0.18, "click", .35) for k in range(int(s.get("dur", 9.0) / 0.18))]
     if n == "swipe":
         return [(0.8, "whoosh", .8), (2.3, "impact", .5)]
     if n == "tierlist":

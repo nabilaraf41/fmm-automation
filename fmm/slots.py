@@ -413,9 +413,8 @@ def build(slot):
     state = load_state()
     fresh, db, made = latest_players()
     ctype, players, pool = pick(kind, fresh, db, state)
-    if ctype == "skip":
-        print(f"Reel slot {slot} skipped: no clip, pack or strong new card")
-        return "skip"
+    if ctype == "skip":  # nothing strong to review: evergreen "Can you stop on…?" game instead (11 Nov study)
+        ctype, players = "stopgame", sorted(fresh.values(), key=lambda x: -(x.get("ovr") or 0))[:24]
     if OUT.exists():
         shutil.rmtree(OUT)
     OUT.mkdir(parents=True)
@@ -463,6 +462,18 @@ def build(slot):
         if test is not None:
             (OUT / "trial_caption.txt").write_text(caption.replace(line(best), line(test), 1), encoding="utf-8")
             state.setdefault("hook_tries", {})[str(test)] = tries.get(str(test), 0) + 1
+    elif ctype == "stopgame":
+        from fmm.versions import FOCUS  # target = a star people want (CR7, Messi, Neymar, Kane...), else top OVR
+        star = [x for x in players if any(f in (x.get("name") or "").lower() for f in FOCUS)]
+        t = (star or players)[dt.date.today().toordinal() % len(star or players)]
+        others = [x["card"] for x in players if x is not t and x.get("name") != t.get("name")]
+        name = f"{t['ovr']} {t['name'].split()[-1]}".upper()
+        reel = {"id": "slot", "outro": False,
+                "cover": {"subject": t["card"], "text": "CAN YOU\nSTOP ON HIM?", "sub": name, "color": "gold"},
+                "scenes": [{"scene": "stopgame", "target": name, "target_card": t["card"], "cards": others}]}
+        media = motion.render_reel(reel, OUT)
+        caption = (f"Can you stop on {t['ovr']} {t['name']}? 🤔\n\nPause the video on him and screenshot it 📸\n"
+                   "Comment how many tries it took 👇\n\n#FCMobile #FIFAMobile #EAFC #FMM")
     elif ctype == "countdown":
         reel = {"id": "slot", "cover": {"subject": players[0]["card"], "text": f"TOP {min(7, len(players))}\nNEW CARDS",
                                          "sub": f"#1 IS {players[0]['ovr']} OVR!", "color": "gold"},
