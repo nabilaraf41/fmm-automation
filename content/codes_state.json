@@ -23,6 +23,12 @@
    "code": "UNDERTHELIGHTS",
    "reward": "300 Shards",
    "date": "8th November"
+  },
+  "AUTUMNCRUNCH": {
+   "first_seen": "2026-11-12",
+   "code": "AUTUMNCRUNCH",
+   "reward": "Draft Voucher",
+   "date": "11th November"
   }
  },
  "roundups": [
@@ -38,6 +44,7 @@
   "2026-11-08",
   "2026-11-09",
   "2026-11-10",
-  "2026-11-11"
+  "2026-11-11",
+  "2026-11-12"
  ]
 }
