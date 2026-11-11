@@ -57,3 +57,11 @@ Handbook = CLAUDE.md. Memory notes (~/.claude/projects/E--Claude-FMM/memory, bac
 - Top 10: "Part N" in title (no '#': polish turns #N into a hashtag), 07:00 Brazil line + #FCMobileBrasil,
   Trial Reel hook tests on Top 10 + Cheap XI (slots.PHOTO_HOOKS). Comment 🙌 -> DM (fmm/dm.py) on all posts except the
   pinned codes post (ManyChat owns that one). Hands-on-head ATB clip deleted (looked bald).
+- Stop-game Reel (slots ctype "stopgame", motion.sc_stopgame): "Can you stop on <name>?" cards flash 9 s loop.
+  Title names one player, the flashing card is ANOTHER (owner's twist, on purpose, only this Reel).
+  Order: this week's confirmed new cards first (old star's name + new card, then reverse; state featured.json stop_new),
+  then slots.RIVALS loop (10 pairs + reverses = 18). Posts Fri + Sat 21:00 when new cards exist, and any 21:00 Reel
+  slot that would otherwise skip. Owner removed phone notifications: never add alerts.
+- Recap videos (fmm/recap.py) Sunday + month-end from 20:00 BDT. Comment 🙌 line in every caption + first comment.
+- Research 11 Nov (docs/CREATOR_PLAYBOOK.md end): gameplay comedy/bugs/GK fails go most viral -> owner to upload
+  'meme ….mp4' clips; cheap-players 7 s loops; stop-game format built from that study.

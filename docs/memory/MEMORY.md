@@ -9,7 +9,7 @@
 - [Evergreen FC Mobile Shorts](fc-mobile-evergreen-shorts.md) — top 50 study: legend skills, comedy, then-vs-now keep getting views
 - [Savestate hazard + shard prices](fmm-savestate-hazard.md) — commit code before savestate; forum prices saved from PC for cloud
 - [No posting from the PC](fmm-no-pc-posting.md) — only the cloud posts; never run run_cloud/post locally, even to test
-- [Review = stats photo too](fmm-review-photo-always.md) — every review Reel also posts its stats image (owner rule)
+- [Review photo dropped, 2nd Top 10](fmm-review-photo-always.md) — 10 Nov: no stats photo; 07:00 = 2nd Top 10
 - [ATB host + Flow rules](fmm-atb-host.md) — owner ATB in every post (badge/clip), phone back only, realistic, max quality
 - [Photo + Reel always](fmm-photo-plus-reel.md) — never a picture alone; Reel made first, ffmpeg in every posting workflow
 - [Covers never black + ATB video in every Reel](fmm-covers.md) — cover jpg for every mp4, no fade on frame 0
@@ -17,3 +17,4 @@
 - [ATB Meme format](fmm-atb-meme.md) — NO/YES template; owner names the right side, add to content/atb_meme.json queue
 - [Leak posts](fmm-leaks.md) — unreleased cards made like FC Forum; FMF + MadridistaaFC sources; 2-source rule
 - [Creator playbook](fmm-creator-playbook.md) — docs/CREATOR_PLAYBOOK.md rules every post; YPP doubles 1 Feb 2027
+- [No phone notifications](fmm-no-notifications.md) — owner refused alerts; FB monetization already approved
