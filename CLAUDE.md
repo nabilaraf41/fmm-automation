@@ -22,7 +22,10 @@ give click-by-click steps and copy-paste commands.
   `content/featured.json` → `confirmed_programs`, `hold_programs` (TOTW27 held until confirmed).
 - State (content/*.json) is saved with `python -m fmm.savestate "msg"` (merges with concurrent cloud saves);
   never plain-push state files from the PC while a cloud run may be saving.
-- Never commit tokens. Secrets live in `.env`, `secrets/` (gitignored) and GitHub Secrets.
+- Never commit tokens (repo is PUBLIC). Secrets live on this PC only, gitignored: `.env` (META_PAGE_TOKEN, META_PAGE_ID,
+  IG_USER_ID, META_APP_ID, META_APP_SECRET) and `secrets/` (youtube_token.json = YOUTUBE_TOKEN_JSON, google_client.json,
+  new_page_token.txt, new_user_token.txt); same values are in GitHub Secrets for the cloud. Code loads them via
+  `poster.env()`. If a cloud secret is lost: `gh secret set NAME -R nabilaraf41/fmm-automation < file` (never echo values).
 - Creating repos / uploading may be blocked for Claude: give the owner the command to run.
 - Reviews are original FMM wording from stats (FMM Player Review Standard); never copy RenderZ/forum text.
 - No engagement bait ("tag a friend", "react to vote"); FB Groups stay manual.
