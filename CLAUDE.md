@@ -35,6 +35,7 @@ PUBLIC repo `nabilaraf41/fmm-automation` (made public 11 Nov 2026: free unlimite
 - `.github/workflows/codes.yml` ("FMM hourly") — every 2 hours at :05: `fmm.run_cloud` → posts any slot due in the last
   5 h and not yet done (`featured.json` → `done_slots`; GitHub cron can be late or skip runs), then new-player drops
   (`fmm.newplayers`) and redeem codes (`fmm.codes`). Slots (BDT): 07:00 Top 10 (photo + Reel), 13:00 photo, 19:00 photo (Indonesia peak), 21:00 Reel (BD/India peak).
+- Self-chain (12 Nov): each codes.yml run ends by dispatching the next one ~55 min after it started ("Start the next run" step), so runs never stop; cron + Apps Script only restart the chain if it breaks.
 - Backup trigger: Google Apps Script (owner's Google account, GOOGLE_TRIGGER.gs) dispatches codes.yml every hour,
   because GitHub skips scheduled runs on busy days. Uses a fine-grained PAT (Actions write) stored in Script properties.
 - `.github/workflows/slots.yml` — manual runs only (build / post a slot by hand).
