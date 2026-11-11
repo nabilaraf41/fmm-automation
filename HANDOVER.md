@@ -51,8 +51,8 @@ Handbook = CLAUDE.md. Memory notes (~/.claude/projects/E--Claude-FMM/memory, bac
 - Instagram comment replies ON since 10 Nov (2 per post, spam skipped). YouTube API audit not submitted.
 
 ## Added 11 Nov
-- Phone alerts: ntfy.sh topic in fmm/notify.py (owner subscribes in the ntfy app). Hourly run log is scanned; failures alert.
-- 21:30 BDT share list (fmm/sharelist.py): day's 2 best posts with FB links -> phone, owner shares to FB groups.
+- Owner doesn't want phone notifications (11 Nov): ntfy alerts + share list were built and removed. Don't re-add.
+- FB content monetization: owner already approved and earning.
 - Recap long videos (fmm/recap.py): Sunday Top 5 of the week, month-end Best of (top 10), from 20:00 BDT.
 - Top 10: "Part N" in title (no '#': polish turns #N into a hashtag), 07:00 Brazil line + #FCMobileBrasil,
   Trial Reel hook tests on Top 10 + Cheap XI (slots.PHOTO_HOOKS). Comment 🙌 -> DM (fmm/dm.py) on all posts except the

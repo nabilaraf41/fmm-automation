@@ -38,13 +38,7 @@ jobs:
           IG_USER_ID: ${{ secrets.IG_USER_ID }}
           YOUTUBE_TOKEN_JSON: ${{ secrets.YOUTUBE_TOKEN_JSON }}
           TZ: Asia/Dhaka
-        run: |
-          set -o pipefail
-          python -u -m fmm.run_cloud 2>&1 | tee run.log
-
-      - name: Phone alert on problems
-        if: always()
-        run: python -m fmm.notify --log run.log || true
+        run: python -u -m fmm.run_cloud
 
       - name: Save state
         if: always()
