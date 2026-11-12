@@ -1278,5 +1278,30 @@
   "type": "statrank_trial",
   "hook": "Most people get number 1 wrong 👀",
   "instagram": "18120726893090522"
+ },
+ {
+  "at": "2026-11-12 13:00:41",
+  "kind": "photo",
+  "file": "/home/runner/work/fmm-automation/fmm-automation/output/slot/slot_day.png",
+  "type": "xi",
+  "facebook": "122207889830906131",
+  "instagram": "18121151951063355"
+ },
+ {
+  "at": "2026-11-12 13:01:53",
+  "kind": "reel",
+  "file": "/home/runner/work/fmm-automation/fmm-automation/output/slot/slot_day_reel.mp4",
+  "type": "xi",
+  "facebook": "976180061781797",
+  "instagram": "18012648506994502",
+  "youtube": "2hT6SUckl2k"
+ },
+ {
+  "at": "2026-11-12 13:02:36",
+  "kind": "reel",
+  "file": "/home/runner/work/fmm-automation/fmm-automation/output/slot/slot_day_reel.mp4",
+  "type": "xi_trial",
+  "hook": "This XI costs less than you think 🤑",
+  "instagram": "17921437992465832"
  }
 ]
