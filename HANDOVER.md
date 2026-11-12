@@ -66,5 +66,5 @@ Handbook = CLAUDE.md. Memory notes (~/.claude/projects/E--Claude-FMM/memory, bac
 - Research 11 Nov (docs/CREATOR_PLAYBOOK.md end): gameplay comedy/bugs/GK fails go most viral -> owner to upload
   'meme ….mp4' clips; cheap-players 7 s loops; stop-game format built from that study.
 - IG collabs (12 Nov): content/collaborators.json. newcomer_fm only accepts PHOTOS of Top 10 + new-card reviews ->
-  "prefer" puts him on photo:statrank + photo:newcard; everywhere else all 9 partners rotate 3 per post. Never on
+  "prefer" puts him on photo:statrank + photo:newcard; everywhere else all partners (incl. delete_fc) rotate 3 per post. Never on
   stop-game Reels (poster._NO_COLLAB). Check acceptance: GET /{ig-media-id}/collaborators (invite_status).
