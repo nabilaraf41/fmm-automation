@@ -1,4 +1,5 @@
 {
- "always": ["newcomer_fm"],
- "rotate": ["hatedsurvivorsfcm", "theeliteelastico", "tazeafc", "fc_highlightss", "fc_bangladesh_402", "eafc_jacobek08", "goat_editv", "aftab.fc"]
+ "always": [],
+ "prefer": {"newcomer_fm": ["photo:statrank", "photo:newcard"]},
+ "rotate": ["newcomer_fm", "hatedsurvivorsfcm", "theeliteelastico", "tazeafc", "fc_highlightss", "fc_bangladesh_402", "eafc_jacobek08", "goat_editv", "aftab.fc"]
 }

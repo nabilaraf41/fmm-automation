@@ -153,6 +153,7 @@ COLLAB = ROOT / "content" / "collaborators.json"  # {"usernames": ["name1", ...]
 
 
 _NO_COLLAB = False  # set by post() for formats partners must never be tagged on
+_NOW = ("", "")      # (kind, ctype) of the post being made, for "prefer" collab rules
 
 
 def collab_data():
@@ -166,6 +167,11 @@ def collab_data():
         return {}
     clean = lambda xs: [n.lstrip("@") for n in xs if n]
     always, rot = clean(j.get("always", []))[:3], clean(j.get("rotate", j.get("usernames", [])))
+    # "prefer": {"name": ["photo:statrank", ...]} -> always on those posts (the kinds that partner actually accepts)
+    for name, kinds in j.get("prefer", {}).items():
+        if f"{_NOW[0]}:{_NOW[1]}" in kinds and name not in always and len(always) < 3:
+            always.append(name)
+    rot = [n for n in rot if n not in always]
     # rotate per post (not per day) so every partner is invited several times a day (owner, 12 Nov)
     n = len(json.loads(LOG.read_text(encoding="utf-8"))) if LOG.exists() else 0
     k = (n * (3 - len(always))) % len(rot) if rot else 0
@@ -332,6 +338,8 @@ def post(kind, media, caption, where="both", ctype=None, reel=True, extra=None, 
     media = str(media)
     global _NO_COLLAB
     _NO_COLLAB = ctype == "stopgame"  # owner: never tag partners on the deliberate wrong-name Reel
+    global _NOW
+    _NOW = (kind, ctype or "")
     label = day_label(ctype) if _stamp else None
     if label:
         try:
@@ -408,7 +416,8 @@ def run_queue(folder, where="both", gap=90):
         if m.name in posted_files() or cap is None:  # re-read: posting a photo also posts its _reel.mp4 (was posted twice)
             continue
         kind = "reel" if m.suffix == ".mp4" else "photo"
-        print("posting", kind, m.name, "->", post(kind, m, cap, where))
+        ctype = "newcard" if m.name.startswith("c_review") else None  # new-player review photos (collab rule below)
+        print("posting", kind, m.name, "->", post(kind, m, cap, where, ctype))
         time.sleep(gap)  # space posts out; never burst
 
 
