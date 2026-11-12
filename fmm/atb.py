@@ -27,11 +27,35 @@ PACK = sorted((ROOT / "assets" / "atb_pack").glob("*.mp4"))  # pack reactions WI
 EA = sorted((ROOT / "assets" / "atb_ea").glob("*.mp4"))  # EA-logic comedy + hooks WITH his voice ("EA... why?")
 
 
-def clip(seed=None, pool=None):
+# owner (12 Nov): followers asked for sound -> every Reel gets ATB's VOICE with a line that fits the post
+# (lines transcribed into content/atb_voice.json). Post type -> clips whose line suits it.
+_A = ROOT / "assets"
+VOICE = {k: [_A / x for x in v] for k, v in {
+    "statrank": ["atb_pack/n_j07.mp4", "atb_pack/p_038.mp4", "atb_pack/n_p03.mp4", "atb_pack/p_001.mp4", "atb_pack/n_p06.mp4"],
+    "rank10": ["atb_pack/n_j07.mp4", "atb_pack/p_038.mp4", "atb_pack/n_p03.mp4", "atb_pack/p_001.mp4"],
+    "xi": ["atb_pack/n_j03.mp4", "atb_pack/n_j06.mp4", "atb_pack/n_p03.mp4", "atb_pack/n_p02.mp4"],
+    "choose": ["atb_pack/n_p03.mp4", "atb_clips/46_stunned_blink.mp4", "atb_pack/n_p06.mp4", "atb_pack/p_001.mp4"],
+    "newcard": ["atb_pack/p_071.mp4", "atb_pack/p_076.mp4", "atb_pack/n_j03.mp4", "atb_pack/n_j06.mp4"],
+    "review": ["atb_pack/p_076.mp4", "atb_pack/n_j03.mp4", "atb_pack/n_j06.mp4", "atb_pack/n_j07.mp4"],
+    "code": ["atb_pack/n_p02.mp4", "atb_pack/n_p10.mp4", "atb_pack/p_045.mp4", "atb_clips/02_celebration.mp4"],
+    "leak": ["atb_pack/n_p06.mp4", "atb_pack/n_p03.mp4", "atb_pack/p_046.mp4"],
+    "stopgame": ["atb_pack/n_p06.mp4", "atb_pack/n_p03.mp4"],
+    "default": ["atb_pack/n_p03.mp4", "atb_pack/n_j07.mp4", "atb_pack/p_038.mp4", "atb_clips/01_shocked.mp4",
+                "atb_clips/49_nodding_hype.mp4"],
+}.items()}
+
+
+def voiced(kind):
+    """A voiced ATB clip whose line fits this post type (least recently used); default lines otherwise."""
+    items = [c for c in VOICE.get(kind or "", VOICE["default"]) if c.exists()] or [c for c in VOICE["default"] if c.exists()]
+    return clip(kind, items=items) if items else None
+
+
+def clip(seed=None, pool=None, items=None):
     """Least-recently-used reaction clip (owner: never the same clip again and again). Usage is saved in
     content/clips_state.json -> "atb_used" (merged by fmm.savestate), so it rotates across cloud runs."""
     import datetime as dt, json
-    items = {"pack": PACK, "ea": EA}.get(pool) or CLIPS
+    items = items or {"pack": PACK, "ea": EA}.get(pool) or CLIPS
     if not items:
         return None
     sf = ROOT / "content" / "clips_state.json"
@@ -51,18 +75,18 @@ def _has_audio(p):
                                 "-of", "csv=p=0", str(p)], capture_output=True, text=True).stdout.strip())
 
 
-def box(mp4, seed, y=140, pool=None):
+def box(mp4, seed, y=140, pool=None, voice=None):
     """Reaction video: ATB's clip boxed top-right over a Reel for its whole length (in place). Owner rule:
     no Reel without his video. Keeps the Reel's own audio; pool="ea" also mixes in his voice line (first 6 s)."""
     import subprocess
-    c = clip(seed, pool=pool)
+    c = voiced(voice) if voice else clip(seed, pool=pool)
     if not c:  # no Reel without ATB: raising stops the build, so nothing posts
         raise RuntimeError(f"no ATB clip ({pool or 'atb_clips'}): Reel not made")
     mp4 = Path(mp4)
     tmp = mp4.with_name(mp4.stem + "_atb.mp4")
     fc = f"[1:v]scale=440:248,pad=452:260:6:6:color=0xE11D2E[p];[0:v][p]overlay=W-w-28:{y}:shortest=1[v]"
     amap, acodec = ["-map", "0:a?"], ["-c:a", "copy"]
-    if pool == "ea" and _has_audio(c):
+    if (pool == "ea" or voice) and _has_audio(c):
         voice = "[1:a]atrim=0:6,asetpts=PTS-STARTPTS,volume=1.4,apad"
         if _has_audio(mp4):
             fc += f";{voice}[vo];[0:a]volume=0.6[g];[g][vo]amix=inputs=2:duration=first:normalize=0[a]"

@@ -68,3 +68,7 @@ Handbook = CLAUDE.md. Memory notes (~/.claude/projects/E--Claude-FMM/memory, bac
 - IG collabs (12 Nov): content/collaborators.json. newcomer_fm only accepts PHOTOS of Top 10 + new-card reviews ->
   "prefer" puts him on photo:statrank + photo:newcard; everywhere else all partners (incl. delete_fc) rotate 3 per post. Never on
   stop-game Reels (poster._NO_COLLAB). Check acceptance: GET /{ig-media-id}/collaborators (invite_status).
+- Sound (12 Nov, followers complained "no sound"): every Reel now has ATB's VOICE with a line that fits the post
+  (atb.VOICE: post type -> voiced clips; transcripts of all 73 voiced clips in content/atb_voice.json), music quietly
+  under it. Photo Reels: reel.make_reel(kind=ctype); animated Reels: motion -> atb.box(voice=...). Transcribe new clips
+  with .venv312 + faster-whisper (decode audio with ffmpeg first; av version mismatch).

@@ -668,7 +668,7 @@ def render_reel(reel, out_dir=OUT, music=None, stills=None):
     cover = out_dir / f"{reel['id']}_cover.jpg"
     if reel.get("cover"):  # review Reels open on the verdict cover (payoff in frame 0)
         lead_with_cover(out, cover)
-    atb.box(out, reel["id"])
+    atb.box(out, reel["id"], voice=reel.get("voice", "default"))  # ATB's voice in every animated Reel
     if not cover.exists():  # never a black/empty cover: take a full, settled frame
         subprocess.run(["ffmpeg", "-v", "error", "-y", "-ss", "1.6", "-i", str(out), "-frames:v", "1", "-q:v", "2",
                         str(cover)], check=True)

@@ -18,3 +18,4 @@
 - [Leak posts](fmm-leaks.md) — unreleased cards made like FC Forum; FMF + MadridistaaFC sources; 2-source rule
 - [Creator playbook](fmm-creator-playbook.md) — docs/CREATOR_PLAYBOOK.md rules every post; YPP doubles 1 Feb 2027
 - [No phone notifications](fmm-no-notifications.md) — owner refused alerts; FB monetization already approved
+- [ATB voice in every Reel](fmm-atb-voice.md) — relevant voice line per post type + light bg music

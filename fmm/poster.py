@@ -351,7 +351,7 @@ def post(kind, media, caption, where="both", ctype=None, reel=True, extra=None, 
     pair = None
     if kind == "photo" and where == "both" and reel:  # owner rule: never a photo alone; make its Reel first
         from fmm import reel as reelmod
-        pair = reelmod.make_reel(media, seconds=10)  # raises (nothing posted) if the Reel can't be made
+        pair = reelmod.make_reel(media, seconds=10, kind=ctype or ("code" if "code" in Path(media).name else None))  # raises (nothing posted) if the Reel can't be made
     if kind == "reel" and media.endswith(".mp4"):  # every Reel: gold progress bar (once per file)
         try:
             from fmm import motion

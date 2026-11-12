@@ -39,10 +39,10 @@ def make_frame_atb(src: Path) -> Path:
     return out
 
 
-def make_reel(src, music=None, seconds=8):
+def make_reel(src, music=None, seconds=8, kind=None):
     src = Path(src)
     from fmm import atb
-    top = atb.clip(src.stem)  # owner rule: ATB reacts in the top part of every photo Reel
+    top = atb.voiced(kind) or atb.clip(src.stem)  # owner: ATB's voice is a must, with a line that fits the post  # owner rule: ATB reacts in the top part of every photo Reel
     if not top:  # no Reel without ATB: raising stops poster.post, so nothing posts
         raise RuntimeError("no ATB clip in assets/atb_clips: Reel not made, post stopped")
     frame = make_frame_atb(src) if top else make_frame(src)
@@ -76,7 +76,7 @@ def make_reel(src, music=None, seconds=8):
         # owner: music low under everything; ATB's voice only on clips whose line fits any post (those keep audio)
         voice = subprocess.run(["ffprobe", "-v", "error", "-select_streams", "a", "-show_entries", "stream=index",
                                 "-of", "csv=p=0", str(top)], capture_output=True, text=True).stdout.strip()
-        fc += f";[2:a]volume={0.22 if voice else 0.4},afade=t=in:d=0.5,afade=t=out:st={seconds - 1}:d=1[m]"
+        fc += f";[2:a]volume={0.3 if voice else 0.45},afade=t=in:d=0.5,afade=t=out:st={seconds - 1}:d=1[m]"
         if voice:  # voice once (not looped), then music only
             fc += ";[1:a]atrim=0:6,asetpts=PTS-STARTPTS,volume=1.6,apad[vo];[vo][m]amix=inputs=2:duration=longest:normalize=0[a]"
         else:

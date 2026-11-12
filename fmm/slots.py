@@ -440,7 +440,7 @@ def build(slot):
     elif ctype == "review_reel":
         cover_text = {"MUST BUY": "THIS CARD\nIS BROKEN!!", "WORTH IT": "WORTH IT?!", "SITUATIONAL": "BUY OR NOT?",
                       "SKIP": "DON'T BUY\nTHIS!!"}[r["verdict"]]
-        reel = {"id": "slot", "cover": {"subject": p["card"], "text": cover_text, "sub": f"{p['ovr']} OVR {p['name']}",
+        reel = {"id": "slot", "voice": "review", "cover": {"subject": p["card"], "text": cover_text, "sub": f"{p['ovr']} OVR {p['name']}",
                                          "color": "green" if r["score"] >= 9 else "red"},
                 "scenes": [
             {"scene": "reveal", "title": "New Card", "sub": f"{p['ovr']} OVR {p['name']}", "card": p["card"]},
@@ -505,7 +505,7 @@ def build(slot):
         t = {"card": shown_card, "ovr": said_ovr, "name": said_name}  # title claims one player, card is the other
         others = [c["card"] for c in players if c.get("name") not in pair_names]
         name = f"{t['ovr']} {SAY.get(t['name'], t['name']).upper()}"
-        reel = {"id": "slot", "outro": False,
+        reel = {"id": "slot", "outro": False, "voice": "stopgame",
                 "cover": {"subject": t["card"], "text": "CAN YOU\nSTOP ON HIM?", "sub": name, "color": "gold"},
                 "scenes": [{"scene": "stopgame", "target": name, "target_card": t["card"], "cards": others}]}
         media = motion.render_reel(reel, OUT)
