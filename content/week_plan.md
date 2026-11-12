@@ -1,75 +1,75 @@
-# FMM plan: Thu 05 Nov to Wed 11 Nov 2026
+# FMM plan: Thu 12 Nov to Wed 18 Nov 2026
 
 Times are Bangladesh time. Each post also goes out as a Reel (photos too).
 
-## Thursday 05 Nov
+## Thursday 12 Nov
 
 | Time | Post |
 |---|---|
-| 07:00 | Review Reel: 124 CB Cannavaro |
-| 13:00 | Budget XI: starting XI |
-| 17:00 | Choose 1: four 122+ CDM cards |
-| 19:00 | Top 10 LW by Shooting |
-| 21:00 | Pack opening Reel (your newest 'pack ...' video) |
-
-## Friday 06 Nov
-
-| Time | Post |
-|---|---|
-| 07:00 | Review Reel: 124 CM Gullit |
+| 07:00 | Top 10 all of ST RW LW CAM by Dribbling |
 | 13:00 | Budget XI part 1/3: attack |
-| 17:00 | Choose 1: four 122+ CB cards |
-| 19:00 | Top 10 CAM by Shooting |
-| 21:00 | Review Reel: 124 LW Ronaldinho |
-
-## Saturday 07 Nov
-
-| Time | Post |
-|---|---|
-| 07:00 | Review Reel: 123 ST Baggio |
-| 13:00 | Budget XI part 2/3: defence |
-| 17:00 | Choose 1: four 122+ ST cards |
-| 19:00 | Top 10 all of ST RW LW CAM by Shooting |
-| 21:00 | Review Reel: 124 CDM Matthäus |
-
-## Sunday 08 Nov
-
-| Time | Post |
-|---|---|
-| 07:00 | Review Reel: 123 RB Hakimi |
-| 13:00 | Budget XI part 3/3: midfield |
-| 17:00 | Choose 1: four 122+ CM cards |
-| 19:00 | Top 10 ST by Dribbling |
+| 17:00 | Choose 1: four 122+ RB cards |
+| 19:00 | Top 10 LM by Dribbling |
 | 21:00 | Pack opening Reel (your newest 'pack ...' video) |
 
-## Monday 09 Nov
+## Friday 13 Nov
 
 | Time | Post |
 |---|---|
-| 07:00 | Review Reel: 124 ST Eto'o |
+| 07:00 | Top 10 all of ST RW LW CAM by Pace |
+| 13:00 | Budget XI part 2/3: defence |
+| 17:00 | Choose 1: four 122+ RW cards |
+| 19:00 | Top 10 RM by Dribbling |
+| 21:00 | stopgame |
+
+## Saturday 14 Nov
+
+| Time | Post |
+|---|---|
+| 07:00 | Top 10 CM by Passing |
+| 13:00 | Budget XI part 3/3: midfield |
+| 17:00 | Choose 1: four 122+ CDM cards |
+| 19:00 | Top 10 all of ST RW LW CAM LM RM by Dribbling |
+| 21:00 | stopgame |
+
+## Sunday 15 Nov
+
+| Time | Post |
+|---|---|
+| 07:00 | Top 10 ST by Physical |
 | 13:00 | Budget XI: starting XI |
-| 17:00 | Choose 1: four 122+ LB cards |
-| 19:00 | Top 10 RW by Dribbling |
-| 21:00 | Review Reel: 123 LW dos Santos |
+| 17:00 | Choose 1: four 122+ CB cards |
+| 19:00 | Top 10 ST by Pace |
+| 21:00 | Pack opening Reel (your newest 'pack ...' video) |
 
-## Tuesday 10 Nov
+## Monday 16 Nov
 
 | Time | Post |
 |---|---|
-| 07:00 | Review Reel: 122 ST Papin |
+| 07:00 | Top 10 all of ST RW LW CAM by Agility |
 | 13:00 | Budget XI: all 4 (swipe post) |
-| 17:00 | Choose 1: four 122+ LW cards |
-| 19:00 | Top 10 LW by Dribbling |
-| 21:00 | Review Reel: 122 RW Błaszczykowski |
+| 17:00 | Choose 1: four 122+ ST cards |
+| 19:00 | Top 10 RW by Pace |
+| 21:00 | Review Reel: 121 ST Mbappé |
 
-## Wednesday 11 Nov
+## Tuesday 17 Nov
 
 | Time | Post |
 |---|---|
-| 07:00 | Review Reel: 122 LW Kvaratskhelia |
+| 07:00 | Top 10 ICONS ST RW LW CAM by Dribbling |
+| 13:00 | Guess the player |
+| 17:00 | Choose 1: four 122+ CM cards |
+| 19:00 | Top 10 LW by Pace |
+| 21:00 | Review Reel: 122 RW Antony |
+
+## Wednesday 18 Nov
+
+| Time | Post |
+|---|---|
+| 07:00 | Top 10 ICONS ST RW LW CAM by Dribbling |
 | 13:00 | Top 10 ranking |
-| 17:00 | Choose 1: four 122+ CAM cards |
-| 19:00 | Top 10 CAM by Dribbling |
-| 21:00 | Review Reel: 121 CB Pau Cubarsí |
+| 17:00 | Choose 1: four 122+ LB cards |
+| 19:00 | Top 10 CAM by Pace |
+| 21:00 | Review Reel: 124 RW Raphinha |
 
 Extras any day: new redeem codes, new-player drop (Thursday), your Drive clips (they go first).
