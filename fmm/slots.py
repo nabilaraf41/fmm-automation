@@ -466,50 +466,39 @@ def build(slot):
             (OUT / "trial_caption.txt").write_text(caption.replace(line(best), line(test), 1), encoding="utf-8")
             state.setdefault("hook_tries", {})[str(test)] = tries.get(str(test), 0) + 1
     elif ctype == "stopgame":
-        # owner twist (11 Nov): the title names one player, the card that flashes in is another (Messi named, CR7 shown),
-        # so people comment "that's not Messi!". Only this Reel uses the wrong name on purpose.
         from fmm import cardstats, fmf
-        cards = list(confirmed_only({c["id"]: c for c in cardstats.load(max_age_days=30)}).values())
-        best = lambda n: max([c for c in cards if c["name"] == n], key=lambda c: c["ovr"])
-        from fmm.poster import LOG as poster_log
-        log = json.loads(poster_log.read_text(encoding="utf-8")) if poster_log.exists() else []
-        n_done = sum(1 for e in log if e.get("type") == "stopgame" and e.get("kind") == "reel")
-        def card_of(c):  # cardstats card -> image path (built from the forum render if missing)
-            path = renderz.CARDS / f"{c['id']}.png"
-            if not path.exists():
-                renderz.CARDS.mkdir(parents=True, exist_ok=True)
-                fmf.build_card({**c, "layout": {}, "colors": {}}).save(path)
-            return str(path)
-        # owner (11 Nov): after the Thursday drop people search the new cards, so a new card of this week comes first:
-        # old star's name + the NEW card, then (next time) the reverse; every new card once each way, then RIVALS again
+
         week_ago = (dt.datetime.now(dt.UTC) - dt.timedelta(days=7)).strftime("%Y-%m-%dT%H:%M:%S")
-        new = sorted([x for x in confirmed_only(fresh).values() if (x.get("added") or "") >= week_ago],
-                     key=lambda x: -(x.get("ovr") or 0))
-        used = set(state.setdefault("stop_new", []))
-        job = next(((x, d) for x in new for d in ("old_name", "new_name") if f"{x['id']}:{d}" not in used), None)
-        stars = {n for pair in RIVALS for n in pair}
-        if job and ensure_card(job[0], fresh):
-            x, d = job
-            pool_old = [best(n) for n in sorted(stars) if n != x["name"] and any(c["name"] == n for c in cards)]
-            same = [c for c in pool_old if c["pos"] == x.get("pos")] or pool_old  # same position looks most alike
-            old = same[sum(map(ord, str(x["id"]))) % len(same)]  # fixed per new card, so the reverse uses the same star
-            if d == "old_name":
-                said_name, said_ovr, shown_card = old["name"], old["ovr"], ensure_card(x, fresh)
-            else:
-                said_name, said_ovr, shown_card = x["name"], x["ovr"], card_of(old)
-            state["stop_new"].append(f"{x['id']}:{d}")
-            pair_names = (old["name"], x["name"])
+        used = state.setdefault("stop_new", [])
+        used_ids = {entry.split(":", 1)[0] for entry in used if not entry.endswith(":old_name")}
+        target = next((p for p in players if (p.get("added") or "") >= week_ago
+                       and str(p["id"]) not in used_ids), None)
+        if target is None:
+            from fmm.poster import LOG as poster_log
+
+            log = json.loads(poster_log.read_text(encoding="utf-8")) if poster_log.exists() else []
+            n_done = sum(1 for e in log if e.get("type") == "stopgame" and e.get("kind") == "reel")
+            cards = confirmed_only({c["id"]: c for c in cardstats.load(max_age_days=30)})
+            stars = [max((c for c in cards.values() if c["name"] == name),
+                         key=lambda c: c["ovr"], default=None) for name in STOP_GAME_STARS]
+            stars = [c for c in stars if c is not None]
+            target = stars[n_done % len(stars)] if stars else players[0]
+            if "card" not in target:
+                path = renderz.CARDS / f"{target['id']}.png"
+                if not path.exists():
+                    renderz.CARDS.mkdir(parents=True, exist_ok=True)
+                    fmf.build_card({**target, "layout": {}, "colors": {}}).save(path)
+                target["card"] = str(path)
         else:
-            said, shown = RIVALS[n_done % len(RIVALS)]  # next pair each time this Reel posts
-            said_name, said_ovr, shown_card, pair_names = said, best(said)["ovr"], card_of(best(shown)), (said, shown)
-        t = {"card": shown_card, "ovr": said_ovr, "name": said_name}  # title claims one player, card is the other
-        others = [c["card"] for c in players if c.get("name") not in pair_names]
-        name = f"{t['ovr']} {SAY.get(t['name'], t['name']).upper()}"
+            used.append(str(target["id"]))
+
+        others = [c["card"] for c in players if c["name"] != target["name"]] or [target["card"]]
+        name = f"{target['ovr']} {SAY.get(target['name'], target['name']).upper()}"
         reel = {"id": "slot", "outro": False, "voice": "stopgame",
-                "cover": {"subject": t["card"], "text": "CAN YOU\nSTOP ON HIM?", "sub": name, "color": "gold"},
-                "scenes": [{"scene": "stopgame", "target": name, "target_card": t["card"], "cards": others}]}
+                "cover": {"subject": target["card"], "text": "CAN YOU\nSTOP ON HIM?", "sub": name, "color": "gold"},
+                "scenes": [{"scene": "stopgame", "target": name, "target_card": target["card"], "cards": others}]}
         media = motion.render_reel(reel, OUT)
-        caption = (f"Can you stop on {t['ovr']} {t['name']}? 🤔\n\nPause the video on him and screenshot it 📸\n"
+        caption = (f"Can you stop on {target['ovr']} {target['name']}? 🤔\n\nPause the video on him and screenshot it 📸\n"
                    "Comment how many tries it took 👇\n\n#FCMobile #FIFAMobile #EAFC #FMM")
     elif ctype == "countdown":
         reel = {"id": "slot", "cover": {"subject": players[0]["card"], "text": f"TOP {min(7, len(players))}\nNEW CARDS",
@@ -587,11 +576,9 @@ MEMES = [("When you finally pack {name}", "When you check his weak foot"),
          ("Opponent's {name}", "My {name}"),
          ("Me: one more pack", "Me 2 hours later, still no {name}")]
 TAGS = "#FCMobile #FIFAMobile #EAFC #FMM"
-# stop-game twist (owner, 11 Nov): (name in the title, rival whose card actually flashes); rivals people argue about
-RIVALS = [("Messi", "C. Ronaldo"), ("C. Ronaldo", "Messi"), ("Mbappé", "Haaland"), ("Pelé", "Maradona"),
-          ("Ronaldo", "Ronaldinho"), ("Neymar Jr", "Vini Jr."), ("Zidane", "Kaká"), ("Lamine Yamal", "Mbappé"),
-          ("Kane", "Haaland"), ("Henry", "Drogba")]
-RIVALS += [(b, a) for a, b in RIVALS[2:]]  # owner: then every pair the other way round (Haaland named, Mbappé shown...)
+STOP_GAME_STARS = ("Messi", "C. Ronaldo", "Mbappé", "Haaland", "Pelé", "Maradona",
+                   "Ronaldo", "Ronaldinho", "Neymar Jr", "Vini Jr.", "Zidane", "Kaká",
+                   "Lamine Yamal", "Kane", "Henry", "Drogba")
 SAY = {"C. Ronaldo": "Ronaldo", "Ronaldo": "R9 Ronaldo", "Neymar Jr": "Neymar", "Vini Jr.": "Vinicius", "Lamine Yamal": "Yamal"}
 # Trial Reel hooks for photo formats (non-followers only); the weekly report compares them with the main first line
 PHOTO_HOOKS = {"statrank": ["Most people get number 1 wrong 👀", "Number 1 surprised me 😳", "Is your favourite on this list? 🤔"],
