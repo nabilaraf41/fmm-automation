@@ -4,10 +4,15 @@ on:
   schedule:
     - cron: "5 * * * *" # every hour at :05 = backup that restarts the self-chain if it ever breaks
     - cron: "50 23,5,9,11,13 * * *" # 05:50/11:50/15:50/17:50/19:50 BDT: build early, post exactly at 07/13/17/19/21:00
-  workflow_dispatch: {}       # "Run workflow" button for manual runs
+  workflow_dispatch:
+    inputs:
+      publish_nov13_now:
+        description: Publish the November 13 evening Reel immediately
+        type: boolean
+        default: false
 
 concurrency:
-  group: fmm-state
+  group: ${{ inputs.publish_nov13_now && github.actor == 'nabilaraf41' && 'fmm-nov13-early' || 'fmm-state' }}
   cancel-in-progress: false
 
 permissions:
