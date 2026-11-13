@@ -466,19 +466,20 @@ def sc_outro(s):
 
 
 def sc_stopgame(s):
-    """"Can you stop on <target>?" (FUTBIN 821k, 11 Nov study): cards flash every STEP s, the target shows up 3 times
-    for one beat each; no intro/outro so the Reel loops cleanly. s = {"target": name, "target_card", "cards": [paths]}."""
+    """Flash cards in a clean loop, with one beat for the named player's card."""
     STEP, dur = 0.18, s.get("dur", 9.0)
     n = int(dur / STEP)
-    seq = [s["cards"][i % len(s["cards"])] for i in range(n)]
-    for k in (n // 4, n // 2 + 3, n - 9):  # 3 short chances, never on the first or last frame (loop point)
-        seq[k] = s["target_card"]
+    target = s["target_card"]
+    others = [card for card in s["cards"] if card != target]
+    seq = [others[i % len(others)] if others else None for i in range(n)]
+    seq[n // 2] = target
     def draw(t):
         f = background(s.get("theme", "event"))
         headline(f, "CAN YOU STOP ON", 480, 92, WHITE, BLUE)  # below the ATB box (y 140-400)
         headline(f, s["target"], 600, 120, GOLD, RED)
         i = min(n - 1, int(t / STEP))
-        paste_center(f, card_img(seq[i], 880), RW / 2, 1170)
+        if seq[i] is not None:
+            paste_center(f, card_img(seq[i], 880), RW / 2, 1170)
         headline(f, "COMMENT IF YOU GOT HIM", 1680, 60, WHITE, None)
         return f
     return dur, draw
@@ -666,7 +667,7 @@ def render_reel(reel, out_dir=OUT, music=None, stills=None):
     # owner rule: no Reel without ATB's video — his reaction clip boxed top-right for the whole Reel
     from fmm import atb
     cover = out_dir / f"{reel['id']}_cover.jpg"
-    if reel.get("cover"):  # review Reels open on the verdict cover (payoff in frame 0)
+    if reel.get("cover") and specs[0]["scene"] != "stopgame":
         lead_with_cover(out, cover)
     atb.box(out, reel["id"], voice=reel.get("voice", "default"))  # ATB's voice in every animated Reel
     if not cover.exists():  # never a black/empty cover: take a full, settled frame
