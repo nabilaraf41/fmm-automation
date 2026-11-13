@@ -469,7 +469,7 @@ def build(slot):
         # owner twist (11 Nov): the title names one player, the card that flashes in is another (Messi named, CR7 shown),
         # so people comment "that's not Messi!". Only this Reel uses the wrong name on purpose.
         from fmm import cardstats, fmf
-        cards = list(confirmed_only({c["id"]: c for c in cardstats.load()}).values())
+        cards = list(confirmed_only({c["id"]: c for c in cardstats.load(max_age_days=30)}).values())
         best = lambda n: max([c for c in cards if c["name"] == n], key=lambda c: c["ovr"])
         from fmm.poster import LOG as poster_log
         log = json.loads(poster_log.read_text(encoding="utf-8")) if poster_log.exists() else []
