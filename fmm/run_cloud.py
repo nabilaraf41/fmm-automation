@@ -51,8 +51,7 @@ def run_slot(now):
         return
     t = dt.datetime.combine(dt.date.fromisoformat(key[:10]), dt.time(int(slot[:2]), int(slot[2:])), BDT)
     wait = (t - dt.datetime.now(BDT)).total_seconds()
-    # Owner requested an early post for this evening slot only.
-    if wait > 0 and key != "2026-11-13-2100":
+    if wait > 0:  # built early: hold it until the exact slot time
         print(f"built, waiting {wait / 60:.0f} min for {slot}")
         time.sleep(wait)
     slots.post()
