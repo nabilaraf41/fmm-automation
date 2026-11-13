@@ -1379,5 +1379,30 @@
   "type": "statrank_trial",
   "hook": "Number 1 surprised me 😳",
   "instagram": "18118205417155027"
+ },
+ {
+  "at": "2026-11-13 13:00:44",
+  "kind": "photo",
+  "file": "/home/runner/work/fmm-automation/fmm-automation/output/slot/slot_day.png",
+  "type": "xi",
+  "facebook": "122208068894906131",
+  "instagram": "18105959717637751"
+ },
+ {
+  "at": "2026-11-13 13:01:50",
+  "kind": "reel",
+  "file": "/home/runner/work/fmm-automation/fmm-automation/output/slot/slot_day_reel.mp4",
+  "type": "xi",
+  "facebook": "1471391821638972",
+  "instagram": "17919636387530159",
+  "youtube": "Uy-dOB6coXo"
+ },
+ {
+  "at": "2026-11-13 13:02:30",
+  "kind": "reel",
+  "file": "/home/runner/work/fmm-automation/fmm-automation/output/slot/slot_day_reel.mp4",
+  "type": "xi_trial",
+  "hook": "Budget team that actually wins 💰",
+  "instagram": "18181660939432754"
  }
 ]
