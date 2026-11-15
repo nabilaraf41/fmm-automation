@@ -200,17 +200,7 @@ def post_long():
         poster.log({"kind": "long", "file": str(local), "type": "long", "youtube": vid, "facebook": fb})
     except Exception as ex:
         print("facebook long video skipped:", str(ex)[:150])
-    try:  # Instagram gets a vertical goal-highlight Reel of the match (ATB reacting big on top)
-        from fmm import facecam, poster
-        goals = facecam.goals_for(f["id"])
-        hl = facecam.highlight(download(f), goals, CACHE / f"{f['id']}_hl.mp4") if goals else None
-        if hl:
-            scored = sum(1 for _, k in goals if k == "scored")
-            cap = (f"{scored} goals in one H2H match 🔥 Full match on YouTube: FC Mobile Mania - FMM{nl}{nl}"
-                   "#FCMobile #FIFAMobile #EAFC #H2H #FMM")
-            print("highlight Reel:", poster.post("reel", hl, cap))  # owner rule: all 3 platforms
-    except Exception as ex:
-        print("ig highlight skipped:", str(ex)[:150])
+    # owner (15 Nov): NO Reels from H2H matches (the "Ronaldinho" highlight showed no goal of his). Long video only.
     done[f["id"]] = today
     STATE.write_text(json.dumps(st, indent=1, ensure_ascii=False), encoding="utf-8")
     return vid
@@ -277,7 +267,7 @@ def next_clip():
     d = drive()
     st = state()
     for f in videos(d):
-        if f["name"].lower().startswith(("meme", "long")) or is_pack(f["name"]):  # memes -> EA Logic Reels, packs -> Thu/Sun pack Reels
+        if f["name"].lower().startswith(("meme", "long")) or is_pack(f["name"]) or is_long(f)                 or "h2h" in f["name"].lower():  # memes -> EA Logic, packs -> pack Reels; owner 15 Nov: never Reels of H2H
             continue
         rec = st["files"].setdefault(f["id"], {"name": f["name"], "used": 0, "total": None})
         if rec["total"] is not None and rec["used"] >= rec["total"]:

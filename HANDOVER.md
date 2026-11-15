@@ -58,9 +58,9 @@ Handbook = CLAUDE.md. Memory notes (~/.claude/projects/E--Claude-FMM/memory, bac
   Trial Reel hook tests on Top 10 + Cheap XI (slots.PHOTO_HOOKS). Comment 🙌 -> DM (fmm/dm.py) on all posts except the
   pinned codes post (ManyChat owns that one). Hands-on-head ATB clip deleted (looked bald).
 - Stop-game Reel (slots ctype "stopgame", motion.sc_stopgame): "Can you stop on <name>?" cards flash 9 s loop.
-  Title names one player, the flashing card is ANOTHER (owner's twist, on purpose, only this Reel).
-  Order: this week's confirmed new cards first (old star's name + new card, then reverse; state featured.json stop_new),
-  then slots.RIVALS loop (10 pairs + reverses = 18). Posts Fri + Sat 21:00 when new cards exist, and any 21:00 Reel
+  The player named in the hook is the card viewers can pause on. The cover uses the same card.
+  Order: this week's confirmed new cards first (state featured.json stop_new), then a rotation of confirmed stars.
+  Posts Fri + Sat 21:00 when new cards exist, and any 21:00 Reel
   slot that would otherwise skip. Owner removed phone notifications: never add alerts.
 - Recap videos (fmm/recap.py) Sunday + month-end from 20:00 BDT. Comment 🙌 line in every caption + first comment.
 - Research 11 Nov (docs/CREATOR_PLAYBOOK.md end): gameplay comedy/bugs/GK fails go most viral -> owner to upload
@@ -72,3 +72,8 @@ Handbook = CLAUDE.md. Memory notes (~/.claude/projects/E--Claude-FMM/memory, bac
   (atb.VOICE: post type -> voiced clips; transcripts of all 73 voiced clips in content/atb_voice.json), music quietly
   under it. Photo Reels: reel.make_reel(kind=ctype); animated Reels: motion -> atb.box(voice=...). Transcribe new clips
   with .venv312 + faster-whisper (decode audio with ffmpeg first; av version mismatch).
+- 15 Nov owner rules: NO Reels from H2H videos (highlight + clip Reels removed; full long video to YT/FB stays).
+  Stop-game Reel keeps the CORRECT name (named player = card shown). Collab + fcthunder_ea.
+  Pending: "NEW ICON & HEROES" (Diogo Jota 124 ST, David Silva 124 CAM, Nasri 123 LM, Van der Vaart 123 CM,
+  Kerimoglu 122 CDM, Defoe 122 ST, Hyypia 122 CB, Baines 122 LB, Pedersen 122 LM, Kolo Toure 122 CB) seen on FC Mobile
+  Forum only -> post as leak (fmm.leaks, PC) once a 2nd source confirms; on release newplayers posts the drop grid itself.
