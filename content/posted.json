@@ -1561,5 +1561,22 @@
   "type": "long",
   "youtube": "pYQ_m7UyVQ4",
   "facebook": "1676305820659964"
+ },
+ {
+  "at": "2026-11-15 21:01:50",
+  "kind": "reel",
+  "file": "/home/runner/work/fmm-automation/fmm-automation/output/slot/slot_day.mp4",
+  "type": "pack",
+  "facebook": "2091814271458875",
+  "instagram": "18055785086615520",
+  "youtube": "RPW9L5tZSv4"
+ },
+ {
+  "at": "2026-11-15 21:05:32",
+  "kind": "long",
+  "file": "/home/runner/work/fmm-automation/fmm-automation/output/recap/recap.mp4",
+  "type": "recap_week",
+  "youtube": "yhjTaq8myGc",
+  "facebook": "1449758560260837"
  }
 ]
