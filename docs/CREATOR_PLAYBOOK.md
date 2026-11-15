@@ -188,3 +188,15 @@ Trial Reels: already 1 per Reel slot (other hook, non-followers only). Not 30 co
 - IG: "Can you stop on the correct player? 🤔" rapid card cycle 10 s loop (FUTBIN 821k); "how to get / trick" event-exchange
   tutorials 0.5-1.5M on TikTok; pack openings cut to a phonk beat (Lucks Games, ilovefcmobile 1.5M).
 - Captions: 2-5 words + ☠️🔥🤯😂. Brazilian creators (Lucks, Mike, Gabriel, Xotic EA FC) dominate: matches our Brazil audience.
+
+## Goal clips from long H2H videos (study 15 Nov 2026, after the wrong "Ronaldinho" Reel)
+Old method cut LOUD moments and titled the Reel from the file name -> no Ronaldinho goal in it. Never again.
+FC Mobile shows 3 reliable on-screen signals (tested on match 1BQ-oy..., 2340x1080):
+1. Scoreboard digits (top-left "Nab 1 V 0 Fci", left = owner). Digit change while the scoreboard is on screen
+   (the "Nab" tag matches its usual look) = goal + which side. tools/goal_detect_study.py found all 5 goals
+   (4 scored, 1 conceded), 0 false alarms; the old long_goals.json times were 3-30 s off.
+2. Scorer reveal: a big card + name ("NICO WILLIAMS", "DEMBELE") pops up ~1-2 s after the goal, then a green
+   badge "Nico Williams 25'". Read it (tesseract on the cloud, or match the card image) = the REAL scorer.
+3. EA FC logo wipe = replay start/end (replay = best angle).
+Clip rule: 8 s before the score change -> 3 s after (scorer card in frame); title only with the verified scorer,
+else "GOAL!". Owner rule (15 Nov): no H2H Reels until he approves this new method.
