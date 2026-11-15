@@ -3,15 +3,108 @@
   {
    "title": "BALLON D'OR WEEK 4",
    "tag": "PREDICTION",
-   "sources": ["FC Mobile Forum", "MadridistaaFC", "Sportsdunia"],
+   "sources": [
+    "FC Mobile Forum",
+    "MadridistaaFC",
+    "Sportsdunia"
+   ],
    "groups": [
-    {"name": "DRAFT A", "cards": [
-     {"player": "https://renderz.app/player/30912663-owen", "ovr": 123, "pos": "ST", "bg": "https://renderz.app/player/30922860"},
-     {"player": "https://renderz.app/player/30909502-cruyff", "ovr": 124, "pos": "CAM", "bg": "https://renderz.app/player/30922860"}]},
-    {"name": "DRAFT B", "cards": [
-     {"player": "https://renderz.app/player/24048902-olise", "ovr": 123, "pos": "RW", "bg": "https://renderz.app/player/24053826"},
-     {"player": "https://renderz.app/player/24046020-gabriel", "ovr": 122, "pos": "CB", "bg": "https://renderz.app/player/24053826"}]}
+    {
+     "name": "DRAFT A",
+     "cards": [
+      {
+       "player": "https://renderz.app/player/30912663-owen",
+       "ovr": 123,
+       "pos": "ST",
+       "bg": "https://renderz.app/player/30922860"
+      },
+      {
+       "player": "https://renderz.app/player/30909502-cruyff",
+       "ovr": 124,
+       "pos": "CAM",
+       "bg": "https://renderz.app/player/30922860"
+      }
+     ]
+    },
+    {
+     "name": "DRAFT B",
+     "cards": [
+      {
+       "player": "https://renderz.app/player/24048902-olise",
+       "ovr": 123,
+       "pos": "RW",
+       "bg": "https://renderz.app/player/24053826"
+      },
+      {
+       "player": "https://renderz.app/player/24046020-gabriel",
+       "ovr": 122,
+       "pos": "CB",
+       "bg": "https://renderz.app/player/24053826"
+      }
+     ]
+    }
    ]
+  },
+  {
+   "title": "NEW ICONS & HEROES",
+   "tag": "COMING SOON",
+   "sources": [
+    "FC Mobile Forum"
+   ],
+   "owner_ok": true,
+   "players": [
+    {
+     "name": "Diogo Jota",
+     "ovr": 124,
+     "pos": "ST"
+    },
+    {
+     "name": "David Silva",
+     "ovr": 124,
+     "pos": "CAM"
+    },
+    {
+     "name": "Nasri",
+     "ovr": 123,
+     "pos": "LM"
+    },
+    {
+     "name": "Van der Vaart",
+     "ovr": 123,
+     "pos": "CM"
+    },
+    {
+     "name": "Kerimoğlu",
+     "ovr": 122,
+     "pos": "CDM"
+    },
+    {
+     "name": "Defoe",
+     "ovr": 122,
+     "pos": "ST"
+    },
+    {
+     "name": "Hyypiä",
+     "ovr": 122,
+     "pos": "CB"
+    },
+    {
+     "name": "Baines",
+     "ovr": 122,
+     "pos": "LB"
+    },
+    {
+     "name": "Pedersen",
+     "ovr": 122,
+     "pos": "LM"
+    },
+    {
+     "name": "Kolo Touré",
+     "ovr": 122,
+     "pos": "CB"
+    }
+   ],
+   "caption": "🚨 NEW ICONS & HEROES are coming to FC Mobile 👀\n\n124 Diogo Jota ST, 124 David Silva CAM, 123 Nasri LM, 123 Van der Vaart CM, 122 Kerimoğlu CDM, 122 Defoe ST, 122 Hyypiä CB, 122 Baines LB, 122 Pedersen LM, 122 Kolo Touré CB\n\nNot official until EA confirms. Source: FC Mobile Forum\n\nWhich one are you saving for? 👇\n\n#FCMobile #FIFAMobile #EAFC #FCMobileLeaks #FMM"
   }
  ]
 }

@@ -23,7 +23,12 @@ HOUR = 11  # BDT: between the 07:00 Reel and the 13:00 photo
 
 
 def key(it):
-    return re.sub(r"[^a-z0-9]+", "_", (it["title"] + "_" + "_".join(g["name"] for g in it["groups"])).lower()).strip("_")
+    return re.sub(r"[^a-z0-9]+", "_", (it["title"] + "_" + "_".join(g["name"] for g in it.get("groups", []))).lower()).strip("_")
+
+
+def enough_sources(it):
+    """Owner rule: 2 sources; the owner can approve a single source for one item ("owner_ok": true)."""
+    return len(it.get("sources", [])) >= 2 or (it.get("owner_ok") and it.get("sources"))
 
 
 def card_page(url):
@@ -75,6 +80,32 @@ def render(it, cards):
     return out
 
 
+def render_list(it):
+    """1080x1350 for brand-new players with no card art yet: title, tag, source, OVR/position/name rows."""
+    from fmm import atb
+    from fmm.brand import base, font, label_font, footer, W, RED, WHITE, GOLD, GRAY
+    img, d, _ = base("news")
+    d.text((W // 2 + 60, 150), it["title"].upper(), font=font("Anton-Regular.ttf", 74), fill=WHITE, anchor="mt")
+    tag = it.get("tag", "LEAK").upper()
+    tw = d.textlength(tag, font=label_font(40))
+    d.rounded_rectangle((W // 2 - tw / 2 - 30, 248, W // 2 + tw / 2 + 30, 306), 29, fill=RED)
+    d.text((W // 2, 277), tag, font=label_font(40), fill=WHITE, anchor="mm")
+    d.text((W // 2, 335), "Source: " + ", ".join(it["sources"]), font=label_font(24), fill=GRAY, anchor="mt")
+    ps = it["players"]
+    rh = min(82, (1230 - 390) // len(ps))
+    for i, pl in enumerate(ps):
+        y = 390 + i * rh
+        d.rounded_rectangle((90, y, W - 90, y + rh - 12), 18, fill=(20, 20, 28))
+        d.text((150, y + (rh - 12) // 2), str(pl["ovr"]), font=font("Anton-Regular.ttf", 50), fill=GOLD, anchor="mm")
+        d.text((235, y + (rh - 12) // 2), pl["pos"], font=label_font(34), fill=GRAY, anchor="lm")
+        d.text((340, y + (rh - 12) // 2), pl["name"].upper(), font=font("Anton-Regular.ttf", 44), fill=WHITE, anchor="lm")
+    footer(d, "NOT OFFICIAL UNTIL EA CONFIRMS")
+    img = atb.add_badge(img, key(it))  # owner rule: ATB on every photo post
+    out = CARDS / f"post_{key(it)}.png"
+    img.convert("RGB").save(out, quality=95)
+    return out
+
+
 def caption(it, cards):
     if it.get("caption"):
         return it["caption"]
@@ -91,7 +122,10 @@ def items():
 def make():
     """PC: build cards and post image for queued items; writes the card names into the item for the caption."""
     for it in items():
-        assert len(it.get("sources", [])) >= 2, f"{it['title']}: owner rule needs 2 sources"
+        assert enough_sources(it), f"{it['title']}: owner rule needs 2 sources"
+        if it.get("players"):  # new players without card art yet
+            print("made", render_list(it))
+            continue
         cards = [(g["name"], [make_card(c) for c in g["cards"]]) for g in it["groups"]]
         print("made", render(it, cards))
         (CARDS / f"post_{key(it)}.txt").write_text(caption(it, cards), encoding="utf-8")
@@ -109,7 +143,7 @@ def post_due():
         return None
     for it in items():
         img, cap = CARDS / f"post_{key(it)}.png", CARDS / f"post_{key(it)}.txt"
-        if key(it) in done or not img.exists() or len(it.get("sources", [])) < 2:
+        if key(it) in done or not img.exists() or not enough_sources(it):
             continue
         res = poster.post("photo", img, cap.read_text(encoding="utf-8"), "both", "leak")  # photo + its Reel
         st = slots.load_state()
