@@ -175,7 +175,7 @@ def collab_data():
     # rotate per post (not per day) so every partner is invited several times a day (owner, 12 Nov)
     n = len(json.loads(LOG.read_text(encoding="utf-8"))) if LOG.exists() else 0
     k = (n * (3 - len(always))) % len(rot) if rot else 0
-    names = always + (rot[k:] + rot[:k])[:3 - len(always)]
+    names = always + list(dict.fromkeys(n for n in rot[k:] + rot[:k] if n not in always))[:3 - len(always)]  # names repeat in rot = extra turns
     return {"collaborators": json.dumps(names)} if names else {}
 
 
