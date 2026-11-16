@@ -157,36 +157,27 @@ _NOW = ("", "")      # (kind, ctype) of the post being made, for "prefer" collab
 
 
 def collab_data():
-    """Instagram collab invite, max 3 per post: "always" names on every post, "rotate" names take turns (each post)
-    for the spots left; {} when none. File: {"always": [...], "rotate": [...]} (old {"usernames": [...]} = rotate)."""
+    """Instagram collab invite: up to 5 partners picked by what they accept for this post type (fmm.collabs);
+    {} when none or on posts partners must never be tagged on."""
     if _NO_COLLAB:
         return {}
-    try:
-        j = json.loads(COLLAB.read_text(encoding="utf-8"))
-    except Exception:
-        return {}
-    clean = lambda xs: [n.lstrip("@") for n in xs if n]
-    always, rot = clean(j.get("always", []))[:3], clean(j.get("rotate", j.get("usernames", [])))
-    # "prefer": {"name": ["photo:statrank", ...]} -> always on those posts (the kinds that partner actually accepts)
-    for name, kinds in j.get("prefer", {}).items():
-        if f"{_NOW[0]}:{_NOW[1]}" in kinds and name not in always and len(always) < 3:
-            always.append(name)
-    rot = [n for n in rot if n not in always]
-    # rotate per post (not per day) so every partner is invited several times a day (owner, 12 Nov)
+    from fmm import collabs
     n = len(json.loads(LOG.read_text(encoding="utf-8"))) if LOG.exists() else 0
-    k = (n * (3 - len(always))) % len(rot) if rot else 0
-    names = always + list(dict.fromkeys(n for n in rot[k:] + rot[:k] if n not in always))[:3 - len(always)]  # names repeat in rot = extra turns
+    names = collabs.pick(f"{_NOW[0]}:{_NOW[1] or 'other'}", n)
     return {"collaborators": json.dumps(names)} if names else {}
 
 
 def ig_container(data):
-    """Create a media container with the collab invite; a bad/ineligible username never blocks the post."""
+    """Create a media container with the collab invite: try 5, then 3 (older API limit), then none.
+    A bad/ineligible username never blocks the post."""
     extra = collab_data()
     if extra:
-        try:
-            return call("POST", f"{IG}/media", data={**data, **extra})
-        except Exception as ex:
-            print("collab invite skipped:", str(ex)[:150])
+        names = json.loads(extra["collaborators"])
+        for k in dict.fromkeys((len(names), 3)):
+            try:
+                return call("POST", f"{IG}/media", data={**data, "collaborators": json.dumps(names[:k])})
+            except Exception as ex:
+                print(f"collab invite with {k} skipped:", str(ex)[:150])
     return call("POST", f"{IG}/media", data=data)
 
 

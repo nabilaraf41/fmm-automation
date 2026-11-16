@@ -94,6 +94,13 @@ if __name__ == "__main__":
             print("leak posted:", m)
     except Exception as ex:
         print("leak skipped:", str(ex)[:150])
+    try:  # weekly: re-read who accepts which collab invites -> next posts invite the best-fit partners
+        from fmm import collabs, poster as _p
+        if collabs.stale():
+            collabs.refresh(_p.TOKEN, json.loads(_p.LOG.read_text(encoding="utf-8")))
+            print("collab stats refreshed")
+    except Exception as ex:
+        print("collab stats skipped:", str(ex)[:150])
     try:  # goal Reels made on the PC from owner-confirmed goals (assets/goal_reels): one a day
         from fmm import goalreel
         g = goalreel.post_due()

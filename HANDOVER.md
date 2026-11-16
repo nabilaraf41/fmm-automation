@@ -86,3 +86,6 @@ Handbook = CLAUDE.md. Memory notes (~/.claude/projects/E--Claude-FMM/memory, bac
   silent -> music + impact per goal + ATB "goal" voice. Cloud posts one a day (goalreel.post_due). Ronaldinho hat-trick
   queued 16 Nov. Replay recordings (post-match replays) have no scoreboard: ask owner which replay is whose goal.
 - Auto-save hook in .claude/settings.json (local, gitignored): exports chat + memory after every reply.
+- Collabs v2 (16 Nov): fmm/collabs.py picks up to 5 per post (poster tries 5, then 3, then none): 3 best-fit partners
+  for that exact post type (acceptance per type in content/collab_stats.json, refreshed weekly in run_cloud) + 2
+  rotating spots for everyone. "always"/"prefer" in collaborators.json still override.

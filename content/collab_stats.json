@@ -1,0 +1,311 @@
+{
+ "theeliteelastico": {
+  "photo:choose": [
+   1,
+   2
+  ],
+  "reel:choose": [
+   1,
+   1
+  ],
+  "photo:other": [
+   5,
+   5
+  ],
+  "reel:other": [
+   5,
+   5
+  ],
+  "photo:statrank": [
+   1,
+   1
+  ],
+  "reel:statrank": [
+   3,
+   3
+  ],
+  "reel:pack": [
+   1,
+   1
+  ],
+  "photo:xi": [
+   1,
+   1
+  ],
+  "reel:clip": [
+   3,
+   3
+  ],
+  "photo:leak": [
+   0,
+   1
+  ]
+ },
+ "newcomer_fm": {
+  "photo:choose": [
+   0,
+   2
+  ],
+  "reel:choose": [
+   0,
+   2
+  ],
+  "photo:other": [
+   2,
+   5
+  ],
+  "reel:other": [
+   0,
+   6
+  ],
+  "photo:statrank": [
+   1,
+   6
+  ],
+  "reel:statrank": [
+   0,
+   5
+  ],
+  "reel:pack": [
+   0,
+   2
+  ],
+  "photo:xi": [
+   0,
+   1
+  ],
+  "reel:xi": [
+   0,
+   1
+  ],
+  "reel:clip": [
+   1,
+   3
+  ],
+  "photo:leak": [
+   0,
+   1
+  ]
+ },
+ "tazeafc": {
+  "photo:choose": [
+   1,
+   3
+  ],
+  "reel:choose": [
+   1,
+   1
+  ],
+  "photo:other": [
+   2,
+   4
+  ],
+  "reel:other": [
+   2,
+   6
+  ],
+  "reel:statrank": [
+   1,
+   1
+  ],
+  "photo:xi": [
+   1,
+   1
+  ],
+  "reel:clip": [
+   0,
+   3
+  ],
+  "reel:leak": [
+   0,
+   1
+  ]
+ },
+ "hatedsurvivorsfcm": {
+  "photo:statrank": [
+   2,
+   2
+  ],
+  "photo:other": [
+   1,
+   1
+  ],
+  "reel:pack": [
+   0,
+   1
+  ],
+  "photo:choose": [
+   0,
+   1
+  ],
+  "reel:statrank": [
+   0,
+   1
+  ],
+  "reel:clip": [
+   0,
+   3
+  ],
+  "photo:leak": [
+   0,
+   1
+  ]
+ },
+ "eafc_jacobek08": {
+  "reel:pack": [
+   2,
+   2
+  ],
+  "photo:statrank": [
+   2,
+   2
+  ],
+  "reel:xi": [
+   2,
+   2
+  ],
+  "reel:choose": [
+   1,
+   2
+  ],
+  "reel:statrank": [
+   1,
+   1
+  ],
+  "reel:clip": [
+   2,
+   2
+  ]
+ },
+ "goat_editv": {
+  "reel:pack": [
+   2,
+   2
+  ],
+  "reel:statrank": [
+   2,
+   2
+  ],
+  "reel:xi": [
+   2,
+   2
+  ],
+  "photo:statrank": [
+   2,
+   2
+  ],
+  "reel:clip": [
+   3,
+   3
+  ],
+  "reel:goal_reel": [
+   0,
+   1
+  ]
+ },
+ "fc_highlightss": {
+  "reel:other": [
+   0,
+   1
+  ],
+  "photo:xi": [
+   1,
+   2
+  ],
+  "photo:choose": [
+   0,
+   1
+  ],
+  "reel:choose": [
+   0,
+   1
+  ],
+  "reel:clip": [
+   0,
+   2
+  ],
+  "reel:leak": [
+   0,
+   1
+  ],
+  "reel:goal_reel": [
+   0,
+   1
+  ]
+ },
+ "fc_bangladesh_402": {
+  "photo:statrank": [
+   0,
+   1
+  ],
+  "photo:xi": [
+   1,
+   1
+  ],
+  "reel:choose": [
+   1,
+   2
+  ],
+  "reel:xi": [
+   1,
+   1
+  ],
+  "reel:clip": [
+   0,
+   2
+  ],
+  "reel:pack": [
+   0,
+   1
+  ],
+  "reel:leak": [
+   1,
+   1
+  ]
+ },
+ "aftab.fc": {
+  "photo:statrank": [
+   1,
+   1
+  ],
+  "reel:statrank": [
+   0,
+   1
+  ],
+  "reel:clip": [
+   0,
+   3
+  ]
+ },
+ "delete_fc": {
+  "photo:statrank": [
+   1,
+   2
+  ],
+  "reel:clip": [
+   2,
+   3
+  ],
+  "reel:statrank": [
+   0,
+   1
+  ]
+ },
+ "fcthunder_ea": {
+  "photo:statrank": [
+   0,
+   1
+  ],
+  "reel:statrank": [
+   0,
+   1
+  ]
+ },
+ "hamza.dzn_": {
+  "reel:goal_reel": [
+   0,
+   1
+  ]
+ },
+ "_updated": 1794800505.0206766
+}
