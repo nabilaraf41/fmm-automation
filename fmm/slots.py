@@ -212,6 +212,8 @@ def pick(kind, fresh, db, state):
             return "statrank", list(fresh.values()), pool
         if slot_now() == "1700":  # owner: daily "Choose 1" at 17:00
             return "choose", list(fresh.values()), pool
+        if slot_now() == "1300" and force is None and weekday == 1:  # owner 16 Nov: Tue = Best XI by a stat (pitch)
+            return "statxi", list(fresh.values()), pool
         if slot_now() == "1300" and (str(force).startswith("xi") or (force is None and weekday != 1)):  # Budget XI Thu-Mon + Wed full lineup
             return "xi", list(fresh.values()), pool
         ROT = ["review_post", "rank10", "versus", "pick3", "guess", "rank10", "compare4", "rate", "gem", "worth", "meme"]
@@ -426,7 +428,7 @@ def build(slot):
     if OUT.exists():
         shutil.rmtree(OUT)
     OUT.mkdir(parents=True)
-    if ctype in ("xi", "gem", "worth", "meme", "compare4", "pick3", "rank10", "choose", "statrank", "goat"):
+    if ctype in ("xi", "gem", "worth", "meme", "compare4", "pick3", "rank10", "choose", "statrank", "goat", "statxi", "shardguide"):
         media, caption = build_extra(ctype, players, pool, fresh, state)
         ctype = state.pop("_fallback", ctype)  # a fallback post is logged/labelled as its real type
         return finish(slot, kind, ctype, media, caption, players[:1], state)
@@ -804,6 +806,33 @@ def build_extra(ctype, latest, pool, fresh, state):
         return media, (f"CR7 or Messi? The debate never ends ⚔️\n\n{a['ovr']} {a['name']} ({a['pos']}) vs "
                        f"{b['ovr']} {b['name']} ({b['pos']}): full stats in the picture.\n\n"
                        "Who's your GOAT in FC Mobile? 👇\n\n#FCMobile #FIFAMobile #EAFC #Ronaldo #Messi")
+    elif ctype == "statxi":  # owner 16 Nov: Best XI by one stat on the pitch design, stat rotates weekly
+        from fmm import cardstats, fmf
+        stat = ["PAC", "DRI", "SHO", "PHY", "DEF", "PAS"][dt.date.today().isocalendar()[1] % 6]
+        cards = [c for c in confirmed_only({c["id"]: c for c in cardstats.load()}).values() if c.get("name")]
+        team, used = [], set()
+        for want in (["GK"], ["LB", "LWB"], ["CB"], ["CB"], ["RB", "RWB"], ["CDM", "CM"], ["CM"], ["CAM", "CM"],
+                     ["LW", "LM"], ["ST", "CF"], ["RW", "RM"]):
+            cand = [c for c in cards if c["pos"] in want and c["name"] not in used]
+            if not cand:
+                continue
+            c = max(cand, key=lambda c: ((c["face"].get(stat) or 0) if want != ["GK"] else c["ovr"], c["ovr"]))
+            used.add(c["name"])
+            path = renderz.CARDS / f"{c['id']}.png"
+            if not path.exists():
+                renderz.CARDS.mkdir(parents=True, exist_ok=True)
+                fmf.build_card({**c, "layout": {}, "colors": {}}).save(path)
+            team.append({**c, "card": str(path),
+                         "label": f"{stat} {c['face'][stat]}" if want != ["GK"] and c["face"].get(stat) else f"{c['ovr']} OVR"})
+        if len(team) < 11:
+            state["_fallback"] = "versus"
+            return render_versus(next_pair(latest, state, pool), fresh)
+        name = STAT_NAME[stat]
+        media = brand.render({"id": "slot", "type": "xi", "title": "Best XI",
+                              "subtitle": f"By {name}: highest at every position", "players": team}, OUT)
+        line = "\n".join(f"{p['pos']} {p['ovr']} {p['name']}: {p['label']}" for p in team)
+        return media, (f"Best XI by {name} in FC Mobile ⚡🔥\n\nThe highest {name} card at every position (120+ cards):"
+                       f"\n\n{line}\n\nWho would you swap in? 👇\n\n{TAGS} #BestXI")
     elif ctype == "statrank":  # Top 10 by one stat (series_today), from the cross-checked cards we have stats for
         stat, pos = series_today()
         icons = pos.startswith("ICONS")  # "ICONS ST RW": Icons only, those positions together

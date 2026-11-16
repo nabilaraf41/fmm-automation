@@ -35,6 +35,10 @@ def pick(kind, n_post):
     cfg, stats = _load(CFG, {}), _load(STATS, {})
     clean = lambda xs: [x.lstrip("@") for x in xs if x]
     rot = clean(cfg.get("rotate", cfg.get("usernames", [])))
+    # "only": {"name": ["photo"]} -> that partner is invited only on those post kinds (aftab.fc asked: posts, not Reels)
+    only = cfg.get("only", {})
+    ok = lambda n: not only.get(n) or kind.split(":")[0] in only[n] or kind in only[n]
+    rot = [n for n in rot if ok(n)]
     people = list(dict.fromkeys(rot + clean(cfg.get("always", []))))
     if not people:
         return []
