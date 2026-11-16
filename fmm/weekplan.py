@@ -75,6 +75,8 @@ def describe(ctype, players, st, day):
     return {"countdown": "Countdown Reel: this week's best new cards", "tierlist": "Tier list Reel: this week's cards",
             "rank10": "Top 10 ranking", "pick3": "Pick one (3 cards)", "guess": "Guess the player", "compare4": "Top 4 stats table",
             "rate": "Rate the card", "goat": "CR7 vs Messi stats battle", "gem": "Hidden gem", "worth": "Is the event worth it?", "meme": "Meme",
+            "statxi": "Best XI by a stat on the pitch (weekly stat: PAC/DRI/SHO/PHY/DEF/PAS)",
+            "shardguide": "Shard Guide carousel (Must claim / Worth the shards / Worth but wait)",
             "stopgame": "Stop game Reel: 'Can you stop on ...?' (this week's new card, else a star)",
             "skip": "Stop game Reel: 'Can you stop on ...?'"}.get(ctype, ctype)
 

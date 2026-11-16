@@ -63,7 +63,12 @@ def prices(cards=None):
     """{(name, ovr, pos): shards} for cards both sites agree on (within 5%); the forum's number is used."""
     a = {(norm(c["player_name"]), c["ovr"], c["position"]): c["shard_value"] for c in (cards or forum_cards())
          if c.get("shard_value")}
-    b = squad()
+    try:
+        b = squad()
+    except Exception:
+        b = {}
+    if not b:  # 16 Nov: FC Mobile Squad returns nothing (site changed) -> FC Mobile Forum's prices alone
+        return a
     return {k: v for k, v in a.items() if k in b and abs(v - b[k]) <= 0.05 * max(v, b[k])}
 
 

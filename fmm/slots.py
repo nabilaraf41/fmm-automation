@@ -212,6 +212,8 @@ def pick(kind, fresh, db, state):
             return "statrank", list(fresh.values()), pool
         if slot_now() == "1700":  # owner: daily "Choose 1" at 17:00
             return "choose", list(fresh.values()), pool
+        if slot_now() == "1300" and force is None and weekday == 4:  # owner 16 Nov: Fri = Shard Guide carousel
+            return "shardguide", list(fresh.values()), pool
         if slot_now() == "1300" and force is None and weekday == 1:  # owner 16 Nov: Tue = Best XI by a stat (pitch)
             return "statxi", list(fresh.values()), pool
         if slot_now() == "1300" and (str(force).startswith("xi") or (force is None and weekday != 1)):  # Budget XI Thu-Mon + Wed full lineup
@@ -711,7 +713,7 @@ def build_extra(ctype, latest, pool, fresh, state):
         post = {"id": "slot", "type": "xi", "title": "Best Budget XI", "subtitle": "Every card under 14,000 Star Shards",  # title fits (owner: the design that hit)
                 "players": team}
         caption = (f"Best Cheap Beast H2H Lineup 💰🔥\n\nEvery card under 14k Star Shards, built for H2H\n\n{line(team)}"
-                   f"\n\nWhole team: {total:,} Star Shards (prices checked on 2 databases)"
+                   f"\n\nWhole team: {total:,} Star Shards (prices: FC Mobile Forum)"
                    "\n\nWho would you swap in? 👇 Save this for your next rebuild 📌\n\n" + TAGS + " #BudgetSquad")
         step = forced.split(":", 1)[1] if ":" in forced else \
             {2: "xi", 3: "attack", 4: "defence", 5: "midfield", 6: "xi"}.get(today.weekday(), "all")  # Wed + Sun: full lineup (owner: every 3-5 days)
@@ -806,6 +808,14 @@ def build_extra(ctype, latest, pool, fresh, state):
         return media, (f"CR7 or Messi? The debate never ends ⚔️\n\n{a['ovr']} {a['name']} ({a['pos']}) vs "
                        f"{b['ovr']} {b['name']} ({b['pos']}): full stats in the picture.\n\n"
                        "Who's your GOAT in FC Mobile? 👇\n\n#FCMobile #FIFAMobile #EAFC #Ronaldo #Messi")
+    elif ctype == "shardguide":  # weekly carousel: MUST CLAIM / WORTH THE SHARDS / WORTH BUT WAIT
+        from fmm import shardguide
+        files, caption = shardguide.build(pool, fresh, OUT, ensure_card)
+        if len(files) < 2:
+            state["_fallback"] = "versus"
+            return render_versus(next_pair(latest, state, pool), fresh)
+        (OUT / "carousel.json").write_text(json.dumps([f.name for f in files]), encoding="utf-8")
+        return files[0], caption
     elif ctype == "statxi":  # owner 16 Nov: Best XI by one stat on the pitch design, stat rotates weekly
         from fmm import cardstats, fmf
         stat = ["PAC", "DRI", "SHO", "PHY", "DEF", "PAS"][dt.date.today().isocalendar()[1] % 6]
