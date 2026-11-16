@@ -1,29 +1,30 @@
 {
- "always": [],
- "prefer": {
-  "newcomer_fm": [
-   "photo:statrank",
-   "photo:newcard"
+  "always": [],
+  "prefer": {
+    "newcomer_fm": [
+      "photo:statrank",
+      "photo:newcard"
+    ]
+  },
+  "rotate": [
+    "goat_editv",
+    "theeliteelastico",
+    "eafc_jacobek08",
+    "newcomer_fm",
+    "hatedsurvivorsfcm",
+    "tazeafc",
+    "fc_highlightss",
+    "hamza.dzn_",
+    "goat_editv",
+    "theeliteelastico",
+    "eafc_jacobek08",
+    "fc_bangladesh_402",
+    "aftab.fc",
+    "delete_fc",
+    "fcthunder_ea",
+    "elite_fc.710",
+    "elite_fc.02",
+    "dfx_eafc",
+    "addon_fcm"
   ]
- },
- "rotate": [
-  "goat_editv",
-  "theeliteelastico",
-  "eafc_jacobek08",
-  "newcomer_fm",
-  "hatedsurvivorsfcm",
-  "tazeafc",
-  "fc_highlightss",
-  "hamza.dzn_",
-  "goat_editv",
-  "theeliteelastico",
-  "eafc_jacobek08",
-  "fc_bangladesh_402",
-  "aftab.fc",
-  "delete_fc",
-  "fcthunder_ea",
-  "elite_fc.710",
-  "elite_fc.02",
-  "dfx_eafc"
- ]
 }
