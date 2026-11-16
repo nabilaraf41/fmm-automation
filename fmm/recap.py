@@ -18,7 +18,7 @@ FONT = ROOT / "assets" / "fonts" / "LeagueSpartan.ttf"
 def due(today):
     """('week', 7, 5) on Sundays, ('month', <days>, 10) on the last day of the month, else None."""
     if today.day == calendar.monthrange(today.year, today.month)[1]:
-        return "month", today.day, 10
+        return "month", today.day, 60  # owner 16 Nov: long searchable "mix" (~10 min) for watch hours
     if today.weekday() == 6:
         return "week", 7, 5
     return None
@@ -82,7 +82,7 @@ def run():
         return None
     mp4 = build(reels)
     title = (f"Top {len(reels)} FC Mobile Moments This Week 🔥 - FC Mobile" if kind == "week"
-             else f"Best of FMM {now.strftime('%B')}: Top {len(reels)} FC Mobile Posts 🔥 - FC Mobile")
+             else f"FC Mobile {now.year}: Best Top 10 Lists, Cheap Players & Packs ({now.strftime('%B')} Compilation)")
     nl = "\n"
     cap = (f"{title}{nl}{nl}Our most-watched FC Mobile posts, counted down to #1. Which one was your favourite? 👇{nl}{nl}"
            f"🔔 Subscribe for daily FC Mobile cards, Top 10 lists and codes{nl}"
