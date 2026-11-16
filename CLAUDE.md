@@ -5,6 +5,10 @@
 `gh run list -L 5` to check the cloud. Reply in 5 short lines: what's running, anything broken, what the owner must do.
 Then keep working by all rules below. Everything posts from the cloud; nothing needs starting on the PC.
 
+**If the owner says "BU" (update):** `git pull`, then `python -m fmm.weekplan` (today -> next Thursday, real player /
+list names) and show its tables + extras (codes, Drive clips, leaks queued in content/leaks.json, ATB memes queued).
+Revert content/clips_state.json + featured.json afterwards (`git checkout -- content`), the plan is a dry run.
+
 New chat? Read HANDOVER.md first (status, open items, what was fixed and must not be reintroduced).
 Full text of every earlier chat (owner's words, decisions, fixes) is in docs/history/*.md (PC only, gitignored, secrets removed).
 Whenever the owner refers to something earlier, or you're unsure what was decided, Grep docs/history before answering or asking.

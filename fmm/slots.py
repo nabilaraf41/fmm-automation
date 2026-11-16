@@ -163,8 +163,8 @@ def series_today():
     i = (dt.date.today() - SERIES_START).days
     if slot_now() == "0700":
         main = SERIES[i] if 0 <= i < len(SERIES) else None
-        opts = [x for x in POPULAR if x != main]
-        return opts[i % len(opts)]
+        pick = POPULAR[i % len(POPULAR)]  # fixed position per day (filtering first shifted the list: same post twice)
+        return POPULAR[(i + 1) % len(POPULAR)] if pick == main else pick
     return SERIES[i] if 0 <= i < len(SERIES) else None
 
 
@@ -207,7 +207,7 @@ def pick(kind, fresh, db, state):
             return "statrank", list(fresh.values()), pool
         if slot_now() == "1700":  # owner: daily "Choose 1" at 17:00
             return "choose", list(fresh.values()), pool
-        if slot_now() == "1300" and (str(force).startswith("xi") or (force is None and weekday not in (1, 2))):  # Budget XI Thu-Mon
+        if slot_now() == "1300" and (str(force).startswith("xi") or (force is None and weekday != 1)):  # Budget XI Thu-Mon + Wed full lineup
             return "xi", list(fresh.values()), pool
         ROT = ["review_post", "rank10", "versus", "pick3", "guess", "rank10", "compare4", "rate", "gem", "worth", "meme"]
         n = state.get("photo_n", 0)
@@ -691,13 +691,13 @@ def build_extra(ctype, latest, pool, fresh, state):
                     f"\n\n{name.title()} total: {sub:,} Star Shards. Next part tomorrow at the same time 👀"
                     f"\n\n{TAGS} #BudgetSquad")
         total = sum(p.get("shards") or 0 for p in real(team))
-        post = {"id": "slot", "type": "xi", "title": "Best Budget XI", "subtitle": "Every card under 14,000 Star Shards",
+        post = {"id": "slot", "type": "xi", "title": "Best Cheap Beast H2H Lineup", "subtitle": "Every card under 14,000 Star Shards",
                 "players": team}
-        caption = (f"Best Budget XI in FC Mobile 💰🔥\n\nFMM BEST BUDGET XI: every card under 14k Star Shards\n\n{line(team)}"
+        caption = (f"Best Cheap Beast H2H Lineup 💰🔥\n\nEvery card under 14k Star Shards, built for H2H\n\n{line(team)}"
                    f"\n\nWhole team: {total:,} Star Shards (prices checked on 2 databases)"
                    "\n\nWho would you swap in? 👇 Save this for your next rebuild 📌\n\n" + TAGS + " #BudgetSquad")
         step = forced.split(":", 1)[1] if ":" in forced else \
-            {3: "attack", 4: "defence", 5: "midfield", 6: "xi"}.get(today.weekday(), "all")
+            {2: "xi", 3: "attack", 4: "defence", 5: "midfield", 6: "xi"}.get(today.weekday(), "all")  # Wed + Sun: full lineup (owner: every 3-5 days)
         if step in parts:
             post, caption = part(step)
         elif step == "all":  # Monday: attack, defence, midfield + the pitch in one swipe post; slots.post() reads it

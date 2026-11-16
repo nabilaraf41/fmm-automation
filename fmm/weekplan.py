@@ -11,18 +11,19 @@ from fmm import slots
 
 OUT = Path(__file__).resolve().parent.parent / "content" / "week_plan.md"
 XI = {"attack": "Budget XI part 1/3: attack", "defence": "Budget XI part 2/3: defence",
-      "midfield": "Budget XI part 3/3: midfield", "xi": "Budget XI: starting XI", "all": "Budget XI: all 4 (swipe post)"}
+      "midfield": "Budget XI part 3/3: midfield", "xi": "Best Cheap Beast H2H Lineup (full XI + shard prices)", "all": "Budget XI: all 4 (swipe post)"}
 
 
-def plan(start=None):
+def plan(start=None, days=None):
     start = start or dt.date.today()
+    days = days or ((3 - start.weekday()) % 7 or 7) + 1  # owner's "BU": today until next Thursday
     fresh, db, _ = slots.latest_players()
     st = copy.deepcopy(slots.load_state())  # dry run: nothing is saved
-    lines = [f"# FMM plan: {start:%a %d %b} to {start + dt.timedelta(days=6):%a %d %b %Y}", "",
+    lines = [f"# FMM plan: {start:%a %d %b} to {start + dt.timedelta(days=days - 1):%a %d %b %Y}", "",
              "Times are Bangladesh time. Each post also goes out as a Reel (photos too).", ""]
     real_dt = slots.dt
     try:
-        for i in range(7):
+        for i in range(days):
             day = start + dt.timedelta(days=i)
             # make slots.pick see this day
             slots.dt = types.SimpleNamespace(
@@ -43,6 +44,10 @@ def plan(start=None):
                     for p in players[:1] if ctype.startswith("review") else []:
                         st["featured"] += [str(p["id"]), f"{p['name']}|{p['ovr']}|{p['pos']}"]
                 lines.append(f"| {slot[:2]}:{slot[2:]} | {what} |")
+                if slot == "1700":  # extras between the main slots
+                    lines.append(f"| 18:00 | Long video (YouTube + Facebook) if a full match is waiting in Drive |")
+                if slot == "1900" and day.weekday() == 6:
+                    lines.append("| 20:00 | Recap long video: Top 5 posts of the week |")
             lines.append("")
     finally:
         slots.dt = real_dt
@@ -57,7 +62,7 @@ def describe(ctype, players, st, day):
         return f"Review {'Reel' if ctype == 'review_reel' else 'photo'}: {p.get('ovr')} {p.get('pos')} {p.get('name')}"
     if ctype == "xi":
         f = str(st.get("force", {}).get(f"{day.isoformat()}-1300") or "")
-        step = f.split(":", 1)[1] if ":" in f else {3: "attack", 4: "defence", 5: "midfield", 6: "xi"}.get(day.weekday(), "all")
+        step = f.split(":", 1)[1] if ":" in f else {2: "xi", 3: "attack", 4: "defence", 5: "midfield", 6: "xi"}.get(day.weekday(), "all")
         return XI.get(step, "Budget XI")
     if ctype == "statrank":
         s, pos = slots.series_today()
@@ -69,7 +74,9 @@ def describe(ctype, players, st, day):
         return "Stats battle: " + " vs ".join(f"{x.get('ovr')} {x.get('name')}" for x in players[:2])
     return {"countdown": "Countdown Reel: this week's best new cards", "tierlist": "Tier list Reel: this week's cards",
             "rank10": "Top 10 ranking", "pick3": "Pick one (3 cards)", "guess": "Guess the player", "compare4": "Top 4 stats table",
-            "rate": "Rate the card", "goat": "CR7 vs Messi stats battle", "gem": "Hidden gem", "worth": "Is the event worth it?", "meme": "Meme"}.get(ctype, ctype)
+            "rate": "Rate the card", "goat": "CR7 vs Messi stats battle", "gem": "Hidden gem", "worth": "Is the event worth it?", "meme": "Meme",
+            "stopgame": "Stop game Reel: 'Can you stop on ...?' (this week's new card, else a star)",
+            "skip": "Stop game Reel: 'Can you stop on ...?'"}.get(ctype, ctype)
 
 
 if __name__ == "__main__":

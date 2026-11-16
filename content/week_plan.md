@@ -1,75 +1,49 @@
-# FMM plan: Thu 12 Nov to Wed 18 Nov 2026
+# FMM plan: Mon 16 Nov to Thu 19 Nov 2026
 
 Times are Bangladesh time. Each post also goes out as a Reel (photos too).
-
-## Thursday 12 Nov
-
-| Time | Post |
-|---|---|
-| 07:00 | Top 10 all of ST RW LW CAM by Dribbling |
-| 13:00 | Budget XI part 1/3: attack |
-| 17:00 | Choose 1: four 122+ RB cards |
-| 19:00 | Top 10 LM by Dribbling |
-| 21:00 | Pack opening Reel (your newest 'pack ...' video) |
-
-## Friday 13 Nov
-
-| Time | Post |
-|---|---|
-| 07:00 | Top 10 all of ST RW LW CAM by Pace |
-| 13:00 | Budget XI part 2/3: defence |
-| 17:00 | Choose 1: four 122+ RW cards |
-| 19:00 | Top 10 RM by Dribbling |
-| 21:00 | stopgame |
-
-## Saturday 14 Nov
-
-| Time | Post |
-|---|---|
-| 07:00 | Top 10 CM by Passing |
-| 13:00 | Budget XI part 3/3: midfield |
-| 17:00 | Choose 1: four 122+ CDM cards |
-| 19:00 | Top 10 all of ST RW LW CAM LM RM by Dribbling |
-| 21:00 | stopgame |
-
-## Sunday 15 Nov
-
-| Time | Post |
-|---|---|
-| 07:00 | Top 10 ST by Physical |
-| 13:00 | Budget XI: starting XI |
-| 17:00 | Choose 1: four 122+ CB cards |
-| 19:00 | Top 10 ST by Pace |
-| 21:00 | Pack opening Reel (your newest 'pack ...' video) |
 
 ## Monday 16 Nov
 
 | Time | Post |
 |---|---|
-| 07:00 | Top 10 all of ST RW LW CAM by Agility |
+| 07:00 | Top 10 ST by Physical |
 | 13:00 | Budget XI: all 4 (swipe post) |
 | 17:00 | Choose 1: four 122+ ST cards |
+| 18:00 | Long video (YouTube + Facebook) if a full match is waiting in Drive |
 | 19:00 | Top 10 RW by Pace |
-| 21:00 | Review Reel: 121 ST Mbappé |
+| 21:00 | Review Reel: 124 ST Ronaldo |
 
 ## Tuesday 17 Nov
 
 | Time | Post |
 |---|---|
-| 07:00 | Top 10 ICONS ST RW LW CAM by Dribbling |
+| 07:00 | Top 10 all of ST RW LW CAM by Agility |
 | 13:00 | Guess the player |
 | 17:00 | Choose 1: four 122+ CM cards |
+| 18:00 | Long video (YouTube + Facebook) if a full match is waiting in Drive |
 | 19:00 | Top 10 LW by Pace |
-| 21:00 | Review Reel: 122 RW Antony |
+| 21:00 | Review Reel: 124 CAM Kaká |
 
 ## Wednesday 18 Nov
 
 | Time | Post |
 |---|---|
 | 07:00 | Top 10 ICONS ST RW LW CAM by Dribbling |
-| 13:00 | Top 10 ranking |
+| 13:00 | Best Cheap Beast H2H Lineup (full XI + shard prices) |
 | 17:00 | Choose 1: four 122+ LB cards |
+| 18:00 | Long video (YouTube + Facebook) if a full match is waiting in Drive |
 | 19:00 | Top 10 CAM by Pace |
-| 21:00 | Review Reel: 124 RW Raphinha |
+| 21:00 | Stop game Reel: 'Can you stop on ...?' |
+
+## Thursday 19 Nov
+
+| Time | Post |
+|---|---|
+| 07:00 | Top 10 all of ST RW LW CAM by Balance |
+| 13:00 | Budget XI part 1/3: attack |
+| 17:00 | Choose 1: four 122+ LW cards |
+| 18:00 | Long video (YouTube + Facebook) if a full match is waiting in Drive |
+| 19:00 | Top 10 LM by Pace |
+| 21:00 | Pack opening Reel (your newest 'pack ...' video) |
 
 Extras any day: new redeem codes, new-player drop (Thursday), your Drive clips (they go first).
