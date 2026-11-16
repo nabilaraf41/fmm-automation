@@ -225,3 +225,9 @@ reason built on PlayStyles, weak foot/skill moves, position fit ("Trickster Lv2,
 Why it works: saves/shares (buying decision), one clear verdict per card, price on every card. We have the pieces:
 shard prices (fmm.shards) + review verdicts (fmm.review: MUST BUY / WORTH IT / SITUATIONAL / SKIP). TODO: build as a
 carousel on Instagram + Reel, weekly after the Thursday drop (Friday 13:00 instead of Budget XI defence part).
+
+## Watch-hours hack (reel DfyXT0VttZz, 16 Nov): searchable long "mixes" + curated playlists
+Month-end recap is now a ~10 min compilation titled "FC Mobile <year>: Best Top 10 Lists, Cheap Players & Packs
+(<Month> Compilation)". Playlists (owner, in YouTube Studio; our API token can't create playlists): "FC Mobile Top 10
+<year>", "FC Mobile Cheap Players <year>", "FC Mobile Pack Opening <year>", "FC Mobile Codes <year>" — update the year
+each January. Every long video goes into its playlist.
