@@ -423,6 +423,7 @@ def build(slot):
     OUT.mkdir(parents=True)
     if ctype in ("xi", "gem", "worth", "meme", "compare4", "pick3", "rank10", "choose", "statrank", "goat"):
         media, caption = build_extra(ctype, players, pool, fresh, state)
+        ctype = state.pop("_fallback", ctype)  # a fallback post is logged/labelled as its real type
         return finish(slot, kind, ctype, media, caption, players[:1], state)
     for p in players:
         p["card"] = ensure_card(p, fresh)
@@ -658,12 +659,16 @@ def build_extra(ctype, latest, pool, fresh, state):
                 if p:
                     used.add(p["id"])
                 team.append(p or {"name": "?", "ovr": "", "pos": want[0]})
-            if sum(1 for p in team if p.get("name") != "?") < 8:  # too few cards known yet
-                return render_versus(next_pair(latest, state, pool), fresh)
-            state["xi_week"] = {"start": today.isoformat(),
+            if sum(1 for p in team if p.get("name") != "?") < 8:  # too few cards known (prices down)
+                if not wk.get("team"):
+                    state["_fallback"] = "versus"  # label it as what it is, never "Best Cheap XI"
+                    return render_versus(next_pair(latest, state, pool), fresh)
+                fresh_team = False  # reuse last saved lineup (owner 16 Nov: never a VS post under the XI label)
+            if fresh_team:  # only a complete new lineup replaces the saved one
+              state["xi_week"] = {"start": today.isoformat(),
                                 "team": [{k: p.get(k) for k in ("id", "name", "ovr", "pos", "shards", "img_player", "img_bg")}
                                          for p in team]}
-        else:  # same team all week; card images are rebuilt from the saved art links when missing
+        if not fresh_team:  # same team all week; card images are rebuilt from the saved art links when missing
             from fmm import fmf
             team = []
             for p in wk["team"]:
@@ -816,6 +821,7 @@ def build_extra(ctype, latest, pool, fresh, state):
                 print("card image skipped", p["name"], str(ex)[:60])
         ranked = [p for p in ranked if p.get("card")]
         if len(ranked) < 10:
+            state["_fallback"] = "versus"  # label it as what it is, never "Top 10"
             return render_versus(next_pair(latest, state, pool), fresh)
         label = "/".join(poss) if len(poss) > 1 else pos
         post = {"id": "slot", "type": "top10", "position": label if len(poss) == 1 else "ALL", "title": f"by {STAT_NAME[stat]}", "subtitle": "latest cards",

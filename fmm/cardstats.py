@@ -29,9 +29,14 @@ def fetch(min_ovr=120):
             return out
 
 
-def load(max_age_days=8):
+def load(max_age_days=45):
+    """Fresh stats, saved as the new cache; when the site hiccups, the last good copy (stats rarely change)."""
     try:
-        return fetch()
+        cards = fetch()
+        if cards:
+            CACHE.write_text(json.dumps({"saved": dt.datetime.now(dt.UTC).isoformat(timespec="minutes"), "cards": cards},
+                                        ensure_ascii=False), encoding="utf-8")
+        return cards
     except Exception:
         c = json.loads(CACHE.read_text(encoding="utf-8")) if CACHE.exists() else {}
         if c and dt.datetime.now(dt.UTC) - dt.datetime.fromisoformat(c["saved"]) <= dt.timedelta(days=max_age_days):
