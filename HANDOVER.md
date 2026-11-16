@@ -77,7 +77,7 @@ Handbook = CLAUDE.md. Memory notes (~/.claude/projects/E--Claude-FMM/memory, bac
   Pending: "NEW ICON & HEROES" (Diogo Jota 124 ST, David Silva 124 CAM, Nasri 123 LM, Van der Vaart 123 CM,
   Kerimoglu 122 CDM, Defoe 122 ST, Hyypia 122 CB, Baines 122 LB, Pedersen 122 LM, Kolo Toure 122 CB) seen on FC Mobile
   Forum only -> post as leak (fmm.leaks, PC) once a 2nd source confirms; on release newplayers posts the drop grid itself.
-- Collabs 16 Nov: top acceptors goat_editv, theeliteelastico, eafc_jacobek08 get double turns (listed twice in
+- Collabs 16 Nov: + hamza.dzn_ (big creator, agreed) in rotation. Top acceptors goat_editv, theeliteelastico, eafc_jacobek08 get double turns (listed twice in
   "rotate"). Low (<25%): aftab.fc, fc_highlightss, newcomer_fm, fcthunder_ea got a reminder DM from the owner.
   ON/AFTER 23 Nov: re-run the acceptance check (GET /{ig-media}/collaborators) and REMOVE anyone still under 20%
   (tell the owner who). newcomer_fm keeps "prefer" (Top 10 + new-card photos) only if he accepts those.
