@@ -81,3 +81,8 @@ Handbook = CLAUDE.md. Memory notes (~/.claude/projects/E--Claude-FMM/memory, bac
   "rotate"). Low (<25%): aftab.fc, fc_highlightss, newcomer_fm, fcthunder_ea got a reminder DM from the owner.
   ON/AFTER 23 Nov: re-run the acceptance check (GET /{ig-media}/collaborators) and REMOVE anyone still under 20%
   (tell the owner who). newcomer_fm keeps "prefer" (Top 10 + new-card photos) only if he accepts those.
+- Goal Reels (16 Nov, owner approved): fmm/goalreel.py builds on the PC from goals the OWNER confirms (JOBS: source,
+  parts [(start, end, label)], title, card); ~10-11 s per goal (study: multi-goal 25-35 s best); recordings are often
+  silent -> music + impact per goal + ATB "goal" voice. Cloud posts one a day (goalreel.post_due). Ronaldinho hat-trick
+  queued 16 Nov. Replay recordings (post-match replays) have no scoreboard: ask owner which replay is whose goal.
+- Auto-save hook in .claude/settings.json (local, gitignored): exports chat + memory after every reply.
