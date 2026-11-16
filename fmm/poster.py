@@ -327,6 +327,14 @@ def post(kind, media, caption, where="both", ctype=None, reel=True, extra=None, 
     """Post to each platform independently. One platform failing never re-posts the others:
     the result is logged as soon as any platform succeeds; it raises only if all of them failed."""
     media = str(media)
+    if _stamp and ctype:  # duplicate guard (owner 16 Nov: stop-game posted twice 3 min apart on 13 Nov)
+        since = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(time.time() - 45 * 60))
+        log_ = json.loads(LOG.read_text(encoding="utf-8")) if LOG.exists() else []
+        same = lambda f: Path(str(f)).name.replace("_day", "") == Path(media).name.replace("_day", "")
+        if any(e.get("type") == ctype and e.get("kind") == kind and e.get("at", "") >= since and same(e.get("file"))
+               for e in log_):
+            print(f"duplicate guard: a {kind}:{ctype} already posted in the last 45 min, not posting again")
+            return {}
     global _NO_COLLAB
     _NO_COLLAB = ctype == "stopgame"  # owner: never tag partners on the deliberate wrong-name Reel
     global _NOW

@@ -91,3 +91,7 @@ Handbook = CLAUDE.md. Memory notes (~/.claude/projects/E--Claude-FMM/memory, bac
   rotating spots for everyone. "always"/"prefer" in collaborators.json still override.
 - YPP target 31 Dec 2026 (owner "a must"): see CREATOR_PLAYBOOK "YouTube monetization goal". Track Shorts views/90d
   + watch hours weekly. Long-video queue now newest upload first (Kaka H2H long 16 Nov).
+- Bug sweep 16 Nov (60 run logs): (1) duplicate guard in poster.post (same type + same file within 45 min = skip;
+  13 Nov stop-game posted twice); (2) slots.post refuses builds older than 3 h (never repost leftovers); (3) dm.py
+  stops retrying archived/deleted chats (44 errors per run); (4) Top 10/XI fallbacks fixed earlier (card stats cache,
+  XI reuses lineup). Shard-price API 403s from the cloud: XI reuses the saved lineup. Collabs + elite_fc.02, dfx_eafc.

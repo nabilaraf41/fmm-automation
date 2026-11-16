@@ -42,7 +42,8 @@ def private_reply(comment_id):
     """True = sent (or Meta says it already has one: counts as done)."""
     r = requests.post(f"https://graph.facebook.com/v21.0/{poster.PAGE}/messages", params={"access_token": poster.TOKEN},
                       json={"recipient": {"comment_id": comment_id}, "message": {"text": DM}}, timeout=60)
-    if r.ok or "already has a reply" in r.text:
+    # done for good: replied already, or the person archived/deleted the chat (retrying spammed 44 errors/run)
+    if r.ok or "already has a reply" in r.text or "archived or deleted" in r.text or "does not exist" in r.text:
         return True
     print("dm failed:", r.text[:200])
     return False

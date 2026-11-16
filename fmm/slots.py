@@ -932,6 +932,9 @@ def build_extra(ctype, latest, pool, fresh, state):
 def post():
     from fmm import poster
     m = json.loads((OUT / "manifest.json").read_text(encoding="utf-8"))
+    built = dt.datetime.fromisoformat(m["built"]) if m.get("built") else None
+    if built and (dt.datetime.now() - built.replace(tzinfo=None)).total_seconds() > 3 * 3600:
+        raise RuntimeError(f"stale build from {m['built']}: not reposting an old post")  # never post leftovers
     caption = (OUT / "caption.txt").read_text(encoding="utf-8")
     kind = "reel" if m["media"].endswith(".mp4") else "photo"
     car = OUT / "carousel.json"
