@@ -532,7 +532,12 @@ def build(slot):
                              for t in "SABC")
                    + "\n\n👇 Agree or disagree? Tell us who's misplaced!\n\n#FCMobile #FCMobile26 #TierList #FMM")
     elif ctype == "guess":
-        hints = [f"{p['ovr']} OVR", p["pos"], p.get("nation") or "", p.get("club") or ""]
+        # owner 16 Nov: at least one more clue (country / club); new cards often lack them -> other versions of him
+        same = [x for x in pool if x.get("name") == p["name"] and (x.get("nation") or x.get("club"))]
+        nation = p.get("nation") or next((x["nation"] for x in same if x.get("nation")), "")
+        club = p.get("club") or next((x["club"] for x in same if x.get("club") and x["club"] != "Icons"), "")
+        event = re.sub(r"^PROGRAM_|\d+$", "", str(p.get("program") or "")).replace("_", " ").strip()
+        hints = [f"{p['ovr']} OVR", p["pos"], nation, club, f"{event} card" if event and not (nation and club) else ""]
         post = {"id": "slot", "type": "guess", "card": p["card"], "hints": [h for h in hints if h][:4]}
         media = brand.render(post, OUT)
         caption = ("🤔 GUESS THE PLAYER!\n\nHints are on the card. First correct answer gets a shout-out 🏆\n"
