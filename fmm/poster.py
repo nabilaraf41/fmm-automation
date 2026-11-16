@@ -366,7 +366,12 @@ def post(kind, media, caption, where="both", ctype=None, reel=True, extra=None, 
     if kind == "reel" and where == "both":  # Reels also go to YouTube Shorts
         def yt():
             from fmm import youtube
-            return youtube.upload(media, caption.replace("\n\n" + CTA, ""))[0]  # no DMs on YouTube
+            vid = youtube.upload(media, caption.replace("\n\n" + CTA, ""))[0]  # no DMs on YouTube
+            try:
+                youtube.add_to_playlist(vid, ctype)
+            except Exception as ex:  # older login without playlist permission: the upload still counts
+                print("playlist skipped:", str(ex)[:100])
+            return vid
         steps.append(("youtube", yt))
     for attempt in range(2):  # owner rule: every post on all platforms; a failed one gets a 2nd try
         for name, fn in steps:

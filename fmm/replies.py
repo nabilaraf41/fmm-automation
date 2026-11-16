@@ -76,6 +76,24 @@ def fb_targets(obj_id):
     return out
 
 
+def yt_targets(video_id):
+    """Top-level YouTube comments of one video -> (likes, length, comment id, text). Needs the force-ssl login."""
+    from fmm import youtube
+    r = youtube.service().commentThreads().list(part="snippet", videoId=video_id, maxResults=50,
+                                                 textFormat="plainText").execute()
+    out = []
+    for t in r.get("items", []):
+        c = t["snippet"]["topLevelComment"]
+        sn = c["snippet"]
+        out.append((sn.get("likeCount", 0), len(clean(sn.get("textDisplay"))), c["id"], clean(sn.get("textDisplay"))))
+    return out
+
+
+def yt_send(cid, msg):
+    from fmm import youtube
+    youtube.service().comments().insert(part="snippet", body={"snippet": {"parentId": cid, "textOriginal": msg}}).execute()
+
+
 def run():
     st = json.loads(STATE.read_text(encoding="utf-8")) if STATE.exists() else {"replied": {}, "per_post": {}}
     log = json.loads((ROOT / "content" / "posted.json").read_text(encoding="utf-8"))
@@ -90,7 +108,8 @@ def run():
             ("instagram", None if not IG_REPLIES else e.get("instagram"), lambda o: ig_targets(o, me),
              lambda cid, msg: poster.call("POST", f"{cid}/replies", data={"message": msg})),
             ("facebook", e.get("facebook"), fb_targets,
-             lambda cid, msg: poster.call("POST", f"{cid}/comments", data={"message": msg}))):
+             lambda cid, msg: poster.call("POST", f"{cid}/comments", data={"message": msg})),
+            ("youtube", e.get("youtube"), yt_targets, yt_send)):  # owner 16 Nov: engagement on Shorts too
             if not obj:
                 continue
             key = f"{platform}:{obj}"

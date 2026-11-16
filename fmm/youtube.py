@@ -14,7 +14,8 @@ ROOT = Path(__file__).resolve().parent.parent
 CLIENT = ROOT / "secrets" / "google_client.json"
 TOKEN = ROOT / "secrets" / "youtube_token.json"
 SCOPES = ["https://www.googleapis.com/auth/youtube.upload", "https://www.googleapis.com/auth/youtube.readonly",
-          "https://www.googleapis.com/auth/drive.readonly"]  # Drive: read your "FMM Clips" inbox folder
+          "https://www.googleapis.com/auth/drive.readonly",  # Drive: read your "FMM Clips" inbox folder
+          "https://www.googleapis.com/auth/youtube.force-ssl"]  # 16 Nov: reply to comments + manage playlists
 
 
 def creds():
@@ -45,6 +46,37 @@ def login():
 def check():
     ch = service().channels().list(part="snippet,statistics", mine=True).execute()["items"][0]
     print(f"YouTube: {ch['snippet']['title']} ({ch['statistics'].get('subscriberCount')} subscribers)")
+
+
+# owner 16 Nov: every video goes into its playlist (search traffic -> watch hours). Year in the name, updated in January.
+PLAYLISTS = {"statrank": "Top 10", "rank10": "Top 10", "xi": "Cheap Players & Best XI", "pack": "Pack Opening",
+             "code": "Redeem Codes", "code_reel": "Redeem Codes", "review_reel": "New Players & Reviews",
+             "newcard": "New Players & Reviews", "goal_reel": "Goals & Gameplay", "clip": "Goals & Gameplay",
+             "long": "Full H2H Matches", "stopgame": "Games & Funny Moments", "choose": "Games & Funny Moments",
+             "atb_meme": "Games & Funny Moments", "leak": "Leaks & Predictions", "recap_week": "Best Of",
+             "recap_month": "Best Of"}
+
+
+def add_to_playlist(video_id, ctype):
+    """Put the video in 'FC Mobile <topic> <year>' (created on first use). Needs the youtube.force-ssl login."""
+    topic = PLAYLISTS.get(ctype or "")
+    if not topic or not video_id:
+        return None
+    import datetime as dt
+    title = f"FC Mobile {topic} {dt.date.today().year}"
+    cache = ROOT / "content" / "yt_playlists.json"
+    ids = json.loads(cache.read_text(encoding="utf-8")) if cache.exists() else {}
+    yt = service()
+    if title not in ids:
+        found = [p for p in yt.playlists().list(part="snippet", mine=True, maxResults=50).execute()["items"]
+                 if p["snippet"]["title"] == title]
+        ids[title] = found[0]["id"] if found else yt.playlists().insert(part="snippet,status", body={
+            "snippet": {"title": title, "description": f"Every FC Mobile {topic.lower()} video by FC Mobile Mania (FMM)."},
+            "status": {"privacyStatus": "public"}}).execute()["id"]
+        cache.write_text(json.dumps(ids, indent=1), encoding="utf-8")
+    yt.playlistItems().insert(part="snippet", body={"snippet": {
+        "playlistId": ids[title], "resourceId": {"kind": "youtube#video", "videoId": video_id}}}).execute()
+    return title
 
 
 def title_and_description(caption, short=True):

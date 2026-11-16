@@ -95,3 +95,8 @@ Handbook = CLAUDE.md. Memory notes (~/.claude/projects/E--Claude-FMM/memory, bac
   13 Nov stop-game posted twice); (2) slots.post refuses builds older than 3 h (never repost leftovers); (3) dm.py
   stops retrying archived/deleted chats (44 errors per run); (4) Top 10/XI fallbacks fixed earlier (card stats cache,
   XI reuses lineup). Shard-price API 403s from the cloud: XI reuses the saved lineup. Collabs + elite_fc.02, dfx_eafc.
+- YouTube re-login needed (16 Nov): scope youtube.force-ssl added (fmm/youtube.py SCOPES) for comment replies
+  (replies.py yt_targets/yt_send) + auto playlists (youtube.add_to_playlist, ids in content/yt_playlists.json,
+  "FC Mobile <topic> <year>"). Until the owner runs `python -m fmm.youtube login` and the secret is updated
+  (`gh secret set YOUTUBE_TOKEN_JSON -R nabilaraf41/fmm-automation < secrets/youtube_token.json`), both just log "skipped".
+  Owner won't show his face: use Google Flow ATB clips for face-to-camera tips (credits reset ~26-29 Nov).

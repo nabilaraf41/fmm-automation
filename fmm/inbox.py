@@ -192,6 +192,10 @@ def post_long():
     except Exception as ex:
         print("long cover skipped:", str(ex)[:100])
     vid = youtube.upload(local, caption, short=False)[0]
+    try:  # owner 16 Nov: full matches go in their playlist (search traffic -> watch hours)
+        youtube.add_to_playlist(vid, "long")
+    except Exception as ex:
+        print("playlist skipped:", str(ex)[:100])
     try:  # same video to the Facebook Page (monetized: in-stream ads on 3+ min videos)
         from fmm import poster
         fb = poster.fb_video(local, caption.replace("Subscribe", "Follow"))
