@@ -100,3 +100,7 @@ Handbook = CLAUDE.md. Memory notes (~/.claude/projects/E--Claude-FMM/memory, bac
   "FC Mobile <topic> <year>"). Until the owner runs `python -m fmm.youtube login` and the secret is updated
   (`gh secret set YOUTUBE_TOKEN_JSON -R nabilaraf41/fmm-automation < secrets/youtube_token.json`), both just log "skipped".
   Owner won't show his face: use Google Flow ATB clips for face-to-camera tips (credits reset ~26-29 Nov).
+- Custom cards (16 Nov): fmm/cardmaker.py card(bg_page, ovr, pos, name, player=URL|local png) -> stamped "FMM CONCEPT".
+  Special posts queue = assets/goal_reels/special_N_*.png|mp4 + .txt (goalreel.post_due, max 2/day, N order):
+  CR7 x Portugal 2003-2026, 130 Ronaldo tribute, 130 ATB mascot, follower-card call-out, 125 Hamza. Follower cards:
+  owner collects names/photos from comments+DMs weekly -> make with cardmaker (photo cutout via fmm.clean) -> queue.
