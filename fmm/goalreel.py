@@ -87,11 +87,16 @@ def post_due():
     done = {Path(e.get("file", "")).name for e in log if e.get("type") == "goal_reel"}
     if sum(1 for e in log if e.get("type") == "goal_reel" and e.get("at", "")[:10] == today) >= 2:
         return None  # max 2 a day (owner: trend posts like the CR7 tribute can't wait a day)
-    for mp4 in sorted(DIR.glob("*.mp4")):
-        cap = mp4.with_suffix(".txt")
-        if mp4.name in done or not cap.exists():
+    # special_N_*.png/.mp4 = owner's special posts (concept cards, tributes), posted in N order; photos get their Reel
+    items = sorted(DIR.glob("special_*")) + sorted(DIR.glob("*.mp4"))
+    for f in items:
+        if f.suffix not in (".mp4", ".png") or f.name.endswith(("_cover.jpg", "_reel.mp4")):
             continue
-        return poster.post("reel", mp4, cap.read_text(encoding="utf-8"), "both", "goal_reel")
+        cap = f.with_suffix(".txt")
+        if f.name in done or not cap.exists():
+            continue
+        kind = "reel" if f.suffix == ".mp4" else "photo"
+        return poster.post(kind, f, cap.read_text(encoding="utf-8"), "both", "goal_reel")
     return None
 
 
