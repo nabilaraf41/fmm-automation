@@ -213,3 +213,15 @@ Gap: Shorts ~156k of 10M (or 3M); watch hours ~<400 of 4,000. Honest read: full 
 2. Long watch hours: long videos must be SEARCHED ("best formation FC Mobile", "how to beat...", event guides,
    pack openings 10-15 min) + chapters + end screens; H2H matches alone get ~5 views each.
 3. Playlists, pinned comment, end screen -> long video from every Short (Related video link).
+
+## PlayStyles = hottest topic (study 16 Nov): "Best & Worst Playstyles" 4.2M, "Level 3 Finesse" 2.2M, Vishy 1.4M,
+"Top 5 Tricksters" 449k vs "Best Formation" 572k. FC Mobile Forum has no formation pages, so: 07:00 Top 10 rotation now
+includes PlayStyle lists (Trickster, Finisher, Speed Dribbler, Finesse Shot, Power Shot, Accelerator; ranked by level,
+then OVR, from players_db "playstyles").
+
+## leap_fm "shard guide" carousel (3.6k likes, 101 comments, 253 shares) — model for a weekly post
+4 slides = verdict tiers: MUST CLAIM / WORTH THE SHARDS / WORTH BUT WAIT / (skip). Each card: shard price + 1-2 line
+reason built on PlayStyles, weak foot/skill moves, position fit ("Trickster Lv2, 5* SM", "cheap beast, only 13k").
+Why it works: saves/shares (buying decision), one clear verdict per card, price on every card. We have the pieces:
+shard prices (fmm.shards) + review verdicts (fmm.review: MUST BUY / WORTH IT / SITUATIONAL / SKIP). TODO: build as a
+carousel on Instagram + Reel, weekly after the Thursday drop (Friday 13:00 instead of Budget XI defence part).

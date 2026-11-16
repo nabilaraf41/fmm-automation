@@ -147,6 +147,9 @@ SERIES = [(s, p) for s, ps in [("SHO", "ST RW LW CAM"), ("DRI", "ST RW LW CAM LM
                                ("PAS", "CM CAM CDM"), ("DEF", "RB CB LB"), ("PHY", "RB CB LB")]
           for p in ps.split() + ["ALL " + ps]]
 STAT_NAME = {"SHO": "Shooting", "DRI": "Dribbling", "PAC": "Pace", "PAS": "Passing", "DEF": "Defending", "PHY": "Physical",
+             "PS_TRICKSTER": "Trickster", "PS_SPEED_DRIBBLER": "Speed Dribbler",  # PlayStyle lists (short: title fits)
+             "PS_CLINICAL_FINISHER": "Finisher", "PS_FINESSE_SHOT": "Finesse Shot",
+             "PS_POWER_SHOT": "Power Shot", "PS_ACCELERATOR": "Accelerator",
              "AGI": "Agility", "BAL": "Balance", "FIN": "Finishing", "CUR": "Curve", "LSA": "Long Shots", "SPD": "Sprint Speed"}
 
 
@@ -156,6 +159,8 @@ POPULAR = [("DRI", "LW"), ("PAC", "ST"), ("DRI", "CAM"), ("PAC", "RW"), ("SHO", 
            ("PAC", "CB"), ("SHO", "ST"), ("DRI", "ALL ST RW LW CAM"), ("PAC", "ALL ST RW LW CAM"), ("PAS", "CM"),
            ("DEF", "CB"), ("PHY", "ST"), ("AGI", "ALL ST RW LW CAM"), ("DRI", "ICONS ST RW LW CAM"),
            ("BAL", "ALL ST RW LW CAM"), ("FIN", "ST"), ("CUR", "ALL ST RW LW CAM CM"), ("DRI", "RW"),
+           ("PS_TRICKSTER", "ANY"), ("PS_CLINICAL_FINISHER", "ANY"), ("PS_SPEED_DRIBBLER", "ANY"),
+           ("PS_FINESSE_SHOT", "ANY"), ("PS_POWER_SHOT", "ANY"), ("PS_ACCELERATOR", "ANY"),
            ("SPD", "ALL ST RW LW"), ("LSA", "ALL ST CAM CM"), ("DRI", "ICONS CM CAM CDM"), ("PAC", "ICONS ST RW LW")]
 
 
@@ -805,6 +810,14 @@ def build_extra(ctype, latest, pool, fresh, state):
         except Exception as ex:
             print("card stats unavailable:", str(ex)[:100])
             allc = []
+        if stat.startswith("PS_"):  # owner 16 Nov: PlayStyle lists (hottest topic: 1-4M views) from our player database
+            want = stat[3:]
+            norm = lambda x: re.sub(r"^PLAYSTYLE_|_[0-9]$", "", x.upper().replace(" ", "_"))
+            lvl = lambda c: max([int(x[-1]) if x[-1].isdigit() else 1 for x in (c.get("playstyles") or []) if norm(x) == want] or [0])
+            pdb = json.loads(renderz.DB.read_text(encoding="utf-8"))["players"]
+            allc = [{**c, "face": {stat: lvl(c)}} for c in confirmed_only({str(k): v for k, v in pdb.items()}).values() if lvl(c)]
+            poss = sorted({c["pos"] for c in allc}) if pos == "ANY" else poss
+            val = lambda c: c["face"][stat]
         ranked, names = [], set()
         for p in sorted([c for c in allc if c.get("name") and c["pos"] in poss and (not icons or c.get("program") == "ICONS")], key=lambda c: (-val(c), -c["ovr"])):
             if p["name"] not in names:  # best card per player
@@ -813,6 +826,9 @@ def build_extra(ctype, latest, pool, fresh, state):
         for p in ranked:
             path = renderz.CARDS / f"{p['id']}.png"
             try:
+                if stat.startswith("PS_"):
+                    p["card"] = ensure_card(p, fresh) or None
+                    continue
                 if not path.exists():
                     renderz.CARDS.mkdir(parents=True, exist_ok=True)
                     fmf.build_card({**p, "layout": {}, "colors": {}}).save(path)
@@ -824,9 +840,11 @@ def build_extra(ctype, latest, pool, fresh, state):
             state["_fallback"] = "versus"  # label it as what it is, never "Top 10"
             return render_versus(next_pair(latest, state, pool), fresh)
         label = "/".join(poss) if len(poss) > 1 else pos
+        if stat.startswith("PS_"):
+            label = "players"  # "Top 10 players by Trickster PlayStyle"
         post = {"id": "slot", "type": "top10", "position": label if len(poss) == 1 else "ALL", "title": f"by {STAT_NAME[stat]}", "subtitle": "latest cards",
                 "players": [{"name": p["name"], "card": p["card"], "ovr": p.get("ovr"), "pos": p.get("pos"),
-                             "stat": f"{stat} {val(p)}"} for p in ranked]}
+                             "stat": f"{"Lv." if stat.startswith("PS_") else stat + " "}{val(p)}"} for p in ranked]}
         if icons:
             label = "Icon " + label
         # numbered series ("Part 12", no '#': captions.polish would turn "#12" into a hashtag); owner's idea 5, 10 Nov
@@ -835,7 +853,7 @@ def build_extra(ctype, latest, pool, fresh, state):
         num = 1 + sum(1 for e in log if e.get("type") == "statrank" and e.get("kind") != "reel")
         br = slot_now() == "0700"  # 07:00 BDT = 22:00 in Brazil, our #1 Instagram country (24%, Meta audit 10 Nov)
         caption = (f"Top 10 {label} by {STAT_NAME[stat]} 🏆🔥 Part {num}\n\nFC Mobile, 120+ OVR cards only:\n\n"
-                   + "\n".join(f"{i}. {p['name']} ({p['ovr']} {p['pos']}): {stat} {val(p)}"
+                   + "\n".join(f"{i}. {p['name']} ({p['ovr']} {p['pos']}): {"Lv." if stat.startswith("PS_") else stat + " "}{val(p)}"
                                for i, p in enumerate(ranked, 1))
                    + "\n\nWho's missing from this list? 👇"
                    + ("\n🇧🇷 Quem ficou de fora? Comenta aí 👇" if br else "")
