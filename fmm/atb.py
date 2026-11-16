@@ -39,6 +39,7 @@ VOICE = {k: [_A / x for x in v] for k, v in {
     "review": ["atb_pack/p_076.mp4", "atb_pack/n_j03.mp4", "atb_pack/n_j06.mp4", "atb_pack/n_j07.mp4"],
     "code": ["atb_pack/n_p02.mp4", "atb_pack/n_p10.mp4", "atb_pack/p_045.mp4", "atb_clips/02_celebration.mp4"],
     "leak": ["atb_pack/n_p06.mp4", "atb_pack/n_p03.mp4", "atb_pack/p_046.mp4"],
+    "goal": ["atb_long/goal_01.mp4", "atb_long/goal_03.mp4", "atb_pack/p_032.mp4", "atb_clips/34_goal_celebration.mp4"],
     "stopgame": ["atb_pack/n_p06.mp4", "atb_pack/n_p03.mp4"],
     "default": ["atb_pack/n_p03.mp4", "atb_pack/n_j07.mp4", "atb_pack/p_038.mp4", "atb_clips/01_shocked.mp4",
                 "atb_clips/49_nodding_hype.mp4"],

@@ -94,6 +94,13 @@ if __name__ == "__main__":
             print("leak posted:", m)
     except Exception as ex:
         print("leak skipped:", str(ex)[:150])
+    try:  # goal Reels made on the PC from owner-confirmed goals (assets/goal_reels): one a day
+        from fmm import goalreel
+        g = goalreel.post_due()
+        if g:
+            print("goal reel posted:", g)
+    except Exception as ex:
+        print("goal reel skipped:", str(ex)[:150])
     try:  # owner's "ATB Meme" (content/atb_meme.json queue): one a day from 15:00 BDT, photo + Reel
         from fmm import atbmeme
         m = atbmeme.post_due()
