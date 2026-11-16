@@ -85,8 +85,8 @@ def post_due():
     log = json.loads(poster.LOG.read_text(encoding="utf-8")) if poster.LOG.exists() else []
     today = dt.datetime.now().strftime("%Y-%m-%d")
     done = {Path(e.get("file", "")).name for e in log if e.get("type") == "goal_reel"}
-    if any(e.get("type") == "goal_reel" and e.get("at", "")[:10] == today for e in log):
-        return None
+    if sum(1 for e in log if e.get("type") == "goal_reel" and e.get("at", "")[:10] == today) >= 2:
+        return None  # max 2 a day (owner: trend posts like the CR7 tribute can't wait a day)
     for mp4 in sorted(DIR.glob("*.mp4")):
         cap = mp4.with_suffix(".txt")
         if mp4.name in done or not cap.exists():
