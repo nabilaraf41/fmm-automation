@@ -701,7 +701,7 @@ def build_extra(ctype, latest, pool, fresh, state):
                     f"\n\n{name.title()} total: {sub:,} Star Shards. Next part tomorrow at the same time 👀"
                     f"\n\n{TAGS} #BudgetSquad")
         total = sum(p.get("shards") or 0 for p in real(team))
-        post = {"id": "slot", "type": "xi", "title": "Best Cheap Beast H2H Lineup", "subtitle": "Every card under 14,000 Star Shards",
+        post = {"id": "slot", "type": "xi", "title": "Best Budget XI", "subtitle": "Every card under 14,000 Star Shards",  # title fits (owner: the design that hit)
                 "players": team}
         caption = (f"Best Cheap Beast H2H Lineup 💰🔥\n\nEvery card under 14k Star Shards, built for H2H\n\n{line(team)}"
                    f"\n\nWhole team: {total:,} Star Shards (prices checked on 2 databases)"
@@ -842,7 +842,7 @@ def build_extra(ctype, latest, pool, fresh, state):
         label = "/".join(poss) if len(poss) > 1 else pos
         if stat.startswith("PS_"):
             label = "players"  # "Top 10 players by Trickster PlayStyle"
-        post = {"id": "slot", "type": "top10", "position": label if len(poss) == 1 else "ALL", "title": f"by {STAT_NAME[stat]}", "subtitle": "latest cards",
+        post = {"id": "slot", "type": "top10", "position": label if len(poss) == 1 else ("ICONS" if icons else "ALL"), "title": f"by {STAT_NAME[stat]}", "subtitle": "latest cards",
                 "players": [{"name": p["name"], "card": p["card"], "ovr": p.get("ovr"), "pos": p.get("pos"),
                              "stat": f"{"Lv." if stat.startswith("PS_") else stat + " "}{val(p)}"} for p in ranked]}
         if icons:
