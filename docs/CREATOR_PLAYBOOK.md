@@ -200,3 +200,16 @@ FC Mobile shows 3 reliable on-screen signals (tested on match 1BQ-oy..., 2340x10
 3. EA FC logo wipe = replay start/end (replay = best angle).
 Clip rule: 8 s before the score change -> 3 s after (scorer card in frame); title only with the verified scorer,
 else "GOAL!". Owner rule (15 Nov): no H2H Reels until he approves this new method.
+
+## YouTube monetization goal: before 31 Dec 2026 (owner, 16 Nov) — stats 16 Nov
+Channel: 1,330 subs (need 1,000 OK) | 702 videos: 688 Shorts, 14 long | Shorts views last 90 days: 156,399 |
+long videos total 4,116 views (max ~390 watch hours ever) | best Short 87k ("BEST FORMATION FOR H2H & VSA").
+YPP full (ads): 1,000 subs + 4,000 public watch hours / 12 months OR 10M Shorts views / 90 days.
+YPP lower tier (fan funding, Shopping): 500 subs + 3 uploads / 90 days + 3,000 watch hours OR 3M Shorts views / 90 days.
+Gap: Shorts ~156k of 10M (or 3M); watch hours ~<400 of 4,000. Honest read: full ads by 31 Dec needs a viral run
+(several 500k-1M+ Shorts). Levers, in order:
+1. Shorts views (fastest path): more of what already hit (formation/H2H tips, Bangladeshi/Indian players, EA logic,
+   guess-the-player, Top 10), 2-3 strong Shorts a day, titles = reaction + number, first 1 s = payoff.
+2. Long watch hours: long videos must be SEARCHED ("best formation FC Mobile", "how to beat...", event guides,
+   pack openings 10-15 min) + chapters + end screens; H2H matches alone get ~5 views each.
+3. Playlists, pinned comment, end screen -> long video from every Short (Related video link).

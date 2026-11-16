@@ -141,6 +141,7 @@ def post_long():
     if today in done.values():
         return None
     todo = [f for f in videos(drive()) if is_long(f) and done.get(f["id"], "redo") == "redo"]  # "redo" = post again
+    todo.sort(key=lambda f: f.get("createdTime", ""), reverse=True)  # owner 16 Nov: newest upload first
     if not todo:
         return None
     f = todo[0]

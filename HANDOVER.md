@@ -89,3 +89,5 @@ Handbook = CLAUDE.md. Memory notes (~/.claude/projects/E--Claude-FMM/memory, bac
 - Collabs v2 (16 Nov): fmm/collabs.py picks up to 5 per post (poster tries 5, then 3, then none): 3 best-fit partners
   for that exact post type (acceptance per type in content/collab_stats.json, refreshed weekly in run_cloud) + 2
   rotating spots for everyone. "always"/"prefer" in collaborators.json still override.
+- YPP target 31 Dec 2026 (owner "a must"): see CREATOR_PLAYBOOK "YouTube monetization goal". Track Shorts views/90d
+  + watch hours weekly. Long-video queue now newest upload first (Kaka H2H long 16 Nov).
