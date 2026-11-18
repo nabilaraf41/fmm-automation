@@ -1899,5 +1899,24 @@
   "type": "statrank_trial",
   "hook": "Most people get number 1 wrong 👀",
   "instagram": "17911958742578847"
+ },
+ {
+  "at": "2026-11-18 21:01:47",
+  "kind": "reel",
+  "file": "/home/runner/work/fmm-automation/fmm-automation/output/slot/slot_day.mp4",
+  "type": "review_reel",
+  "hook_style": 1,
+  "facebook": "27672222345809481",
+  "instagram": "18220770181361238",
+  "youtube": "orMVHmtrXw4"
+ },
+ {
+  "at": "2026-11-18 21:02:31",
+  "kind": "reel",
+  "file": "/home/runner/work/fmm-automation/fmm-automation/output/slot/slot.mp4",
+  "type": "review_reel_trial",
+  "hook": "121 OVR Kane... Buy or skip?",
+  "hook_style": 4,
+  "instagram": "18096041408688821"
  }
 ]
