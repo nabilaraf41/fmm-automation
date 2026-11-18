@@ -285,6 +285,10 @@ def next_clip():
                 done = False
                 while not done:
                     _, done = dl.next_chunk()
+        if clips.duration(local) > 40:  # owner 18 Nov: loudest moments of full matches were kick-off/half/full-time whistles
+            rec.update(total=0, note="full recording: no auto Reels, only owner-cut goal clips (<=40 s)")
+            STATE.write_text(json.dumps(st, indent=1, ensure_ascii=False), encoding="utf-8")
+            continue
         rec["total"] = len(clips.peaks(local))
         if rec["used"] >= rec["total"]:
             continue
