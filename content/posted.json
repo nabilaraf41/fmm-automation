@@ -1918,5 +1918,22 @@
   "hook": "121 OVR Kane... Buy or skip?",
   "hook_style": 4,
   "instagram": "18096041408688821"
+ },
+ {
+  "at": "2026-11-19 00:47:12",
+  "kind": "photo",
+  "file": "/home/runner/work/fmm-automation/fmm-automation/assets/goal_reels/special_4_follower_card_callout.png",
+  "type": "goal_reel",
+  "facebook": "122208996422906131",
+  "instagram": "18649479559046486"
+ },
+ {
+  "at": "2026-11-19 00:48:20",
+  "kind": "reel",
+  "file": "/home/runner/work/fmm-automation/fmm-automation/assets/goal_reels/special_4_follower_card_callout_reel.mp4",
+  "type": "goal_reel",
+  "facebook": "1976640753743499",
+  "instagram": "18346978753285228",
+  "youtube": "kvABjmWRY7E"
  }
 ]
