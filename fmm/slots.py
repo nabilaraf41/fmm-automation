@@ -261,6 +261,9 @@ def pick(kind, fresh, db, state):
     return "versus", pair, pool
 
 
+GAMEPLAY_REELS = False  # owner 19 Nov: "goal reels are shitty, stop them" -> back on only when he says so
+
+
 def build_from_inbox(slot):
     """Any slot: your own gameplay from the Drive clips folder, when there is any."""
     try:
@@ -417,7 +420,7 @@ def build(slot):
         return
     if slot == "2100" and dt.datetime.now().weekday() in (3, 6) and build_pack():  # Thu + Sun: pack opening Reel
         return
-    if build_from_inbox(slot):  # your own gameplay always goes first, in any slot
+    if GAMEPLAY_REELS and build_from_inbox(slot):  # owner 19 Nov: gameplay Reels paused (bad quality)
         return
     if SLOTS[slot] == "reel" and build_versions(slot):  # every 2nd Reel: "EA Sports Logic"
         return
