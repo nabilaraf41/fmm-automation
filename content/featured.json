@@ -1019,6 +1019,16 @@
     "f30924202"
    ],
    "built": "2026-11-19T06:31"
+  },
+  {
+   "slot": "1300",
+   "kind": "photo",
+   "type": "xi",
+   "media": "xi_20261119_attack.png",
+   "players": [
+    "f30924202"
+   ],
+   "built": "2026-11-19T12:09"
   }
  ],
  "force": {
@@ -1153,7 +1163,8 @@
   "2026-11-18-1700": "2026-11-18T16:09+06:00",
   "2026-11-18-1900": "2026-11-18T18:00+06:00",
   "2026-11-18-2100": "2026-11-18T20:02+06:00",
-  "2026-11-19-0700": "2026-11-19T06:31+06:00"
+  "2026-11-19-0700": "2026-11-19T06:31+06:00",
+  "2026-11-19-1300": "2026-11-19T11:56+06:00"
  },
  "slot_tries": {
   "2026-11-13-2100": 1
@@ -1181,7 +1192,7 @@
  "boost": "xi",
  "drop": null,
  "xi_week": {
-  "start": "2026-11-06",
+  "start": "2026-11-19",
   "team": [
    {
     "id": "s24051602",
@@ -1344,6 +1355,87 @@
     "shards": 13500,
     "img_player": "https://cdn.fcmobileforum.com/players/164994_ST27_ICON_b15129d1.png",
     "img_bg": "https://cdn.fcmobileforum.com/card-art/proto_PLAYERS:44/backgrounds_27_B_SCREAMTEAM_ICON_STATIC"
+   },
+   {
+    "id": "s30923914",
+    "name": "Campos",
+    "ovr": 122,
+    "pos": "GK",
+    "shards": 12420,
+    "img_player": "https://cdn.fcmobileforum.com/players/191694_SST27_ICON_85293a08.png",
+    "img_bg": "https://cdn.fcmobileforum.com/card-art/proto_PLAYERS:63/backgrounds_27_STREETSTARS_ICON_STATIC"
+   },
+   {
+    "id": "s24055136",
+    "name": "Murillo",
+    "ovr": 122,
+    "pos": "CB",
+    "shards": 11155,
+    "img_player": "https://cdn.fcmobileforum.com/players/278016_SST27_LIVE_d1214ace.png",
+    "img_bg": "https://cdn.fcmobileforum.com/card-art/proto_PLAYERS:36/backgrounds_27_STREETSTARS_LIVE_STATIC"
+   },
+   {
+    "id": "s30922848",
+    "name": "Baresi",
+    "ovr": 122,
+    "pos": "CB",
+    "shards": 13455,
+    "img_player": "https://cdn.fcmobileforum.com/players/239528_BD27_ICON_69ef79a7.png",
+    "img_bg": "https://cdn.fcmobileforum.com/card-art/proto_PLAYERS:34/backgrounds_27_FCM27_BALLONDOR_ICON_STATIC"
+   },
+   {
+    "id": "s24054004",
+    "name": "Dest",
+    "ovr": 122,
+    "pos": "RB",
+    "shards": 13110,
+    "img_player": "https://cdn.fcmobileforum.com/players/251804_STELLAR27_LIVE_61db6243.png",
+    "img_bg": "https://cdn.fcmobileforum.com/card-art/proto_PLAYERS:27/backgrounds_27_STELLAR_SCORPIO_LIVE_STATIC"
+   },
+   {
+    "id": "s24055226",
+    "name": "Anderson",
+    "ovr": 120,
+    "pos": "CDM",
+    "shards": 2500,
+    "img_player": "https://cdn.fcmobileforum.com/players/254243_RV27_LIVE_1943a92b.png",
+    "img_bg": "https://cdn.fcmobileforum.com/card-art/proto_PLAYERS:38/backgrounds_27_ENGLAND_LIVE_STATIC"
+   },
+   {
+    "id": "s24055402",
+    "name": "Maddison",
+    "ovr": 122,
+    "pos": "CM",
+    "shards": 13455,
+    "img_player": "https://cdn.fcmobileforum.com/players/220697_STELLAR27_LIVE_0693eccd.png",
+    "img_bg": "https://cdn.fcmobileforum.com/card-art/proto_PLAYERS:40/backgrounds_27_STELLAR27_SAGITTARIUS_LIVE_STATIC"
+   },
+   {
+    "id": "s30923908",
+    "name": "Guti",
+    "ovr": 121,
+    "pos": "CAM",
+    "shards": 5200,
+    "img_player": "https://cdn.fcmobileforum.com/players/262285_SST27_ICON_724a5c76.png",
+    "img_bg": "https://cdn.fcmobileforum.com/card-art/proto_PLAYERS:63/backgrounds_27_STREETSTARS_ICON_STATIC"
+   },
+   {
+    "id": "s24055228",
+    "name": "Gordon",
+    "ovr": 122,
+    "pos": "LW",
+    "shards": 11385,
+    "img_player": "https://cdn.fcmobileforum.com/players/242964_RV27_LIVE_7caae76b.png",
+    "img_bg": "https://cdn.fcmobileforum.com/card-art/proto_PLAYERS:38/backgrounds_27_ENGLAND_LIVE_STATIC"
+   },
+   {
+    "id": "s30924006",
+    "name": "Klose",
+    "ovr": 122,
+    "pos": "ST",
+    "shards": 12190,
+    "img_player": "https://cdn.fcmobileforum.com/players/242511_RV27_ICON_77c6957b.png",
+    "img_bg": "https://cdn.fcmobileforum.com/card-art/proto_PLAYERS:69/backgrounds_27_GERMANY_ICON_STATIC"
    }
   ]
  },
