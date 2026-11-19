@@ -231,3 +231,16 @@ Month-end recap is now a ~10 min compilation titled "FC Mobile <year>: Best Top 
 (<Month> Compilation)". Playlists (owner, in YouTube Studio; our API token can't create playlists): "FC Mobile Top 10
 <year>", "FC Mobile Cheap Players <year>", "FC Mobile Pack Opening <year>", "FC Mobile Codes <year>" — update the year
 each January. Every long video goes into its playlist.
+
+## Goal + fail Shorts study (19 Nov 2026, 138 top Shorts) — gameplay Reels PAUSED until the owner restarts them
+Why ours flopped: auto-picked "loud" moments (kick-off/half/full-time whistles), 30 s+ clips, no goal, generic title.
+What wins:
+- ONE goal, 6–15 s, start 1–3 s before the shot, end on the net/celebration (FC Elite "INSANE GOAL" 0:09 319K from 1.4K subs).
+- Name the cards in the title: "Quaresma & Shevchenko", "Mbappe 122", "Marcelo x R. Carlos" (29x–37x breakouts, small channels).
+- A twist or a question: "...BUT SHEVCHENKO WAS OFFSIDE!", "Goal or no goal?" (1M), "Is this the fastest goal on 126 Cech?".
+- Vote compilations: "Who deserves the best goal? (Puskas)" 1.5M, "Pick one your hero, Puskas trophy" 12.9M.
+- Fails beat goals: "FIFA FUNNY MOMENTS (Part 2)" 4.7M from 6.5K subs (200x), "Saving in FC Mobile 💀" 1.8M from 2.7K subs
+  (179x) = 3–5 quick GK/defending fails, 17–25 s, numbered Parts. Glitch/bug + "EA logic" Shorts also break out.
+- Challenges: "Score a hattrick with Onana", "Score a header with Maradona" (R I M UT I K, 640–685K).
+Restart rule: owner cuts each clip (one goal or one fail, <=15 s) and names it "goal <scorer> <card>" / "fail <what>";
+never auto-cut full matches. Meanwhile the free slots run the card formats (Top 10 / PlayStyles / XI / pick-one / EA logic).
