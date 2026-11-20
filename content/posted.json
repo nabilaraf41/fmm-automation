@@ -2138,5 +2138,22 @@
   "facebook": "1649368390262198",
   "instagram": "17983720494128920",
   "youtube": "XQsoeJARyqk"
+ },
+ {
+  "at": "2026-11-21 01:46:27",
+  "kind": "photo",
+  "file": "/home/runner/work/fmm-automation/fmm-automation/assets/goal_reels/special_9_06_hero_brazil.png",
+  "type": "goal_reel",
+  "facebook": "122209292564906131",
+  "instagram": "17999006595106971"
+ },
+ {
+  "at": "2026-11-21 01:47:40",
+  "kind": "reel",
+  "file": "/home/runner/work/fmm-automation/fmm-automation/assets/goal_reels/special_9_06_hero_brazil_reel.mp4",
+  "type": "goal_reel",
+  "facebook": "1659632375826466",
+  "instagram": "17916766929285975",
+  "youtube": "Xqqr0z_EwV0"
  }
 ]
