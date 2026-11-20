@@ -2078,5 +2078,13 @@
   "type": "statrank_trial",
   "hook": "Is your favourite on this list? 🤔",
   "instagram": "18143231506714077"
+ },
+ {
+  "at": "2026-11-20 13:01:03",
+  "kind": "carousel",
+  "file": "/home/runner/work/fmm-automation/fmm-automation/output/slot/guide_1.png",
+  "type": "shardguide",
+  "facebook": "705738725948110_122209214738906131",
+  "instagram": "18130583722853527"
  }
 ]
