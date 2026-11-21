@@ -53,7 +53,7 @@ def slide(title, color, items, out, n):
         why = (r.get("short_pros") or [r.get("verdict", "")])[0]
         for j, ln in enumerate(textwrap.wrap(f"{p['pos']}: {why}", 24)[:3]):
             d.text((cx, cy + 365 + j * 34), ln.upper(), font=brand.label_font(24), fill=(255, 255, 255), anchor="mm")
-    d.text((540, 1300), f"{n}/3  •  PRICES: FC MOBILE FORUM", font=brand.label_font(24), fill=(200, 200, 200), anchor="mm")
+    d.text((540, 1300), (f"{n}/3  •  " if n else "") + "PRICES: FC MOBILE FORUM", font=brand.label_font(24), fill=(200, 200, 200), anchor="mm")
     img.convert("RGB").save(out, quality=94)
     return out
 

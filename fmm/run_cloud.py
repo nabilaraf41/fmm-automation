@@ -91,8 +91,15 @@ if __name__ == "__main__":
         from fmm import poster as _p
         today = now.strftime("%Y-%m-%d")
         lg = json.loads(_p.LOG.read_text(encoding="utf-8")) if _p.LOG.exists() else []
-        return 10 <= now.hour < 22 and not any(e.get("type") in ("leak", "goal_reel", "atb_meme") and e.get("at", "")[:10] == today for e in lg)
+        return 10 <= now.hour < 22 and not any(e.get("type") in ("leak", "goal_reel", "atb_meme", "shardcost") and e.get("at", "")[:10] == today for e in lg)
 
+    try:  # Thursday (or Friday) 15:00: this week's new players with their shard cost (it is that day's extra post)
+        from fmm import shardcost
+        sc = shardcost.post_due(now) if extra_ok() else None
+        if sc:
+            print("shard cost posted:", sc)
+    except Exception as ex:
+        print("shard cost skipped:", str(ex)[:150])
     try:  # leaks / predictions made on the PC (content/leaks.json): one a day from 11:00 BDT, photo + Reel
         from fmm import leaks
         m = leaks.post_due() if extra_ok() else None
