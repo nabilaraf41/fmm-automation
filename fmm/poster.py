@@ -167,6 +167,20 @@ def collab_data():
     return {"collaborators": json.dumps(names)} if names else {}
 
 
+def yt_mentions():
+    """YouTube has no collab API: @mention partners invited on Instagram who have a YouTube channel (links + notifies).
+    Owner 22 Nov: YouTube collabs every day; the 2 big channels (TI FC MOBILE 29.5K, ADDON_FCM 26.1K) alternate."""
+    try:
+        from fmm import collabs
+        yt = json.loads(COLLAB.read_text(encoding="utf-8")).get("youtube", {})
+        n = len(json.loads(LOG.read_text(encoding="utf-8"))) if LOG.exists() else 0
+        names = [yt[x] for x in collabs.pick(f"{_NOW[0]}:{_NOW[1] or 'other'}", n) if x in yt]
+        names = list(dict.fromkeys(names + [("@tazeafc", "@addon_fcm")[n % 2]]))[:3]
+        return "\n\n🤝 With " + " ".join(names) if names and not _NO_COLLAB else ""
+    except Exception:  # a mention never blocks an upload
+        return ""
+
+
 def ig_container(data):
     """Create a media container with the collab invite: try 5, then 3 (older API limit), then none.
     A bad/ineligible username never blocks the post."""
@@ -371,7 +385,7 @@ def post(kind, media, caption, where="both", ctype=None, reel=True, extra=None, 
     if kind == "reel" and where == "both":  # Reels also go to YouTube Shorts
         def yt():
             from fmm import youtube
-            vid = youtube.upload(media, caption.replace("\n\n" + CTA, ""))[0]  # no DMs on YouTube
+            vid = youtube.upload(media, caption.replace("\n\n" + CTA, "") + yt_mentions())[0]  # no DMs on YouTube
             try:
                 youtube.add_to_playlist(vid, ctype)
             except Exception as ex:  # older login without playlist permission: the upload still counts
