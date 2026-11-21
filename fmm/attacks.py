@@ -132,9 +132,9 @@ def row_slide(title, sub, cards, out, color=(200, 255, 0), labels=None):
 
 # Sunday 17:00 "Legends vs Legends" (owner 22 Nov upgrade; FC Beast "Madrid Legends VS Barca Legends" 4.5M)
 VS = [("REAL MADRID 2002", "BARCELONA 2006"), ("AC MILAN 1990", "INTER 2010"), ("BRAZIL 2002", "FRANCE 1998"),
-      ("ARSENAL 2004", "MAN UNITED 2008"), ("ITALY", "GERMANY 2014"), ("BARCELONA MSN", "PSG"),
-      ("JUVENTUS", "AC MILAN 2007"), ("REAL MADRID NOW", "BARCELONA NOW"), ("ARGENTINA", "PORTUGAL"),
-      ("CHELSEA", "LIVERPOOL 2014"), ("MAN CITY", "BAYERN"), ("GOAT TRIO", "BRAZIL LEGENDS")]
+      ("ARSENAL 2004", "MAN UNITED 2008"), ("ITALY", "GERMANY 2014"), ("BARCELONA MSN", "REAL MADRID NOW"),
+      ("JUVENTUS", "AC MILAN 2007"), ("BARCELONA NOW", "PSG"), ("ARGENTINA", "PORTUGAL"),
+      ("CHELSEA", "LIVERPOOL 2014"), ("MAN CITY", "BAYERN"), ("GOAT TRIO", "SERIE A LEGENDS")]
 
 
 def build_vs(outdir, n=None):

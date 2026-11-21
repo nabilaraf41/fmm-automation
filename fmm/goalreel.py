@@ -112,7 +112,9 @@ def post_due():
     # owner 21 Nov: gameplay goal Reels back (scoreboard-verified goals, g*_ jobs), NEVER more than 1 a day
     if not any(e.get("type") == "goal_reel" and e.get("at", "")[:10] == today and Path(e.get("file", "")).name.startswith("g")
                and not Path(e.get("file", "")).name.startswith("goal") for e in log):
-        items += sorted(DIR.glob("g[0-9]*_*.mp4"))
+        goals = sorted(DIR.glob("g[0-9]*_*.mp4"))
+        # 22 Nov: one extra a day -> goal Reels and specials take turns (even days goals first), so neither waits weeks
+        items = goals + items if dt.date.today().toordinal() % 2 == 0 else items + goals
     for f in items:
         if f.suffix not in (".mp4", ".png") or f.name.endswith(("_cover.jpg", "_reel.mp4")):
             continue
