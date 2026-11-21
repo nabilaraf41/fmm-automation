@@ -175,7 +175,7 @@ def yt_mentions():
         yt = json.loads(COLLAB.read_text(encoding="utf-8")).get("youtube", {})
         n = len(json.loads(LOG.read_text(encoding="utf-8"))) if LOG.exists() else 0
         names = [yt[x] for x in collabs.pick(f"{_NOW[0]}:{_NOW[1] or 'other'}", n) if x in yt]
-        names = list(dict.fromkeys(names + [("@tazeafc", "@addon_fcm")[n % 2]]))[:3]
+        names = list(dict.fromkeys(names + [("@tazeafc", "@addon_fcm", "@delete-fc")[n % 3]]))[:3]  # the 3 big ones (26-30K) rotate
         return "\n\n🤝 With " + " ".join(names) if names and not _NO_COLLAB else ""
     except Exception:  # a mention never blocks an upload
         return ""
