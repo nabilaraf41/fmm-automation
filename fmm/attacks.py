@@ -12,11 +12,21 @@ ROWS = [(214, 40, 90), (230, 170, 20), (200, 30, 40)]  # pink, gold, red like th
 
 
 # famous real attacks (club, trio) -> each player's best FC Mobile card on FC Mobile Forum; 3 rows per post, rotates weekly
-TRIOS = [("BARCELONA", ["Messi", "Suárez", "Neymar Jr"]), ("PSG", ["Mbappé", "Neymar Jr", "Messi"]),
-         ("REAL MADRID", ["Luís Figo", "Raúl", "Ronaldo"]), ("BARCELONA 2006", ["Ronaldinho", "Eto'o", "Messi"]),
-         ("BARCELONA NOW", ["Lamine Yamal", "Raphinha", "Lewandowski"]), ("BAYERN", ["Ribéry", "Lewandowski", "Musiala"]),
-         ("MAN UNITED", ["Rooney", "Tévez", "Owen"]), ("AC MILAN", ["Kaká", "Shevchenko", "Ibrahimović"]),
-         ("ENGLAND", ["Kane", "Saka", "Owen"])]
+TRIOS = [("BARCELONA MSN", ["Messi", "Suárez", "Neymar Jr"]), ("ARSENAL 2004", ["Henry", "Bergkamp", "Pires"]),
+         ("REAL MADRID 2002", ["Luís Figo", "Raúl", "Ronaldo"]), ("INTER 2010", ["Milito", "Eto'o", "Sneijder"]),
+         ("BARCELONA NOW", ["Lamine Yamal", "Raphinha", "Lewandowski"]), ("JUVENTUS", ["Del Piero", "Trezeguet", "Nedvěd"]),
+         ("REAL MADRID NOW", ["Mbappé", "Vini Jr.", "Bellingham"]), ("AC MILAN 1990", ["van Basten", "Gullit", "Rijkaard"]),
+         ("MAN UNITED 2008", ["Rooney", "Tévez", "Owen"]), ("BRAZIL 2002", ["Ronaldo", "Rivaldo", "Ronaldinho"]),
+         ("CHELSEA", ["Drogba", "Lampard", "Hazard"]), ("BAYERN", ["Ribéry", "Lewandowski", "Musiala"]),
+         ("FRANCE 1998", ["Zidane", "Henry", "Trezeguet"]), ("MAN CITY", ["Haaland", "Foden", "De Bruyne"]),
+         ("BARCELONA 2006", ["Ronaldinho", "Eto'o", "Messi"]), ("ITALY", ["Baggio", "Totti", "Del Piero"]),
+         ("LIVERPOOL 2014", ["Suárez", "Sturridge", "Gerrard"]), ("GERMANY 2014", ["Müller", "Klose", "Götze"]),
+         ("PSG", ["Mbappé", "Neymar Jr", "Messi"]), ("SPAIN 2010", ["Torres", "Iniesta", "Xavi"]),
+         ("AC MILAN 2007", ["Kaká", "Shevchenko", "Ibrahimović"]), ("ARGENTINA", ["Messi", "Agüero", "Di María"]),
+         ("BARCELONA 1994", ["Stoichkov", "Laudrup", "Kluivert"]), ("AFRICA LEGENDS", ["Drogba", "Eto'o", "Weah"]),
+         ("PORTUGAL", ["Eusébio", "Luís Figo", "Rui Costa"]), ("ENGLAND", ["Kane", "Saka", "Owen"]),
+         ("SERIE A LEGENDS", ["Batistuta", "Totti", "Baggio"]), ("GOAT TRIO", ["Pelé", "Maradona", "Cruyff"]),
+         ("REAL MADRID 2000s", ["Raúl", "Morientes", "Guti"]), ("BRAZIL LEGENDS", ["Pelé", "Garrincha", "Ronaldinho"])]
 
 
 def card_for(name, cards):
@@ -70,10 +80,12 @@ def render(rows, out):
 def build(outdir, week=None):
     from fmm import shards
     cards = shards.forum_cards()
-    w = week or dt.date.today().isocalendar()[1]
+    w = week if week is not None else (dt.date.today() - dt.date(2026, 11, 28)).days // 7  # Saturdays since the first post
     order = TRIOS[(w * 3) % len(TRIOS):] + TRIOS[:(w * 3) % len(TRIOS)]
     rows = []
     for club, names in order:
+        if set(names) & {p["name"] for _, cs in rows for p in cs}:
+            continue  # one player once per post
         got = [card_for(n, cards) for n in names]
         if all(got):
             rows.append((club, got))
