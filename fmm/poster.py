@@ -302,6 +302,9 @@ def stamp(media, label):
 CTA = "📩 Comment 🙌 and I'll DM you every working FC Mobile code"
 
 
+REEL_ONLY = {"choose", "versus", "xi"}  # owner 22 Nov: post less, better (UPDATE_2026-11-22.md)
+
+
 def with_cta(caption):
     if "comment 🙌" in caption.lower():
         return caption
@@ -351,6 +354,8 @@ def post(kind, media, caption, where="both", ctype=None, reel=True, extra=None, 
     if kind == "photo" and where == "both" and reel:  # owner rule: never a photo alone; make its Reel first
         from fmm import reel as reelmod
         pair = reelmod.make_reel(media, seconds=10, kind=ctype or ("code" if "code" in Path(media).name else None))  # raises (nothing posted) if the Reel can't be made
+        if ctype in REEL_ONLY:  # 22 Nov stats: these photo copies got ~800-1,000 vs 4,700-6,400 for their Reel
+            return post("reel", pair, caption, where, ctype, _stamp=False)
     if kind == "reel" and media.endswith(".mp4"):  # every Reel: gold progress bar (once per file)
         try:
             from fmm import motion

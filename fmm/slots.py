@@ -603,6 +603,7 @@ STOP_GAME_STARS = ("Messi", "C. Ronaldo", "Mbappé", "Haaland", "Pelé", "Marado
                    "Lamine Yamal", "Kane", "Henry", "Drogba")
 SAY = {"C. Ronaldo": "Ronaldo", "Ronaldo": "R9 Ronaldo", "Neymar Jr": "Neymar", "Vini Jr.": "Vinicius", "Lamine Yamal": "Yamal"}
 # Trial Reel hooks for photo formats (non-followers only); the weekly report compares them with the main first line
+TRIALS = False  # owner 22 Nov: trial copy Reels off (scored 1,800-2,400, below the main posts)
 PHOTO_HOOKS = {"statrank": ["Most people get number 1 wrong 👀", "Number 1 surprised me 😳", "Is your favourite on this list? 🤔"],
                "xi": ["This XI costs less than you think 🤑", "Budget team that actually wins 💰", "No gems needed for this XI 😮"]}
 
@@ -1011,7 +1012,7 @@ def post():
                       extra={"hook_style": hk["main"]} if "main" in hk else None)
     print("posted", res)
     alt = PHOTO_HOOKS.get(m.get("type"))
-    if kind == "photo" and alt and res.get("reel_file"):  # owner idea 5 (11 Nov): hook test on Top 10 / Cheap XI too
+    if TRIALS and kind == "photo" and alt and res.get("reel_file"):  # owner idea 5 (11 Nov): hook test on Top 10 / Cheap XI too
         try:
             from fmm.captions import polish
             day = dt.date.today().toordinal()
@@ -1023,7 +1024,7 @@ def post():
             print("trial reel skipped:", str(ex)[:150])
     # owner (10 Nov): review stats photo dropped (under 100 views each); review Reels post alone
     trial = OUT / "trial_caption.txt"
-    if kind == "reel" and trial.exists():  # hook test; a failure here never affects the main post
+    if TRIALS and kind == "reel" and trial.exists():  # hook test; a failure here never affects the main post
         try:
             from fmm.captions import polish
             t = polish(trial.read_text(encoding="utf-8"))
