@@ -214,6 +214,8 @@ def pick(kind, fresh, db, state):
             return "choose", list(fresh.values()), pool
         if slot_now() == "1300" and force is None and weekday == 4:  # owner 16 Nov: Fri = Shard Guide carousel
             return "shardguide", list(fresh.values()), pool
+        if slot_now() == "1300" and force is None and weekday == 0:  # owner 21 Nov: Mon = "Build your back four"
+            return "backfour", list(fresh.values()), pool
         if slot_now() == "1300" and force is None and weekday == 5:  # owner 21 Nov: Sat = "Which one is the best attack?"
             return "attacks", list(fresh.values()), pool
         if slot_now() == "1300" and force is None and weekday == 1:  # owner 16 Nov: Tue = Best XI by a stat (pitch)
@@ -435,7 +437,7 @@ def build(slot):
     if OUT.exists():
         shutil.rmtree(OUT)
     OUT.mkdir(parents=True)
-    if ctype in ("xi", "gem", "worth", "meme", "compare4", "pick3", "rank10", "choose", "statrank", "goat", "statxi", "shardguide", "attacks"):
+    if ctype in ("xi", "gem", "worth", "meme", "compare4", "pick3", "rank10", "choose", "statrank", "goat", "statxi", "shardguide", "attacks", "backfour"):
         media, caption = build_extra(ctype, players, pool, fresh, state)
         ctype = state.pop("_fallback", ctype)  # a fallback post is logged/labelled as its real type
         return finish(slot, kind, ctype, media, caption, players[:1], state)
@@ -813,6 +815,13 @@ def build_extra(ctype, latest, pool, fresh, state):
         return media, (f"CR7 or Messi? The debate never ends ⚔️\n\n{a['ovr']} {a['name']} ({a['pos']}) vs "
                        f"{b['ovr']} {b['name']} ({b['pos']}): full stats in the picture.\n\n"
                        "Who's your GOAT in FC Mobile? 👇\n\n#FCMobile #FIFAMobile #EAFC #Ronaldo #Messi")
+    elif ctype == "backfour":  # Mon 13:00: LB/CB/CB/RB x star/mid/budget with shard prices + a budget
+        from fmm import buildfour
+        img, caption = buildfour.build(OUT)
+        if not img:
+            state["_fallback"] = "versus"
+            return render_versus(next_pair(latest, state, pool), fresh)
+        return img, caption
     elif ctype == "attacks":  # Sat 13:00: 3 famous attack trios as FC Mobile cards, comment 1/2/3
         from fmm import attacks
         img, caption = attacks.build(OUT)
