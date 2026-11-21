@@ -244,3 +244,13 @@ What wins:
 - Challenges: "Score a hattrick with Onana", "Score a header with Maradona" (R I M UT I K, 640–685K).
 Restart rule: owner cuts each clip (one goal or one fail, <=15 s) and names it "goal <scorer> <card>" / "fail <what>";
 never auto-cut full matches. Meanwhile the free slots run the card formats (Top 10 / PlayStyles / XI / pick-one / EA logic).
+
+## Gameplay Shorts study #2 (21 Nov 2026, 194 Shorts via YouTube API, Jun-Nov 2026) -> goal Reels restarted, max 1/day
+- Top titles = card/player + ONE moment + emoji: "Ronaldo Rocket Goal💀🥶" 4.9M, "Roberto Carlos Curve Shoot" 4.7M,
+  "Del Piero's Secret Shoot" 10M, "Courtois' last-minute bicycle kick" 12M, "Ronaldo 89' Min Goal" 5.9M.
+- Lengths: single moments 6-17 s; themed compilations 20-33 s ("Goalkeepers Aren't Goalkeeping Anymore" 23M,
+  "They Don't Score Goals Like This Anymore" 8.7M). Now-vs-then (23M, 11M) and comeback stories (Vishy 4M) also win.
+- Our rule now: goal found by the scoreboard change, scorer read from the game's own card pop-up (never guessed),
+  clip = 7.5 s before the score change -> 0.5 s after (8 s), zoomed in, card + minute shown, title "<NAME> <OVR> GOAL".
+  Jobs in fmm/goalreel.py (g1_, g2_ ...), posted by the cloud: max ONE gameplay Reel per day.
+- Next ideas: "<Name> scores again" sequel posts (brace), weekly "Best goal of the week? 1/2/3" vote from 3 clips.

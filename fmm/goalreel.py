@@ -23,6 +23,19 @@ JOBS = [{
     "card": "assets/cards/rz/f30922854.png",
     "caption": "124 Ronaldinho Hat-trick 🔥🇧🇷\n\nThree goals in one H2H match: 8', 12', 30'. Which one was the best? 👇"
                "\n\n#FCMobile #FIFAMobile #EAFC #Ronaldinho #FMM",
+}, {
+    # 21 Nov: goals found by the scoreboard change (tools/goal_detect_study.py), scorer read from the game's own pop-up
+    "name": "g1_nico_williams_25", "source": "output/inbox/1BQ-oyjyMStrkbnbU_7IXzCPx9i7vjoyO.mp4",
+    "parts": [(106.5, 114.5, "25'")], "title": "NICO WILLIAMS 124 GOAL", "card": "assets/cards/rz/ingame_nico_williams_124.png",
+    "caption": "124 Nico Williams Goal 🔥🇪🇸\n\nWould you have scored this? Rate it 1-10 👇\n\n#FCMobile #FIFAMobile #EAFC #NicoWilliams #FMM",
+}, {
+    "name": "g2_dembele_68", "source": "output/inbox/1BQ-oyjyMStrkbnbU_7IXzCPx9i7vjoyO.mp4",
+    "parts": [(254.0, 262.0, "68'")], "title": "DEMBELE 127 GOAL", "card": "assets/cards/rz/ingame_dembele_127.png",
+    "caption": "127 Dembélé Goal 🥶🇫🇷\n\nIs this card worth it? 👇\n\n#FCMobile #FIFAMobile #EAFC #Dembele #FMM",
+}, {
+    "name": "g3_dembele_79", "source": "output/inbox/1BQ-oyjyMStrkbnbU_7IXzCPx9i7vjoyO.mp4",
+    "parts": [(300.3, 308.3, "79'")], "title": "DEMBELE AGAIN!!", "card": "assets/cards/rz/ingame_dembele_127.png",
+    "caption": "127 Dembélé Scores Again 💀🔥\n\nSecond goal of the match. Best ST in the game right now? 👇\n\n#FCMobile #FIFAMobile #EAFC #Dembele #FMM",
 }]
 
 
@@ -36,7 +49,7 @@ def make(job):
         seg = DIR / f"_seg{i}.mp4"
         vf = (f"[0:v]trim=start={a}:end={b},setpts=PTS-STARTPTS,split=2[x][y];"
               f"[x]scale=-2:{RH},crop={RW}:{RH},boxblur=25:2,eq=brightness=-0.12:saturation=1.3[bg];"
-              f"[y]scale=1560:-2,crop=1080:ih:(iw-1080)/2:0,{LOOK}[fg];"
+              f"[y]scale=2000:-2,crop=1080:ih:(iw-1080)/2:0,{LOOK}[fg];"
               f"[bg][fg]overlay=(W-w)/2:(H-h)/2-40[base];[base][1:v]overlay=0:0,format=yuv420p[v]")
         subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", str(src), "-i", str(ov), "-filter_complex", vf, "-map", "[v]",
                         "-r", "30", "-an", "-c:v", "libx264", "-preset", "medium", "-crf", "19", str(seg)], check=True)
@@ -88,7 +101,11 @@ def post_due():
     if sum(1 for e in log if e.get("type") == "goal_reel" and e.get("at", "")[:10] == today) >= 2:
         return None  # max 2 a day (owner: trend posts like the CR7 tribute can't wait a day)
     # special_N_*.png/.mp4 = owner's special posts (concept cards, tributes), posted in N order; photos get their Reel
-    items = sorted(DIR.glob("special_*"))  # owner 19 Nov: gameplay goal Reels paused, concept/special posts only
+    items = sorted(DIR.glob("special_*"))
+    # owner 21 Nov: gameplay goal Reels back (scoreboard-verified goals, g*_ jobs), NEVER more than 1 a day
+    if not any(e.get("type") == "goal_reel" and e.get("at", "")[:10] == today and Path(e.get("file", "")).name.startswith("g")
+               and not Path(e.get("file", "")).name.startswith("goal") for e in log):
+        items += sorted(DIR.glob("g[0-9]*_*.mp4"))
     for f in items:
         if f.suffix not in (".mp4", ".png") or f.name.endswith(("_cover.jpg", "_reel.mp4")):
             continue
