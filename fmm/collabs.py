@@ -33,6 +33,8 @@ def score(stats, name, kind):
 
 def held(stats, name):
     """Owner 22 Nov: hold partners who decline (any decline and no accept, or 3+ declines) until they accept again."""
+    if name in _load(CFG, {}).get("keep", []):  # owner: never hold these (newcomer_fm: big audience, 22 Nov)
+        return False
     st = stats.get("_status", {}).get(name, {})
     dec, acc, pend = st.get("Declined", 0), st.get("Accepted", 0), st.get("Pending", 0)
     # Instagram doesn't report "Declined"; an ignored invite stays Pending -> 5+ unanswered and no accept,
