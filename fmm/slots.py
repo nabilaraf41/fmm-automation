@@ -936,6 +936,15 @@ def build_extra(ctype, latest, pool, fresh, state):
                    + "\n\nWho's missing from this list? 👇"
                    + ("\n🇧🇷 Quem ficou de fora? Comenta aí 👇" if br else "")
                    + "\n\n" + (TAGS.replace("#FMM", "#FCMobileBrasil #FMM") if br else TAGS))
+        try:  # 22 Nov upgrade: Instagram carousel = the list + 3 slides of big cards (carousels got 5-10x our posts)
+            from fmm.attacks import row_slide
+            lab = lambda p: f"{'Lv.' if stat.startswith('PS_') else stat + ' '}{val(p)}"
+            slides = [row_slide(t, f"TOP 10 {label} BY {STAT_NAME[stat]}".upper(), ranked[a:b], OUT / f"top10_{k}.png",
+                                labels=[lab(p) for p in ranked[a:b]])
+                      for k, (t, a, b) in enumerate((("TOP 3", 0, 3), ("4 TO 7", 3, 7), ("8 TO 10", 7, 10)))]
+            (OUT / "carousel.json").write_text(json.dumps(["slot.png"] + [f.name for f in slides]), encoding="utf-8")
+        except Exception as ex:  # no carousel -> the normal photo + Reel
+            print("top 10 carousel skipped:", str(ex)[:120])
     elif ctype == "choose":  # 17:00 "Choose 1": 4 cards of one position, 122+; defenders/attackers/midfielders by day
         day = dt.date.today().toordinal()
         groups = [["CB", "LB", "RB"], ["ST", "LW", "RW"], ["CM", "CAM", "CDM"]]
@@ -1021,7 +1030,7 @@ def post():
         print("posted", poster.post_carousel(files, caption, m.get("type")))
         try:  # 22 Nov upgrade: carousel on FB + IG, and its first slide as a Reel too (YouTube Shorts + Reels tab)
             from fmm import reel as reelmod
-            r = reelmod.make_reel(files[0], seconds=8, kind=m.get("type"))
+            r = reelmod.make_reel(files[0], seconds=7 if m.get("type") == "statrank" else 8, kind=m.get("type"))
             print("carousel reel", poster.post("reel", r, caption, "both", m.get("type"), _stamp=False))
         except Exception as ex:
             print("carousel reel skipped:", str(ex)[:150])

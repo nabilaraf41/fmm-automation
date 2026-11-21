@@ -36,6 +36,13 @@ JOBS = [{
     "name": "g3_dembele_79", "source": "output/inbox/1BQ-oyjyMStrkbnbU_7IXzCPx9i7vjoyO.mp4",
     "parts": [(300.3, 308.3, "79'")], "title": "DEMBELE AGAIN!!", "card": "assets/cards/rz/ingame_dembele_127.png",
     "caption": "127 Dembélé Scores Again 💀🔥\n\nSecond goal of the match. Best ST in the game right now? 👇\n\n#FCMobile #FIFAMobile #EAFC #Dembele #FMM",
+}, {
+    # 22 Nov upgrade: vote Reel ("Who deserves the best goal?" 1.5M, "Pick one, Puskas" 13.7M) from the 3 verified goals
+    "name": "g4_best_goal_vote", "source": "output/inbox/1BQ-oyjyMStrkbnbU_7IXzCPx9i7vjoyO.mp4",
+    "parts": [(106.5, 114.5, "GOAL 1", "assets/cards/rz/ingame_nico_williams_124.png"), (254.0, 262.0, "GOAL 2"),
+              (300.3, 308.3, "GOAL 3")],
+    "title": "BEST GOAL? 1, 2 OR 3", "card": "assets/cards/rz/ingame_dembele_127.png",
+    "caption": "Which goal is the best? 1, 2 or 3 🤔⚽\n\n1. 124 Nico Williams\n2. 127 Dembélé\n3. 127 Dembélé again\n\nComment your pick 👇\n\n#FCMobile #FIFAMobile #EAFC #FCMobileGoals #FMM",
 }]
 
 
@@ -44,8 +51,8 @@ def make(job):
     out = DIR / f"{job['name']}.mp4"
     src = ROOT / job["source"]
     segs = []
-    for i, (a, b, label) in enumerate(job["parts"]):
-        ov = overlay_png(job["title"], label, DIR / f"_ov{i}.png", ROOT / job["card"], title_y=430)  # below ATB box
+    for i, (a, b, label, *card) in enumerate(job["parts"]):  # optional 4th item = that goal's scorer card
+        ov = overlay_png(job["title"], label, DIR / f"_ov{i}.png", ROOT / (card[0] if card else job["card"]), title_y=430)  # below ATB box
         seg = DIR / f"_seg{i}.mp4"
         vf = (f"[0:v]trim=start={a}:end={b},setpts=PTS-STARTPTS,split=2[x][y];"
               f"[x]scale=-2:{RH},crop={RW}:{RH},boxblur=25:2,eq=brightness=-0.12:saturation=1.3[bg];"
@@ -64,9 +71,9 @@ def make(job):
     from fmm import music, sfx, atb
     sfx.build() if not (sfx.OUT / "impact.wav").exists() else None
     track, start = music.pick(job["name"])
-    total = sum(b - a for a, b, _ in job["parts"])
+    total = sum(b - a for a, b, *_ in job["parts"])
     hits, t = [], 0.0
-    for a, b, _ in job["parts"]:
+    for a, b, *_ in job["parts"]:
         t += b - a
         hits.append(int((t - 1.5) * 1000))
     ins = ["-i", str(joined), "-stream_loop", "-1", "-ss", str(start), "-i", track]
