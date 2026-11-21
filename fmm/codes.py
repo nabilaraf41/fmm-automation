@@ -43,6 +43,22 @@ def parse_active(page):
     return out
 
 
+FAKE = re.compile(r"probe|test|dummy|sample|example", re.I)
+OUR_CHANNEL = "UCsM21u8fqgx6btOk7v06d0A"
+
+
+def confirmed(code, days=14):
+    """2nd source (owner rule): at least 2 OTHER YouTube channels mention the code in the last `days` days.
+    22 Nov: the Forum listed a test entry "RZPROBE" ("RZ probe code") and we posted it; never again."""
+    from fmm import youtube
+    after = (dt.datetime.now(dt.UTC) - dt.timedelta(days=days)).strftime("%Y-%m-%dT%H:%M:%SZ")
+    r = youtube.service().search().list(q=code, part="snippet", type="video", publishedAfter=after, maxResults=15).execute()
+    chans = {i["snippet"]["channelId"] for i in r.get("items", [])
+             if i["snippet"]["channelId"] != OUR_CHANNEL
+             and code.lower() in (i["snippet"]["title"] + " " + i["snippet"]["description"]).lower()}
+    return len(chans) >= 2
+
+
 def load_state():
     return json.loads(STATE.read_text(encoding="utf-8")) if STATE.exists() else {"seen": {}, "roundups": []}
 
@@ -76,7 +92,22 @@ def run(dry=False):
     from fmm import brand, motion  # heavy imports only when rendering
     active = parse_active(fetch())
     state = load_state()
-    new = [c for c in active if c["code"] not in state["seen"]]
+    rejected = state.setdefault("rejected", {})
+    for c in active:
+        if c["code"] not in state["seen"] and c["code"] not in rejected and FAKE.search(c["code"] + " " + c["reward"]):
+            rejected[c["code"]] = "looks like a test entry: " + c["reward"]
+    active = [c for c in active if c["code"] not in rejected]
+    new = []
+    for c in [c for c in active if c["code"] not in state["seen"]]:
+        try:
+            ok = confirmed(c["code"])
+        except Exception as ex:  # no YouTube check possible -> wait, never post unconfirmed
+            print("code check failed, waiting:", c["code"], str(ex)[:80]); ok = False
+        if ok:
+            new.append(c)
+        else:
+            print("waiting for a 2nd source (2+ other YouTube channels):", c["code"])
+    active = [c for c in active if c["code"] in state["seen"] or c in new]  # roundups list confirmed codes only
     print("active:", [c["code"] for c in active], "| new:", [c["code"] for c in new])
     if dry:
         return
