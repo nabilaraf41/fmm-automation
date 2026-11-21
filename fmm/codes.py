@@ -92,22 +92,11 @@ def run(dry=False):
     from fmm import brand, motion  # heavy imports only when rendering
     active = parse_active(fetch())
     state = load_state()
+    # owner 22 Nov: FC Mobile Forum alone is enough for codes (regional codes like RZPROBE, Vietnam, are real);
+    # only codes the owner rejects by hand (state["rejected"]) are skipped
     rejected = state.setdefault("rejected", {})
-    for c in active:
-        if c["code"] not in state["seen"] and c["code"] not in rejected and FAKE.search(c["code"] + " " + c["reward"]):
-            rejected[c["code"]] = "looks like a test entry: " + c["reward"]
     active = [c for c in active if c["code"] not in rejected]
-    new = []
-    for c in [c for c in active if c["code"] not in state["seen"]]:
-        try:
-            ok = confirmed(c["code"])
-        except Exception as ex:  # no YouTube check possible -> wait, never post unconfirmed
-            print("code check failed, waiting:", c["code"], str(ex)[:80]); ok = False
-        if ok:
-            new.append(c)
-        else:
-            print("waiting for a 2nd source (2+ other YouTube channels):", c["code"])
-    active = [c for c in active if c["code"] in state["seen"] or c in new]  # roundups list confirmed codes only
+    new = [c for c in active if c["code"] not in state["seen"]]
     print("active:", [c["code"] for c in active], "| new:", [c["code"] for c in new])
     if dry:
         return
