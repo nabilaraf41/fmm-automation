@@ -43,22 +43,6 @@ def parse_active(page):
     return out
 
 
-FAKE = re.compile(r"probe|test|dummy|sample|example", re.I)
-OUR_CHANNEL = "UCsM21u8fqgx6btOk7v06d0A"
-
-
-def confirmed(code, days=14):
-    """2nd source (owner rule): at least 2 OTHER YouTube channels mention the code in the last `days` days.
-    22 Nov: the Forum listed a test entry "RZPROBE" ("RZ probe code") and we posted it; never again."""
-    from fmm import youtube
-    after = (dt.datetime.now(dt.UTC) - dt.timedelta(days=days)).strftime("%Y-%m-%dT%H:%M:%SZ")
-    r = youtube.service().search().list(q=code, part="snippet", type="video", publishedAfter=after, maxResults=15).execute()
-    chans = {i["snippet"]["channelId"] for i in r.get("items", [])
-             if i["snippet"]["channelId"] != OUR_CHANNEL
-             and code.lower() in (i["snippet"]["title"] + " " + i["snippet"]["description"]).lower()}
-    return len(chans) >= 2
-
-
 def load_state():
     return json.loads(STATE.read_text(encoding="utf-8")) if STATE.exists() else {"seen": {}, "roundups": []}
 
