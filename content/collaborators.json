@@ -41,10 +41,15 @@
     "newcomer_fm"
   ],
   "youtube": {
-    "addon_fcm": "@addon_fcm",
     "tazeafc": "@tazeafc",
-    "goat_editv": "@goat_editv",
+    "addon_fcm": "@addon_fcm",
+    "delete_fc": "@delete-fc",
+    "elite_fc.02": "@ELITEFC-u3o",
+    "newcomer_fm": "@newcomerfm",
+    "eafc_jacobek08": "@Jacobek08",
     "theeliteelastico": "@theeliteelastico",
-    "fcthunder_ea": "@fcthunder_ea"
+    "fcthunder_ea": "@fcthunder_ea",
+    "goat_editv": "@goat_editv",
+    "hamza.dzn_": "@HamzaFCM"
   }
 }
