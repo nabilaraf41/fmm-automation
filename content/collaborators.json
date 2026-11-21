@@ -1,5 +1,7 @@
 {
-  "always": [],
+  "always": [
+    "newcomer_fm"
+  ],
   "prefer": {
     "newcomer_fm": [
       "photo:statrank",
@@ -31,5 +33,8 @@
     "aftab.fc": [
       "photo"
     ]
-  }
+  },
+  "keep": [
+    "newcomer_fm"
+  ]
 }
