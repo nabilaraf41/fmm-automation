@@ -339,7 +339,7 @@ def post(kind, media, caption, where="both", ctype=None, reel=True, extra=None, 
             print(f"duplicate guard: a {kind}:{ctype} already posted in the last 45 min, not posting again")
             return {}
     global _NO_COLLAB
-    _NO_COLLAB = ctype == "stopgame"  # owner: never tag partners on the deliberate wrong-name Reel
+    _NO_COLLAB = False  # 22 Nov: stop game now uses the correct names (owner), so partners are invited on it too
     global _NOW
     _NOW = (kind, ctype or "")
     label = day_label(ctype) if _stamp else None

@@ -114,6 +114,13 @@ if __name__ == "__main__":
             print("goal reel posted:", g)
     except Exception as ex:
         print("goal reel skipped:", str(ex)[:150])
+    try:  # 22 Nov: 2 extra YouTube-only stop-game Shorts a day (10:00 + 15:00) for the 10M Shorts views goal
+        from fmm import ytextra
+        y = ytextra.post_due(now)
+        if y:
+            print("youtube extra short:", y)
+    except Exception as ex:
+        print("youtube extra skipped:", str(ex)[:150])
     try:  # owner's "ATB Meme" (content/atb_meme.json queue): one a day from 15:00 BDT, photo + Reel
         from fmm import atbmeme
         m = atbmeme.post_due() if extra_ok() else None
