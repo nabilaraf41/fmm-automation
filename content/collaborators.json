@@ -39,5 +39,12 @@
   },
   "keep": [
     "newcomer_fm"
-  ]
+  ],
+  "youtube": {
+    "addon_fcm": "@addon_fcm",
+    "tazeafc": "@tazeafc",
+    "goat_editv": "@goat_editv",
+    "theeliteelastico": "@theeliteelastico",
+    "fcthunder_ea": "@fcthunder_ea"
+  }
 }
