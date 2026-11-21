@@ -1,18 +1,21 @@
 {
-  "always": [
-    "newcomer_fm"
-  ],
+  "always": [],
   "prefer": {
     "newcomer_fm": [
+      "carousel:statrank",
+      "carousel:xi",
+      "carousel:shardguide",
+      "carousel:attacks",
+      "carousel:backfour",
       "photo:statrank",
-      "photo:newcard"
+      "photo:newcard",
+      "photo:other"
     ]
   },
   "rotate": [
     "goat_editv",
     "theeliteelastico",
     "eafc_jacobek08",
-    "newcomer_fm",
     "hatedsurvivorsfcm",
     "tazeafc",
     "fc_highlightss",
