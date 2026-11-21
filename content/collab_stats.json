@@ -1,54 +1,146 @@
 {
  "theeliteelastico": {
   "photo:choose": [
-   1,
-   2
+   4,
+   7
   ],
   "reel:choose": [
-   1,
-   1
+   6,
+   6
   ],
   "photo:other": [
    5,
-   5
+   6
   ],
   "reel:other": [
    5,
-   5
+   6
   ],
   "photo:statrank": [
-   1,
-   1
+   3,
+   3
   ],
   "reel:statrank": [
-   3,
-   3
+   8,
+   9
   ],
   "reel:pack": [
-   1,
-   1
+   2,
+   2
   ],
   "photo:xi": [
+   3,
+   4
+  ],
+  "reel:clip": [
+   6,
+   10
+  ],
+  "photo:leak": [
    1,
    1
   ],
-  "reel:clip": [
+  "carousel:xi": [
+   1,
+   1
+  ],
+  "reel:goal_reel": [
+   6,
+   8
+  ],
+  "photo:goal_reel": [
+   2,
+   5
+  ],
+  "reel:xi": [
    3,
    3
   ],
-  "photo:leak": [
+  "reel:review_reel": [
+   1,
+   1
+  ],
+  "photo:versus": [
+   1,
+   2
+  ],
+  "reel:versus": [
+   2,
+   2
+  ],
+  "carousel:shardguide": [
    0,
    1
   ]
  },
+ "_status": {
+  "theeliteelastico": {
+   "Pending": 18,
+   "Accepted": 59
+  },
+  "newcomer_fm": {
+   "Pending": 46,
+   "Accepted": 6
+  },
+  "tazeafc": {
+   "Accepted": 8,
+   "Pending": 19
+  },
+  "hatedsurvivorsfcm": {
+   "Accepted": 3,
+   "Pending": 24
+  },
+  "eafc_jacobek08": {
+   "Accepted": 67,
+   "Pending": 2
+  },
+  "goat_editv": {
+   "Accepted": 35,
+   "Pending": 35
+  },
+  "fc_highlightss": {
+   "Pending": 13,
+   "Accepted": 1
+  },
+  "fc_bangladesh_402": {
+   "Pending": 10,
+   "Accepted": 5
+  },
+  "aftab.fc": {
+   "Accepted": 2,
+   "Pending": 11
+  },
+  "delete_fc": {
+   "Accepted": 7,
+   "Pending": 6
+  },
+  "fcthunder_ea": {
+   "Pending": 4,
+   "Accepted": 6
+  },
+  "hamza.dzn_": {
+   "Pending": 5
+  },
+  "elite_fc.710": {
+   "Accepted": 6
+  },
+  "elite_fc.02": {
+   "Accepted": 3,
+   "Pending": 2
+  },
+  "dfx_eafc": {
+   "Accepted": 2,
+   "Pending": 1
+  }
+ },
  "newcomer_fm": {
   "photo:choose": [
    0,
-   2
+   4
   ],
   "reel:choose": [
    0,
-   2
+   4
   ],
   "photo:other": [
    2,
@@ -59,12 +151,12 @@
    6
   ],
   "photo:statrank": [
-   1,
-   6
+   2,
+   12
   ],
   "reel:statrank": [
    0,
-   5
+   6
   ],
   "reel:pack": [
    0,
@@ -72,7 +164,7 @@
   ],
   "photo:xi": [
    0,
-   1
+   2
   ],
   "reel:xi": [
    0,
@@ -80,9 +172,25 @@
   ],
   "reel:clip": [
    1,
-   3
+   5
   ],
   "photo:leak": [
+   0,
+   1
+  ],
+  "carousel:xi": [
+   1,
+   1
+  ],
+  "reel:goal_reel": [
+   0,
+   1
+  ],
+  "photo:versus": [
+   0,
+   1
+  ],
+  "reel:versus": [
    0,
    1
   ]
@@ -98,7 +206,7 @@
   ],
   "photo:other": [
    2,
-   4
+   5
   ],
   "reel:other": [
    2,
@@ -106,7 +214,7 @@
   ],
   "reel:statrank": [
    1,
-   1
+   2
   ],
   "photo:xi": [
    1,
@@ -117,6 +225,26 @@
    3
   ],
   "reel:leak": [
+   0,
+   1
+  ],
+  "reel:goal_reel": [
+   0,
+   1
+  ],
+  "photo:statrank": [
+   0,
+   1
+  ],
+  "reel:pack": [
+   0,
+   1
+  ],
+  "photo:versus": [
+   0,
+   1
+  ],
+  "reel:xi": [
    0,
    1
   ]
@@ -124,11 +252,11 @@
  "hatedsurvivorsfcm": {
   "photo:statrank": [
    2,
-   2
+   4
   ],
   "photo:other": [
    1,
-   1
+   2
   ],
   "reel:pack": [
    0,
@@ -136,69 +264,181 @@
   ],
   "photo:choose": [
    0,
-   1
+   3
   ],
   "reel:statrank": [
    0,
-   1
+   3
   ],
   "reel:clip": [
    0,
-   3
+   5
   ],
   "photo:leak": [
+   0,
+   1
+  ],
+  "carousel:xi": [
+   0,
+   1
+  ],
+  "reel:choose": [
+   0,
+   2
+  ],
+  "reel:goal_reel": [
+   0,
+   1
+  ],
+  "photo:versus": [
+   0,
+   2
+  ],
+  "reel:versus": [
+   0,
+   1
+  ],
+  "photo:xi": [
    0,
    1
   ]
  },
  "eafc_jacobek08": {
   "reel:pack": [
-   2,
-   2
+   3,
+   3
   ],
   "photo:statrank": [
-   2,
-   2
+   7,
+   8
   ],
   "reel:xi": [
-   2,
-   2
+   5,
+   5
   ],
   "reel:choose": [
-   1,
-   2
+   6,
+   7
   ],
   "reel:statrank": [
+   7,
+   7
+  ],
+  "reel:clip": [
+   9,
+   9
+  ],
+  "carousel:xi": [
    1,
    1
   ],
-  "reel:clip": [
+  "reel:goal_reel": [
+   8,
+   8
+  ],
+  "photo:choose": [
+   5,
+   5
+  ],
+  "photo:goal_reel": [
+   5,
+   5
+  ],
+  "photo:other": [
+   1,
+   1
+  ],
+  "reel:other": [
+   1,
+   1
+  ],
+  "photo:xi": [
+   3,
+   3
+  ],
+  "reel:review_reel": [
+   1,
+   1
+  ],
+  "photo:versus": [
    2,
    2
+  ],
+  "reel:versus": [
+   2,
+   2
+  ],
+  "carousel:shardguide": [
+   1,
+   1
   ]
  },
  "goat_editv": {
   "reel:pack": [
-   2,
-   2
-  ],
-  "reel:statrank": [
-   2,
-   2
-  ],
-  "reel:xi": [
-   2,
-   2
-  ],
-  "photo:statrank": [
-   2,
-   2
-  ],
-  "reel:clip": [
    3,
    3
   ],
+  "reel:statrank": [
+   6,
+   8
+  ],
+  "reel:xi": [
+   2,
+   5
+  ],
+  "photo:statrank": [
+   3,
+   8
+  ],
+  "reel:clip": [
+   5,
+   10
+  ],
   "reel:goal_reel": [
+   7,
+   9
+  ],
+  "carousel:xi": [
+   0,
+   1
+  ],
+  "photo:choose": [
+   0,
+   5
+  ],
+  "reel:choose": [
+   4,
+   5
+  ],
+  "photo:goal_reel": [
+   2,
+   5
+  ],
+  "photo:other": [
+   1,
+   1
+  ],
+  "reel:other": [
+   1,
+   1
+  ],
+  "photo:xi": [
+   0,
+   3
+  ],
+  "reel:review_reel": [
+   1,
+   1
+  ],
+  "photo:versus": [
+   0,
+   2
+  ],
+  "reel:versus": [
+   0,
+   2
+  ],
+  "carousel:shardguide": [
    0,
    1
   ]
@@ -206,7 +446,7 @@
  "fc_highlightss": {
   "reel:other": [
    0,
-   1
+   2
   ],
   "photo:xi": [
    1,
@@ -229,6 +469,18 @@
    1
   ],
   "reel:goal_reel": [
+   0,
+   2
+  ],
+  "reel:pack": [
+   0,
+   1
+  ],
+  "reel:versus": [
+   0,
+   1
+  ],
+  "reel:xi": [
    0,
    1
   ]
@@ -252,7 +504,7 @@
   ],
   "reel:clip": [
    0,
-   2
+   3
   ],
   "reel:pack": [
    0,
@@ -261,6 +513,14 @@
   "reel:leak": [
    1,
    1
+  ],
+  "reel:goal_reel": [
+   1,
+   3
+  ],
+  "photo:goal_reel": [
+   0,
+   2
   ]
  },
  "aftab.fc": {
@@ -274,19 +534,43 @@
   ],
   "reel:clip": [
    0,
+   5
+  ],
+  "reel:goal_reel": [
+   0,
    3
+  ],
+  "photo:choose": [
+   1,
+   1
+  ],
+  "photo:goal_reel": [
+   0,
+   2
   ]
  },
  "delete_fc": {
   "photo:statrank": [
-   1,
-   2
-  ],
-  "reel:clip": [
    2,
    3
   ],
+  "reel:clip": [
+   3,
+   5
+  ],
   "reel:statrank": [
+   1,
+   2
+  ],
+  "photo:choose": [
+   1,
+   1
+  ],
+  "reel:review_reel": [
+   0,
+   1
+  ],
+  "photo:goal_reel": [
    0,
    1
   ]
@@ -294,9 +578,33 @@
  "fcthunder_ea": {
   "photo:statrank": [
    0,
-   1
+   2
   ],
   "reel:statrank": [
+   2,
+   2
+  ],
+  "reel:choose": [
+   1,
+   1
+  ],
+  "reel:clip": [
+   1,
+   1
+  ],
+  "photo:xi": [
+   0,
+   1
+  ],
+  "reel:review_reel": [
+   1,
+   1
+  ],
+  "photo:choose": [
+   1,
+   1
+  ],
+  "reel:goal_reel": [
    0,
    1
   ]
@@ -305,7 +613,85 @@
   "reel:goal_reel": [
    0,
    1
+  ],
+  "photo:goal_reel": [
+   0,
+   1
+  ],
+  "reel:other": [
+   0,
+   1
+  ],
+  "photo:statrank": [
+   0,
+   1
+  ],
+  "reel:versus": [
+   0,
+   1
   ]
  },
- "_updated": 1794800505.0206766
+ "elite_fc.710": {
+  "reel:choose": [
+   1,
+   1
+  ],
+  "reel:clip": [
+   1,
+   1
+  ],
+  "photo:xi": [
+   1,
+   1
+  ],
+  "photo:choose": [
+   1,
+   1
+  ],
+  "reel:goal_reel": [
+   1,
+   1
+  ],
+  "reel:statrank": [
+   1,
+   1
+  ]
+ },
+ "elite_fc.02": {
+  "reel:clip": [
+   1,
+   1
+  ],
+  "reel:xi": [
+   1,
+   1
+  ],
+  "reel:choose": [
+   1,
+   1
+  ],
+  "photo:statrank": [
+   0,
+   1
+  ],
+  "reel:statrank": [
+   0,
+   1
+  ]
+ },
+ "dfx_eafc": {
+  "reel:xi": [
+   1,
+   1
+  ],
+  "reel:choose": [
+   1,
+   1
+  ],
+  "photo:statrank": [
+   0,
+   1
+  ]
+ },
+ "_updated": 1795288075.8511293
 }
