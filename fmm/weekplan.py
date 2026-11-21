@@ -20,7 +20,7 @@ def plan(start=None, days=None):
     fresh, db, _ = slots.latest_players()
     st = copy.deepcopy(slots.load_state())  # dry run: nothing is saved
     lines = [f"# FMM plan: {start:%a %d %b} to {start + dt.timedelta(days=days - 1):%a %d %b %Y}", "",
-             "Times are Bangladesh time. Each post also goes out as a Reel (photos too).", ""]
+             "Times are Bangladesh time. Top 10, Back Four, Best Attack, Best XI and Shard Guide post as photo + Reel; Choose 1, Versus and Budget XI as Reel only.", ""]
     real_dt = slots.dt
     try:
         for i in range(days):
@@ -51,7 +51,7 @@ def plan(start=None, days=None):
             lines.append("")
     finally:
         slots.dt = real_dt
-    lines += ["Extras any day: new redeem codes, new-player drop (Thursday), your Drive clips (they go first).", ""]
+    lines += ["Extras any day: new redeem codes, new-player drop (Thursday), 1 verified goal Reel max (scorer read from the game), concept-card specials.", ""]
     OUT.write_text("\n".join(lines), encoding="utf-8")
     return "\n".join(lines)
 
