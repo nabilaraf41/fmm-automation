@@ -77,10 +77,15 @@ def render(rows, out):
     return out
 
 
+def post_no(day):
+    """Wed + Sat posts counted from Wed 25 Nov 2026 (0, 1, 2 ...), so all 30 trios run before any repeat."""
+    return ((day - dt.date(2026, 11, 25)).days // 7) * 2 + (1 if day.weekday() == 5 else 0)
+
+
 def build(outdir, week=None):
     from fmm import shards
     cards = shards.forum_cards()
-    w = week if week is not None else (dt.date.today() - dt.date(2026, 11, 28)).days // 7  # Saturdays since the first post
+    w = week if week is not None else post_no(dt.date.today())
     order = TRIOS[(w * 3) % len(TRIOS):] + TRIOS[:(w * 3) % len(TRIOS)]
     rows = []
     for club, names in order:

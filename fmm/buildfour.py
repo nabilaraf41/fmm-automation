@@ -60,7 +60,7 @@ def render(grid, budget, out):
 
 
 def build(outdir, week=None):
-    w = week or dt.date.today().isocalendar()[1]
+    w = week or dt.date.today().toordinal()  # new defenders every post (Mon + Thu)
     grid = pick(w)
     if sum(1 for row in grid for p in row if p) < 10:
         return None, None

@@ -214,9 +214,9 @@ def pick(kind, fresh, db, state):
             return "choose", list(fresh.values()), pool
         if slot_now() == "1300" and force is None and weekday == 4:  # owner 16 Nov: Fri = Shard Guide carousel
             return "shardguide", list(fresh.values()), pool
-        if slot_now() == "1300" and force is None and weekday == 0:  # owner 21 Nov: Mon = "Build your back four"
+        if slot_now() == "1300" and force is None and weekday in (0, 3):  # owner 21 Nov: Mon + Thu = "Build your back four" (2 a week)
             return "backfour", list(fresh.values()), pool
-        if slot_now() == "1300" and force is None and weekday == 5:  # owner 21 Nov: Sat = "Which one is the best attack?"
+        if slot_now() == "1300" and force is None and weekday in (2, 5):  # owner 21 Nov: Wed + Sat = "Which one is the best attack?" (2 a week)
             return "attacks", list(fresh.values()), pool
         if slot_now() == "1300" and force is None and weekday == 1:  # owner 16 Nov: Tue = Best XI by a stat (pitch)
             return "statxi", list(fresh.values()), pool
