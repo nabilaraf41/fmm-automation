@@ -4,7 +4,7 @@ Reads last week's posts from content/posted.json, fetches results (YouTube views
 Facebook likes/comments), scores each post type, writes content/weekly_report.md and sets
 featured.json -> "boost" (best photo format, gets extra turns) and "drop" (worst, skipped) for the photo rotation.
 """
-import collections, datetime as dt, json
+import time, collections, datetime as dt, json
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -86,6 +86,7 @@ def run(force=False):
         if e.get("at", "") < since or not type_of(e):
             continue
         m = metrics(e)
+        time.sleep(2)  # 22 Nov: Meta blocks stats reads after ~100 fast calls (later posts then showed 0)
         posts.append({"type": type_of(e), "kind": e["kind"], "score": score(m), "at": e["at"][:10],
                       "hour": e["at"][11:13], "hook_style": e.get("hook_style"), **m})
     ranked = rank(posts)

@@ -87,9 +87,15 @@ if __name__ == "__main__":
         run_slot(now)
     except Exception as ex:
         print("slot failed (next hourly run retries):", str(ex)[:200])
+    def extra_ok():  # owner 22 Nov upgrade: ONE extra post a day (leak / goal / special / meme), 10:00-21:59 BDT only
+        from fmm import poster as _p
+        today = now.strftime("%Y-%m-%d")
+        lg = json.loads(_p.LOG.read_text(encoding="utf-8")) if _p.LOG.exists() else []
+        return 10 <= now.hour < 22 and not any(e.get("type") in ("leak", "goal_reel", "atb_meme") and e.get("at", "")[:10] == today for e in lg)
+
     try:  # leaks / predictions made on the PC (content/leaks.json): one a day from 11:00 BDT, photo + Reel
         from fmm import leaks
-        m = leaks.post_due()
+        m = leaks.post_due() if extra_ok() else None
         if m:
             print("leak posted:", m)
     except Exception as ex:
@@ -103,14 +109,14 @@ if __name__ == "__main__":
         print("collab stats skipped:", str(ex)[:150])
     try:  # goal Reels made on the PC from owner-confirmed goals (assets/goal_reels): one a day
         from fmm import goalreel
-        g = goalreel.post_due()
+        g = goalreel.post_due() if extra_ok() and now.hour >= 15 else None
         if g:
             print("goal reel posted:", g)
     except Exception as ex:
         print("goal reel skipped:", str(ex)[:150])
     try:  # owner's "ATB Meme" (content/atb_meme.json queue): one a day from 15:00 BDT, photo + Reel
         from fmm import atbmeme
-        m = atbmeme.post_due()
+        m = atbmeme.post_due() if extra_ok() else None
         if m:
             print("atb meme posted:", m)
     except Exception as ex:

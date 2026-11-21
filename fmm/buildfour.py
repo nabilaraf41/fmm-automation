@@ -67,6 +67,11 @@ def build(outdir, week=None):
     top = sum(p["shards"] for p in grid[0] if p)
     budget = int(round(top * 0.55 / 5000) * 5000)
     out = render(grid, budget, Path(outdir) / "backfour.png")
+    from fmm.attacks import row_slide
+    slides = [out] + [row_slide(t, f"BUDGET {budget:,} SHARDS", [p for p in grid[r] if p], Path(outdir) / f"backfour_{r}.png",
+                                labels=[f"{p['shards']:,}" for p in grid[r] if p])
+                      for r, t in enumerate(("STARS", "MID PRICE", "BUDGET"))]
+    (Path(outdir) / "carousel.json").write_text(__import__("json").dumps([f.name for f in slides]), encoding="utf-8")
     names = lambda r: ", ".join(f"{p['ovr']} {p['name']} ({p['shards']:,})" for p in grid[r] if p)
     cap = (f"You have {budget:,} Star Shards to build your back four 💎🧱\n\n"
            "Pick one LB, two CBs and one RB without going over the budget. Comment your 4 👇\n\n"

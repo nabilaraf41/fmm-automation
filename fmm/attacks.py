@@ -49,14 +49,14 @@ def card_for(name, cards):
     return p
 
 
-def render(rows, out):
+def render(rows, out, title="WHICH ONE", sub="I S   T H E   B E S T   A T T A C K ?"):
     W, H = 1080, 1350
     img, d, _ = brand.base("event", None, (W, H))
     img = img.convert("RGBA"); d = ImageDraw.Draw(img)
-    d.text((W / 2, 215), "WHICH ONE", font=brand.font("Anton-Regular.ttf", 140), fill=(200, 255, 0), anchor="mm")
-    d.text((W / 2, 310), "I S   T H E   B E S T   A T T A C K ?", font=brand.label_font(34), fill=(255, 255, 255), anchor="mm")
+    d.text((W / 2, 215), title, font=brand.font("Anton-Regular.ttf", 140), fill=(200, 255, 0), anchor="mm")
+    d.text((W / 2, 310), sub, font=brand.label_font(34), fill=(255, 255, 255), anchor="mm")
     for i, (club, cards) in enumerate(rows):
-        y0 = 340 + i * 305
+        y0 = 340 + i * 305 + (70 if len(rows) == 2 else 0)
         col = ROWS[i]
         layer = Image.new("RGBA", (W, H)); ld = ImageDraw.Draw(layer)
         ld.rounded_rectangle((40, y0 + 40, W - 40, y0 + 290), 50, fill=col + (150,), outline=col + (255,), width=5)
@@ -72,7 +72,7 @@ def render(rows, out):
         f = brand.font("Anton-Regular.ttf", 40)
         for k, ln in enumerate(lines):
             d.text((935, y0 + 165 + (k - (len(lines) - 1) / 2) * 50), ln, font=f, fill=(255, 255, 255), anchor="mm")
-    d.text((W / 2, H - 28), "COMMENT 1, 2 OR 3", font=brand.font("Anton-Regular.ttf", 40), fill=(200, 255, 0), anchor="mm")
+    d.text((W / 2, H - 28), ("COMMENT 1 OR 2" if len(rows) == 2 else "COMMENT 1, 2 OR 3"), font=brand.font("Anton-Regular.ttf", 40), fill=(200, 255, 0), anchor="mm")
     img.convert("RGB").save(out, quality=94)
     return out
 
@@ -99,7 +99,57 @@ def build(outdir, week=None):
     if len(rows) < 3:
         return None, None
     out = render(rows, Path(outdir) / "attacks.png")
+    slides = [out] + [row_slide(f"OPTION {i}", club, cs, Path(outdir) / f"attacks_{i}.png",
+                                labels=[f"{p['ovr']} {p['pos']}" for p in cs]) for i, (club, cs) in enumerate(rows, 1)]
+    (Path(outdir) / "carousel.json").write_text(__import__("json").dumps([f.name for f in slides]), encoding="utf-8")
     cap = ("WHICH ONE is the best attack? 🤯🔥\n\n" +
            "\n".join(f"{i}. {c}: " + ", ".join(f"{p['ovr']} {p['name']}" for p in cs) for i, (c, cs) in enumerate(rows, 1)) +
            "\n\nComment 1, 2 or 3 👇\n\nCards: FC Mobile Forum.\n\n#FCMobile #FIFAMobile #EAFC #FCMobileCards #FMM")
+    return out, cap
+
+
+def row_slide(title, sub, cards, out, color=(200, 255, 0), labels=None):
+    """Carousel slide: one row of cards, big (22 Nov upgrade: carousels get 5-10x our other posts)."""
+    W, H = 1080, 1350
+    img, d, _ = brand.base("event", None, (W, H))
+    img = img.convert("RGBA"); d = ImageDraw.Draw(img)
+    d.text((W / 2, 215), title, font=brand.font("Anton-Regular.ttf", 110), fill=color, anchor="mm")
+    d.text((W / 2, 310), sub, font=brand.label_font(34), fill=(255, 255, 255), anchor="mm")
+    n = len(cards)
+    cols = 2 if n == 4 else n
+    w, h = 1000 // cols, (340 if n == 4 else 560)
+    for j, p in enumerate(cards):
+        c = brand.fit_card(p["card"], w + 40, h)
+        cx = 40 + w * (j % cols) + w / 2
+        y = 360 + (j // cols) * (h + 115) + (60 if n < 4 else 0)
+        img.alpha_composite(c, (int(cx - c.width / 2), int(y)))
+        if labels:
+            d.text((cx, y + c.height + 25), labels[j], font=brand.font("Anton-Regular.ttf", 44), fill=(255, 215, 0), anchor="mm")
+    d.text((W / 2, H - 35), "SWIPE  •  COMMENT YOUR PICK", font=brand.label_font(28), fill=(200, 200, 200), anchor="mm")
+    img.convert("RGB").save(out, quality=94)
+    return out
+
+
+# Sunday 17:00 "Legends vs Legends" (owner 22 Nov upgrade; FC Beast "Madrid Legends VS Barca Legends" 4.5M)
+VS = [("REAL MADRID 2002", "BARCELONA 2006"), ("AC MILAN 1990", "INTER 2010"), ("BRAZIL 2002", "FRANCE 1998"),
+      ("ARSENAL 2004", "MAN UNITED 2008"), ("ITALY", "GERMANY 2014"), ("BARCELONA MSN", "PSG"),
+      ("JUVENTUS", "AC MILAN 2007"), ("REAL MADRID NOW", "BARCELONA NOW"), ("ARGENTINA", "PORTUGAL"),
+      ("CHELSEA", "LIVERPOOL 2014"), ("MAN CITY", "BAYERN"), ("GOAT TRIO", "BRAZIL LEGENDS")]
+
+
+def build_vs(outdir, n=None):
+    from fmm import shards
+    cards, trio = shards.forum_cards(), dict(TRIOS)
+    n = n if n is not None else (dt.date.today() - dt.date(2026, 11, 29)).days // 7
+    for k in range(len(VS)):
+        a, b = VS[(n + k) % len(VS)]
+        rows = [(c, [card_for(x, cards) for x in trio[c]]) for c in (a, b)]
+        if all(all(cs) for _, cs in rows):
+            break
+    else:
+        return None, None
+    out = render(rows, Path(outdir) / "legends.png", title="WHO WINS?", sub="1   O R   2 ?")
+    cap = (f"{a} vs {b}: who wins? ⚔️🔥\n\n" +
+           "\n".join(f"{i}. {c}: " + ", ".join(f"{p['ovr']} {p['name']}" for p in cs) for i, (c, cs) in enumerate(rows, 1)) +
+           "\n\nComment 1 or 2 👇\n\nCards: FC Mobile Forum.\n\n#FCMobile #FIFAMobile #EAFC #FCMobileCards #FMM")
     return out, cap

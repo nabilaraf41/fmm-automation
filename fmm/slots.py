@@ -210,6 +210,8 @@ def pick(kind, fresh, db, state):
             return "goat", [best("C. Ronaldo"), best("Messi")], pool
         if slot_now() in ("0700", "1900") and series_today():  # owner: Top 10 by stat at 19:00 (31-day series) + 07:00
             return "statrank", list(fresh.values()), pool
+        if slot_now() == "1700" and force is None and weekday == 6:  # 22 Nov upgrade: Sun 17:00 = Legends vs Legends
+            return "legends", list(fresh.values()), pool
         if slot_now() == "1700":  # owner: daily "Choose 1" at 17:00
             return "choose", list(fresh.values()), pool
         if slot_now() == "1300" and force is None and weekday == 4:  # owner 16 Nov: Fri = Shard Guide carousel
@@ -235,6 +237,8 @@ def pick(kind, fresh, db, state):
         forced_rot = rot
     else:
         forced_rot = None
+    if kind == "reel" and not force and slot_now() == "2100":  # 22 Nov upgrade: stop game every night (best YT Short)
+        return "stopgame", sorted((this_week or list(fresh.values())), key=lambda x: -(x.get("ovr") or 0))[:24], pool
     if unfeatured:
         p = unfeatured[0]
         if kind == "reel" and not force and slot_now() == "2100" and weekday in (4, 5) and this_week:
@@ -437,7 +441,7 @@ def build(slot):
     if OUT.exists():
         shutil.rmtree(OUT)
     OUT.mkdir(parents=True)
-    if ctype in ("xi", "gem", "worth", "meme", "compare4", "pick3", "rank10", "choose", "statrank", "goat", "statxi", "shardguide", "attacks", "backfour"):
+    if ctype in ("xi", "gem", "worth", "meme", "compare4", "pick3", "rank10", "choose", "statrank", "goat", "statxi", "shardguide", "attacks", "backfour", "legends"):
         media, caption = build_extra(ctype, players, pool, fresh, state)
         ctype = state.pop("_fallback", ctype)  # a fallback post is logged/labelled as its real type
         return finish(slot, kind, ctype, media, caption, players[:1], state)
@@ -816,6 +820,13 @@ def build_extra(ctype, latest, pool, fresh, state):
         return media, (f"CR7 or Messi? The debate never ends ⚔️\n\n{a['ovr']} {a['name']} ({a['pos']}) vs "
                        f"{b['ovr']} {b['name']} ({b['pos']}): full stats in the picture.\n\n"
                        "Who's your GOAT in FC Mobile? 👇\n\n#FCMobile #FIFAMobile #EAFC #Ronaldo #Messi")
+    elif ctype == "legends":  # Sun 17:00: two famous trios, "who wins? 1 or 2"
+        from fmm import attacks
+        img, caption = attacks.build_vs(OUT)
+        if not img:
+            state["_fallback"] = "versus"
+            return render_versus(next_pair(latest, state, pool), fresh)
+        return img, caption
     elif ctype == "backfour":  # Mon 13:00: LB/CB/CB/RB x star/mid/budget with shard prices + a budget
         from fmm import buildfour
         img, caption = buildfour.build(OUT)
@@ -918,7 +929,8 @@ def build_extra(ctype, latest, pool, fresh, state):
         log = json.loads(poster_log.read_text(encoding="utf-8")) if poster_log.exists() else []
         num = 1 + sum(1 for e in log if e.get("type") == "statrank" and e.get("kind") != "reel")
         br = slot_now() == "0700"  # 07:00 BDT = 22:00 in Brazil, our #1 Instagram country (24%, Meta audit 10 Nov)
-        caption = (f"Top 10 {label} by {STAT_NAME[stat]} 🏆🔥 Part {num}\n\nFC Mobile, 120+ OVR cards only:\n\n"
+        stars = f"{ranked[0]['name']}, {ranked[1]['name']} & more"  # 22 Nov upgrade: names in the title (search, Fc Messi style)
+        caption = (f"Top 10 {label} by {STAT_NAME[stat]}: {stars} 🏆🔥 Part {num}\n\nFC Mobile, 120+ OVR cards only:\n\n"
                    + "\n".join(f"{i}. {p['name']} ({p['ovr']} {p['pos']}): {"Lv." if stat.startswith("PS_") else stat + " "}{val(p)}"
                                for i, p in enumerate(ranked, 1))
                    + "\n\nWho's missing from this list? 👇"
@@ -1005,7 +1017,14 @@ def post():
     kind = "reel" if m["media"].endswith(".mp4") else "photo"
     car = OUT / "carousel.json"
     if car.exists():  # Monday Budget XI: all 4 images as one swipe post
-        print("posted", poster.post_carousel([OUT / f for f in json.loads(car.read_text(encoding="utf-8"))], caption, m.get("type")))
+        files = [OUT / f for f in json.loads(car.read_text(encoding="utf-8"))]
+        print("posted", poster.post_carousel(files, caption, m.get("type")))
+        try:  # 22 Nov upgrade: carousel on FB + IG, and its first slide as a Reel too (YouTube Shorts + Reels tab)
+            from fmm import reel as reelmod
+            r = reelmod.make_reel(files[0], seconds=8, kind=m.get("type"))
+            print("carousel reel", poster.post("reel", r, caption, "both", m.get("type"), _stamp=False))
+        except Exception as ex:
+            print("carousel reel skipped:", str(ex)[:150])
         return
     hk = json.loads((OUT / "hooks.json").read_text()) if (OUT / "hooks.json").exists() else {}
     res = poster.post(kind, OUT / m["media"], caption, "both", m.get("type"),  # type feeds the weekly growth loop

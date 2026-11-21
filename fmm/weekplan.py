@@ -76,6 +76,7 @@ def describe(ctype, players, st, day):
             "rank10": "Top 10 ranking", "pick3": "Pick one (3 cards)", "guess": "Guess the player", "compare4": "Top 4 stats table",
             "rate": "Rate the card", "goat": "CR7 vs Messi stats battle", "gem": "Hidden gem", "worth": "Is the event worth it?", "meme": "Meme",
             "statxi": "Best XI by a stat on the pitch (weekly stat: PAC/DRI/SHO/PHY/DEF/PAS)",
+            "legends": "Legends vs Legends: who wins? (two famous trios)",
             "backfour": "Build your back four (12 defenders with shard prices + budget)",
             "attacks": "Which one is the best attack? (3 famous trios as FC Mobile cards)",
             "shardguide": "Shard Guide carousel (Must claim / Worth the shards / Worth but wait)",
