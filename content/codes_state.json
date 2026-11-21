@@ -35,6 +35,12 @@
    "code": "CHOOSEYOURSIDE",
    "reward": "Draft voucher & 100 RUP",
    "date": "17th November"
+  },
+  "RZPROBE": {
+   "first_seen": "2026-11-22",
+   "code": "RZPROBE",
+   "reward": "RZ probe code",
+   "date": "18th November"
   }
  },
  "roundups": [
