@@ -26,5 +26,10 @@
     "elite_fc.02",
     "dfx_eafc",
     "addon_fcm"
-  ]
+  ],
+  "only": {
+    "aftab.fc": [
+      "photo"
+    ]
+  }
 }
