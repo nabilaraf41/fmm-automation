@@ -24,10 +24,20 @@ def _load(p, default):
 def score(stats, name, kind):
     """Chance this partner accepts this post type: their rate for the type, pulled toward their overall rate."""
     s = stats.get(name, {})
+    s = {k: v for k, v in s.items() if isinstance(v, list)}
     acc = sum(a for a, _ in s.values()); inv = sum(i for _, i in s.values())
     overall = (acc + 1) / (inv + 2)            # new partner -> 0.5
     a, i = s.get(kind, [0, 0])
     return (a + 2 * overall) / (i + 2)
+
+
+def held(stats, name):
+    """Owner 22 Nov: hold partners who decline (any decline and no accept, or 3+ declines) until they accept again."""
+    st = stats.get("_status", {}).get(name, {})
+    dec, acc, pend = st.get("Declined", 0), st.get("Accepted", 0), st.get("Pending", 0)
+    # Instagram doesn't report "Declined"; an ignored invite stays Pending -> 5+ unanswered and no accept,
+    # or under 15% accepted after 10+ invites = hold (they come back automatically once they accept more)
+    return bool((dec and not acc) or dec >= 3 or (pend >= 5 and not acc) or (acc + pend >= 10 and acc < 0.15 * (acc + pend)))
 
 
 def pick(kind, n_post):
@@ -38,7 +48,7 @@ def pick(kind, n_post):
     # "only": {"name": ["photo"]} -> that partner is invited only on those post kinds (aftab.fc asked: posts, not Reels)
     only = cfg.get("only", {})
     ok = lambda n: not only.get(n) or kind.split(":")[0] in only[n] or kind in only[n]
-    rot = [n for n in rot if ok(n)]
+    rot = [n for n in rot if ok(n) and not held(stats, n)]
     people = list(dict.fromkeys(rot + clean(cfg.get("always", []))))
     if not people:
         return []
@@ -72,6 +82,8 @@ def refresh(token, log):
             row = stats.setdefault(c["username"], {}).setdefault(kind, [0, 0])
             row[1] += 1
             row[0] += c.get("invite_status") == "Accepted"
+            st = stats.setdefault("_status", {}).setdefault(c["username"], {})
+            st[c.get("invite_status") or "?"] = st.get(c.get("invite_status") or "?", 0) + 1
         time.sleep(0.2)
     stats["_updated"] = time.time()  # file dates are useless on the cloud (fresh checkout)
     STATS.write_text(json.dumps(stats, indent=1), encoding="utf-8")
