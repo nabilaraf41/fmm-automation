@@ -9,6 +9,21 @@ Then keep working by all rules below. Everything posts from the cloud; nothing n
 list names) and show its tables + extras (codes, Drive clips, leaks queued in content/leaks.json, ATB memes queued).
 Revert content/clips_state.json + featured.json afterwards (`git checkout -- content`), the plan is a dry run.
 
+**More owner shortcuts (22 Nov):**
+- **"YT"** = do YouTube collab invites by hand (no scheduled tasks: shared family PC). `git pull`, take every
+  content/posted.json entry from the last 4 days with a "youtube" id (skip "trial"), newest first, max 15. For each:
+  built-in browser → studio.youtube.com/video/<id>/edit → "Show more" → Collaboration → "Invite a collaborator" /
+  "Manage collaborators"; add the missing ones of TI FC MOBILE (@TazEAFC, ~29.5k), ADDON_FCM (@ADDON_FCM, ~26.1k,
+  never the fake @ADDON-_-FCM7), D.E.L.E.T.E F.C (@delete-fc, ~27k): click the search box, type the handle, pick the
+  exact channel, "Create link", close the share popup with X, then "Save" ("Changes saved"). If Studio asks to sign in,
+  stop and tell the owner (never type passwords). Report a short table.
+- **"CHK"** = check + test everything: `gh run list -w codes.yml -L 10`, last 24 h of content/posted.json (anything
+  posted at night, wrong type, fallbacks), dry-build every post type (slots.build_extra), `python -m fmm.weekplan`,
+  collab picks; fix what's broken, push, report. Never post from the PC.
+- **"STATS"** = fresh numbers: followers (IG, FB, YT), last 7 days per post type (fmm.growth.metrics, 2 s between
+  calls), best/worst posts, YPP progress; short table + what to change.
+- **"SAVE"** = end of chat: `python -m fmm.export_chat`, copy memory notes to docs/memory/, commit + push.
+
 New chat? Read HANDOVER.md first (status, open items, what was fixed and must not be reintroduced).
 Full text of every earlier chat (owner's words, decisions, fixes) is in docs/history/*.md (PC only, gitignored, secrets removed).
 Whenever the owner refers to something earlier, or you're unsure what was decided, Grep docs/history before answering or asking.
