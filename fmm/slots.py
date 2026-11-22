@@ -609,8 +609,11 @@ MEMES = [("When you finally pack {name}", "When you check his weak foot"),
          ("Me: one more pack", "Me 2 hours later, still no {name}")]
 TAGS = "#FCMobile #FIFAMobile #EAFC #FMM"
 STOP_GAME_STARS = ("C. Ronaldo", "Messi", "Neymar Jr", "Lamine Yamal", "Vini Jr.", "Haaland", "Ibrahimović",  # owner order 23 Nov
-                   "Ronaldinho", "Zidane", "Choudhury", "Chhetri")
-SAY = {"Choudhury": "Hamza Choudhury", "Chhetri": "Sunil Chhetri", "Ibrahimović": "Zlatan", "C. Ronaldo": "Ronaldo", "Ronaldo": "R9 Ronaldo", "Neymar Jr": "Neymar", "Vini Jr.": "Vinicius", "Lamine Yamal": "Yamal"}
+                   "Ronaldinho", "Zidane", "Choudhury", "Chhetri",
+                   # + national heroes of the best-paying YouTube countries (owner 23 Nov): USA, Australia, Canada,
+                   # England, Germany, Switzerland, Denmark, Netherlands, Norway (Sweden = Zlatan above)
+                   "Pulisic", "Cahill", "Davies", "Kane", "Müller", "Shaqiri", "Laudrup", "Cruyff", "Ødegaard")
+SAY = {"Cahill": "Tim Cahill", "Davies": "Alphonso Davies", "Laudrup": "Michael Laudrup", "Choudhury": "Hamza Choudhury", "Chhetri": "Sunil Chhetri", "Ibrahimović": "Zlatan", "C. Ronaldo": "Ronaldo", "Ronaldo": "R9 Ronaldo", "Neymar Jr": "Neymar", "Vini Jr.": "Vinicius", "Lamine Yamal": "Yamal"}
 # Trial Reel hooks for photo formats (non-followers only); the weekly report compares them with the main first line
 TRIALS = False  # owner 22 Nov: trial copy Reels off (scored 1,800-2,400, below the main posts)
 PHOTO_HOOKS = {"statrank": ["Most people get number 1 wrong 👀", "Number 1 surprised me 😳", "Is your favourite on this list? 🤔"],
