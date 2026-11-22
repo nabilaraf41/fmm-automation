@@ -492,18 +492,24 @@ def build(slot):
         week_ago = (dt.datetime.now(dt.UTC) - dt.timedelta(days=7)).strftime("%Y-%m-%dT%H:%M:%S")
         used = state.setdefault("stop_new", [])
         used_ids = {entry.split(":", 1)[0] for entry in used if not entry.endswith(":old_name")}
-        target = next((p for p in players if (p.get("added") or "") >= week_ago
-                       and str(p["id"]) not in used_ids), None)
+        from fmm.poster import LOG as poster_log
+        log = json.loads(poster_log.read_text(encoding="utf-8")) if poster_log.exists() else []
+        n_done = sum(1 for e in log if e.get("type") == "stopgame" and e.get("kind") == "reel") - 4  # 4 before 23 Nov -> start at CR7
+        # owner 23 Nov: famous players first (in his order), then this week's new cards: 11 famous, 3 new, repeat
+        cycle = len(STOP_GAME_STARS) + 3
+        target = None
+        if n_done % cycle >= len(STOP_GAME_STARS):
+            target = next((p for p in players if (p.get("added") or "") >= week_ago
+                           and str(p["id"]) not in used_ids), None)
         if target is None:
-            from fmm.poster import LOG as poster_log
-
-            log = json.loads(poster_log.read_text(encoding="utf-8")) if poster_log.exists() else []
-            n_done = sum(1 for e in log if e.get("type") == "stopgame" and e.get("kind") == "reel")
             cards = confirmed_only({c["id"]: c for c in cardstats.load(max_age_days=30)})
-            stars = [max((c for c in cards.values() if c["name"] == name),
-                         key=lambda c: c["ovr"], default=None) for name in STOP_GAME_STARS]
-            stars = [c for c in stars if c is not None]
-            target = stars[n_done % len(stars)] if stars else players[0]
+            name = STOP_GAME_STARS[n_done % cycle % len(STOP_GAME_STARS)]
+            target = max((c for c in cards.values() if c["name"] == name), key=lambda c: c["ovr"], default=None)
+            if target is None:  # Choudhury / Chhetri: only on FC Mobile Forum (owner: Forum alone is enough)
+                from fmm import shards
+                from fmm.attacks import card_for
+                target = card_for(name, shards.forum_cards())
+            target = dict(target) if target else players[0]
             if "card" not in target:
                 path = renderz.CARDS / f"{target['id']}.png"
                 if not path.exists():
@@ -602,10 +608,9 @@ MEMES = [("When you finally pack {name}", "When you check his weak foot"),
          ("Opponent's {name}", "My {name}"),
          ("Me: one more pack", "Me 2 hours later, still no {name}")]
 TAGS = "#FCMobile #FIFAMobile #EAFC #FMM"
-STOP_GAME_STARS = ("Messi", "C. Ronaldo", "Mbappé", "Haaland", "Pelé", "Maradona",
-                   "Ronaldo", "Ronaldinho", "Neymar Jr", "Vini Jr.", "Zidane", "Kaká",
-                   "Lamine Yamal", "Kane", "Henry", "Drogba")
-SAY = {"C. Ronaldo": "Ronaldo", "Ronaldo": "R9 Ronaldo", "Neymar Jr": "Neymar", "Vini Jr.": "Vinicius", "Lamine Yamal": "Yamal"}
+STOP_GAME_STARS = ("C. Ronaldo", "Messi", "Neymar Jr", "Lamine Yamal", "Vini Jr.", "Haaland", "Ibrahimović",  # owner order 23 Nov
+                   "Ronaldinho", "Zidane", "Choudhury", "Chhetri")
+SAY = {"Choudhury": "Hamza Choudhury", "Chhetri": "Sunil Chhetri", "Ibrahimović": "Zlatan", "C. Ronaldo": "Ronaldo", "Ronaldo": "R9 Ronaldo", "Neymar Jr": "Neymar", "Vini Jr.": "Vinicius", "Lamine Yamal": "Yamal"}
 # Trial Reel hooks for photo formats (non-followers only); the weekly report compares them with the main first line
 TRIALS = False  # owner 22 Nov: trial copy Reels off (scored 1,800-2,400, below the main posts)
 PHOTO_HOOKS = {"statrank": ["Most people get number 1 wrong 👀", "Number 1 surprised me 😳", "Is your favourite on this list? 🤔"],
