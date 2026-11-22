@@ -10,6 +10,16 @@
       "photo:statrank",
       "photo:newcard",
       "photo:other"
+    ],
+    "elite_fc.02": [
+      "reel:statrank",
+      "reel:choose",
+      "reel:stopgame",
+      "reel:xi",
+      "reel:legends",
+      "reel:attacks",
+      "reel:backfour",
+      "carousel:statrank"
     ]
   },
   "rotate": [
@@ -38,7 +48,8 @@
     ]
   },
   "keep": [
-    "newcomer_fm"
+    "newcomer_fm",
+    "elite_fc.02"
   ],
   "youtube": {
     "tazeafc": "@tazeafc",
