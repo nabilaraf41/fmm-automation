@@ -41,6 +41,12 @@
    "code": "RZPROBE",
    "reward": "RZ probe code",
    "date": "18th November"
+  },
+  "COMINGHOME": {
+   "first_seen": "2026-11-24",
+   "code": "COMINGHOME",
+   "reward": "119–120 OVR England Player Pack",
+   "date": "24th November"
   }
  },
  "roundups": [
@@ -67,7 +73,8 @@
   "2026-11-19",
   "2026-11-20",
   "2026-11-21",
-  "2026-11-22"
+  "2026-11-22",
+  "2026-11-24"
  ],
  "rejected": {
   "RZPROBE": "Forum test entry (\"RZ probe code\"), posted by mistake 22 Nov"
