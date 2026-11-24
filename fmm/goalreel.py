@@ -43,6 +43,15 @@ JOBS = [{
               (300.3, 308.3, "GOAL 3")],
     "title": "BEST GOAL? 1, 2 OR 3", "card": "assets/cards/rz/ingame_dembele_127.png",
     "caption": "Which goal is the best? 1, 2 or 3 🤔⚽\n\n1. 124 Nico Williams\n2. 127 Dembélé\n3. 127 Dembélé again\n\nComment your pick 👇\n\n#FCMobile #FIFAMobile #EAFC #FCMobileGoals #FMM",
+}, {
+    # 25 Nov: owner-cut clips from Drive (names are the owner's own: "6 VS Ronaldo", "Pacho Own Goal Fail Meme")
+    "name": "g5_r9_vs_6_defenders", "source": "output/inbox/1nKTf6rQg8DCMAoAZiNuwE3d5BwlXkoTJ.mp4",
+    "parts": [(0.0, 29.0, "R9 VS 6")], "title": "6 DEFENDERS VS RONALDO", "card": "assets/cards/rz/s30922860.png",
+    "caption": "6 defenders vs 124 Ronaldo 💀🔥\n\nWho stops R9? Nobody.\n\nRate this run 1-10 👇\n\n#FCMobile #FIFAMobile #EAFC #Ronaldo #FMM",
+}, {
+    "name": "g6_pacho_own_goal_fail", "source": "output/inbox/1cl_Q883DOSZD8P2cAgwVlOIqIbgVgWVw.mp4",
+    "parts": [(0.0, 25.0, "FAIL")], "title": "PACHO WHAT ARE YOU DOING", "card": "assets/cards/rz/s24053894.png",
+    "caption": "Pacho really did that 💀😭\n\nOwn goal of the week? Has your defender ever done this? 👇\n\n#FCMobile #FIFAMobile #EAFC #FCMobileFails #FMM",
 }]
 
 

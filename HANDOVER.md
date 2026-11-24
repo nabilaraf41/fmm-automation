@@ -1,4 +1,30 @@
-# Handover (updated 8 Nov 2026, from chat b2f6976c)
+# Handover (updated 25 Nov 2026)
+
+Any agent (Claude, Codex, Antigravity): handbook = CLAUDE.md, this file = status. Memory notes: docs/memory/.
+
+## Status 25 Nov
+- Daily (BDT): 07:00 Top 10 (IG carousel + 7 s Reel, star names in title), 13:00 weekly special
+  (Mon/Thu Back Four, Tue Front Three, Wed/Sat Best Attack, Fri Shard Guide, Sun Budget XI), 17:00 Choose 1
+  (Sun: Legends vs Legends), 19:00 Top 10, 21:00 stop game (Thu/Sun pack opening). Owner's stop-game order is
+  slots.STOP_GAME_STARS (famous + top-paying-country heroes, then 3 new cards).
+- ONE extra a day 10:00-21:59 (run_cloud.extra_ok): Tue/Wed EA teaser "Guess who's coming" (fmm.teaser),
+  Thu/Fri new players' shard cost (fmm.shardcost), else leak / goal Reel / concept special / ATB meme (alternating).
+  YouTube-only stop-game Shorts 3/day 10, 12, 15 (fmm.ytextra) = our best YouTube Shorts.
+- Codes: FC Mobile Forum alone is enough (owner 22 Nov; RZPROBE was a real Vietnam code — never auto-delete posts).
+- IG collabs: fmm/collabs.py + content/collaborators.json (keep, prefer, only, not_visible; addon_fcm and
+  fc_bangladesh_402 are "User not visible"). YouTube: no collab API; descriptions @mention partners; real invites
+  only by hand in YouTube Studio ("YT" shortcut, needs the owner signed in to the browser).
+- Gameplay Reels: only scoreboard-verified goals (tools/goal_detect_study.py) or owner-named short clips, max 1/day
+  (fmm/goalreel.py JOBS, made on the PC, posted by the cloud). Loudness auto-clips are off (slots.GAMEPLAY_REELS).
+
+## Open items
+- Owner asked for a subscriber "goal" badge on every post: two designs shown 25 Nov (fixed 1,499 vs real count);
+  waiting for his pick. Not built.
+- Drive has 11 new full-match recordings (16 Nov). Download them one at a time (a 1 GB file hit MemoryError with a
+  64 MB chunk in one Python process), then run goal detection and add verified goals to goalreel.JOBS.
+- 2 owner clips queued: g5 R9 vs 6 defenders, g6 Pacho own goal (assets/goal_reels).
+- Facebook Reels get ~0 plays (published fine): owner should check Page quality in Meta Business Suite.
+
 
 Previous chat transcript (open only if something below is unclear):
 `C:\Users\Admin\.claude\projects\E--Claude-FMM\b2f6976c-4048-4597-b0d1-56da525790d0.jsonl`
