@@ -9,7 +9,8 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 FILES = ["content/posted.json", "content/codes_state.json", "content/featured.json", "content/clips_state.json",
-         "content/players_db.json", "content/card_library.json", "content/trends.json"]
+         "content/players_db.json", "content/card_library.json", "content/trends.json",
+         "content/collaborators.json", "content/collab_stats.json"]  # 24 Nov: cloud-learned collab data must persist
 
 
 def git(*a, check=True):
