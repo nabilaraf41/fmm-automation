@@ -221,7 +221,7 @@ def pick(kind, fresh, db, state):
         if slot_now() == "1300" and force is None and weekday in (2, 5):  # owner 21 Nov: Wed + Sat = "Which one is the best attack?" (2 a week)
             return "attacks", list(fresh.values()), pool
         if slot_now() == "1300" and force is None and weekday == 1:  # owner 16 Nov: Tue = Best XI by a stat (pitch)
-            return "statxi", list(fresh.values()), pool
+            return "frontthree", list(fresh.values()), pool  # 24 Nov stats: Best XI by stat got 62 views -> Front Three
         if slot_now() == "1300" and (str(force).startswith("xi") or (force is None and weekday != 1)):  # Budget XI Thu-Mon + Wed full lineup
             return "xi", list(fresh.values()), pool
         ROT = ["review_post", "rank10", "versus", "pick3", "guess", "rank10", "compare4", "rate", "gem", "worth", "meme"]
@@ -441,7 +441,7 @@ def build(slot):
     if OUT.exists():
         shutil.rmtree(OUT)
     OUT.mkdir(parents=True)
-    if ctype in ("xi", "gem", "worth", "meme", "compare4", "pick3", "rank10", "choose", "statrank", "goat", "statxi", "shardguide", "attacks", "backfour", "legends"):
+    if ctype in ("xi", "gem", "worth", "meme", "compare4", "pick3", "rank10", "choose", "statrank", "goat", "statxi", "shardguide", "attacks", "backfour", "legends", "frontthree"):
         media, caption = build_extra(ctype, players, pool, fresh, state)
         ctype = state.pop("_fallback", ctype)  # a fallback post is logged/labelled as its real type
         return finish(slot, kind, ctype, media, caption, players[:1], state)
@@ -835,9 +835,9 @@ def build_extra(ctype, latest, pool, fresh, state):
             state["_fallback"] = "versus"
             return render_versus(next_pair(latest, state, pool), fresh)
         return img, caption
-    elif ctype == "backfour":  # Mon 13:00: LB/CB/CB/RB x star/mid/budget with shard prices + a budget
+    elif ctype in ("backfour", "frontthree"):  # Mon+Thu back four, Tue front three: cards x shard prices + a budget
         from fmm import buildfour
-        img, caption = buildfour.build(OUT)
+        img, caption = buildfour.build(OUT, line="front" if ctype == "frontthree" else "back")
         if not img:
             state["_fallback"] = "versus"
             return render_versus(next_pair(latest, state, pool), fresh)

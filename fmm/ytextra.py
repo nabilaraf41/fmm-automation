@@ -7,8 +7,8 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 OUT = ROOT / "output" / "ytextra"
-HOURS = (10, 15)
-QUOTA = 11  # most uploads seen succeeding in one quota day: 10 (20-21 Nov); stay at the edge, never above
+HOURS = (10, 12, 15)  # 24 Nov stats: YouTube-only stop game = our best Short (avg 13K, best 32K)
+QUOTA = 20  # uploads cost ~100 units since Dec 2025; 10+ a day worked
 
 
 def post_due(now):

@@ -8,15 +8,18 @@ from fmm import brand, shards
 from fmm.attacks import card_for
 
 COLS = [("LB", (225, 60, 70)), ("CB", (150, 80, 230)), ("CB", (40, 140, 255)), ("RB", (245, 160, 30))]
+FRONT = [("LW", (225, 60, 70)), ("ST", (150, 80, 230)), ("RW", (245, 160, 30))]  # 24 Nov: Tuesday "front three"
+LINES = {"back": (COLS, "BACK FOUR", "back four", "one LB, two CBs and one RB", "🧱"),
+         "front": (FRONT, "FRONT THREE", "front three", "one LW, one ST and one RW", "⚡")}
 BANDS = [(40000, 10**9), (10000, 30000), (0, 10000)]  # star / mid / budget shard prices
 
 
-def pick(week):
+def pick(week, cols=COLS):
     cards = shards.forum_cards(); ok = shards.prices(cards)
     rng = random.Random(week)
-    used, grid = set(), [[None] * 4 for _ in BANDS]
+    used, grid = set(), [[None] * len(cols) for _ in BANDS]
     for r, (lo, hi) in enumerate(BANDS):
-        for c, (pos, _) in enumerate(COLS):
+        for c, (pos, _) in enumerate(cols):
             cands = sorted({(x["player_name"], x["ovr"]): ok[k] for x in cards
                             if x["position"] == pos and x["ovr"] >= 118 and (k := (shards.norm(x["player_name"]), x["ovr"], pos)) in ok
                             and lo <= ok[k] < hi and x["player_name"] not in used}.items(), key=lambda t: -t[0][1])[:8]
@@ -29,18 +32,18 @@ def pick(week):
     return grid
 
 
-def render(grid, budget, out):
+def render(grid, budget, out, cols=COLS, word="BACK FOUR"):
     W, H = 1080, 1350
     img, d, _ = brand.base("event", None, (W, H))
     img = img.convert("RGBA"); d = ImageDraw.Draw(img)
     f = brand.font("Anton-Regular.ttf", 96)
-    a, b = "BUILD YOUR ", "BACK FOUR"
+    a, b = "BUILD YOUR ", word
     wa, wb = d.textlength(a, font=f), d.textlength(b, font=f)
     x = (W - wa - wb) / 2
     d.text((x, 215), a, font=f, fill=(255, 255, 255), anchor="lm"); d.text((x + wa, 215), b, font=f, fill=(200, 255, 0), anchor="lm")
     d.text((W / 2, 300), f"BUDGET: {budget:,} SHARDS", font=brand.label_font(34), fill=(255, 215, 0), anchor="mm")
-    for c, (pos, col) in enumerate(COLS):
-        cx = 150 + c * 260
+    for c, (pos, col) in enumerate(cols):
+        cx = int(1080 / len(cols) * (c + 0.5))
         d.text((cx, 360), pos, font=brand.font("Anton-Regular.ttf", 54), fill=(255, 255, 255), anchor="mm")
         d.rectangle((cx - 40, 392, cx + 40, 398), fill=col)
         for r, row in enumerate(grid):
@@ -59,22 +62,23 @@ def render(grid, budget, out):
     return out
 
 
-def build(outdir, week=None):
-    w = week or dt.date.today().toordinal()  # new defenders every post (Mon + Thu)
-    grid = pick(w)
-    if sum(1 for row in grid for p in row if p) < 10:
+def build(outdir, week=None, line="back"):
+    cols, word, name, rule, emoji = LINES[line]
+    w = week or dt.date.today().toordinal()  # new cards every post
+    grid = pick(w, cols)
+    if sum(1 for row in grid for p in row if p) < len(cols) * 3 - 2:
         return None, None
     top = sum(p["shards"] for p in grid[0] if p)
     budget = int(round(top * 0.55 / 5000) * 5000)
-    out = render(grid, budget, Path(outdir) / "backfour.png")
+    out = render(grid, budget, Path(outdir) / "backfour.png", cols, word)
     from fmm.attacks import row_slide
     slides = [out] + [row_slide(t, f"BUDGET {budget:,} SHARDS", [p for p in grid[r] if p], Path(outdir) / f"backfour_{r}.png",
                                 labels=[f"{p['shards']:,}" for p in grid[r] if p])
                       for r, t in enumerate(("STARS", "MID PRICE", "BUDGET"))]
     (Path(outdir) / "carousel.json").write_text(__import__("json").dumps([f.name for f in slides]), encoding="utf-8")
     names = lambda r: ", ".join(f"{p['ovr']} {p['name']} ({p['shards']:,})" for p in grid[r] if p)
-    cap = (f"You have {budget:,} Star Shards to build your back four 💎🧱\n\n"
-           "Pick one LB, two CBs and one RB without going over the budget. Comment your 4 👇\n\n"
+    cap = (f"You have {budget:,} Star Shards to build your {name} 💎{emoji}\n\n"
+           f"Pick {rule} without going over the budget. Comment your {len(cols)} 👇\n\n"
            f"Stars: {names(0)}\nMid: {names(1)}\nBudget: {names(2)}\n\n"
            "Prices: FC Mobile Forum.\n\n#FCMobile #FIFAMobile #EAFC #FCMobileShards #FMM")
     return out, cap
