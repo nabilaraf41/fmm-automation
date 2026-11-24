@@ -17,13 +17,17 @@ EARLY = dt.timedelta(minutes=75)  # owner: post exactly on time, so start early,
 
 def due_slot(now, done):
     """Latest slot whose time passed within CATCH_UP and isn't in done -> (key, slot) or None."""
-    for back in range(2):  # today and yesterday (00:30 belongs to the next calendar day)
-        day = (now - dt.timedelta(days=back)).date()
-        for slot in sorted(slots.SLOTS, reverse=True):
-            t = dt.datetime.combine(day, dt.time(int(slot[:2]), int(slot[2:])), BDT)
-            key = f"{day}-{slot}"
-            if t - EARLY <= now < t + CATCH_UP and key not in done:
-                return key, slot
+    # 24 Nov: a MISSED slot (time already passed) goes before an upcoming one built early; the 07:00 Top 10 was
+    # lost when its run died and the 11:52 run chose to wait for 13:00 instead
+    for early in (False, True):
+        for back in range(2):  # today and yesterday (00:30 belongs to the next calendar day)
+            day = (now - dt.timedelta(days=back)).date()
+            for slot in sorted(slots.SLOTS, reverse=True):
+                t = dt.datetime.combine(day, dt.time(int(slot[:2]), int(slot[2:])), BDT)
+                key = f"{day}-{slot}"
+                ok = (t - EARLY <= now < t) if early else (t <= now < t + CATCH_UP)
+                if ok and key not in done:
+                    return key, slot
     return None
 
 
@@ -70,6 +74,7 @@ if __name__ == "__main__":
     assert due_slot(dt.datetime(2026, 11, 1, 1, 30, tzinfo=BDT), {}) == ("2026-10-31-2100", "2100")
     assert due_slot(dt.datetime(2026, 11, 1, 12, 30, tzinfo=BDT), {}) == ("2026-11-01-1300", "1300")  # early start
     assert due_slot(dt.datetime(2026, 11, 1, 15, 0, tzinfo=BDT), {"2026-11-01-1300": 1}) is None
+    assert due_slot(dt.datetime(2026, 11, 24, 11, 52, tzinfo=BDT), {}) == ("2026-11-24-0700", "0700")  # missed first
 
     # owner rule: only the cloud posts. A PC run (even "--help") posted the 8 Nov leak by mistake, so refuse here.
     if os.environ.get("GITHUB_ACTIONS") != "true":

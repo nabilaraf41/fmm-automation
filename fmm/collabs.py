@@ -50,13 +50,14 @@ def pick(kind, n_post):
     # "only": {"name": ["photo"]} -> that partner is invited only on those post kinds (aftab.fc asked: posts, not Reels)
     only = cfg.get("only", {})
     ok = lambda n: not only.get(n) or kind.split(":")[0] in only[n] or kind in only[n]
-    rot = [n for n in rot if ok(n) and not held(stats, n)]
+    gone = set(cfg.get("not_visible", []))  # 24 Nov: Instagram "User not visible" for these -> the whole invite failed
+    rot = [n for n in rot if ok(n) and not held(stats, n) and n not in gone]
     people = list(dict.fromkeys(rot + clean(cfg.get("always", []))))
     if not people:
         return []
     names = clean(cfg.get("always", []))
     for name, kinds in cfg.get("prefer", {}).items():   # manual overrides still win
-        if kind in kinds and name not in names:
+        if kind in kinds and name not in names and name not in gone:
             names.append(name)
     best = sorted((p for p in people if p not in names), key=lambda p: -score(stats, p, kind))
     names += best[:max(0, MAX - ROTATING - len(names))]

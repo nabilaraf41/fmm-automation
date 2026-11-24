@@ -187,11 +187,32 @@ def ig_container(data):
     extra = collab_data()
     if extra:
         names = json.loads(extra["collaborators"])
-        for k in dict.fromkeys((len(names), 3)):
-            try:
-                return call("POST", f"{IG}/media", data={**data, "collaborators": json.dumps(names[:k])})
-            except Exception as ex:
-                print(f"collab invite with {k} skipped:", str(ex)[:150])
+        try:
+            return call("POST", f"{IG}/media", data={**data, "collaborators": json.dumps(names)})
+        except Exception as ex:
+            print(f"collab invite with {len(names)} skipped:", str(ex)[:150])
+            if "not visible" in str(ex).lower():  # 24 Nov: find the blocked name(s), drop them, remember them
+                good = []
+                for n in names:
+                    try:
+                        call("POST", f"{IG}/media", data={**data, "collaborators": json.dumps([n])})  # unpublished test
+                        good.append(n)
+                    except Exception as e2:
+                        if "not visible" in str(e2).lower():
+                            cfg = json.loads(COLLAB.read_text(encoding="utf-8"))
+                            cfg["not_visible"] = sorted(set(cfg.get("not_visible", [])) | {n})
+                            COLLAB.write_text(json.dumps(cfg, indent=2, ensure_ascii=False), encoding="utf-8")
+                            print("collab partner not visible, removed from invites:", n)
+                if good:
+                    try:
+                        return call("POST", f"{IG}/media", data={**data, "collaborators": json.dumps(good)})
+                    except Exception as e3:
+                        print("collab invite skipped:", str(e3)[:150])
+            elif len(names) > 3:
+                try:
+                    return call("POST", f"{IG}/media", data={**data, "collaborators": json.dumps(names[:3])})
+                except Exception as e4:
+                    print("collab invite with 3 skipped:", str(e4)[:150])
     return call("POST", f"{IG}/media", data=data)
 
 
