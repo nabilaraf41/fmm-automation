@@ -20,3 +20,5 @@
 - [No phone notifications](fmm-no-notifications.md) — owner refused alerts; FB monetization already approved
 - [ATB voice in every Reel](fmm-atb-voice.md) — relevant voice line per post type + light bg music
 - [No H2H Reels, correct names](fmm-no-h2h-reels.md) — owner 15 Nov: H2H = long video only; stop-game name correct
+- [22 Nov upgrade](fmm-upgrade-22nov.md) — 6 strong posts/day, carousels, 1 extra/day 10-22h, stop game nightly
+- [No PC scheduled tasks](fmm-no-scheduled-tasks.md) — shared family PC; cloud only, no visible PC automations
