@@ -10,7 +10,9 @@ from PIL import Image, ImageDraw
 _COUNTS = {}
 
 
-def milestone(n, step=500):
+def milestone(n):
+    """Next round number above n; the step grows with the channel (owner 26 Nov)."""
+    step = 500 if n < 10_000 else 1_000 if n < 100_000 else 10_000 if n < 1_000_000 else 100_000
     return (n // step + 1) * step
 
 
@@ -81,5 +83,6 @@ def add(media, kind):
 
 
 if __name__ == "__main__":
-    assert milestone(1410) == 1500 and milestone(1499) == 1500 and milestone(1500) == 2000 and milestone(1960) == 2000
+    assert milestone(1410) == 1500 and milestone(1500) == 2000 and milestone(1777) == 2000 and milestone(4655) == 5000
+    assert milestone(13222) == 14000 and milestone(123123) == 130000 and milestone(2323222) == 2400000
     print("ok")
