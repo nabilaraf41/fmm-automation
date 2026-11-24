@@ -1,70 +1,72 @@
 {
-  "always": [],
-  "prefer": {
-    "newcomer_fm": [
-      "carousel:statrank",
-      "carousel:xi",
-      "carousel:shardguide",
-      "carousel:attacks",
-      "carousel:backfour",
-      "photo:statrank",
-      "photo:newcard",
-      "photo:other"
-    ],
-    "elite_fc.02": [
-      "reel:statrank",
-      "reel:choose",
-      "reel:stopgame",
-      "reel:xi",
-      "reel:legends",
-      "reel:attacks",
-      "reel:backfour",
-      "carousel:statrank"
-    ]
-  },
-  "rotate": [
-    "goat_editv",
-    "theeliteelastico",
-    "eafc_jacobek08",
-    "hatedsurvivorsfcm",
-    "tazeafc",
-    "fc_highlightss",
-    "hamza.dzn_",
-    "goat_editv",
-    "theeliteelastico",
-    "eafc_jacobek08",
-    "fc_bangladesh_402",
-    "aftab.fc",
-    "delete_fc",
-    "fcthunder_ea",
-    "elite_fc.710",
-    "elite_fc.02",
-    "dfx_eafc",
-    "addon_fcm"
+ "always": [],
+ "prefer": {
+  "newcomer_fm": [
+   "carousel:statrank",
+   "carousel:xi",
+   "carousel:shardguide",
+   "carousel:attacks",
+   "carousel:backfour",
+   "photo:statrank",
+   "photo:newcard",
+   "photo:other",
+   "carousel:frontthree"
   ],
-  "only": {
-    "aftab.fc": [
-      "photo"
-    ]
-  },
-  "keep": [
-    "newcomer_fm",
-    "elite_fc.02"
-  ],
-  "youtube": {
-    "tazeafc": "@tazeafc",
-    "addon_fcm": "@addon_fcm",
-    "delete_fc": "@delete-fc",
-    "elite_fc.02": "@ELITEFC-u3o",
-    "newcomer_fm": "@newcomerfm",
-    "eafc_jacobek08": "@Jacobek08",
-    "theeliteelastico": "@theeliteelastico",
-    "fcthunder_ea": "@fcthunder_ea",
-    "goat_editv": "@goat_editv",
-    "hamza.dzn_": "@HamzaFCM"
-  },
-  "not_visible": [
-    "addon_fcm",
-    "fc_bangladesh_402"
+  "elite_fc.02": [
+   "reel:statrank",
+   "reel:choose",
+   "reel:stopgame",
+   "reel:xi",
+   "reel:legends",
+   "reel:attacks",
+   "reel:backfour",
+   "carousel:statrank",
+   "reel:frontthree"
   ]
+ },
+ "rotate": [
+  "goat_editv",
+  "theeliteelastico",
+  "eafc_jacobek08",
+  "hatedsurvivorsfcm",
+  "tazeafc",
+  "fc_highlightss",
+  "hamza.dzn_",
+  "goat_editv",
+  "theeliteelastico",
+  "eafc_jacobek08",
+  "fc_bangladesh_402",
+  "aftab.fc",
+  "delete_fc",
+  "fcthunder_ea",
+  "elite_fc.710",
+  "elite_fc.02",
+  "dfx_eafc",
+  "addon_fcm"
+ ],
+ "only": {
+  "aftab.fc": [
+   "photo"
+  ]
+ },
+ "keep": [
+  "newcomer_fm",
+  "elite_fc.02"
+ ],
+ "youtube": {
+  "tazeafc": "@tazeafc",
+  "addon_fcm": "@addon_fcm",
+  "delete_fc": "@delete-fc",
+  "elite_fc.02": "@ELITEFC-u3o",
+  "newcomer_fm": "@newcomerfm",
+  "eafc_jacobek08": "@Jacobek08",
+  "theeliteelastico": "@theeliteelastico",
+  "fcthunder_ea": "@fcthunder_ea",
+  "goat_editv": "@goat_editv",
+  "hamza.dzn_": "@HamzaFCM"
+ },
+ "not_visible": [
+  "addon_fcm",
+  "fc_bangladesh_402"
+ ]
 }
