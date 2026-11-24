@@ -62,5 +62,9 @@
     "fcthunder_ea": "@fcthunder_ea",
     "goat_editv": "@goat_editv",
     "hamza.dzn_": "@HamzaFCM"
-  }
+  },
+  "not_visible": [
+    "addon_fcm",
+    "fc_bangladesh_402"
+  ]
 }
