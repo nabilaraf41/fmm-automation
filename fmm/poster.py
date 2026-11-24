@@ -244,6 +244,11 @@ def post_carousel(paths, caption, ctype=None):
     """Swipe post on Facebook + Instagram; each platform on its own, logged once any succeeds."""
     from fmm.captions import polish
     caption = polish(caption)
+    try:  # owner 25 Nov: milestone badge on the cover slide
+        from fmm import subbadge
+        subbadge.add(paths[0], "photo")
+    except Exception as ex:
+        print("sub badge skipped:", str(ex)[:120])
     done, errors = {}, {}
     for name, fn in (("facebook", fb_carousel), ("instagram", ig_carousel)):
         try:
@@ -391,6 +396,12 @@ def post(kind, media, caption, where="both", ctype=None, reel=True, extra=None, 
         pair = reelmod.make_reel(media, seconds=7 if ctype == "statrank" else 10, kind=ctype or ("code" if "code" in Path(media).name else None))  # raises (nothing posted) if the Reel can't be made
         if ctype in REEL_ONLY:  # 22 Nov stats: these photo copies got ~800-1,000 vs 4,700-6,400 for their Reel
             return post("reel", pair, caption, where, ctype, _stamp=False)
+    if kind in ("reel", "photo"):  # owner 25 Nov: "1,499 · BE THE 1,500TH!" badge on every post (once per file)
+        try:
+            from fmm import subbadge
+            subbadge.add(media, "reel" if media.endswith(".mp4") else "photo")
+        except Exception as ex:
+            print("sub badge skipped:", str(ex)[:120])
     if kind == "reel" and media.endswith(".mp4"):  # every Reel: gold progress bar (once per file)
         try:
             from fmm import motion
