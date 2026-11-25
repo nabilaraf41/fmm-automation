@@ -2624,5 +2624,38 @@
   "file": "/home/runner/work/fmm-automation/fmm-automation/output/ytextra/slot.mp4",
   "type": "yt_stopgame",
   "youtube": "8qUz6lSQ_lY"
+ },
+ {
+  "at": "2026-11-25 17:01:22",
+  "kind": "reel",
+  "file": "/home/runner/work/fmm-automation/fmm-automation/output/slot/slot_day_reel.mp4",
+  "type": "choose",
+  "facebook": "1797867971262708",
+  "instagram": "17934660582165241",
+  "youtube": "bt3ZiYCe0Bw"
+ },
+ {
+  "at": "2026-11-25 17:02:04",
+  "kind": "photo",
+  "file": "/home/runner/work/fmm-automation/fmm-automation/assets/goal_reels/special_9_08_hero_india.png",
+  "type": "goal_reel",
+  "facebook": "122210136278906131",
+  "instagram": "17993163615094283"
+ },
+ {
+  "at": "2026-11-25 17:03:47",
+  "kind": "reel",
+  "file": "/home/runner/work/fmm-automation/fmm-automation/assets/goal_reels/special_9_08_hero_india_reel.mp4",
+  "type": "goal_reel",
+  "facebook": "2889441384761326",
+  "instagram": "17909058933604466",
+  "youtube": "bSQOV9ZzqxQ"
+ },
+ {
+  "at": "2026-11-25 17:04:31",
+  "kind": "reel",
+  "file": "/home/runner/work/fmm-automation/fmm-automation/output/ytextra/slot.mp4",
+  "type": "yt_stopgame",
+  "youtube": "zOoXCsrLsaE"
  }
 ]
