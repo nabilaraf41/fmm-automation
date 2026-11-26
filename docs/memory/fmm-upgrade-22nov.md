@@ -14,3 +14,5 @@ Applied 22 Nov 2026 (docs/PLAN_UPGRADE.md, from our stats + 17 competitor channe
 **How to apply:** don't re-add trials/photo copies or night posts without new data. Related: [[fmm-photo-plus-reel]] [[fmm-creator-playbook]]
 
 24 Nov: Tuesday 13:00 = Front Three (Best XI by stat dropped, 62 views). YT-only stop game 3/day (10,12,15). Missed slot posts before an early one. addon_fcm + fc_bangladesh_402 IG "not visible" (excluded; cloud auto-detects).
+
+26 Nov: PC Python 3.15 vanished; use C:/Users/Admin/AppData/Local/Programs/Python/Python313/python.exe (requirements installed). Stop game picks ALL new 122-124 cards (images built) before famous; goal/special, shardcost, teaser, legends are Reel-only.
