@@ -3,7 +3,7 @@ name: FMM hourly
 on:
   schedule:
     - cron: "5 * * * *" # every hour at :05 = backup that restarts the self-chain if it ever breaks
-    - cron: "50 23,5,9,11,13 * * *" # 05:50/11:50/15:50/17:50/19:50 BDT: build early, post exactly at 07/13/17/19/21:00
+    - cron: "50 23,5,9,11,14 * * *" # 05:50/11:50/15:50/17:50/20:50 BDT: build early, post exactly at 07/13/17/19/22:00
   workflow_dispatch: {}       # "Run workflow" button for manual runs
 
 concurrency:

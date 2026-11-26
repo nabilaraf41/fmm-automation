@@ -24,13 +24,13 @@ def post_due(now):
     if now < reset:
         reset -= dt.timedelta(days=1)
     used = sum(1 for e in log if e.get("youtube") and e.get("at", "") >= reset.strftime("%Y-%m-%d %H:%M:%S"))
-    mains_left = sum(1 for h in (17, 19, 21, 31, 37) if reset + dt.timedelta(hours=h - 14) > now)  # 17 19 21 07 13
+    mains_left = sum(1 for h in (17, 19, 22, 31, 37) if reset + dt.timedelta(hours=h - 14) > now)  # 17 19 22 07 13
     if used + mains_left + 1 > QUOTA:
         print(f"youtube extra skipped: quota ({used} used, {mains_left} main Shorts still to come)")
         return None
     fresh, db, _ = slots.latest_players()
     pool = sorted(fresh.values(), key=lambda x: -(x.get("ovr") or 0))
-    target, kind_ = slots.stop_target(list(db.values()) + pool)  # owner 26 Nov: new 122-124 cards first, then famous (shared with 21:00)
+    target, kind_ = slots.stop_target(list(db.values()) + pool)  # owner 26 Nov: new 122-124 cards first, then famous (shared with 22:00)
     others = [c["card"] for c in pool if c.get("card") and c["name"] != target["name"]][:14] or [target["card"]]
     name = f"{target['ovr']} {slots.SAY.get(target['name'], target['name']).upper()}"
     if OUT.exists():

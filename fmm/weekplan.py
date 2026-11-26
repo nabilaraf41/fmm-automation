@@ -33,7 +33,7 @@ def plan(start=None, days=None):
             lines += [f"## {day:%A %d %b}", "", "| Time | Post |", "|---|---|"]
             for slot in sorted(slots.SLOTS):
                 slots._SLOT["v"] = slot
-                if slot == "2100" and day.weekday() in (3, 6):
+                if slot == "2200" and day.weekday() in (3, 6):
                     what = "Pack opening Reel (your newest 'pack ...' video)"
                 else:
                     try:

@@ -1,11 +1,11 @@
 name: FMM daily slots
 
-# Manual runs only; the 2-hourly job in codes.yml posts the slots (07:00 / 13:00 / 19:00 / 21:00 BDT).
+# Manual runs only; the 2-hourly job in codes.yml posts the slots (07:00 / 13:00 / 17:00 / 19:00 / 22:00 BDT).
 on:
   workflow_dispatch:
     inputs:
       mode: {description: "build or post", required: true, default: build, type: choice, options: [build, post, reel, ig]}   # reel = only the Reel of the latest build; ig = re-post the built video to Instagram only
-      slot: {description: "0700 / 1300 / 1900 / 2100", required: false, default: "1300"}
+      slot: {description: "0700 / 1300 / 1700 / 1900 / 2200", required: false, default: "1300"}
 
 run-name: "${{ github.event_name == 'workflow_dispatch' && format('{0} {1}', inputs.mode, inputs.slot) || 'scheduled' }}"
 
@@ -34,7 +34,7 @@ jobs:
           case "${{ github.event.schedule }}" in
             "30 0 * * *")  echo "mode=build" >> $GITHUB_OUTPUT; echo "slot=0700" >> $GITHUB_OUTPUT ;;
             "30 6 * * *")  echo "mode=build" >> $GITHUB_OUTPUT; echo "slot=1300" >> $GITHUB_OUTPUT ;;
-            "30 14 * * *") echo "mode=build" >> $GITHUB_OUTPUT; echo "slot=2100" >> $GITHUB_OUTPUT ;;
+            "30 14 * * *") echo "mode=build" >> $GITHUB_OUTPUT; echo "slot=2200" >> $GITHUB_OUTPUT ;;
             "0 18 * * *")  echo "mode=build" >> $GITHUB_OUTPUT; echo "slot=0030" >> $GITHUB_OUTPUT ;;
             "")            echo "mode=${{ inputs.mode }}" >> $GITHUB_OUTPUT; echo "slot=${{ inputs.slot }}" >> $GITHUB_OUTPUT ;;
             *)             echo "mode=post" >> $GITHUB_OUTPUT ;;

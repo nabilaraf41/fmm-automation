@@ -3,7 +3,7 @@
     python -m fmm.slots build <slot>   -> 30 min before: check RenderZ, pick + render content into output/slot/
     python -m fmm.slots post           -> at slot time: publish output/slot/ to FB + IG (+ YouTube for Reels)
 
-Slots (BDT): 0700 (USA evening, Reel) · 1300 (Asia lunch, photo) · 1900 (Indonesia 20:00 WIB, photo) · 2100 (BD/India peak, Reel)
+Slots (BDT): 0700 (USA evening, Reel) · 1300 (Asia lunch, photo) · 1900 (Indonesia 20:00 WIB, photo) · 2200 (BD/India + niche peak, Reel; was 21:00 until 26 Nov)
 New cards are featured first (newest/highest OVR); with nothing new, slots fall back to card battles,
 tier lists and countdowns built from the latest cards.
 """
@@ -15,7 +15,7 @@ from fmm import renderz, review as rv
 ROOT = Path(__file__).resolve().parent.parent
 OUT = ROOT / "output" / "slot"
 STATE = ROOT / "content" / "featured.json"
-SLOTS = {"0700": "photo", "1300": "photo", "1700": "photo", "1900": "photo", "2100": "reel"}  # FC Mobile is biggest in South/SE Asia; 07:00 keeps one high-pay US slot
+SLOTS = {"0700": "photo", "1300": "photo", "1700": "photo", "1900": "photo", "2200": "reel"}  # FC Mobile is biggest in South/SE Asia; 07:00 keeps one high-pay US slot
 VERDICT_COLOR = {"MUST BUY": (0, 200, 83), "WORTH IT": (255, 215, 0), "SITUATIONAL": (255, 152, 0), "SKIP": (225, 6, 44)}
 
 
@@ -237,11 +237,11 @@ def pick(kind, fresh, db, state):
         forced_rot = rot
     else:
         forced_rot = None
-    if kind == "reel" and not force and slot_now() == "2100":  # 22 Nov upgrade: stop game every night (best YT Short)
+    if kind == "reel" and not force and slot_now() == "2200":  # 22 Nov upgrade: stop game every night (best YT Short)
         return "stopgame", sorted((this_week or list(fresh.values())), key=lambda x: -(x.get("ovr") or 0))[:24], pool
     if unfeatured:
         p = unfeatured[0]
-        if kind == "reel" and not force and slot_now() == "2100" and weekday in (4, 5) and this_week:
+        if kind == "reel" and not force and slot_now() == "2200" and weekday in (4, 5) and this_week:
             # owner (11 Nov): Fri + Sat after the Thursday drop people search the new cards -> stop game with a new card
             return "stopgame", sorted(fresh.values(), key=lambda x: -(x.get("ovr") or 0))[:24], pool
         if kind == "reel" and not force and weak_reel(p, this_week, heat):
@@ -377,7 +377,7 @@ def build_pack(got=None, title=None, caption=None):
         motion.lead_with_cover(OUT / "slot.mp4", OUT / "slot_cover.jpg")  # final card + ATB face in frame 0
         caption = caption or PACK_CAPTION.read_text(encoding="utf-8").replace("{title}", title.title())
         inbox.mark_pack(f)
-        finish("2100", "reel", "pack", OUT / "slot.mp4", caption, [], load_state())
+        finish("2200", "reel", "pack", OUT / "slot.mp4", caption, [], load_state())
         return True
     except Exception as ex:
         print("pack Reel skipped:", str(ex)[:150])
@@ -426,7 +426,7 @@ def build(slot):
     _SLOT["v"] = slot
     if slot == "pack" and build_pack():  # manual: slots.yml build with slot "pack"
         return
-    if slot == "2100" and dt.datetime.now().weekday() in (3, 6) and build_pack():  # Thu + Sun: pack opening Reel
+    if slot == "2200" and dt.datetime.now().weekday() in (3, 6) and build_pack():  # Thu + Sun: pack opening Reel
         return
     if GAMEPLAY_REELS and build_from_inbox(slot):  # owner 19 Nov: gameplay Reels paused (bad quality)
         return
