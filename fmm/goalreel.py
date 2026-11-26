@@ -19,7 +19,7 @@ JOBS = [{
     "name": "ronaldinho_hattrick",
     "source": "output/inbox/1CIeHvazDcGTilflZ7aGcUA3NtyKR2HAm.mp4",
     "parts": [(19.5, 30.5, "GOAL 1 • 8'"), (50.5, 61.5, "GOAL 2 • 12'"), (74.5, 85.5, "GOAL 3 • 30'")],
-    "title": "RONALDINHO HAT-TRICK!!",
+    "title": "RONALDINHO HAT-TRICK!!", "cover_sub": "3 GOALS IN ONE GAME",
     "card": "assets/cards/rz/f30922854.png",
     "caption": "124 Ronaldinho Hat-trick 🔥🇧🇷\n\nThree goals in one H2H match: 8', 12', 30'. Which one was the best? 👇"
                "\n\n#FCMobile #FIFAMobile #EAFC #Ronaldinho #FMM",
@@ -100,7 +100,7 @@ def make(job):
     frame = DIR / "_frame.png"
     subprocess.run(["ffmpeg", "-v", "error", "-y", "-ss", str(job["parts"][-1][1] - 1.5), "-i", str(src), "-frames:v", "1",
                     "-vf", "crop=ih*3/4:ih:(iw-ih*3/4)/2:0", str(frame)], check=True)
-    thumb.cover(str(ROOT / job["card"]), job["title"], DIR / f"{job['name']}_cover.jpg", sub="3 GOALS IN ONE GAME",
+    thumb.cover(str(ROOT / job["card"]), job["title"], DIR / f"{job['name']}_cover.jpg", sub=job.get("cover_sub"),  # 26 Nov: was hard-coded "3 GOALS IN ONE GAME" on every cover
                 color="red", bg=str(frame))
     (DIR / f"{job['name']}.txt").write_text(job["caption"], encoding="utf-8")
     for f in [*segs, lst, joined, frame]:
