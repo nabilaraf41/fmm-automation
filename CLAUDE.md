@@ -34,6 +34,7 @@ YouTube "FC Mobile Mania - FMM". Owner is in Bangladesh (BDT = UTC+6), zero budg
 give click-by-click steps and copy-paste commands.
 
 ## Rules
+- **Ponytail at ULTRA level in every chat** (owner 26 Nov): smallest complete change, and push back on any part of a request the need does not justify.
 - Follow docs/CREATOR_PLAYBOOK.md for every post; update it from the Monday growth report.
 - Follow docs/DESIGN_PLAYBOOK.md for every image, Reel frame and cover (layouts, fonts, ATB safe zone).
 - **Cross-check before posting anything** (cards, events, players): a 2nd source must confirm it

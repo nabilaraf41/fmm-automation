@@ -6,6 +6,7 @@ The one handbook is **CLAUDE.md** (same rules for every agent; the name is histo
 Owner shortcuts (defined in CLAUDE.md): **Go**, **BU**, **YT**, **CHK**, **STATS**, **SAVE**.
 
 Hard rules (details in CLAUDE.md):
+- Work in ponytail ULTRA mode: smallest complete change; push back on parts the need does not justify.
 - Only the cloud posts (GitHub Actions `codes.yml`). Never run `fmm.run_cloud` or any posting from the PC.
 - Repo is PUBLIC: never commit `.env`, `secrets/`, tokens or `docs/history/`.
 - Save state with `python -m fmm.savestate "msg"`; never plain-push `content/*.json`.
