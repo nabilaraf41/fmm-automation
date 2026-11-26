@@ -489,8 +489,8 @@ def build(slot):
     elif ctype == "stopgame":
         from fmm import cardstats, fmf
 
-        target, kind_ = stop_target(players)
-        state["_stop"] = {"stop": kind_, "stop_id": str(target["id"])}  # logged with the post -> new vs famous report
+        target, kind_ = stop_target(list(pool) + list(players))  # all new cards of the week, not only the top 24
+        state["_stop"] = {"stop": kind_, "stop_id": str(target["id"]), "stop_name": f"{target['ovr']} {target['name']}"}  # logged with the post -> new vs famous report
 
         others = [c["card"] for c in players if c["name"] != target["name"]] or [target["card"]]
         name = f"{target['ovr']} {SAY.get(target['name'], target['name']).upper()}"
@@ -566,10 +566,23 @@ def stop_target(players):
     log = json.loads(poster_log.read_text(encoding="utf-8")) if poster_log.exists() else []
     used = {e.get("stop_id") for e in log if e.get("stop_id")}
     week_ago = (dt.datetime.now(dt.UTC) - dt.timedelta(days=7)).strftime("%Y-%m-%dT%H:%M:%S")
+    used_names = {e.get("stop_name") for e in log if e.get("stop_name")}
     new = sorted((p for p in players if 122 <= (p.get("ovr") or 0) <= 124 and (p.get("added") or "") >= week_ago
-                  and str(p["id"]) not in used and p.get("card")), key=lambda p: -(p.get("ovr") or 0))
-    if new:
-        return new[0], "new"
+                  and str(p["id"]) not in used and f"{p['ovr']} {p['name']}" not in used_names),
+                 key=lambda p: -(p.get("ovr") or 0))
+    for p in new:  # 26 Nov: new cards often have no image yet -> build it (RenderZ, else FC Mobile Forum art)
+        p = dict(p)
+        try:
+            p["card"] = p.get("card") or ensure_card(p, {})
+        except Exception:
+            p["card"] = None
+        if not p["card"]:
+            from fmm import shards
+            from fmm.attacks import card_for
+            f = card_for(p["name"], [c for c in shards.forum_cards() if c["ovr"] == p["ovr"]])
+            p["card"] = f and f["card"]
+        if p["card"]:
+            return p, "new"
     n = sum(1 for e in log if e.get("stop") == "famous")
     name = STOP_GAME_STARS[n % len(STOP_GAME_STARS)]
     cards = confirmed_only({c["id"]: c for c in cardstats.load(max_age_days=30)})
@@ -1050,7 +1063,7 @@ def post():
     hk = json.loads((OUT / "hooks.json").read_text()) if (OUT / "hooks.json").exists() else {}
     res = poster.post(kind, OUT / m["media"], caption, "both", m.get("type"),  # type feeds the weekly growth loop
                       extra={**({"hook_style": hk["main"]} if "main" in hk else {}),
-                             **{k: m[k] for k in ("stop", "stop_id") if k in m}} or None)
+                             **{k: m[k] for k in ("stop", "stop_id", "stop_name") if k in m}} or None)
     print("posted", res)
     alt = PHOTO_HOOKS.get(m.get("type"))
     if TRIALS and kind == "photo" and alt and res.get("reel_file"):  # owner idea 5 (11 Nov): hook test on Top 10 / Cheap XI too

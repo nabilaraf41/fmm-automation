@@ -22,3 +22,5 @@
 - [No H2H Reels, correct names](fmm-no-h2h-reels.md) — owner 15 Nov: H2H = long video only; stop-game name correct
 - [22 Nov upgrade](fmm-upgrade-22nov.md) — 6 strong posts/day, carousels, 1 extra/day 10-22h, stop game nightly
 - [No PC scheduled tasks](fmm-no-scheduled-tasks.md) — shared family PC; cloud only, no visible PC automations
+- [Sub badge](fmm-sub-badge.md) — fixed 1,499-style milestone badge on every post; final position, don't re-ask
+- [Ponytail ultra](ponytail-ultra.md) — owner wants ponytail ULTRA in every chat (FMM + GTA6)

@@ -28,9 +28,9 @@ def post_due(now):
     if used + mains_left + 1 > QUOTA:
         print(f"youtube extra skipped: quota ({used} used, {mains_left} main Shorts still to come)")
         return None
-    fresh, _, _ = slots.latest_players()
+    fresh, db, _ = slots.latest_players()
     pool = sorted(fresh.values(), key=lambda x: -(x.get("ovr") or 0))
-    target, kind_ = slots.stop_target(pool)  # owner 26 Nov: new 122-124 cards first, then famous (shared with 21:00)
+    target, kind_ = slots.stop_target(list(db.values()) + pool)  # owner 26 Nov: new 122-124 cards first, then famous (shared with 21:00)
     others = [c["card"] for c in pool if c.get("card") and c["name"] != target["name"]][:14] or [target["card"]]
     name = f"{target['ovr']} {slots.SAY.get(target['name'], target['name']).upper()}"
     if OUT.exists():
@@ -49,5 +49,5 @@ def post_due(now):
     except Exception as ex:
         print("playlist skipped:", str(ex)[:100])
     poster.log({"kind": "reel", "file": str(media), "type": "yt_stopgame", "youtube": vid,
-                "stop": kind_, "stop_id": str(target["id"])})
+                "stop": kind_, "stop_id": str(target["id"]), "stop_name": f"{target['ovr']} {target['name']}"})
     return vid
