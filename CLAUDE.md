@@ -54,7 +54,7 @@ give click-by-click steps and copy-paste commands.
 PUBLIC repo `nabilaraf41/fmm-automation` (made public 11 Nov 2026: free unlimited Actions minutes; private used ~6,500 of 3,000/month). NEVER commit secrets, tokens, .env or chat history. GitHub Actions (PC can be off):
 - `.github/workflows/codes.yml` ("FMM hourly") — every 2 hours at :05: `fmm.run_cloud` → posts any slot due in the last
   5 h and not yet done (`featured.json` → `done_slots`; GitHub cron can be late or skip runs), then new-player drops
-  (`fmm.newplayers`) and redeem codes (`fmm.codes`). Slots (BDT): 07:00 Top 10 (photo + Reel), 13:00 photo, 19:00 photo (Indonesia peak), 21:00 Reel (BD/India peak).
+  (`fmm.newplayers`) and redeem codes (`fmm.codes`). Slots (BDT): 07:00 Top 10, 13:00 weekly special, 17:00 Choose 1, 19:00 Top 10, 22:00 Reel (stop game / pack; moved from 21:00 on 26 Nov after slot research).
 - Self-chain (12 Nov): each codes.yml run ends by dispatching the next one ~55 min after it started ("Start the next run" step), so runs never stop; cron + Apps Script only restart the chain if it breaks.
 - Backup trigger: Google Apps Script (owner's Google account, GOOGLE_TRIGGER.gs) dispatches codes.yml every hour,
   because GitHub skips scheduled runs on busy days. Uses a fine-grained PAT (Actions write) stored in Script properties.

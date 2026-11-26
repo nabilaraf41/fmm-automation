@@ -5,7 +5,7 @@ Any agent (Claude, Codex, Antigravity): handbook = CLAUDE.md, this file = status
 ## Status 25 Nov
 - Daily (BDT): 07:00 Top 10 (IG carousel + 7 s Reel, star names in title), 13:00 weekly special
   (Mon/Thu Back Four, Tue Front Three, Wed/Sat Best Attack, Fri Shard Guide, Sun Budget XI), 17:00 Choose 1
-  (Sun: Legends vs Legends), 19:00 Top 10, 21:00 stop game (Thu/Sun pack opening). Owner's stop-game order is
+  (Sun: Legends vs Legends), 19:00 Top 10, 22:00 stop game (Thu/Sun pack opening). Owner's stop-game order is
   slots.STOP_GAME_STARS (famous + top-paying-country heroes, then 3 new cards).
 - ONE extra a day 10:00-21:59 (run_cloud.extra_ok): Tue/Wed EA teaser "Guess who's coming" (fmm.teaser),
   Thu/Fri new players' shard cost (fmm.shardcost), else leak / goal Reel / concept special / ATB meme (alternating).
