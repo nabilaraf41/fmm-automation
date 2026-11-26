@@ -342,7 +342,7 @@ def stamp(media, label):
 CTA = "📩 Comment 🙌 and I'll DM you every working FC Mobile code"
 
 
-REEL_ONLY = {"choose", "versus", "xi"}  # owner 22 Nov: post less, better (UPDATE_2026-11-22.md)
+REEL_ONLY = {"choose", "versus", "xi", "goal_reel", "shardcost", "teaser", "legends"}  # photo copies got 200-1,300 vs 1,000-7,000 for their Reels (22 + 26 Nov stats)
 
 
 def with_cta(caption):
