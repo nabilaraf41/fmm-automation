@@ -20,8 +20,9 @@ Any agent (Claude, Codex, Antigravity): handbook = CLAUDE.md, this file = status
 ## Open items
 - Owner asked for a subscriber "goal" badge on every post: two designs shown 25 Nov (fixed 1,499 vs real count);
   waiting for his pick. Not built.
-- Drive has 11 new full-match recordings (16 Nov). Download them one at a time (a 1 GB file hit MemoryError with a
-  64 MB chunk in one Python process), then run goal detection and add verified goals to goalreel.JOBS.
+- 16 Nov match recordings: all 11 downloaded + scanned (26 Nov). Used: Kaka hat-trick, Rummenigge, Olise, Rice, vote (g7-g11).
+  Unused scored goals (scoreboard times, scorer not read yet): 177k82C79... 139.8 224.5 333.5 373.5 427.5;
+  1LsJjxLAO... 262.8 318.2; 14N7fU... 103.0 (Rummenigge) 178.5 353.8 (Kaka); 1bh2/195_ Dembele 222.8 / 269.2.
 - 2 owner clips queued: g5 R9 vs 6 defenders, g6 Pacho own goal (assets/goal_reels).
 - Facebook Reels get ~0 plays (published fine): owner should check Page quality in Meta Business Suite.
 

@@ -52,6 +52,30 @@ JOBS = [{
     "name": "g6_pacho_own_goal_fail", "source": "output/inbox/1cl_Q883DOSZD8P2cAgwVlOIqIbgVgWVw.mp4",
     "parts": [(0.0, 25.0, "FAIL")], "title": "PACHO WHAT ARE YOU DOING", "card": "assets/cards/rz/s24053894.png",
     "caption": "Pacho really did that 💀😭\n\nOwn goal of the week? Has your defender ever done this? 👇\n\n#FCMobile #FIFAMobile #EAFC #FCMobileFails #FMM",
+}, {
+    # 26 Nov: from the owner's 16 Nov matches; goals found by the scoreboard, scorers read from the in-game pop-up
+    "name": "g7_kaka_hattrick", "source": "output/inbox/13JsPDw4oCAG8j6h28pIa2ht-tkiTpgGB.mp4",
+    "parts": [(85.0, 93.0, "GOAL 1"), (113.7, 121.7, "GOAL 2"), (162.3, 170.3, "GOAL 3")],
+    "title": "KAKA 128 HAT-TRICK!!", "cover_sub": "3 GOALS", "card": "assets/cards/rz/ingame_kaka_128.png",
+    "caption": "128 Kaká hat-trick 🔥🇧🇷\n\nThree goals in one H2H match. Which one was the best? 1, 2 or 3 👇\n\n#FCMobile #FIFAMobile #EAFC #Kaka #FMM",
+}, {
+    "name": "g8_rummenigge_128", "source": "output/inbox/13JsPDw4oCAG8j6h28pIa2ht-tkiTpgGB.mp4",
+    "parts": [(330.5, 338.5, "GOAL")], "title": "RUMMENIGGE 128 GOAL", "card": "assets/cards/rz/ingame_rummenigge_128.png",
+    "caption": "128 Rummenigge Goal 🇩🇪🔥\n\nIs he the best ST in the game right now? 👇\n\n#FCMobile #FIFAMobile #EAFC #Rummenigge #FMM",
+}, {
+    "name": "g9_olise_127", "source": "output/inbox/1XcrNiaygXtwOeNM5H4FoY26H2CIAxF2q.mp4",
+    "parts": [(305.3, 313.3, "GOAL")], "title": "OLISE 127 GOAL", "card": "assets/cards/rz/ingame_olise_127.png",
+    "caption": "127 Olise Goal 🔥🇫🇷\n\nRate this finish 1-10 👇\n\n#FCMobile #FIFAMobile #EAFC #Olise #FMM",
+}, {
+    "name": "g10_rice_127", "source": "output/inbox/1TIT2g-rzUb5gkNfy921AgDZ8n0bUyUgd.mp4",
+    "parts": [(255.7, 263.7, "GOAL")], "title": "A CDM SCORED THIS?!", "card": "assets/cards/rz/ingame_rice_127.png",
+    "caption": "127 Rice, a CDM, scored this 😳\n\nWould your CDM score this? 👇\n\n#FCMobile #FIFAMobile #EAFC #DeclanRice #FMM",
+}, {
+    "name": "g11_best_goal_vote_2", "source": "output/inbox/13JsPDw4oCAG8j6h28pIa2ht-tkiTpgGB.mp4",
+    "parts": [(85.0, 93.0, "GOAL 1"), (330.5, 338.5, "GOAL 2", "assets/cards/rz/ingame_rummenigge_128.png"),
+              (162.3, 170.3, "GOAL 3")],
+    "title": "BEST GOAL? 1, 2 OR 3", "card": "assets/cards/rz/ingame_kaka_128.png",
+    "caption": "Which goal is the best? 1, 2 or 3 🤔⚽\n\n1. 128 Kaká\n2. 128 Rummenigge\n3. 128 Kaká again\n\nComment your pick 👇\n\n#FCMobile #FIFAMobile #EAFC #FCMobileGoals #FMM",
 }]
 
 
