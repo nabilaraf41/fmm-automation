@@ -2709,5 +2709,37 @@
   "youtube": "85yREmnf0Ok",
   "stop": "famous",
   "stop_id": "f24050896"
+ },
+ {
+  "at": "2026-11-26 13:01:03",
+  "kind": "carousel",
+  "file": "/home/runner/work/fmm-automation/fmm-automation/output/slot/backfour.png",
+  "type": "backfour",
+  "facebook": "705738725948110_122210270696906131",
+  "instagram": "18007618110011187"
+ },
+ {
+  "at": "2026-11-26 13:02:17",
+  "kind": "reel",
+  "file": "/home/runner/work/fmm-automation/fmm-automation/output/slot/backfour_reel.mp4",
+  "type": "backfour",
+  "facebook": "1828970868254090",
+  "instagram": "17878904661636018",
+  "youtube": "CooihMw37Vw"
+ },
+ {
+  "at": "2026-11-26 13:05:09",
+  "kind": "photo",
+  "file": "/home/runner/work/fmm-automation/fmm-automation/output/queue/2026-11-26/code_FOOTBALLFEAST.png",
+  "facebook": "122210271674906131",
+  "instagram": "17947496460386030"
+ },
+ {
+  "at": "2026-11-26 13:06:21",
+  "kind": "reel",
+  "file": "/home/runner/work/fmm-automation/fmm-automation/output/queue/2026-11-26/code_FOOTBALLFEAST_reel.mp4",
+  "facebook": "891041407403911",
+  "instagram": "18189345097426889",
+  "youtube": "BEQZD01daQs"
  }
 ]
