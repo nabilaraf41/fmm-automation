@@ -64,58 +64,66 @@ def arrow(length=360, width=70, color=(255, 30, 30)):
     return out
 
 
+AURA = {"red": (255, 70, 40), "gold": (255, 200, 0), "blue": (0, 190, 255), "purple": (200, 90, 255), "green": (60, 255, 120)}
+
+
+def pitch():
+    """Bright mown-pitch background (top FC Mobile Shorts covers are bright green, not dark)."""
+    img = Image.new("RGB", (W, H), (40, 150, 55))
+    d = ImageDraw.Draw(img)
+    for i in range(0, H, 160):
+        d.rectangle((0, i, W, i + 80), fill=(52, 172, 66))
+    vig = Image.radial_gradient("L").resize((W, H))
+    return Image.composite(Image.new("RGB", (W, H), (0, 0, 0)), img, vig.point(lambda v: int(v * 0.45))).convert("RGBA")
+
+
 def cover(subject_path, text, out_path, sub=None, color="red", emoji="wow", flip_arrow=False, bg=None):
-    """bg = optional photo (e.g. the goal frame) blended under the burst rays."""
-    inner, outer = THEMES.get(color, THEMES["red"])
-    img = burst(inner, outer, W // 2, 1130)
+    """26 Nov redesign from the 16 most-viewed FC Mobile Shorts covers: the real moment (bright) or a green pitch,
+    one subject with a coloured aura, 1 short headline, a 1-2 word name at most, no arrows. ATB's face stays (owner).
+    flip_arrow is kept for callers but no arrow is drawn any more."""
+    img = pitch()
     if bg and Path(bg).exists():
         ph = Image.open(bg).convert("RGB")
+        ph = ph.crop((0, int(ph.height * 0.12), ph.width, ph.height))  # drop the recording's FPS/CPU/score HUD
         s = max(W / ph.width, H / ph.height)
         ph = ph.resize((int(ph.width * s), int(ph.height * s)), Image.LANCZOS)
         ph = ph.crop(((ph.width - W) // 2, (ph.height - H) // 2, (ph.width + W) // 2, (ph.height + H) // 2))
-        ph = ImageEnhance.Color(ImageEnhance.Brightness(ph).enhance(0.75)).enhance(1.4).convert("RGBA")
-        img = Image.blend(ph, img, 0.45)
-    # subject: card, huge, punchy colours, white rim + glow
+        img = ImageEnhance.Color(ImageEnhance.Contrast(ph).enhance(1.15)).enhance(1.35).convert("RGBA")
     card = load_card(subject_path) if subject_path else None
     if card:
         card = ImageEnhance.Color(ImageEnhance.Contrast(card.convert("RGBA")).enhance(1.15)).enhance(1.25)
-        s = 1220 / card.height
+        s = 1150 / card.height
         card = card.resize((int(card.width * s), int(card.height * s)), Image.LANCZOS)
-        if card.width > 1000:
-            card = card.resize((1000, int(card.height * 1000 / card.width)), Image.LANCZOS)
+        if card.width > 960:
+            card = card.resize((960, int(card.height * 960 / card.width)), Image.LANCZOS)
+        pad = 120
+        aura = Image.new("RGBA", (card.width + 2 * pad, card.height + 2 * pad), (0, 0, 0, 0))
+        col = Image.new("RGBA", card.size, AURA.get(color, AURA["gold"]) + (255,))
+        for blur, alpha in ((70, 1.0), (28, 0.9)):  # wide soft aura + tight bright edge
+            layer = Image.new("RGBA", aura.size, (0, 0, 0, 0))
+            layer.paste(col, (pad, pad), card)
+            layer = layer.filter(ImageFilter.GaussianBlur(blur))
+            layer.putalpha(layer.getchannel("A").point(lambda v: int(min(255, v * 2.2 * alpha))))
+            aura.alpha_composite(layer)
         rim = Image.new("RGBA", card.size, (0, 0, 0, 0))
         rim.paste(Image.new("RGBA", card.size, (255, 255, 255, 255)), (0, 0), card)
-        rim = rim.filter(ImageFilter.MaxFilter(21)).filter(ImageFilter.GaussianBlur(3))
-        glow = Image.new("RGBA", card.size, (0, 0, 0, 0))
-        glow.paste(Image.new("RGBA", card.size, (255, 255, 200, 230)), (0, 0), card)
-        glow = glow.filter(ImageFilter.GaussianBlur(40))
-        x, y = (W - card.width) // 2, 1130 - card.height // 2 + 80
-        img.alpha_composite(glow, (x, y)); img.alpha_composite(rim, (x, y)); img.alpha_composite(card, (x, y))
-    # headline (2–4 words), top third
-    lines = text.upper().split("\n") if "\n" in text else [text.upper()]
-    y = 70
+        rim = rim.filter(ImageFilter.MaxFilter(15)).filter(ImageFilter.GaussianBlur(2))
+        x, y = (W - card.width) // 2, 1150 - card.height // 2 + 60
+        img.alpha_composite(aura, (x - pad, y - pad)); img.alpha_composite(rim, (x, y)); img.alpha_composite(card, (x, y))
+    lines = text.upper().split(chr(10))
+    y = 80
     for i, ln in enumerate(lines[:2]):
-        t = big_text(ln, 230 if len(lines) == 1 else 190, (255, 230, 0) if i == 0 else (255, 255, 255))
+        t = big_text(ln, 210 if len(lines) == 1 else 180, (255, 230, 0) if i == 0 else (255, 255, 255))
         img.alpha_composite(t, ((W - t.width) // 2, y)); y += t.height - 40
-    if sub:
+    if sub and len(sub.split()) <= 2:  # a name like "122 RONALDO"; longer subtitles were noise
         t = big_text(sub.upper(), 120, (255, 255, 255), stroke=12)
-        img.alpha_composite(t, ((W - t.width) // 2, H - t.height - 70))
-    # shocked emoji + red arrow pointing at the card
-    em = Image.open(EMOJI / f"{emoji or 'wow'}.png").convert("RGBA")
-    from fmm import atb
-    face = atb.badge(f"{text}{emoji}")  # owner rule: ATB's real reaction instead of a cartoon emoji
-    if face and emoji is not None:
-        em = Image.open(face).convert("RGBA")
-    if emoji is None:
-        em = Image.new("RGBA", (1, 1), (0, 0, 0, 0))
-    em = em.resize((260, int(260 * em.height / em.width)), Image.LANCZOS).rotate(-12, expand=True, resample=Image.BICUBIC)
-    a = arrow().rotate(-35 if not flip_arrow else 215, expand=True, resample=Image.BICUBIC)
-    # emoji low on the side (never over the OVR, which sits top-left on cards); arrow top-right
-    if not flip_arrow:
-        img.alpha_composite(em, (10, 1330)); img.alpha_composite(a, (W - a.width - 10, 600))
-    else:
-        img.alpha_composite(em, (W - em.width - 10, 1330)); img.alpha_composite(a, (10, 600))
-    # small brand mark
+        img.alpha_composite(t, ((W - t.width) // 2, H - t.height - 90))
+    if emoji is not None:  # owner rule: ATB's real reaction in every cover
+        from fmm import atb
+        face = atb.badge(f"{text}{emoji}")
+        em = Image.open(face if face else EMOJI / f"{emoji or 'wow'}.png").convert("RGBA")
+        em = em.resize((240, int(240 * em.height / em.width)), Image.LANCZOS).rotate(-10, expand=True, resample=Image.BICUBIC)
+        img.alpha_composite(em, (W - em.width - 10 if flip_arrow else 10, 1360))
     logo = Image.open(LOGO).convert("RGBA")
     logo.putalpha(logo.convert("L").point(lambda v: 0 if v < 40 else 255))
     logo.thumbnail((200, 100))
