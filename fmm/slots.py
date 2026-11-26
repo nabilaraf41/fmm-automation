@@ -489,35 +489,8 @@ def build(slot):
     elif ctype == "stopgame":
         from fmm import cardstats, fmf
 
-        week_ago = (dt.datetime.now(dt.UTC) - dt.timedelta(days=7)).strftime("%Y-%m-%dT%H:%M:%S")
-        used = state.setdefault("stop_new", [])
-        used_ids = {entry.split(":", 1)[0] for entry in used if not entry.endswith(":old_name")}
-        from fmm.poster import LOG as poster_log
-        log = json.loads(poster_log.read_text(encoding="utf-8")) if poster_log.exists() else []
-        n_done = sum(1 for e in log if e.get("type") == "stopgame" and e.get("kind") == "reel") - 4  # 4 before 23 Nov -> start at CR7
-        # owner 23 Nov: famous players first (in his order), then this week's new cards: 11 famous, 3 new, repeat
-        cycle = len(STOP_GAME_STARS) + 3
-        target = None
-        if n_done % cycle >= len(STOP_GAME_STARS):
-            target = next((p for p in players if (p.get("added") or "") >= week_ago
-                           and str(p["id"]) not in used_ids), None)
-        if target is None:
-            cards = confirmed_only({c["id"]: c for c in cardstats.load(max_age_days=30)})
-            name = STOP_GAME_STARS[n_done % cycle % len(STOP_GAME_STARS)]
-            target = max((c for c in cards.values() if c["name"] == name), key=lambda c: c["ovr"], default=None)
-            if target is None:  # Choudhury / Chhetri: only on FC Mobile Forum (owner: Forum alone is enough)
-                from fmm import shards
-                from fmm.attacks import card_for
-                target = card_for(name, shards.forum_cards())
-            target = dict(target) if target else players[0]
-            if "card" not in target:
-                path = renderz.CARDS / f"{target['id']}.png"
-                if not path.exists():
-                    renderz.CARDS.mkdir(parents=True, exist_ok=True)
-                    fmf.build_card({**target, "layout": {}, "colors": {}}).save(path)
-                target["card"] = str(path)
-        else:
-            used.append(str(target["id"]))
+        target, kind_ = stop_target(players)
+        state["_stop"] = {"stop": kind_, "stop_id": str(target["id"])}  # logged with the post -> new vs famous report
 
         others = [c["card"] for c in players if c["name"] != target["name"]] or [target["card"]]
         name = f"{target['ovr']} {SAY.get(target['name'], target['name']).upper()}"
@@ -585,6 +558,36 @@ def build(slot):
     finish(slot, kind, ctype, media, caption, players, state)
 
 
+def stop_target(players):
+    """Owner 26 Nov: every new 122-124 card of the week first (each once, across the 21:00 Reel and the YouTube
+    extras), then the famous list in his order. -> (player with "card", "new" | "famous")."""
+    from fmm import cardstats, fmf
+    from fmm.poster import LOG as poster_log
+    log = json.loads(poster_log.read_text(encoding="utf-8")) if poster_log.exists() else []
+    used = {e.get("stop_id") for e in log if e.get("stop_id")}
+    week_ago = (dt.datetime.now(dt.UTC) - dt.timedelta(days=7)).strftime("%Y-%m-%dT%H:%M:%S")
+    new = sorted((p for p in players if 122 <= (p.get("ovr") or 0) <= 124 and (p.get("added") or "") >= week_ago
+                  and str(p["id"]) not in used and p.get("card")), key=lambda p: -(p.get("ovr") or 0))
+    if new:
+        return new[0], "new"
+    n = sum(1 for e in log if e.get("stop") == "famous")
+    name = STOP_GAME_STARS[n % len(STOP_GAME_STARS)]
+    cards = confirmed_only({c["id"]: c for c in cardstats.load(max_age_days=30)})
+    target = max((c for c in cards.values() if c["name"] == name), key=lambda c: c["ovr"], default=None)
+    if target is None:  # Choudhury / Chhetri: only on FC Mobile Forum (owner: Forum alone is enough)
+        from fmm import shards
+        from fmm.attacks import card_for
+        target = card_for(name, shards.forum_cards())
+    target = dict(target) if target else dict(players[0])
+    if "card" not in target:
+        path = renderz.CARDS / f"{target['id']}.png"
+        if not path.exists():
+            renderz.CARDS.mkdir(parents=True, exist_ok=True)
+            fmf.build_card({**target, "layout": {}, "colors": {}}).save(path)
+        target["card"] = str(path)
+    return target, "famous"
+
+
 def finish(slot, kind, ctype, media, caption, players, state):
     pending = [r for r in state.get("reveal", []) if not r.get("done")]
     if pending and ctype != "guess":  # answer to the last "guess the player"
@@ -594,7 +597,8 @@ def finish(slot, kind, ctype, media, caption, players, state):
             x["done"] = True
     (OUT / "caption.txt").write_text(caption, encoding="utf-8")
     manifest = {"slot": slot, "kind": kind, "type": ctype, "media": Path(media).name,
-                "players": [x["id"] for x in players], "built": dt.datetime.now().isoformat(timespec="minutes")}
+                "players": [x["id"] for x in players], "built": dt.datetime.now().isoformat(timespec="minutes"),
+                **state.pop("_stop", {})}
     (OUT / "manifest.json").write_text(json.dumps(manifest, indent=1), encoding="utf-8")
     state["history"] = (state["history"] + [manifest])[-200:]
     STATE.write_text(json.dumps(state, indent=1, ensure_ascii=False), encoding="utf-8")
@@ -1045,7 +1049,8 @@ def post():
         return
     hk = json.loads((OUT / "hooks.json").read_text()) if (OUT / "hooks.json").exists() else {}
     res = poster.post(kind, OUT / m["media"], caption, "both", m.get("type"),  # type feeds the weekly growth loop
-                      extra={"hook_style": hk["main"]} if "main" in hk else None)
+                      extra={**({"hook_style": hk["main"]} if "main" in hk else {}),
+                             **{k: m[k] for k in ("stop", "stop_id") if k in m}} or None)
     print("posted", res)
     alt = PHOTO_HOOKS.get(m.get("type"))
     if TRIALS and kind == "photo" and alt and res.get("reel_file"):  # owner idea 5 (11 Nov): hook test on Top 10 / Cheap XI too

@@ -12,7 +12,7 @@ QUOTA = 20  # uploads cost ~100 units since Dec 2025; 10+ a day worked
 
 
 def post_due(now):
-    from fmm import poster, slots, cardstats, fmf, renderz, motion, youtube
+    from fmm import poster, slots, motion, youtube
     log = json.loads(poster.LOG.read_text(encoding="utf-8")) if poster.LOG.exists() else []
     today = now.strftime("%Y-%m-%d")
     done_today = sum(1 for e in log if e.get("type") == "yt_stopgame" and e.get("at", "")[:10] == today)
@@ -28,26 +28,10 @@ def post_due(now):
     if used + mains_left + 1 > QUOTA:
         print(f"youtube extra skipped: quota ({used} used, {mains_left} main Shorts still to come)")
         return None
-    n = sum(1 for e in log if e.get("type") == "yt_stopgame")
-    cards = slots.confirmed_only({c["id"]: c for c in cardstats.load(max_age_days=30)})
-    stars = [max((c for c in cards.values() if c["name"] == s), key=lambda c: c["ovr"], default=None)
-             for s in slots.STOP_GAME_STARS]
-    stars = [c for c in stars if c]
-    if len(stars) < 4:
-        return None
-    target = dict(stars[(n + 7) % len(stars)])  # offset so it never repeats the 21:00 Reel's star the same day
-
-    def card(c):
-        if c.get("card"):
-            return c["card"]
-        path = renderz.CARDS / f"{c['id']}.png"
-        if not path.exists():
-            renderz.CARDS.mkdir(parents=True, exist_ok=True)
-            fmf.build_card({**c, "layout": {}, "colors": {}}).save(path)
-        return str(path)
-
-    target["card"] = card(target)
-    others = [card(c) for c in stars if c["name"] != target["name"]][:14]
+    fresh, _, _ = slots.latest_players()
+    pool = sorted(fresh.values(), key=lambda x: -(x.get("ovr") or 0))
+    target, kind_ = slots.stop_target(pool)  # owner 26 Nov: new 122-124 cards first, then famous (shared with 21:00)
+    others = [c["card"] for c in pool if c.get("card") and c["name"] != target["name"]][:14] or [target["card"]]
     name = f"{target['ovr']} {slots.SAY.get(target['name'], target['name']).upper()}"
     if OUT.exists():
         shutil.rmtree(OUT)
@@ -64,5 +48,6 @@ def post_due(now):
         youtube.add_to_playlist(vid, "stopgame")
     except Exception as ex:
         print("playlist skipped:", str(ex)[:100])
-    poster.log({"kind": "reel", "file": str(media), "type": "yt_stopgame", "youtube": vid})
+    poster.log({"kind": "reel", "file": str(media), "type": "yt_stopgame", "youtube": vid,
+                "stop": kind_, "stop_id": str(target["id"])})
     return vid

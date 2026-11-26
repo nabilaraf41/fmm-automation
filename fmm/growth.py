@@ -88,8 +88,19 @@ def run(force=False):
         m = metrics(e)
         time.sleep(2)  # 22 Nov: Meta blocks stats reads after ~100 fast calls (later posts then showed 0)
         posts.append({"type": type_of(e), "kind": e["kind"], "score": score(m), "at": e["at"][:10],
-                      "hour": e["at"][11:13], "hook_style": e.get("hook_style"), **m})
+                      "hour": e["at"][11:13], "hook_style": e.get("hook_style"), "stop": e.get("stop"), **m})
     ranked = rank(posts)
+    stops = [p for p in posts if p.get("stop")]  # owner 26 Nov: new 122-124 cards vs famous players in "stop on"
+    if stops:
+        stop_lines = ["", "## Stop game: new cards vs famous players", "",
+                      "| Kind | Posts | Avg YouTube views | Avg IG views | Avg comments |", "|---|---|---|---|---|"]
+        for k in ("new", "famous"):
+            g = [p for p in stops if p["stop"] == k]
+            if g:
+                a = lambda f: sum(p.get(f, 0) for p in g) / len(g)
+                stop_lines.append(f"| {k} | {len(g)} | {a('yt_views'):,.0f} | {a('ig_views'):,.0f} | {a('comments'):.1f} |")
+    else:
+        stop_lines = []
     rotation = {"review_post", "rank10", "versus", "pick3", "guess", "compare4", "xi", "rate", "gem", "worth", "meme"}
     photo = [r for r in ranked if r[0] in rotation]  # only formats the photo slots can actually schedule
     st["growth_week"] = week
@@ -99,6 +110,7 @@ def run(force=False):
     lines = [f"# FMM weekly report — {week}", "", f"{len(posts)} posts checked.", "",
              "| Type | Avg score | Posts |", "|---|---|---|"]
     lines += [f"| {t} | {s:.0f} | {n} |" for t, s, n in ranked]
+    lines += stop_lines
     tot = lambda k: sum(p.get(k, 0) for p in posts)
     lines += ["", "## By platform", "", "| Platform | Views | Likes + comments |", "|---|---|---|",
               f"| YouTube | {tot('yt_views'):,} | — |", f"| Instagram | (needs insights permission) | {tot('ig_eng'):,} |",
