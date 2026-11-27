@@ -6,15 +6,19 @@
   ],
   "reel:choose": [
    6,
-   6
+   6,
+   10,
+   11
   ],
   "photo:other": [
    5,
-   6
+   6,
+   7
   ],
   "reel:other": [
    5,
-   6
+   6,
+   9
   ],
   "photo:statrank": [
    3,
@@ -22,11 +26,15 @@
   ],
   "reel:statrank": [
    8,
-   9
+   9,
+   12,
+   14
   ],
   "reel:pack": [
    2,
-   2
+   2,
+   3,
+   5
   ],
   "photo:xi": [
    3,
@@ -46,15 +54,20 @@
   ],
   "reel:goal_reel": [
    6,
-   8
+   8,
+   10,
+   12
   ],
   "photo:goal_reel": [
    2,
-   5
+   5,
+   6
   ],
   "reel:xi": [
    3,
-   3
+   3,
+   4,
+   4
   ],
   "reel:review_reel": [
    1,
@@ -66,37 +79,92 @@
   ],
   "reel:versus": [
    2,
-   2
+   2,
+   3,
+   3
   ],
   "carousel:shardguide": [
    0,
+   1,
+   2
+  ],
+  "carousel:statrank": [
+   4,
+   10
+  ],
+  "photo:legends": [
+   0,
+   1
+  ],
+  "reel:legends": [
+   1,
+   1
+  ],
+  "carousel:backfour": [
+   0,
+   2
+  ],
+  "photo:statxi": [
+   0,
+   1
+  ],
+  "reel:statxi": [
+   0,
+   1
+  ],
+  "photo:teaser": [
+   1,
+   1
+  ],
+  "reel:teaser": [
+   1,
+   1
+  ],
+  "carousel:attacks": [
+   1,
+   1
+  ],
+  "reel:stopgame": [
+   1,
+   1
+  ],
+  "photo:shardcost": [
+   0,
+   1
+  ],
+  "reel:shardcost": [
+   1,
+   1
+  ],
+  "reel:shardguide": [
+   1,
    1
   ]
  },
  "_status": {
   "theeliteelastico": {
-   "Pending": 18,
-   "Accepted": 59
+   "Pending": 38,
+   "Accepted": 87
   },
   "newcomer_fm": {
-   "Pending": 46,
+   "Pending": 49,
    "Accepted": 6
   },
   "tazeafc": {
    "Accepted": 8,
-   "Pending": 19
+   "Pending": 34
   },
   "hatedsurvivorsfcm": {
    "Accepted": 3,
    "Pending": 24
   },
   "eafc_jacobek08": {
-   "Accepted": 67,
+   "Accepted": 127,
    "Pending": 2
   },
   "goat_editv": {
-   "Accepted": 35,
-   "Pending": 35
+   "Accepted": 47,
+   "Pending": 51
   },
   "fc_highlightss": {
    "Pending": 13,
@@ -108,28 +176,29 @@
   },
   "aftab.fc": {
    "Accepted": 2,
-   "Pending": 11
+   "Pending": 12
   },
   "delete_fc": {
    "Accepted": 7,
-   "Pending": 6
+   "Pending": 16
   },
   "fcthunder_ea": {
-   "Pending": 4,
+   "Pending": 20,
    "Accepted": 6
   },
   "hamza.dzn_": {
    "Pending": 5
   },
   "elite_fc.710": {
-   "Accepted": 6
+   "Accepted": 21,
+   "Pending": 47
   },
   "elite_fc.02": {
-   "Accepted": 3,
-   "Pending": 2
+   "Accepted": 30,
+   "Pending": 5
   },
   "dfx_eafc": {
-   "Accepted": 2,
+   "Accepted": 16,
    "Pending": 1
   }
  },
@@ -144,7 +213,8 @@
   ],
   "photo:other": [
    2,
-   5
+   5,
+   8
   ],
   "reel:other": [
    0,
@@ -202,19 +272,23 @@
   ],
   "reel:choose": [
    1,
-   1
+   1,
+   2
   ],
   "photo:other": [
    2,
-   5
+   5,
+   7
   ],
   "reel:other": [
    2,
-   6
+   6,
+   8
   ],
   "reel:statrank": [
    1,
-   2
+   2,
+   3
   ],
   "photo:xi": [
    1,
@@ -230,7 +304,8 @@
   ],
   "reel:goal_reel": [
    0,
-   1
+   1,
+   3
   ],
   "photo:statrank": [
    0,
@@ -245,6 +320,22 @@
    1
   ],
   "reel:xi": [
+   0,
+   1
+  ],
+  "reel:legends": [
+   0,
+   1
+  ],
+  "carousel:statrank": [
+   0,
+   4
+  ],
+  "photo:goal_reel": [
+   0,
+   1
+  ],
+  "carousel:shardguide": [
    0,
    1
   ]
@@ -306,7 +397,9 @@
  "eafc_jacobek08": {
   "reel:pack": [
    3,
-   3
+   3,
+   6,
+   6
   ],
   "photo:statrank": [
    7,
@@ -314,15 +407,21 @@
   ],
   "reel:xi": [
    5,
-   5
+   5,
+   6,
+   6
   ],
   "reel:choose": [
    6,
-   7
+   7,
+   10,
+   11
   ],
   "reel:statrank": [
    7,
-   7
+   7,
+   17,
+   17
   ],
   "reel:clip": [
    9,
@@ -334,7 +433,9 @@
   ],
   "reel:goal_reel": [
    8,
-   8
+   8,
+   12,
+   12
   ],
   "photo:choose": [
    5,
@@ -342,15 +443,21 @@
   ],
   "photo:goal_reel": [
    5,
-   5
+   5,
+   7,
+   7
   ],
   "photo:other": [
    1,
-   1
+   1,
+   4,
+   4
   ],
   "reel:other": [
    1,
-   1
+   1,
+   4,
+   4
   ],
   "photo:xi": [
    3,
@@ -366,9 +473,73 @@
   ],
   "reel:versus": [
    2,
-   2
+   2,
+   3,
+   3
   ],
   "carousel:shardguide": [
+   1,
+   1,
+   2,
+   2
+  ],
+  "carousel:statrank": [
+   9,
+   9
+  ],
+  "photo:legends": [
+   1,
+   1
+  ],
+  "reel:legends": [
+   1,
+   1
+  ],
+  "carousel:backfour": [
+   2,
+   2
+  ],
+  "reel:backfour": [
+   2,
+   2
+  ],
+  "reel:stopgame": [
+   4,
+   4
+  ],
+  "photo:statxi": [
+   1,
+   1
+  ],
+  "reel:statxi": [
+   1,
+   1
+  ],
+  "photo:teaser": [
+   1,
+   1
+  ],
+  "reel:teaser": [
+   1,
+   1
+  ],
+  "carousel:attacks": [
+   1,
+   1
+  ],
+  "reel:attacks": [
+   1,
+   1
+  ],
+  "photo:shardcost": [
+   1,
+   1
+  ],
+  "reel:shardcost": [
+   1,
+   1
+  ],
+  "reel:shardguide": [
    1,
    1
   ]
@@ -380,7 +551,8 @@
   ],
   "reel:statrank": [
    6,
-   8
+   8,
+   13
   ],
   "reel:xi": [
    2,
@@ -396,7 +568,9 @@
   ],
   "reel:goal_reel": [
    7,
-   9
+   9,
+   8,
+   12
   ],
   "carousel:xi": [
    0,
@@ -408,19 +582,26 @@
   ],
   "reel:choose": [
    4,
-   5
+   5,
+   7,
+   8
   ],
   "photo:goal_reel": [
    2,
-   5
+   5,
+   7
   ],
   "photo:other": [
    1,
-   1
+   1,
+   2,
+   2
   ],
   "reel:other": [
    1,
-   1
+   1,
+   3,
+   3
   ],
   "photo:xi": [
    0,
@@ -439,6 +620,31 @@
    2
   ],
   "carousel:shardguide": [
+   0,
+   1,
+   2
+  ],
+  "reel:legends": [
+   1,
+   1
+  ],
+  "carousel:statrank": [
+   0,
+   4
+  ],
+  "reel:stopgame": [
+   1,
+   3
+  ],
+  "reel:backfour": [
+   1,
+   1
+  ],
+  "photo:shardcost": [
+   0,
+   1
+  ],
+  "reel:shardguide": [
    0,
    1
   ]
@@ -547,6 +753,10 @@
   "photo:goal_reel": [
    0,
    2
+  ],
+  "photo:shardcost": [
+   0,
+   1
   ]
  },
  "delete_fc": {
@@ -560,7 +770,8 @@
   ],
   "reel:statrank": [
    1,
-   2
+   2,
+   4
   ],
   "photo:choose": [
    1,
@@ -573,6 +784,30 @@
   "photo:goal_reel": [
    0,
    1
+  ],
+  "carousel:statrank": [
+   0,
+   3
+  ],
+  "carousel:backfour": [
+   0,
+   1
+  ],
+  "carousel:attacks": [
+   0,
+   1
+  ],
+  "reel:goal_reel": [
+   0,
+   1
+  ],
+  "reel:pack": [
+   0,
+   1
+  ],
+  "reel:shardguide": [
+   0,
+   1
   ]
  },
  "fcthunder_ea": {
@@ -582,7 +817,8 @@
   ],
   "reel:statrank": [
    2,
-   2
+   2,
+   6
   ],
   "reel:choose": [
    1,
@@ -605,6 +841,34 @@
    1
   ],
   "reel:goal_reel": [
+   0,
+   1
+  ],
+  "carousel:statrank": [
+   0,
+   4
+  ],
+  "carousel:backfour": [
+   0,
+   2
+  ],
+  "carousel:attacks": [
+   0,
+   1
+  ],
+  "reel:attacks": [
+   0,
+   1
+  ],
+  "reel:shardcost": [
+   0,
+   1
+  ],
+  "reel:pack": [
+   0,
+   2
+  ],
+  "reel:other": [
    0,
    1
   ]
@@ -634,7 +898,9 @@
  "elite_fc.710": {
   "reel:choose": [
    1,
-   1
+   1,
+   2,
+   6
   ],
   "reel:clip": [
    1,
@@ -650,10 +916,102 @@
   ],
   "reel:goal_reel": [
    1,
-   1
+   1,
+   3,
+   5
   ],
   "reel:statrank": [
    1,
+   1,
+   5,
+   11
+  ],
+  "carousel:statrank": [
+   0,
+   10
+  ],
+  "reel:xi": [
+   1,
+   1
+  ],
+  "photo:legends": [
+   1,
+   1
+  ],
+  "reel:legends": [
+   1,
+   1
+  ],
+  "reel:pack": [
+   1,
+   3
+  ],
+  "carousel:backfour": [
+   0,
+   2
+  ],
+  "reel:backfour": [
+   1,
+   2
+  ],
+  "photo:goal_reel": [
+   0,
+   2
+  ],
+  "reel:stopgame": [
+   0,
+   4
+  ],
+  "photo:other": [
+   0,
+   3
+  ],
+  "reel:other": [
+   1,
+   3
+  ],
+  "photo:statxi": [
+   0,
+   1
+  ],
+  "reel:statxi": [
+   1,
+   1
+  ],
+  "photo:teaser": [
+   0,
+   1
+  ],
+  "reel:teaser": [
+   1,
+   1
+  ],
+  "carousel:attacks": [
+   0,
+   1
+  ],
+  "reel:attacks": [
+   0,
+   1
+  ],
+  "photo:shardcost": [
+   0,
+   1
+  ],
+  "reel:shardcost": [
+   0,
+   1
+  ],
+  "reel:versus": [
+   0,
+   1
+  ],
+  "carousel:shardguide": [
+   0,
+   1
+  ],
+  "reel:shardguide": [
+   0,
    1
   ]
  },
@@ -668,7 +1026,9 @@
   ],
   "reel:choose": [
    1,
-   1
+   1,
+   6,
+   6
   ],
   "photo:statrank": [
    0,
@@ -676,6 +1036,56 @@
   ],
   "reel:statrank": [
    0,
+   1,
+   7,
+   10
+  ],
+  "reel:backfour": [
+   2,
+   2
+  ],
+  "reel:stopgame": [
+   3,
+   4
+  ],
+  "photo:teaser": [
+   1,
+   1
+  ],
+  "reel:teaser": [
+   1,
+   1
+  ],
+  "reel:attacks": [
+   1,
+   1
+  ],
+  "carousel:statrank": [
+   1,
+   1
+  ],
+  "carousel:backfour": [
+   1,
+   1
+  ],
+  "photo:other": [
+   1,
+   1
+  ],
+  "reel:shardcost": [
+   1,
+   1
+  ],
+  "reel:pack": [
+   1,
+   1
+  ],
+  "reel:versus": [
+   1,
+   1
+  ],
+  "reel:other": [
+   1,
    1
   ]
  },
@@ -691,7 +1101,43 @@
   "photo:statrank": [
    0,
    1
+  ],
+  "reel:statrank": [
+   4,
+   4
+  ],
+  "photo:goal_reel": [
+   2,
+   2
+  ],
+  "photo:teaser": [
+   1,
+   1
+  ],
+  "reel:teaser": [
+   1,
+   1
+  ],
+  "reel:stopgame": [
+   2,
+   2
+  ],
+  "reel:attacks": [
+   1,
+   1
+  ],
+  "reel:backfour": [
+   1,
+   1
+  ],
+  "photo:other": [
+   0,
+   1
+  ],
+  "reel:versus": [
+   1,
+   1
   ]
  },
- "_updated": 1795288075.8511293
+ "_updated": 1795808912.5138783
 }
