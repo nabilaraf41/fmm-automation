@@ -2881,5 +2881,24 @@
   "stop": "new",
   "stop_id": "f30924048",
   "stop_name": "124 Pelé"
+ },
+ {
+  "at": "2026-11-27 15:02:10",
+  "kind": "reel",
+  "file": "/home/runner/work/fmm-automation/fmm-automation/assets/goal_reels/special_9_09_hero_indonesia_reel.mp4",
+  "type": "goal_reel",
+  "facebook": "1161660659680137",
+  "instagram": "18192185173414555",
+  "youtube": "EVOn4Yx8sZI"
+ },
+ {
+  "at": "2026-11-27 15:02:49",
+  "kind": "reel",
+  "file": "/home/runner/work/fmm-automation/fmm-automation/output/ytextra/slot.mp4",
+  "type": "yt_stopgame",
+  "youtube": "x4CTE8ORJpg",
+  "stop": "new",
+  "stop_id": "f30924046",
+  "stop_name": "124 Kempes"
  }
 ]
