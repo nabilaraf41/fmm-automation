@@ -3029,5 +3029,16 @@
   "type": "statrank",
   "facebook": "1629550454988036",
   "youtube": "7d3cpvrsy3Q"
+ },
+ {
+  "at": "2026-11-28 22:01:54",
+  "kind": "reel",
+  "file": "/home/runner/work/fmm-automation/fmm-automation/output/slot/slot.mp4",
+  "type": "stopgame",
+  "stop": "new",
+  "stop_id": "f30924038",
+  "stop_name": "122 Mascherano",
+  "facebook": "1829864651394466",
+  "youtube": "3TC6Dq4gSOo"
  }
 ]
