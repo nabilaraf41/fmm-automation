@@ -2978,5 +2978,15 @@
   "type": "attacks",
   "facebook": "1804836550777212",
   "youtube": "zPIIfc1M6Z4"
+ },
+ {
+  "at": "2026-11-28 13:06:44",
+  "kind": "reel",
+  "file": "/home/runner/work/fmm-automation/fmm-automation/output/ytextra/slot.mp4",
+  "type": "yt_stopgame",
+  "youtube": "4Lvydu0k78s",
+  "stop": "new",
+  "stop_id": "f30924036",
+  "stop_name": "123 Cambiasso"
  }
 ]
